@@ -10,20 +10,20 @@
       ":tulip:": 60000,
       ":rose:": 30000
     },
-    "dirt": ":brown_box:",
+    "dirt": ":brown_square:",
     "msgLtrs": [
-      ":lettter_a:",
-      ":lettter_b:",
-      ":lettter_c:",
-      ":lettter_d:",
-      ":lettter_e:"
+      "<:letter_a:645350816315736087>",
+      "<:letter_b:645350816424656916>",
+      "<:letter_c:645350816474988566>",
+      "<:letter_d:645350816567394324>",
+      "<:letter_e:645350816760201221>"
     ],
     "msgNums": [
-      ":number_1:",
-      ":number_2:",
-      ":number_3:",
-      ":number_4:",
-      ":number_5:"
+      "<:number_1:645350816659668993>",
+      "<:number_2:645350816584302613>",
+      "<:number_3:645350816919584788>",
+      "<:number_4:645350816923910144>",
+      "<:number_5:645350819797139516>"
     ]
   }
 }

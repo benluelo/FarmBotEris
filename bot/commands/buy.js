@@ -24,7 +24,7 @@ exports.run = async (bot) => {
           { $push: {
             farm: {
               crop: {
-                planted: bot.dirt,
+                planted: bot.config.farminfo.dirt,
                 datePlantedAt: Date.now()
               },
               fertilized: false,

@@ -6,14 +6,14 @@ exports.run = bot => {
       if (!userdata) {
         bot.database.Userdata.insertOne({
           userID: message.author.id,
-          userTag: message.author.tag,
+          userTag: message.author.username + "#" + message.author.discriminator,
           messagesUserSent: 0,
           botCommandsUsed: 0,
           nickname: message.author.username,
           farm: [
             {
               crop: {
-                planted: bot.config.dirt,
+                planted: bot.config.farminfo.dirt,
                 datePlantedAt: Date.now()
               },
               fertilized: false,

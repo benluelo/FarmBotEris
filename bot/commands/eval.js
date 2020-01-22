@@ -32,7 +32,7 @@ exports.run = (bot) => {
         bot.createMessage(message.channel.id, "Error while evaluating: `cannot evaluate nothing`")  // its a hard word ik FCKN LISTEN OK ITS 4AM 4AM!!!!!LOL     - leave that there for production lmao - agreed
       }
     } catch (e) {
-      bot.createMessage(message.channel.id, `Error whilst evaluating: \`${e.message}\``)
+      bot.createMessage(message.channel.id, `Error while evaluating: \`${e.message}\``)
     }
   }, {
     requirements: {
