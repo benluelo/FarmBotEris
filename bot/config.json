@@ -1,0 +1,29 @@
+{
+  "db": {
+    "connectionString": "mongodb://localhost:27017/",
+    "connectionOptions": {
+      "useUnifiedTopology": true
+    }
+  },
+  "farminfo": {
+    "growTimes": {
+      ":tulip:": 60000,
+      ":rose:": 30000
+    },
+    "dirt": ":brown_box:",
+    "msgLtrs": [
+      ":lettter_a:",
+      ":lettter_b:",
+      ":lettter_c:",
+      ":lettter_d:",
+      ":lettter_e:"
+    ],
+    "msgNums": [
+      ":number_1:",
+      ":number_2:",
+      ":number_3:",
+      ":number_4:",
+      ":number_5:"
+    ]
+  }
+}
