@@ -1,5 +1,6 @@
 const Eris = require("eris")
 const fs = require("fs")
+// eslint-disable-next-line no-unused-vars
 const chalk = require("chalk")
 require("dotenv").config({ path: ".env" })
 
@@ -7,7 +8,7 @@ const bot = new Eris.CommandClient(process.env.TOKEN, {
   disableEveryone: true
 }, {
   description: "description of bot",
-  prefix: ["f!", "@mention"], // most likey will be changed lol
+  prefix: ["f!", "farm", "@mention"], // most likey will be changed lol
   ignoreBots: true,
   owner: "ben & tyler",
   defaultHelpCommand: false,
@@ -26,7 +27,7 @@ setTimeout(() => {
     Userdata: client.db("farmbot").collection("farm"),
   }
   bot.database = dbObject
-  console.log(chalk.keyword("lime").underline("DB Connected!"))
+  bot.log.dbconnect("Successfully connected to database!")
 }, 4000)
 
 // add onto bot var
@@ -49,6 +50,8 @@ bot.cooldown = (length) => {
   }
   return _cd
 }
+bot.log = require("./src/logger.js").log
+bot.log.connect()
 
 // load commands
 const loader = require("./commands/meta/loader.js")
