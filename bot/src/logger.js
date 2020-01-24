@@ -1,8 +1,13 @@
 const chalk = require("chalk")
 
+const getDate = () => {
+  const date = new Date()
+  return date.toLocaleString()
+}
+
 const log = {
   connect(...args){
-    process.stdout.write(chalk.bgGreen.black(`[LOG][CONNECT][${new Date(Date.now()).toString()}]`) + " ", () => {
+    process.stdout.write(chalk.bgGreen.black(`[LOG][CONNECT][${getDate()}]`) + " ", () => {
       args.forEach(arg => {
         process.stdout.write(arg + " ")
       })
@@ -10,7 +15,7 @@ const log = {
     })
   },
   dbconnect(...args){
-    process.stdout.write(chalk.bgGreen.black(`[LOG][DB CONNECT][${new Date(Date.now()).toString()}]`) + " ", () => {
+    process.stdout.write(chalk.bgGreen.black(`[LOG][DB CONNECT][${getDate()}]`) + " ", () => {
       args.forEach(arg => {
         process.stdout.write(arg + " ")
       })
@@ -18,7 +23,7 @@ const log = {
     })
   },
   error(...args){
-    process.stdout.write(chalk.bgRed.black(`[LOG][ERROR][${new Date(Date.now()).toString()}]`) + " ", () => {
+    process.stdout.write(chalk.bgRed.black(`[LOG][ERROR][${getDate()}]`) + " ", () => {
       args.forEach(arg => {
         process.stdout.write(arg + " ")
       })
@@ -26,7 +31,7 @@ const log = {
     })
   },
   toFile(...args){
-    process.stdout.write(chalk.bgGreen.black(`[LOG][TO FILE][${new Date(Date.now()).toString()}]`) + " ", () => {
+    process.stdout.write(chalk.bgGreen.black(`[LOG][TO FILE][${getDate()}]`) + " ", () => {
       args.forEach(arg => {
         process.stdout.write(arg + " ")
       })

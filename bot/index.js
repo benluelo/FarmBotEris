@@ -8,7 +8,7 @@ const bot = new Eris.CommandClient(process.env.TOKEN, {
   disableEveryone: true
 }, {
   description: "description of bot",
-  prefix: ["f!", "farm", "@mention"], // most likey will be changed lol
+  prefix: ["f!", "farm ", "@mention"], // most likey will be changed lol
   ignoreBots: true,
   owner: "ben & tyler",
   defaultHelpCommand: false,
@@ -51,7 +51,6 @@ bot.cooldown = (length) => {
   return _cd
 }
 bot.log = require("./src/logger.js").log
-bot.log.connect()
 
 // load commands
 const loader = require("./commands/meta/loader.js")

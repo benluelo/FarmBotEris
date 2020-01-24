@@ -1,6 +1,9 @@
 const versionNumber = require("../../package").version
+const ms = require("parse-ms")
 exports.run = (bot) => {
   bot.registerCommand("botinfo", (message) => {
+    const botCreateion = (message.author.id == bot.ownersIDS[0] || message.author.id == bot.ownersIDS[1]) ? `${new Date(bot.user.createdAt).toUTCString()}` : bot.user.createdAt
+    const botUptime = (message.author.id == bot.ownersIDS[0] || message.author.id == bot.ownersIDS[1]) ? `${ms(bot.uptime).days}d ${ms(bot.uptime).hours}h ${ms(bot.uptime).minutes}m ${ms(bot.uptime).seconds}s` : bot.uptime
     const infoEmbed = {
       embed: {
         author: {
@@ -8,14 +11,17 @@ exports.run = (bot) => {
           icon_url: bot.user.avatarURL
         },
         color: 0x004C00,
+        thumbnail: {
+          url: bot.user.avatarURL
+        },
         fields: [
           {
             name: ":date: Created On",
-            value: bot.user.createdAt
+            value: botCreateion
           },
           {
             name: ":hourglass: Uptime",
-            value: bot.uptime
+            value: botUptime
           },
           {
             name: ":rosette: Version",
