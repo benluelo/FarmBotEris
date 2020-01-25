@@ -30,14 +30,34 @@ exports.run = (bot) => {
           fields: [
             {
               name: "General",
-              value: "`help`"
+              value: "`buy`, `money`, `plots`"
+            },
+            {
+              name: "Utility",
+              value: "`botinfo`, `help`, `ping`"
+            },
+            {
+              name: "Admin",
+              value: "`eval`, `stop`"
             }
           ]
         }
       })
     } else {
+      if (args[0] == "botinfo") {
+        sendHelp("Botinfo", "To display infomation about the bot", "f!botinfo")
+      }
+      if (args[0] == "eval") {
+        sendHelp("Eval", "Eval any JS code", "f!eval <code>")
+      }
       if (args[0] == "help") {
         sendHelp("Help", "To show help for all the commands in the bot", "f!help `[command name]`")
+      }
+      if (args[0] == "ping") {
+        sendHelp("Ping", "Shows the response time from the bot to Discord", "f!ping")
+      }
+      if (args[0] == "stop") {
+        sendHelp("Stop", "Stops or restarts the bot", "f!stop [restart]")
       }
     }
     
