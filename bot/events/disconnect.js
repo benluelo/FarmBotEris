@@ -1,3 +1,3 @@
-exports.run = (bot) => {
-  
+exports.run = () => {
+  console.error("Bot disconnected")
 }

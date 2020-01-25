@@ -8,7 +8,7 @@ exports.run = async (bot) => {
 
     // attempt to find the user in the system
     bot.database.Userdata.findOne({ userID: message.author.id }, (err, userdata) => {
-      if(err){console.log(err)}
+      if (err) bot.log.error(err)
 
       // if the user is NOT in the database, tell them to start
       if (!userdata) {

@@ -6,6 +6,7 @@ exports.run = async (bot) => {
   bot.registerCommand("buy", (message, args) => {
       
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+      if (err) bot.log.error(err)
       if (!userdata) {
         bot.createMessage(
           message.channel.id,

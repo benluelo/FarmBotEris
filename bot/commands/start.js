@@ -1,7 +1,7 @@
 exports.run = bot => {
   bot.registerCommand("start", (message) => {
     bot.database.Userdata.findOne({ userID: message.author.id}, (err, userdata) => {
-      if (err) return err
+      if (err) bot.log.error(err)
       if (!userdata) {
         bot.database.Userdata.insertOne({
           userID: message.author.id,

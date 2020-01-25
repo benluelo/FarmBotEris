@@ -2,6 +2,7 @@ exports.run = bot => {
   // eslint-disable-next-line no-unused-vars
   bot.registerCommand("money", (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, (err, userdata) => {
+      if (err) bot.log.error(err)
       if (userdata) {
         bot.createMessage(
           message.channel.id,

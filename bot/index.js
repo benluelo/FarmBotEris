@@ -75,20 +75,19 @@ bot.cooldown = (length) => {
 }
 bot.log = require("./src/logger.js").log
 
-// load commands
-const loader = require("./commands/meta/loader.js")
-loader.run(bot)
-
 const init = async () => {
   // Load Events
   fs.readdir("./bot/events/", (err, files) => {
-    if (err) console.log(err)
+    if (err) bot.log.error(err)
     files.forEach(file => {
       const eventFunction = require(`./events/${file}`)
       const eventName = file.split(".")[0]
       bot.on(eventName, (...args) => eventFunction.run(bot, ...args))
     })
   })
+  // load commands
+  const loader = require("./commands/meta/loader.js")
+  loader.run(bot)
 }
 init()
 
