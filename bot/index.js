@@ -5,7 +5,25 @@ const chalk = require("chalk")
 require("dotenv").config({ path: ".env" })
 
 const bot = new Eris.CommandClient(process.env.TOKEN, {
-  disableEveryone: true
+  disableEveryone: true,
+  defaultImageFormat: "png",
+  // i dont know if you want this but it says "This can cause significant performance increase on large bots"
+  disableEvents: {
+    CHANNEL_CREATE: true,
+    CHANNEL_DELETE: true,
+    CHANNEL_UPDATE: true,
+    GUILD_BAN_ADD: true,
+    GUILD_BAN_REMOVE: true,
+    GUILD_ROLE_CREATE: true,
+    GUILD_ROLE_DELETE: true,
+    GUILD_ROLE_UPDATE: true,
+    MESSAGE_DELETE: true,
+    MESSAGE_DELETE_BULK: true,
+    MESSAGE_UPDATE: true,
+    PRESENCE_UPDATE: true,
+    TYPING_START: true,
+    VOICE_STATE_UPDATE: true
+  }
 }, {
   description: "description of bot",
   prefix: ["f!", "farm ", "@mention"], // most likey will be changed lol
@@ -36,6 +54,11 @@ bot.ownersIDS = [
   "295255543596187650" // tyler
 ]
 bot.config = require("./config.json")
+bot.color = {
+  darkgreen: 0x004C00,
+  lightgreen: 0x00FF00,
+  red: 0xFF0000
+}
 bot.cooldown = (length) => {
   const _cd = {
     cooldown: length,

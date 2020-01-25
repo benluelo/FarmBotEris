@@ -10,7 +10,7 @@ exports.run = (bot) => {
         const evalEmbed = {
           embed: {
             title: "Evaluation",
-            color: 0x00ff00,
+            color: bot.color.lightgreen,
             fields: [
               {
                 name: ":scroll: Script",

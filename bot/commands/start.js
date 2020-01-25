@@ -1,15 +1,15 @@
 exports.run = bot => {
-  // eslint-disable-next-line no-unused-vars
-  bot.registerCommand("start", (message, args) => {
+  bot.registerCommand("start", (message) => {
     bot.database.Userdata.findOne({ userID: message.author.id}, (err, userdata) => {
-      if(err){ return err }
+      if (err) return err
       if (!userdata) {
         bot.database.Userdata.insertOne({
           userID: message.author.id,
           userTag: message.author.username + "#" + message.author.discriminator,
+          nickname: message.author.username,
           messagesUserSent: 0,
           botCommandsUsed: 0,
-          nickname: message.author.username,
+          money: 0,
           farm: [
             {
               crop: {
@@ -20,7 +20,6 @@ exports.run = bot => {
               watered: false
             }
           ],
-          money: 0,
           seeds: {
             // 🍎🍊🍋🍐🍒🍑🥭🍈🍇🍓🍉🍌🍍
             common: {
@@ -124,6 +123,11 @@ exports.run = bot => {
             // }
           }
         })
+        bot.createMessage(message.channel.id, { embed: {
+          title: `Welcome to ${bot.user.username}`,
+          description: "Do `f!help` to display the full list of commands the bot has!",
+          color: bot.color.lightgreen
+        }})
       }
 
       if (userdata) {

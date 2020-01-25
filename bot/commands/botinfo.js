@@ -10,7 +10,7 @@ exports.run = (bot) => {
           name: bot.user.username,
           icon_url: bot.user.avatarURL
         },
-        color: 0x004C00,
+        color: bot.color.darkgreen,
         thumbnail: {
           url: bot.user.avatarURL
         },

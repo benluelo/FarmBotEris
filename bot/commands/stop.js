@@ -5,7 +5,7 @@ exports.run = (bot) => {
         embed: {
           title: "Stopping Bot",
           description: `${bot.user.username} disconnecting in 5 seconds\n**${bot.guilds.size}** servers\n**${bot.users.size}** users`,
-          color: 0xFF0000 
+          color: bot.color.red 
         }
       } 
       bot.createMessage(message.channel.id, stopEmbed)
@@ -15,7 +15,7 @@ exports.run = (bot) => {
         embed: {
           title: "Restarting Bot",
           description: `${bot.user.username} Restarting in 10 seconds\n**${bot.guilds.size}** servers\n**${bot.users.size}** users`,
-          color: 0xFF0000 
+          color: bot.color.red 
         }
       }
       bot.createMessage(message.channel.id, restartEmbed)

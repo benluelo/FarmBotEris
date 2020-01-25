@@ -22,28 +22,35 @@ exports.run = (bot) => {
 
     // if <PREFIX>help was typed
     if (args.length == 0) {
-      bot.createMessage(message.channel.id, {
+      const helpEmbed = {
         embed: {
           title: "Help Command",
           description: "A full list of commands",
-          color: 0xFF000,
+          color: bot.color.lightgreen,
           fields: [
             {
-              name: "General",
+              name: ":seedling: General",
               value: "`buy`, `money`, `plots`"
             },
             {
-              name: "Utility",
+              name: ":gear: Utility",
               value: "`botinfo`, `help`, `ping`"
-            },
-            {
-              name: "Admin",
-              value: "`eval`, `stop`"
             }
           ]
         }
-      })
+      }
+
+      // checks to see if it should add more info
+      if (message.author.id == bot.ownersIDS[0] || message.author.id == bot.ownersIDS[1]) {
+        helpEmbed.embed.fields.push({name: ":avocado: Admin",value: "`eval`, `stop`"})
+      }
+      if (process.env.DEVELOPMENT == "true") {
+        helpEmbed.embed.fields.push({name: ":scroll: Development", value: "`deleteuser`"})
+      }
+
+      bot.createMessage(message.channel.id, helpEmbed)
     } else {
+      // detailed commands
       if (args[0] == "botinfo") {
         sendHelp("Botinfo", "To display infomation about the bot", "f!botinfo")
       }
