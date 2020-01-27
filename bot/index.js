@@ -54,11 +54,9 @@ bot.ownersIDS = [
   "295255543596187650" // tyler
 ]
 bot.config = require("./config.json")
-bot.color = {
-  darkgreen: 0x004C00,
-  lightgreen: 0x00FF00,
-  red: 0xFF0000
-}
+bot.color = require("./src/color.js")
+bot.log = require("./src/logger.js").log
+
 bot.cooldown = (length) => {
   const _cd = {
     cooldown: length,
@@ -73,10 +71,9 @@ bot.cooldown = (length) => {
   }
   return _cd
 }
-bot.log = require("./src/logger.js").log
 
 const init = async () => {
-  // Load Events
+  // load events
   fs.readdir("./bot/events/", (err, files) => {
     if (err) bot.log.error(err)
     files.forEach(file => {

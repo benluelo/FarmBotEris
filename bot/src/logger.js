@@ -16,6 +16,13 @@ const getDate = () => {
 }
 
 const log = {
+  default(...args){
+    console.log(
+      chalk.white.bold(`${path.basename(stackTrace.get()[1].getFileName())}:`),
+      chalk.cyan(`[LOG][DEFAULT][${getDate()}]`),
+      args.join(" ")
+    )
+  },
   connect(...args){
     console.log(
       chalk.white.bold(`${path.basename(stackTrace.get()[1].getFileName())}:`),
