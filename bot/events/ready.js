@@ -5,7 +5,5 @@ exports.run = async (bot) => {
   })
   setImmediate(() => {
     bot.log.connect("Bot Online!")
-    bot.log.error("error test")
-    bot.log.toFile("error test")
   })
 }

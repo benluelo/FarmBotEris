@@ -2,7 +2,6 @@ const assert = require("assert")
 const client = require("mongodb").MongoClient
 const config = require("../config.json")
 
-
 let _db
 
 function initDb(callback) {
