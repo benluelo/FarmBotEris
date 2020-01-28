@@ -37,7 +37,10 @@ const log = {
       args.join(" ")
     )
   },
-  error(...args){
+  error(...args){ 
+    // stackTrace.get().forEach(callSite => {
+    //   console.log(callSite.getFileName())
+    // })
     const p = path.basename(stackTrace.get()[1].getFileName())
     const fileName = `${new Date().toISOString().replace(/:/g, "-").replace(/\./g, "-")}.txt`
     console.log(
