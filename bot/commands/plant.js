@@ -32,7 +32,7 @@ exports.run = (bot) => {
             await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, 
               {
                 $set: {
-                  [`farm.${plotNumber}.crop.planted`] : ":apple:",
+                  [`farm.${plotNumber}.crop.planted`] : "apple",
                   [`farm.${plotNumber}.crop.datePlantedAt`] : Date.now()
                 }
               }
@@ -63,7 +63,7 @@ exports.run = (bot) => {
               await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, 
                 {
                   $set: {
-                    [`farm.${plot}.crop.planted`] : ":apple:",
+                    [`farm.${plot}.crop.planted`] : "apple",
                     [`farm.${plot}.crop.datePlantedAt`] : Date.now()
                   }
                 }

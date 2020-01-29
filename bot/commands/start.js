@@ -13,7 +13,7 @@ exports.run = bot => {
           farm: [
             {
               crop: {
-                planted: bot.config.farminfo.dirt,
+                planted: "dirt",
                 datePlantedAt: Date.now()
               },
               fertilized: false,

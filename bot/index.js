@@ -56,6 +56,7 @@ bot.ownersIDS = [
 bot.config = require("./config.json")
 bot.color = require("./src/color.js")
 bot.log = require("./src/logger.js").log
+bot.plants = require("./lib/plants.json")
 
 bot.cooldown = (length) => {
   const _cd = {

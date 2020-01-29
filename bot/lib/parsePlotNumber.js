@@ -1,4 +1,5 @@
 const parse = require("./plotFunctions.js")
+const { log } = require("../src/logger.js")
 
 module.exports = {
 
@@ -18,8 +19,12 @@ module.exports = {
         number: parse.formatForPlotNumberLETTER(temp[0])
       }
 
+      log.default("a", JSON.stringify(a, null, 4))
+
       // get the plot number, base 5
       plotNumber = parseInt((( a.number + a.letter )), 5)
+
+      log.default("plotNumber", plotNumber)
 
       return plotNumber
 

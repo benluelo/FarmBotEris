@@ -26,8 +26,8 @@ exports.run = async (bot) => {
         const FARM = userdata.farm
 
         // initialize message variables
-        var plotsMsg = "" // top of message (letters)
-        var plotsMsgTop = "<:blank:645355907206742023>" // rest of message (numbers and plots)
+        var plotsMsg = "" // top of message (numbers)
+        var plotsMsgTop = "<:blank:645355907206742023>" // rest of message (letters and plots)
 
         // send message to let the user know the farm is being built, then build the farm
         bot.createMessage(
@@ -38,23 +38,29 @@ exports.run = async (bot) => {
             if(DEBUG) { console.log(chalk.keyword("brown")("CHECKING PLOT #"), plot) }
 
             // this builds the farm, i really dont want to explain it lol but here goes
+            //   1 2 3 4 5
+            // A * * * * *
+            // B * * * * *
+            // C * * * * *
+            // D * * * * *
+            // E * * * * *
             // adds the letters and numbers as they are needed
             if(plot < 5){
-              plotsMsgTop += bot.config.farminfo.msgLtrs[plot]
+              plotsMsgTop += bot.config.farminfo.msgNums[plot]
             }
             if(plot % 5 === 0){
-              plotsMsg += "\n" + bot.config.farminfo.msgNums[Math.floor(plot/5)]
+              plotsMsg += "\n" + bot.config.farminfo.msgLtrs[Math.floor(plot/5)]
             }
 
             if(DEBUG) { console.log(FARM[plot].crop.planted) }
 
             // adds the plots to the message
-            if(FARM[plot].crop.planted == bot.config.farminfo.dirt){ // if dirt, add dirt (lol)
-              plotsMsg += bot.config.farminfo.dirt
+            if(FARM[plot].crop.planted == "dirt"){ // if dirt, add dirt (lol)
+              plotsMsg += bot.plants.dirt
             }else if(parseInt(Date.now() - FARM[plot].crop.datePlantedAt) >= parseInt(bot.config.farminfo.growTimes[FARM[plot].crop.planted])){ // if not dirt, and if the crop is grown, add the crop
-              plotsMsg += FARM[plot].crop.planted
+              plotsMsg += bot.plants[FARM[plot].crop.planted]
             }else{ // if the crop in the plot isn't grown, add a seedling
-              plotsMsg += ":seedling:"
+              plotsMsg += bot.plants.seedling
             }
 
             if(DEBUG) { console.log("Now:", Date.now()) }

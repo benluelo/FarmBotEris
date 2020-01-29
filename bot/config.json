@@ -7,8 +7,9 @@
   },
   "farminfo": {
     "growTimes": {
-      ":tulip:": 60000,
-      ":rose:": 30000
+      "tulip": 60000,
+      "rose": 30000,
+      "apple": 30000
     },
     "dirt": ":brown_square:",
     "msgLtrs": [

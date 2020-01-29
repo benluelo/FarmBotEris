@@ -13,17 +13,19 @@ module.exports.run = async (bot) => {
         let farm = userdata.farm
         let totalPlots = 0
         for(let plot in farm){
+
+          const userCrop = farm[plot].crop
       
           // console.log(chalk.bold.keyword("brown")(`FARM PLOT #${plot}:\n`), farm[plot])
       
-          if((farm[plot].crop.planted != bot.config.farminfo.dirt) && ((Date.now() - farm[plot].crop.datePlantedAt) >= bot.config.farminfo.growTimes[farm[plot].crop.planted])){
+          if((userCrop.planted != bot.plants.dirt) && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])){
       
-            // console.log("TEST BEFORE:", plot, farm[plot].crop.planted)
+            // console.log("TEST BEFORE:", plot, userCrop.planted)
       
             await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, 
               {
                 $set: {
-                  [`farm.${plot}.crop.planted`]: bot.dirt,
+                  [`farm.${plot}.crop.planted`]: "dirt",
                   [`farm.${plot}.crop.datePlantedAt`]: Date.now(),
                 },
                 $inc: {
@@ -34,7 +36,7 @@ module.exports.run = async (bot) => {
             ).then((res) => {
               totalPlots += 1
       
-              // console.log("TEST AFTER:", plot, res.value.farm[plot].crop.planted)
+              // console.log("TEST AFTER:", plot, res.value.userCrop.planted)
               // console.log(chalk.bold.blue(`PLOT #${plot} HARVESTED`))
       
             }).catch(err => {

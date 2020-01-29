@@ -24,22 +24,31 @@ exports.run = (bot) => {
               bot.createMessage(message.channel.id, "You don't own that plot!")
               return
             }else{
+              const userCrop = userdata.farm[plotNumber].crop
+              console.log(JSON.stringify(userCrop))
 
-              console.log(JSON.stringify(userdata, null, 4))
+              // console.log(JSON.stringify(userdata, null, 4))
+
+              console.log((
+                Date.now() -
+                userCrop.datePlantedAt
+              ) /
+              bot.config.farminfo.growTimes[userCrop.planted])
         
               let growthPercentage = clamp(
                 (
                   (
                     Date.now() -
-                    userdata.farm[plotNumber].crop.datePlantedAt) /
-                    bot.config.farminfo.growTimes[userdata.farm[plotNumber].crop.planted]
+                    userCrop.datePlantedAt
+                  ) /
+                  bot.config.farminfo.growTimes[userCrop.planted]
                 ),
                 0,
                 1
               )
         
-              console.log((Date.now() - userdata.farm[plotNumber].crop.datePlantedAt))
-              console.log(growthPercentage)
+              console.log("Time difference:", (Date.now() - userCrop.datePlantedAt))
+              console.log("growthPercentage:", growthPercentage)
         
               let growthBar = "█".repeat(growthPercentage*10) + "░".repeat(10 - growthPercentage*10)
         
@@ -49,14 +58,24 @@ exports.run = (bot) => {
                     name: bot.user.username,
                     icon_url: bot.user.avatarURL
                   },
+                  description: "Info for plot #`<L><N>`",
                   fields: [
                     {
-                      name: userdata.farm[plotNumber].crop.planted == bot.config.farminfo.dirt? "Dirt": userdata.farm[plotNumber].crop.planted.replace(/(<|>|:)/g, ""),
-                      value: userdata.farm[plotNumber].crop.planted
+                      name: "Currently planted:",
+                      value: bot.plants[userCrop.planted]
                     }
                   ],
-                  description: userdata.farm[plotNumber].crop.planted == bot.config.farminfo.dirt? null: `Time until grown:\n${growthBar}`
+                  thumbnail: {
+                    url: "https://i.imgur.com/tHDIEKj.png"
+                  }
                 }
+              }
+
+              if(userCrop.planted != "dirt"){
+                infoEmbed.embed.fields.push({
+                  name: "Time until grown:",
+                  value: growthBar
+                })
               }
               
               bot.createMessage(message.channel.id, infoEmbed)
