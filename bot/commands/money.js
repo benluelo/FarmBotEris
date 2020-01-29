@@ -12,10 +12,8 @@ exports.run = bot => {
       }
 
       if (!userdata) {
-        bot.createMessage(
-          message.channel.id,
-          `You haven't started farming yet, ${message.author.username}! Send \`farm start\` to start farming!`
-        )
+        bot.startMessage(message)
+        return
       }
     })
   }, bot.cooldown(15000))

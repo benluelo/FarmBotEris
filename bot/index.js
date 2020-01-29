@@ -73,6 +73,10 @@ bot.cooldown = (length) => {
   return _cd
 }
 
+bot.startMessage = (message) => {
+  bot.createMessage(message.channel.id, "You have to start farming first! Send `farm start` to start farming!")
+}
+
 const init = async () => {
   // load events
   fs.readdir("./bot/events/", (err, files) => {

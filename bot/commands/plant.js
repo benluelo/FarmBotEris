@@ -1,5 +1,5 @@
 // const all = require("./plant/all.js")
-const parsePlotNumber = require("../lib/parsePlotNumber.js")
+const { parsePlotNumber } = require("../lib/parsePlotNumber.js")
 
 exports.run = (bot) => {
   bot.registerCommand("plant", (message, args) => {
@@ -14,7 +14,7 @@ exports.run = (bot) => {
     if(args[0]){
     
       // check if input is valid
-      let plotNumber = parsePlotNumber.pNum(args[0])
+      let plotNumber = parsePlotNumber(args[0])
       if(plotNumber !== false){
         
         bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
@@ -22,7 +22,7 @@ exports.run = (bot) => {
           if(err) throw err
     
           if (!userdata) {
-            bot.createMessage(message.channel.id, "You have to start farming first! Send `farm start` to start farming!")
+            bot.startMessage(message)
           }
           if (userdata) {
             if(plotNumber >= userdata.farm.length){
@@ -55,7 +55,7 @@ exports.run = (bot) => {
 
       bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
         if (!userdata) {
-          bot.createMessage(message.channel.id, "You have to start farming first! Send `farm start` to start farming!")
+          bot.startMessage(message)
         }
         if (userdata) {
           for(let plot in userdata.farm){

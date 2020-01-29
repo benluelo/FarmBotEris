@@ -12,10 +12,7 @@ exports.run = async (bot) => {
 
       // if the user is NOT in the database, tell them to start
       if (!userdata) {
-        bot.createMessage(
-          message.channel.id,
-          "You have to start farming first! Send `farm start` to start farming!"
-        )
+        bot.startMessage(message)
         return
       }
 

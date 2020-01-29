@@ -7,7 +7,7 @@ function clamp(num, min, max) {
 exports.run = (bot) => {
   bot.registerCommand("info", (message, args) => {
     if(args[0]){
-      let plotNumber = parsePlotNumber.pNum(args[0])
+      let plotNumber = parsePlotNumber(args[0])
       if(plotNumber !== false){
             
         bot.database.Userdata.findOne({ userID: message.author.id }, (err, userdata) => {
@@ -15,7 +15,7 @@ exports.run = (bot) => {
           if(err) throw err
         
           if (!userdata) {
-            bot.createMessage(message.channel.id, "You have to start farming first! Send `farm start` to start farming!")
+            bot.startMessage(message)
             return
           }
           if (userdata) {

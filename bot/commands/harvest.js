@@ -7,7 +7,8 @@ module.exports.run = async (bot) => {
 
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
       if (!userdata) {
-        bot.createMessage(message.channel.id, "You have to start farming first! Send `farm start` to start farming!")
+        bot.startMessage(message)
+        return
       }
       if (userdata) {
         let farm = userdata.farm
@@ -19,7 +20,7 @@ module.exports.run = async (bot) => {
       
           // console.log(chalk.bold.keyword("brown")(`FARM PLOT #${plot}:\n`), farm[plot])
       
-          if((userCrop.planted != bot.plants.dirt) && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])){
+          if((userCrop.planted != "dirt") && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])){
       
             // console.log("TEST BEFORE:", plot, userCrop.planted)
       
