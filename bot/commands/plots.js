@@ -74,6 +74,6 @@ exports.run = async (bot) => {
       }
     })
 
-  })
+  }, bot.cooldown(30000))
 }
 // [["S", 0, true, ["S", 0, true, ["S", 0, true]]], 0, true]

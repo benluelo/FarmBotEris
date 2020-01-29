@@ -84,5 +84,5 @@ exports.run = (bot) => {
         })
       }
     }
-  })
+  }, bot.cooldown(15000))
 }

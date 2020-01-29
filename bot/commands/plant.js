@@ -47,7 +47,7 @@ exports.run = (bot) => {
     }
 
   // eslint-disable-next-line no-unused-vars
-  }).registerSubcommand("all", (message, args) => {
+  }, bot.cooldown(5000)).registerSubcommand("all", (message, args) => {
 
     bot.createMessage(message.channel.id, "Planting all!").then(msg => {
 
@@ -59,7 +59,7 @@ exports.run = (bot) => {
         }
         if (userdata) {
           for(let plot in userdata.farm){
-            if(userdata.farm[plot].crop.planted === bot.config.farminfo.dirt){
+            if(userdata.farm[plot].crop.planted === "dirt"){
               await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, 
                 {
                   $set: {
@@ -79,5 +79,5 @@ exports.run = (bot) => {
       })
     })
 
-  })
+  }, bot.cooldown(15000))
 }

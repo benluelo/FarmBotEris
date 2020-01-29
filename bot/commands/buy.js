@@ -40,5 +40,5 @@ exports.run = async (bot) => {
         })
       }
     })
-  })
+  }, bot.cooldown(60000))
 }

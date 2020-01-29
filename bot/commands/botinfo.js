@@ -1,5 +1,6 @@
 const versionNumber = require("../../package").version
 const ms = require("parse-ms")
+
 exports.run = (bot) => {
   bot.registerCommand("botinfo", (message) => {
     const botCreation = bot.ownersIDS.includes(message.author.id)? `${new Date(bot.user.createdAt).toUTCString()}`: bot.user.createdAt
@@ -31,6 +32,6 @@ exports.run = (bot) => {
       }
     }
     bot.createMessage(message.channel.id, infoEmbed)
-  }, bot.cooldown(10000)
+  }, bot.cooldown(15000)
   )
 }

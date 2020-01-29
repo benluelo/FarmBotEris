@@ -12,6 +12,7 @@ module.exports.run = async (bot) => {
       if (userdata) {
         let farm = userdata.farm
         let totalPlots = 0
+        let value = 0
         for(let plot in farm){
 
           const userCrop = farm[plot].crop
@@ -35,6 +36,7 @@ module.exports.run = async (bot) => {
               // eslint-disable-next-line no-unused-vars
             ).then((res) => {
               totalPlots += 1
+              value += 1
       
               // console.log("TEST AFTER:", plot, res.value.userCrop.planted)
               // console.log(chalk.bold.blue(`PLOT #${plot} HARVESTED`))
@@ -51,9 +53,11 @@ module.exports.run = async (bot) => {
                   
         // console.log(chalk.yellow.underline(`${totalPlots} plots harvested in total`))
       
-        bot.createMessage(message.channel.id, `${totalPlots} plots harvested in total`)
+        bot.createMessage(
+          message.channel.id,
+          `${totalPlots} plots harvested in total, you made ${value} <:farmbot_coin:648032810682023956> selling the crops!`)
       }
     })
 
-  })
+  }, bot.cooldown(15000))
 }

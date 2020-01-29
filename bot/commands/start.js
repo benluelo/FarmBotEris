@@ -134,15 +134,5 @@ exports.run = bot => {
         bot.createMessage(message.channel.id, `You've already started farming, ${message.author.username}!`)
       }
     })
-  }, {
-    cooldown: 60000,
-    cooldownMessage: function() {
-      return "cooldown is 60 seconds pls slow down"
-    },
-    cooldownExclusions: {
-      channelIDs: [
-        "669353094953435183" // dev stuff > #test-test
-      ]
-    }
-  })
+  }, bot.cooldown(60000))
 }

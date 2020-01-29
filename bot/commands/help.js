@@ -68,15 +68,5 @@ exports.run = (bot) => {
       }
     }
     
-  }, {
-    cooldown: 10000,
-    cooldownMessage: function() {
-      return "cooldown is 10 seconds pls slow down"
-    },
-    cooldownExclusions: {
-      channelIDs: [
-        "669353094953435183" // dev stuff > #test-test
-      ]
-    }
-  })
+  }, bot.cooldown(15000))
 }

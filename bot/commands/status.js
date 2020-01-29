@@ -1,30 +1,39 @@
 const ms = require("parse-ms")
+
 exports.run = (bot) => {
+  // eslint-disable-next-line no-unused-vars
   bot.registerCommand("status", (message, args) => {
-    const onlineUsers = bot.users.filter(user => !user.bot).length
-    const bugMode = (process.env.DEBUG == "true") ? ":white_check_mark: Enabled" : ":negative_squared_cross_mark: Disemabled"
-    const developmentMode = (process.env.DEVELOPMENT == "true") ? ":white_check_mark: Enabled" : ":negative_squared_cross_mark: Disemabled"
+
+    const debugMode = (process.env.DEBUG == "true") ?
+      ":white_check_mark: Enabled" :
+      ":negative_squared_cross_mark: Disabled"
+    const developmentMode = (process.env.DEVELOPMENT == "true") ?
+      ":white_check_mark: Enabled" :
+      ":negative_squared_cross_mark: Disabled"
+    
     const readySince = new Date(bot.startTime)
     const uptime = ms(bot.uptime)
+    const onlineUsers = bot.users.filter(user => !user.bot).length
+    
     const statusEmbed = {
       embed: {
         title: `${bot.user.username} Status`,
         color: bot.color.lightgreen,
         fields: [
           {
+            name: "Connected Since",
+            value: readySince.toUTCString(),
+            inline: false
+          },
+          {
             name: "Total Servers",
             value: bot.guilds.size,
             inline: true
           },
           {
-            name: "Connected Since",
-            value: readySince.toUTCString(),
-            inline: true
-          },
-          {
             name: "Online Users",
             value: onlineUsers,
-            inline: true
+            inline: false
           },
           {
             name: "Uptime",
@@ -38,7 +47,7 @@ exports.run = (bot) => {
           },
           {
             name: "Debug Mode",
-            value: bugMode,
+            value: debugMode,
             inline: true
           },
           {
@@ -50,5 +59,5 @@ exports.run = (bot) => {
       }
     }
     bot.createMessage(message.channel.id, statusEmbed)
-  })
+  }, bot.cooldown(30000))
 }
