@@ -49,7 +49,7 @@ const log = {
       chalk.red.bold(`${fileName}:`),
       args.join(" ")
     )
-    fs.writeFile(`${process.cwd()}/bot/logs/${fileName}`, p + "\n" + args.join("\n"), err => {
+    fs.writeFile(`${process.cwd()}/bot/logs/errors/${fileName}`, p + "\n" + args.join("\n"), err => {
       if (err) { throw err }
       console.log(
         chalk.red.bold(`${fileName}:`),
