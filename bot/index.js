@@ -58,6 +58,7 @@ bot.color = require("./src/color.js")
 bot.log = require("./src/logger.js").log
 bot.plants = require("./lib/plants.json")
 bot.cooldown = require("./src/cooldown.js")
+bot.getPriceOfSeeds = require("./lib/getPriceOfSeeds")
 
 bot.startMessage = (message) => {
   bot.createMessage(message.channel.id, "You have to start farming first! Send `farm start` to start farming!")

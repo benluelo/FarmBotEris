@@ -2,7 +2,7 @@ const funcs = require("./plotFunctions.js")
 // const { log } = require("../src/logger.js")
 
 module.exports = {
-  /** 
+  /**
    * Parses the supplied plot number.
    * @param {String} str - the plot number to get the value of, in the format `<letter><number>`.
    * @returns {Number|Boolean} the value of the plot supplied, or `false` if the input was not in valid format.

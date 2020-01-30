@@ -7,14 +7,14 @@ function clamp(num, min, max) {
 
 exports.run = (bot) => {
   bot.registerCommand("info", (message, args) => {
-    if (args[0]) {
-      let plotNumber = parsePlotNumber(args[0])
-      if (plotNumber !== false) {
-            
-        bot.database.Userdata.findOne({ userID: message.author.id }, (err, userdata) => {
-        
-          if (err) throw err
-        
+    bot.database.Userdata.findOne({ userID: message.author.id }, (err, userdata) => {
+      if (err) throw err
+
+      // check for plant/plot info
+      if (args[0]) {
+        let plotNumber = parsePlotNumber(args[0])
+        if (plotNumber !== false) {
+
           if (!userdata) {
             bot.startMessage(message)
             return
@@ -35,7 +35,7 @@ exports.run = (bot) => {
                 userCrop.datePlantedAt
               ) /
               bot.config.farminfo.growTimes[userCrop.planted])
-        
+
               let growthPercentage = clamp(
                 (
                   (
@@ -47,10 +47,10 @@ exports.run = (bot) => {
                 0,
                 1
               )
-        
+
               console.log("Time difference:", (Date.now() - userCrop.datePlantedAt))
               console.log("growthPercentage:", growthPercentage)
-        
+
               // calculate the time until growth
               let timeUntilPlantFinished
               if (bot.config.farminfo.growTimes[userCrop.planted] - (Date.now() - userCrop.datePlantedAt) > 0) {
@@ -61,7 +61,7 @@ exports.run = (bot) => {
               }
 
               let growthBar = timeUntilPlantFinished + "█".repeat(growthPercentage*10) + "░".repeat(10 - growthPercentage*10) + ` ${growthPercentage.toFixed(2) * 100}%`
-        
+
               const infoEmbed = {
                 embed: {
                   author: {
@@ -88,14 +88,28 @@ exports.run = (bot) => {
                   value: growthBar
                 })
               }
-              
+
               bot.createMessage(message.channel.id, infoEmbed)
             }
           }
-        })
+
+        } else {
+          if (Object.keys(userdata.seeds.common).includes(args[0])) {
+            const plantEmbed = {
+              embed: {
+                title: `:${args[0]}: ${args[0]}`,
+                description: `Level: \`${userdata.seeds.common[args[0]].level}\`\nCurrent Price: \`$${bot.getPriceOfSeeds[args[0]]}\``,
+                color: bot.color.darkgreen
+              }
+            }
+            bot.createMessage(message.channel.id, plantEmbed)
+          } else {
+            bot.createMessage(message.channel.id, "Please add the plot/plant you want info on")
+          }
+        }
+      } else {
+        bot.createMessage(message.channel.id, "Please add the plot/plant you want info on")
       }
-    } else {
-      bot.createMessage(message.channel.id, "Please add the plot you want info on")
-    }
+    })
   }, bot.cooldown(15000))
 }

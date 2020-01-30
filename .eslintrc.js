@@ -32,6 +32,9 @@ module.exports = {
         'keyword-spacing': [
             'error',
             { 'before': true }
+        ],
+        'no-trailing-spaces': [
+            'error'
         ]
     }
 }
