@@ -24,101 +24,89 @@ exports.run = bot => {
             // 🍎🍊🍋🍐🍒🍑🥭🍈🍇🍓🍉🍌🍍
             common: {
               apple: {
-                crop: "🍎",
                 discovered: true,
-                amount: 0
+                level: 1
               },
               tangerine: {
-                crop: "🍊",
                 discovered: true,
-                amount: 0
+                level: 1
               },
               lemon: {
-                crop: "🍋",
                 discovered: true,
-                amount: 0
+                level: 1
               },
               pear: {
-                crop: "🍐",
                 discovered: true,
-                amount: 0
+                level: 1
               },
               cherry: {
-                crop: "🍒",
                 discovered: true,
-                amount: 0
+                level: 1
               },
               peach: {
-                crop: "🍑",
                 discovered: true,
-                amount: 0
+                level: 1
               },
               mango: {
-                crop: "🥭",
                 discovered: true,
-                amount: 0
+                level: 1
               },
               melon: {
-                crop: "🍈",
                 discovered: true,
-                amount: 0
+                level: 1
               },
               grape: {
-                crop: "🍇",
                 discovered: true,
-                amount: 0
+                level: 1
               },
               strawberry: {
-                crop: "🍓",
                 discovered: true,
-                amount: 0
+                level: 1
               },
               banana: {
-                crop: "🍌",
                 discovered: true,
-                amount: 0
+                level: 1
               },
               pineapple: {
-                crop: "🍍",
                 discovered: true,
-                amount: 0
+                level: 1
               }
             }
             // uncommon:{
             //     rose: {
             //         discovered: true,
-            //         amount: 0
+            //         
             //     }
 
             // },
             // rare: {
             //     corn: {
             //         discovered: true,
-            //         amount: 0
+            //         
             //     }
             // },
             // epic: {
             //     tulip: {
             //         discovered: true,
-            //         amount: 0
+            //         
             //     }
             // },
             // legendary: {
             //     broccoli: {
             //         discovered: true,
-            //         amount: 0
+            //         
             //     }
             // },
             // mythical:{
             //     carrot: {
             //         discovered: true,
-            //         amount: 0
+            //         
             //     }
             // },
             // seasonal:{
             //     christmas_tree: {
             //         discovered: true,
-            //         amount: 0
+            //         
             //     }
             // }
           }

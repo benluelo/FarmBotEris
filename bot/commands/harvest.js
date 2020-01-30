@@ -14,13 +14,13 @@ module.exports.run = async (bot) => {
         let farm = userdata.farm
         let totalPlots = 0
         let value = 0
-        for(let plot in farm){
+        for (let plot in farm) {
 
           const userCrop = farm[plot].crop
       
           // console.log(chalk.bold.keyword("brown")(`FARM PLOT #${plot}:\n`), farm[plot])
       
-          if((userCrop.planted != "dirt") && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])){
+          if ((userCrop.planted != "dirt") && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])){
       
             // console.log("TEST BEFORE:", plot, userCrop.planted)
       
