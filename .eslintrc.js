@@ -28,6 +28,13 @@ module.exports = {
         'semi': [
             'error',
             'never'
+        ],
+        'keyword-spacing': [
+            'error',
+            { 'before': true }
+        ],
+        'no-trailing-spaces': [
+            'error'
         ]
     }
 }

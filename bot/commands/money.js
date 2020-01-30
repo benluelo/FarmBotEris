@@ -8,7 +8,7 @@ exports.run = bot => {
           message.channel.id,
           `${message.author.username}'s balance: **${userdata.money}** <:farmbot_coin:648032810682023956>`
         )
-        bot.log.toFile("money test")
+        //bot.log.toFile("money test")      - crashes bot
       }
 
       if (!userdata) {

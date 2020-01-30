@@ -7,9 +7,18 @@
   },
   "farminfo": {
     "growTimes": {
-      "tulip": 60000,
-      "rose": 30000,
-      "apple": 30000
+      "apple": 30000,
+      "tangerine": 30000,
+      "lemon": 30000,
+      "pear": 30000,
+      "cherry": 30000,
+      "peach": 30000,
+      "mango": 30000,
+      "melon": 30000,
+      "grape": 30000,
+      "strawberry": 30000,
+      "banana": 30000,
+      "pineapple": 30000
     },
     "dirt": ":brown_square:",
     "msgLtrs": [

@@ -31,8 +31,8 @@ exports.run = async (bot) => {
           message.channel.id,
           "Building farm..."
         ).then(msg => {
-          for(const plot in FARM){
-            if(DEBUG) { console.log(chalk.keyword("brown")("CHECKING PLOT #"), plot) }
+          for (const plot in FARM) {
+            if (DEBUG) { console.log(chalk.keyword("brown")("CHECKING PLOT #"), plot) }
 
             // this builds the farm, i really dont want to explain it lol but here goes
             //   1 2 3 4 5
@@ -42,27 +42,27 @@ exports.run = async (bot) => {
             // D * * * * *
             // E * * * * *
             // adds the letters and numbers as they are needed
-            if(plot < 5){
+            if (plot < 5) {
               plotsMsgTop += bot.config.farminfo.msgNums[plot]
             }
-            if(plot % 5 === 0){
+            if (plot % 5 === 0) {
               plotsMsg += "\n" + bot.config.farminfo.msgLtrs[Math.floor(plot/5)]
             }
 
-            if(DEBUG) { console.log(FARM[plot].crop.planted) }
+            if (DEBUG) { console.log(FARM[plot].crop.planted) }
 
             // adds the plots to the message
-            if(FARM[plot].crop.planted == "dirt"){ // if dirt, add dirt (lol)
+            if (FARM[plot].crop.planted == "dirt") { // if dirt, add dirt (lol)
               plotsMsg += bot.plants.dirt
-            }else if(parseInt(Date.now() - FARM[plot].crop.datePlantedAt) >= parseInt(bot.config.farminfo.growTimes[FARM[plot].crop.planted])){ // if not dirt, and if the crop is grown, add the crop
+            } else if (parseInt(Date.now() - FARM[plot].crop.datePlantedAt) >= parseInt(bot.config.farminfo.growTimes[FARM[plot].crop.planted])){ // if not dirt, and if the crop is grown, add the crop
               plotsMsg += bot.plants[FARM[plot].crop.planted]
-            }else{ // if the crop in the plot isn't grown, add a seedling
+            } else { // if the crop in the plot isn't grown, add a seedling
               plotsMsg += bot.plants.seedling
             }
 
-            if(DEBUG) { console.log("Now:", Date.now()) }
-            if(DEBUG) { console.log("Planted at:", FARM[plot].crop.datePlantedAt) }
-            if(DEBUG) { console.log("Time Difference:", (Date.now() - FARM[plot].crop.datePlantedAt)) }
+            if (DEBUG) { console.log("Now:", Date.now()) }
+            if (DEBUG) { console.log("Planted at:", FARM[plot].crop.datePlantedAt) }
+            if (DEBUG) { console.log("Time Difference:", (Date.now() - FARM[plot].crop.datePlantedAt)) }
           }
 
           // edit the originally sent message

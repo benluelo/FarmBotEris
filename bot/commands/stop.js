@@ -5,11 +5,11 @@ exports.run = (bot) => {
         embed: {
           title: "Stopping Bot",
           description: `${bot.user.username} disconnecting in 5 seconds\n**${bot.guilds.size}** servers\n**${bot.users.size}** users`,
-          color: bot.color.red 
+          color: bot.color.red
         }
-      } 
+      }
       bot.createMessage(message.channel.id, stopEmbed)
-      setTimeout(() => { bot.disconnect() }, 5000)
+      setTimeout(() => { bot.disconnect(); process.exit(0) }, 5000)
     } else if (args[0] == "restart") {
       const restartEmbed = {
         embed: {
