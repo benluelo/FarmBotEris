@@ -57,21 +57,7 @@ bot.config = require("./config.json")
 bot.color = require("./src/color.js")
 bot.log = require("./src/logger.js").log
 bot.plants = require("./lib/plants.json")
-
-bot.cooldown = (length) => {
-  const _cd = {
-    cooldown: length,
-    cooldownMessage: function() {
-      return `cooldown is ${length/1000} seconds pls slow down`
-    },
-    cooldownExclusions: {
-      channelIDs: [
-        "669353094953435183" // dev stuff > #test-test
-      ]
-    }
-  }
-  return _cd
-}
+bot.cooldown = require("./src/cooldown.js")
 
 bot.startMessage = (message) => {
   bot.createMessage(message.channel.id, "You have to start farming first! Send `farm start` to start farming!")

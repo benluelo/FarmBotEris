@@ -1,7 +1,7 @@
 const chalk = require("chalk")
 const fs = require("fs")
-const path = require("path")
-const stackTrace = require("stack-trace")
+const { basename } = require("path")
+const { get } = require("stack-trace")
 
 
 const outFileName = "toFileLogs"
@@ -10,38 +10,59 @@ const toFileStream = fs.createWriteStream(`${process.cwd()}/bot/logs/${outFileNa
   flags: "a+"
 })
 
+/**
+ * Gets the date and returns it in a readable format for logging to the console.
+ * @returns {String}
+ */
 const getDate = () => {
   const date = new Date()
   return date.toLocaleString()
 }
 
 const log = {
+  /** 
+   * The default log; logs to the console in cyan.
+   * @param  {...any} args - what you would like to log.
+   */
   default(...args){
     console.log(
-      chalk.white.bold(`${path.basename(stackTrace.get()[1].getFileName())}:`),
+      chalk.white.bold(`${basename(get()[1].getFileName())}:`),
       chalk.cyan(`[LOG][DEFAULT][${getDate()}]`),
       args.join(" ")
     )
   },
   connect(...args){
+    /** 
+     * Log for when the bot connects; logs to the console in green.
+     * @param  {...any} args - what you would like to log.
+     */
     console.log(
-      chalk.white.bold(`${path.basename(stackTrace.get()[1].getFileName())}:`),
+      chalk.white.bold(`${basename(get()[1].getFileName())}:`),
       chalk.green(`[LOG][CONNECT][${getDate()}]`),
       args.join(" ")
     )
   },
+  /** 
+   * Log for when the database connects; logs to the console in lime.
+   * @param  {...any} args - what you would like to log.
+   */
   dbconnect(...args){
     console.log(
-      chalk.white.bold(`${path.basename(stackTrace.get()[1].getFileName())}:`),
-      chalk.greenBright(`[LOG][DBCONNECT][${getDate()}]`),
+      chalk.white.bold(`${basename(get()[1].getFileName())}:`),
+      chalk.keyword("lime")(`[LOG][DBCONNECT][${getDate()}]`),
       args.join(" ")
     )
   },
+  /**
+   * Log for when there is an error; logs both to a file with the name of the ISO timestamp
+   * that the function was called at and to the console (in red).
+   * @param {...any} args - what you would like to log.
+   */
   error(...args){ 
-    // stackTrace.get().forEach(callSite => {
+    // get().forEach(callSite => {
     //   console.log(callSite.getFileName())
     // })
-    const p = path.basename(stackTrace.get()[1].getFileName())
+    const p = basename(get()[1].getFileName())
     const fileName = `${new Date().toISOString().replace(/:/g, "-").replace(/\./g, "-")}.txt`
     console.log(
       chalk.white.bold(`${p}:`),
@@ -57,8 +78,13 @@ const log = {
       )
     })
   },
+  /** 
+   * Logs to a file for use in long-term debugging and/or statstics. Also logs to the 
+   * console, in yellow.
+   * @param  {...any} args - what you would like to log.
+   */
   toFile(...args){
-    const p = path.basename(stackTrace.get()[1].getFileName())
+    const p = basename(get()[1].getFileName())
     console.log(
       chalk.white.bold(`${p}:`),
       chalk.yellow(`[LOG][TO FILE][${getDate()}]`),
