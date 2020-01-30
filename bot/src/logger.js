@@ -54,6 +54,17 @@ const log = {
     )
   },
   /**
+   * Log the commands being loaded into the bot
+   * @param  {...any} args - cmd that was loaded
+   */
+  loadedCmd(...args){
+    console.log(
+      chalk.white.bold(`${basename(get()[1].getFileName())}:`),
+      chalk.keyword("cyan")(`[LOG][CMD LOAD][${getDate()}]`),
+      args.join(" ")
+    )
+  },
+  /**
    * Log for when there is an error; logs both to a file with the name of the ISO timestamp
    * that the function was called at and to the console (in red).
    * @param {...any} args - what you would like to log.
