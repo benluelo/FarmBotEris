@@ -9,7 +9,7 @@ let seedsPrice = {
   peach: 1,
   mango: 1,
   melon: 1,
-  grape: 1,
+  grapes: 1,
   strawberry: 1,
   banana: 1,
   pineapple: 1

@@ -55,7 +55,7 @@ exports.run = bot => {
                 discovered: true,
                 level: 1
               },
-              grape: {
+              grapes: {
                 discovered: true,
                 level: 1
               },
