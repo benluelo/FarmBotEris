@@ -16,7 +16,7 @@ let seedsPrice = {
 }
 
 const getRandomNumber = (min, max) => {
-  return parseFloat((Math.random() * (max - min) + min).toFixed(2))
+  return parseFloat((Math.random() * (max - min) + min)).toFixed(2)
 }
 
 const randomPrice = () => {

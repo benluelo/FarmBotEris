@@ -12,16 +12,16 @@ exports.run = (bot) => {
     // }
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
       if (err) throw err
-      
+
       // check specified plot
       if (!args[1]) return bot.createMessage(message.channel.id, "You have to specify a plot to plant on!")
       if (args[0] && args[1]) {
-      
+
         // check if input is valid
         let plotNumber = parsePlotNumber(args[1])
         let truePlant = Object.keys(userdata.seeds.common).includes(args[0])
         if (plotNumber !== false && truePlant) {
-    
+
           if (!userdata) {
             bot.startMessage(message)
           }
@@ -30,7 +30,7 @@ exports.run = (bot) => {
               bot.createMessage(message.channel.id, "You don't own that plot!")
               return
             }
-            await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, 
+            await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
               {
                 $set: {
                   [`farm.${plotNumber}.crop.planted`] : args[0],
@@ -38,9 +38,9 @@ exports.run = (bot) => {
                 }
               }
             )
-            bot.createMessage(message.channel.id, ":white_check_mark: Planted an apple on " + args[1])
+            bot.createMessage(message.channel.id, `:white_check_mark: Planted an ${args[0]} on ${args[1]}`)
           }
-          
+
         } else {
           bot.createMessage(message.channel.id, "Invalid input! Please try again with the format `<plant> <letter><number>`.")
         }
@@ -63,7 +63,7 @@ exports.run = (bot) => {
         if (userdata) {
           for (let plot in userdata.farm){
             if (userdata.farm[plot].crop.planted === "dirt"){
-              await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, 
+              await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
                 {
                   $set: {
                     [`farm.${plot}.crop.planted`] : "apple",

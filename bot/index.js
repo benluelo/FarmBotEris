@@ -64,6 +64,15 @@ bot.startMessage = (message) => {
   bot.createMessage(message.channel.id, "You have to start farming first! Send `farm start` to start farming!")
 }
 
+bot.formatMoney = (value) => {
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2
+  })
+  return formatter.format(value).substr(1)
+}
+
 const init = async () => {
   // load events
   fs.readdir("./bot/events/", (err, files) => {
