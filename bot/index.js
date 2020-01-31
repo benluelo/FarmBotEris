@@ -1,13 +1,10 @@
 const Eris = require("eris")
 const fs = require("fs")
-// eslint-disable-next-line no-unused-vars
-const chalk = require("chalk")
 require("dotenv").config({ path: ".env" })
 
 const bot = new Eris.CommandClient(process.env.TOKEN, {
   disableEveryone: true,
   defaultImageFormat: "png",
-  // i dont know if you want this but it says "This can cause significant performance increase on large bots"
   disableEvents: {
     CHANNEL_CREATE: true,
     CHANNEL_DELETE: true,

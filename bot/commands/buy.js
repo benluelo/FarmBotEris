@@ -2,9 +2,8 @@ const MAX_PLOTS = 25
 
 exports.run = async (bot) => {
 
-  // eslint-disable-next-line no-unused-vars
-  bot.registerCommand("buy", (message, args) => {
-      
+  bot.registerCommand("buy", (message) => {
+
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
       if (err) bot.log.error(err)
       if (!userdata) {
@@ -12,14 +11,13 @@ exports.run = async (bot) => {
         return
       }
       if (userdata) {
-        if(userdata.farm.length >= MAX_PLOTS){
-          bot.createMessage(
+        if (userdata.farm.length >= MAX_PLOTS) {
+          return bot.createMessage(
             message.channel.id,
             `${message.author.username}, you already have the maximum number of plots!`
           )
-          return
         }
-        await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, 
+        await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
           { $push: {
             farm: {
               crop: {

@@ -15,7 +15,7 @@ exports.run = (bot) => {
         embed: {
           title: "Restarting Bot",
           description: `${bot.user.username} Restarting in 10 seconds\n**${bot.guilds.size}** servers\n**${bot.users.size}** users`,
-          color: bot.color.red 
+          color: bot.color.red
         }
       }
       bot.createMessage(message.channel.id, restartEmbed)

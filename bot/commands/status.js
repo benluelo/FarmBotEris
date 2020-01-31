@@ -10,11 +10,11 @@ exports.run = (bot) => {
     const developmentMode = (process.env.DEVELOPMENT == "true") ?
       ":white_check_mark: Enabled" :
       ":negative_squared_cross_mark: Disabled"
-    
+
     const readySince = new Date(bot.startTime)
     const uptime = ms(bot.uptime)
     const onlineUsers = bot.users.filter(user => !user.bot).length
-    
+
     const statusEmbed = {
       embed: {
         title: `${bot.user.username} Status`,

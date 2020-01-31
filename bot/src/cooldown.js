@@ -3,7 +3,7 @@
  * @typedef {String} ChannelID
  */
 
-/** 
+/**
  * The cooldown object for the Eris `CommandClient.registerCommand()` method.
  * @typedef {Object} CooldownObject
  * @property {Number} cooldown - the length of the cooldown.

@@ -1,8 +1,6 @@
-// const chalk = require("chalk")
 const { parsePlotNumber } = require("../lib/parsePlotNumber.js")
-// eslint-disable-next-line no-unused-vars
+
 module.exports.run = async (bot) => {
-  // eslint-disable-next-line no-unused-vars
   bot.registerCommand("harvest", (message, args) => {
 
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
@@ -21,11 +19,7 @@ module.exports.run = async (bot) => {
 
             const userCrop = farm[plot].crop
 
-            // console.log(chalk.bold.keyword("brown")(`FARM PLOT #${plot}:\n`), farm[plot])
-
             if ((userCrop.planted != "dirt") && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])){
-
-              // console.log("TEST BEFORE:", plot, userCrop.planted)
 
               await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
                 {
@@ -37,20 +31,13 @@ module.exports.run = async (bot) => {
                     money: parseFloat(bot.getPriceOfSeeds[userCrop.planted])
                   }
                 }
-                // eslint-disable-next-line no-unused-vars
-              ).then((res) => {
+              ).then(() => {
                 totalPlots += 1
                 value += parseFloat(bot.getPriceOfSeeds[userCrop.planted])
-
-                // console.log("TEST AFTER:", plot, res.value.userCrop.planted)
-                // console.log(chalk.bold.blue(`PLOT #${plot} HARVESTED`))
 
               }).catch(err => {
                 console.log(err.message)
               })
-
-              // console.log("test:", plot)
-
             }
           }
 
@@ -93,8 +80,6 @@ module.exports.run = async (bot) => {
           }
 
         }
-
-        // console.log(chalk.yellow.underline(`${totalPlots} plots harvested in total`))
       }
     })
 

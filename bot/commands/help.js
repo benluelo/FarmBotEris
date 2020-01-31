@@ -67,6 +67,6 @@ exports.run = (bot) => {
         sendHelp("Stop", "Stops or restarts the bot", "f!stop [restart]")
       }
     }
-    
+
   }, bot.cooldown(15000))
 }

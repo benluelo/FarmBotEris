@@ -49,36 +49,38 @@ exports.run = (bot) => {
       }
     })
 
-  // eslint-disable-next-line no-unused-vars
   }, bot.cooldown(5000)).registerSubcommand("all", (message, args) => {
 
-    bot.createMessage(message.channel.id, "Planting all!").then(msg => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+      if (err) bot.log.error(err)
+      if (!userdata) {
+        bot.startMessage(message)
+      }
 
-      let totalPlots = 0
+      if (!args[0]) return bot.createMessage(message.channel.id, "Please add the plant you want to plant")
+      if (!Object.keys(userdata.seeds.common).includes(args[0])) return bot.createMessage(message.channel.id, "Please include a vaild plant type")
+      if (!userdata.seeds.common[args[0]].discovered) return // slient quit
 
-      bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
-        if (!userdata) {
-          bot.startMessage(message)
-        }
+      bot.createMessage(message.channel.id, "Planting all!").then(async msg => {
+
+        let totalPlots = 0
+
         if (userdata) {
-          for (let plot in userdata.farm){
-            if (userdata.farm[plot].crop.planted === "dirt"){
+          for (let plot in userdata.farm) {
+            if (userdata.farm[plot].crop.planted === "dirt") {
               await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
                 {
                   $set: {
-                    [`farm.${plot}.crop.planted`] : "apple",
+                    [`farm.${plot}.crop.planted`] : args[0],
                     [`farm.${plot}.crop.datePlantedAt`] : Date.now()
                   }
-                }
-              // eslint-disable-next-line no-unused-vars
-              ).then(res => {
+                }).then(() => {
                 totalPlots += 1
-                // msg.edit(`Succesfully planted plot #${plot}`)
               })
             }
           }
+          msg.edit(`Succesfully planted ${totalPlots} plots!`)
         }
-        msg.edit(`Succesfully planted ${totalPlots} plots!`)
       })
     })
 
