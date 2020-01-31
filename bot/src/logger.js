@@ -20,7 +20,7 @@ const getDate = () => {
 }
 
 const log = {
-  /** 
+  /**
    * The default log; logs to the console in cyan.
    * @param  {...any} args - what you would like to log.
    */
@@ -32,7 +32,7 @@ const log = {
     )
   },
   connect(...args){
-    /** 
+    /**
      * Log for when the bot connects; logs to the console in green.
      * @param  {...any} args - what you would like to log.
      */
@@ -42,7 +42,7 @@ const log = {
       args.join(" ")
     )
   },
-  /** 
+  /**
    * Log for when the database connects; logs to the console in lime.
    * @param  {...any} args - what you would like to log.
    */
@@ -57,7 +57,7 @@ const log = {
    * Log the commands being loaded into the bot
    * @param  {...any} args - cmd that was loaded
    */
-  loadedCmd(...args){
+  commandLoad(...args){
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
       chalk.keyword("cyan")(`[LOG][CMD LOAD][${getDate()}]`),
@@ -69,7 +69,7 @@ const log = {
    * that the function was called at and to the console (in red).
    * @param {...any} args - what you would like to log.
    */
-  error(...args){ 
+  error(...args){
     // get().forEach(callSite => {
     //   console.log(callSite.getFileName())
     // })
@@ -89,8 +89,8 @@ const log = {
       )
     })
   },
-  /** 
-   * Logs to a file for use in long-term debugging and/or statstics. Also logs to the 
+  /**
+   * Logs to a file for use in long-term debugging and/or statstics. Also logs to the
    * console, in yellow.
    * @param  {...any} args - what you would like to log.
    */

@@ -27,7 +27,7 @@ exports.run = bot => {
                 discovered: true,
                 level: 1
               },
-              tangerine: {
+              orange: {
                 discovered: true,
                 level: 1
               },
@@ -75,38 +75,38 @@ exports.run = bot => {
             // uncommon:{
             //     rose: {
             //         discovered: true,
-            //         
+            //
             //     }
 
             // },
             // rare: {
             //     corn: {
             //         discovered: true,
-            //         
+            //
             //     }
             // },
             // epic: {
             //     tulip: {
             //         discovered: true,
-            //         
+            //
             //     }
             // },
             // legendary: {
             //     broccoli: {
             //         discovered: true,
-            //         
+            //
             //     }
             // },
             // mythical:{
             //     carrot: {
             //         discovered: true,
-            //         
+            //
             //     }
             // },
             // seasonal:{
             //     christmas_tree: {
             //         discovered: true,
-            //         
+            //
             //     }
             // }
           }
