@@ -15,7 +15,7 @@ module.exports = {
     let temp = str.split("")
 
     // check that the plot is in <letter> <number> format
-    if (funcs.isAlpha(temp[0]) && funcs.isNumeric(temp[1])) {
+    if (funcs.isAlpha(temp[0]) && funcs.isNumeric(temp[1]) && temp.length == 2) {
 
       // if correct format, create an object that holds the plot coordinates
       const a = {
