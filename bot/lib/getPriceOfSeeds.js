@@ -1,5 +1,9 @@
 const hour = 3600000
 
+// ideas for the prices
+// - random (low) chance for any seed price to be decreased by 50%
+// - if too many of a seed is sold in a curtain amount of time is decreases
+
 let seedsPrice = {
   apple: 1,
   orange: 1,
@@ -20,8 +24,12 @@ const getRandomNumber = (min, max) => {
 }
 
 const randomPrice = () => {
+  let min = 0.7
+  let max = 1.5
   for (let seed in seedsPrice) {
-    seedsPrice[seed] = getRandomNumber(0.7, 1.5)
+    seedsPrice[seed] = getRandomNumber(min, max)
+    min = min*1.15
+    max = max*1.15
   }
 }
 
