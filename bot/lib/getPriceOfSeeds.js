@@ -2,7 +2,7 @@ const hour = 3600000
 
 let seedsPrice = {
   apple: 1,
-  tangerine: 1,
+  orange: 1,
   lemon: 1,
   pear: 1,
   cherry: 1,
