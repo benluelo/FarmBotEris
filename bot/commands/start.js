@@ -25,51 +25,63 @@ exports.run = bot => {
             common: {
               apple: {
                 discovered: true,
-                level: 1
+                level: 1,
+                amount: 0
               },
               orange: {
                 discovered: true,
-                level: 1
+                level: 1,
+                amount: 0
               },
               lemon: {
                 discovered: true,
-                level: 1
+                level: 1,
+                amount: 0
               },
               pear: {
                 discovered: true,
-                level: 1
+                level: 1,
+                amount: 0
               },
               cherry: {
                 discovered: true,
-                level: 1
+                level: 1,
+                amount: 0
               },
               peach: {
                 discovered: true,
-                level: 1
+                level: 1,
+                amount: 0
               },
               mango: {
                 discovered: true,
-                level: 1
+                level: 1,
+                amount: 0
               },
               melon: {
                 discovered: true,
-                level: 1
+                level: 1,
+                amount: 0
               },
               grapes: {
                 discovered: true,
-                level: 1
+                level: 1,
+                amount: 0
               },
               strawberry: {
                 discovered: true,
-                level: 1
+                level: 1,
+                amount: 0
               },
               banana: {
                 discovered: true,
-                level: 1
+                level: 1,
+                amount: 0
               },
               pineapple: {
                 discovered: true,
-                level: 1
+                level: 1,
+                amount: 0
               }
             }
             // uncommon:{

@@ -11,7 +11,6 @@ module.exports.run = async (bot) => {
       if (userdata) {
         let farm = userdata.farm
         let totalPlots = 0
-        let value = 0
 
         // harvest all plots
         if (!args[0]) {
@@ -28,12 +27,11 @@ module.exports.run = async (bot) => {
                     [`farm.${plot}.crop.datePlantedAt`]: Date.now(),
                   },
                   $inc: {
-                    money: parseFloat(bot.getPriceOfSeeds[userCrop.planted])
+                    [`seeds.common.${userCrop.planted}.amount`]: 1
                   }
                 }
               ).then(() => {
                 totalPlots += 1
-                value += parseFloat(bot.getPriceOfSeeds[userCrop.planted])
 
               }).catch(err => {
                 console.log(err.message)
@@ -42,7 +40,7 @@ module.exports.run = async (bot) => {
           }
 
           bot.createMessage(message.channel.id,
-            `**${totalPlots}** plots harvested in total, you made **${value}** <:farmbot_coin:648032810682023956> selling the crops!`)
+            `**${totalPlots}** plots harvested in total!`)
 
         } else {
           //harvest just one plot
@@ -51,11 +49,9 @@ module.exports.run = async (bot) => {
           if (plotNumber !== false) {
 
             if (plotNumber >= userdata.farm.length) {
-              bot.createMessage(message.channel.id, "You don't own that plot!")
-              return
+              return bot.createMessage(message.channel.id, "You don't own that plot!")
             } else {
               const userCrop = userdata.farm[plotNumber].crop
-              value = bot.getPriceOfSeeds[userCrop.planted]
 
               if ((userCrop.planted != "dirt") && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])) {
                 await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
@@ -65,14 +61,14 @@ module.exports.run = async (bot) => {
                       [`farm.${plotNumber}.crop.datePlantedAt`]: Date.now(),
                     },
                     $inc: {
-                      money: parseFloat(value)
+                      [`seeds.common.${userCrop.planted}.amount`]: 1
                     }
                   }
                 ).catch(err => {
                   console.log(err.message)
                 })
                 bot.createMessage(message.channel.id,
-                  `You made **${value}** <:farmbot_coin:648032810682023956> selling the crop!`)
+                  `You harvested the **${userCrop.planted}** on #${args[0]}!`)
               } else {
                 bot.createMessage(message.channel.id, "Cannot harvest dirt!")
               }

@@ -48,7 +48,7 @@ exports.run = async (bot) => {
         }).then(res => {
           bot.createMessage(
             message.channel.id,
-            `Plot purchased successfully! You now own ${res.value.farm.length + 1} plots!${res.value.farm.length + 1 === MAX_PLOTS ? " This is the maximum amount of plots!" : ""}`
+            `Plot purchased for **${bot.formatMoney(priceOfNextPlot)}**<:farmbot_coin:648032810682023956>! You now own ${res.value.farm.length + 1} plots!${res.value.farm.length + 1 === MAX_PLOTS ? " This is the maximum amount of plots!" : ""}`
           )
         })
       }

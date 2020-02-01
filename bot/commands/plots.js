@@ -3,8 +3,7 @@ const chalk = require("chalk")
 const DEBUG = true
 
 exports.run = async (bot) => {
-  // eslint-disable-next-line no-unused-vars
-  bot.registerCommand("plots", (message, args) => {
+  bot.registerCommand("plots", (message) => {
 
     // attempt to find the user in the system
     bot.database.Userdata.findOne({ userID: message.author.id }, (err, userdata) => {
@@ -66,11 +65,17 @@ exports.run = async (bot) => {
           }
 
           // edit the originally sent message
-          msg.edit(`${message.author.username}'s farm!\n${plotsMsgTop + plotsMsg}`)
+          msg.edit({
+            content: "",
+            embed: {
+              title: `${message.author.username}'s farm!`,
+              description: `${plotsMsgTop + plotsMsg}`,
+              color: bot.color.darkgreen
+            }
+          })
         })
       }
     })
 
   }, bot.cooldown(30000))
 }
-// [["S", 0, true, ["S", 0, true, ["S", 0, true]]], 0, true]
