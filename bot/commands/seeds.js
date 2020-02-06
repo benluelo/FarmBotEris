@@ -11,11 +11,9 @@ exports.run = (bot) => {
       let seedsEmbed = {
         embed: {
           title: "Seeds",
-          description: seeds,
+          description: "Prices update every hour\n" + seeds,
           color: bot.color.darkgreen,
-          footer: {
-            text: "Prices update every hour"
-          }
+          timestamp: new Date()
         }
       }
       await bot.createMessage(message.channel.id, seedsEmbed)
