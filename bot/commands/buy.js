@@ -23,7 +23,7 @@ exports.run = async (bot) => {
         if (userdata.money < priceOfNextPlot) {
           const notEnoughEmbed = {
             embed: {
-              title: "Insignificant Funds!",
+              title: "Insufficient Funds!",
               description: `The next plot costs **${priceOfNextPlot}** <:farmbot_coin:648032810682023956>`,
               color: bot.color.red
             }
