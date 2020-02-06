@@ -1,4 +1,5 @@
 const ms = require("parse-ms")
+const { Embed } = require("../lib/classes")
 const { parsePlotNumber } = require("../lib/parsePlotNumber.js")
 
 function clamp(num, min, max) {
@@ -62,25 +63,12 @@ exports.run = (bot) => {
 
               let growthBar = timeUntilPlantFinished + "█".repeat(growthPercentage*10) + "░".repeat(10 - growthPercentage*10) + ` ${growthPercentage.toFixed(2) * 100}%`
 
-              const infoEmbed = {
-                embed: {
-                  author: {
-                    name: bot.user.username,
-                    icon_url: bot.user.avatarURL
-                  },
-                  color: bot.color.lightgreen,
-                  description: `Info for plot #\`${args[0][0].toUpperCase() + args[0][1]}\``,
-                  fields: [
-                    {
-                      name: "Currently planted:",
-                      value: bot.plants[userCrop.planted]
-                    }
-                  ],
-                  thumbnail: {
-                    url: "https://i.imgur.com/tHDIEKj.png"
-                  }
-                }
-              }
+              const infoEmbed = new Embed()
+                .setAuthor(bot.user.username, bot.user.avatarURL)
+                .setColor(bot.color.lightgreen)
+                .setDescription(`Info for plot #\`${args[0][0].toUpperCase() + args[0][1]}\``)
+                .addField("Currently planted:", bot.plants[userCrop.planted])
+                .setThumbnail("https://i.imgur.com/tHDIEKj.png")
 
               if (userCrop.planted != "dirt") {
                 infoEmbed.embed.fields.push({
@@ -89,23 +77,10 @@ exports.run = (bot) => {
                 })
               }
 
-              bot.createMessage(message.channel.id, infoEmbed)
+              bot.createMessage(message.channel.id, infoEmbed.show())
             }
           }
 
-        } else {
-          if (Object.keys(userdata.seeds.common).includes(args[0])) {
-            const plantEmbed = {
-              embed: {
-                title: `:${args[0]}: ${args[0]}`,
-                description: `Level: \`${userdata.seeds.common[args[0]].level}\`\nCurrent Price: \`$${bot.getPriceOfSeeds[args[0]]}\``,
-                color: bot.color.darkgreen
-              }
-            }
-            bot.createMessage(message.channel.id, plantEmbed)
-          } else {
-            bot.createMessage(message.channel.id, "Please add the plot/plant you want info on")
-          }
         }
       } else {
         bot.createMessage(message.channel.id, "Please add the plot/plant you want info on")

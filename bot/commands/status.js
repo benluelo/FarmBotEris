@@ -1,4 +1,5 @@
 const ms = require("parse-ms")
+const { Embed } = require("../lib/classes")
 
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
@@ -15,49 +16,17 @@ exports.run = (bot) => {
     const uptime = ms(bot.uptime)
     const onlineUsers = bot.users.filter(user => !user.bot).length
 
-    const statusEmbed = {
-      embed: {
-        title: `${bot.user.username} Status`,
-        color: bot.color.lightgreen,
-        fields: [
-          {
-            name: "Connected Since",
-            value: readySince.toUTCString(),
-            inline: false
-          },
-          {
-            name: "Total Servers",
-            value: bot.guilds.size,
-            inline: true
-          },
-          {
-            name: "Online Users",
-            value: onlineUsers,
-            inline: false
-          },
-          {
-            name: "Uptime",
-            value: `${uptime.days} days, ${uptime.hours}:${uptime.minutes}:${uptime.seconds}`,
-            inline: true
-          },
-          {
-            name: "Shards",
-            value: bot.shards.size,
-            inline: true
-          },
-          {
-            name: "Debug Mode",
-            value: debugMode,
-            inline: true
-          },
-          {
-            name: "Development Mode",
-            value: developmentMode,
-            inline: true
-          }
-        ]
-      }
-    }
-    bot.createMessage(message.channel.id, statusEmbed)
+    const statusEmbed = new Embed()
+      .setTitle(`${bot.user.username} Status`)
+      .setColor(bot.color.lightgreen)
+      .addField("Total Servers", bot.guilds.size, true)
+      .addField("Connected Since", readySince.toUTCString(), true)
+      .addField("Online Users", onlineUsers, true)
+      .addField("Uptime", `${uptime.days} days, ${uptime.hours}:${uptime.minutes}:${uptime.seconds}`, true)
+      .addField("Shards", bot.shards.size, true)
+      .addField("Debug Mode", debugMode, false)
+      .addField("Development Mode", developmentMode, true)
+
+    bot.createMessage(message.channel.id, statusEmbed.show())
   }, bot.cooldown(30000))
 }

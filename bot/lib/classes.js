@@ -4,7 +4,6 @@ class Embed {
    */
   constructor() {
     this.self = {
-      content: null,
       embed: {
         title: null,
         description: null,
@@ -132,5 +131,5 @@ class Embed {
 }
 
 module.exports = {
-  Embed
+  Embed: Embed
 }

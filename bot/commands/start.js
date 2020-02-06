@@ -1,3 +1,4 @@
+const { Embed } = require("../lib/classes")
 exports.run = bot => {
   bot.registerCommand("start", (message) => {
     bot.database.Userdata.findOne({ userID: message.author.id}, (err, userdata) => {
@@ -123,13 +124,12 @@ exports.run = bot => {
             // }
           }
         })
-        bot.createMessage(message.channel.id, { embed: {
-          title: `Welcome to ${bot.user.username}`,
-          description: "Do `f!help` to display the full list of commands the bot has!",
-          color: bot.color.lightgreen
-        }})
+        bot.createMessage(message.channel.id, new Embed()
+          .setTitle(`Welcome to ${bot.user.username}`)
+          .setDescription("Do `f!help` to display the full list of commands the bot has!")
+          .setColor(bot.color.lightgreen).show()
+        )
       }
-
       if (userdata) {
         bot.createMessage(message.channel.id, `You've already started farming, ${message.author.username}!`)
       }

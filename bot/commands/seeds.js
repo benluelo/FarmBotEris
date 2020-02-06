@@ -1,3 +1,4 @@
+const { Embed } = require("../lib/classes")
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   bot.registerCommand("seeds", (message, args) => {
@@ -8,15 +9,12 @@ exports.run = (bot) => {
           seeds += `${bot.plants[crop]} ${crop.charAt(0).toUpperCase() + crop.slice(1)} - \`$${bot.getPriceOfSeeds[crop]}\` \n`
         }
       }
-      let seedsEmbed = {
-        embed: {
-          title: "Seeds",
-          description: "Prices update every hour\n" + seeds,
-          color: bot.color.darkgreen,
-          timestamp: new Date()
-        }
-      }
-      await bot.createMessage(message.channel.id, seedsEmbed)
+      const seedsEmbed = new Embed()
+        .setTitle("Seeds")
+        .setDescription("Prices update every hour\n" + seeds)
+        .setColor(bot.color.darkgreen)
+        .setTimestamp()
+      await bot.createMessage(message.channel.id, seedsEmbed.show())
     })
   })
 }

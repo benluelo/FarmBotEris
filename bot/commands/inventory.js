@@ -1,4 +1,6 @@
+const { Embed } = require("../lib/classes")
 const smallNumbers = ["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"]
+
 const getSmallNumbers = (number) => {
   number = number.toString()
   let numberString = ""
@@ -40,17 +42,12 @@ exports.run = (bot) => {
       }
 
       // make embed
-      const invEmbed = {
-        embed: {
-          author: {
-            name: `${message.author.username}'s Inventory`,
-            icon_url: message.author.avatarURL
-          },
-          color: bot.color.lightgreen,
-          description: invItemString
-        }
-      }
-      bot.createMessage(message.channel.id, invEmbed)
+      const invEmbed = new Embed()
+        .setAuthor(`${message.author.username}'s Inventory`, message.author.avatarURL)
+        .setColor(bot.color.lightgreen)
+        .setDescription(invItemString)
+
+      bot.createMessage(message.channel.id, invEmbed.show())
     })
   })
   bot.registerCommandAlias("inv", "inventory")

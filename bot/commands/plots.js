@@ -1,4 +1,5 @@
 const chalk = require("chalk")
+const { Embed } = require("../lib/classes")
 
 const DEBUG = true
 
@@ -65,14 +66,12 @@ exports.run = async (bot) => {
           }
 
           // edit the originally sent message
-          msg.edit({
-            content: "",
-            embed: {
-              title: `${message.author.username}'s farm!`,
-              description: `${plotsMsgTop + plotsMsg}`,
-              color: bot.color.darkgreen
+          msg.edit(
+            {
+              ...new Embed().setTitle(`${message.author.username}'s farm!`).setDescription(`${plotsMsgTop + plotsMsg}`).setColor(bot.color.darkgreen).show(),
+              ...{content: ""}
             }
-          })
+          )
         })
       }
     })

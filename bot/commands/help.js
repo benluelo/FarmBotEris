@@ -1,54 +1,35 @@
+const { Embed } = require("../lib/classes")
 exports.run = (bot) => {
   bot.registerCommand("help", (message, args) => {
 
     // Function to send more detailed info about commands
     const sendHelp = (commandName, description, usage) => {
-      bot.createMessage(message.channel.id, {
-        embed: {
-          title: `${commandName} Command`,
-          description: description,
-          fields: [
-            {
-              name: "Usage",
-              value: usage
-            }
-          ],
-          footer: {
-            text: "[] - optional  |  <> - required"
-          }
-        }
-      })
+      bot.createMessage(message.channel.id, new Embed()
+        .setTitle(`${commandName} Command`)
+        .setDescription(description)
+        .addField("Usage", usage)
+        .setFooter("[] - optional  |  <> - required").show()
+      )
     }
 
     // if <PREFIX>help was typed
     if (args.length == 0) {
-      const helpEmbed = {
-        embed: {
-          title: "Help Command",
-          description: "A full list of commands",
-          color: bot.color.lightgreen,
-          fields: [
-            {
-              name: ":seedling: General",
-              value: "`buy`, `money`, `plots`"
-            },
-            {
-              name: ":gear: Utility",
-              value: "`botinfo`, `help`, `ping`"
-            }
-          ]
-        }
-      }
+      const helpEmbed = new Embed()
+        .setTitle("Help Command")
+        .setDescription("A full list of commands")
+        .setColor(bot.color.lightgreen)
+        .addField(":seedling: General", "`buy`, `money`, `plots`")
+        .addField(":gear: Utility", "`botinfo`, `help`, `ping`")
 
       // checks to see if it should add more info
       if (message.author.id == bot.ownersIDS[0] || message.author.id == bot.ownersIDS[1]) {
-        helpEmbed.embed.fields.push({name: ":avocado: Admin",value: "`eval`, `stop`"})
+        helpEmbed.addField(":avocado: Admin", "`eval`, `stop`")
       }
       if (process.env.DEVELOPMENT == "true") {
-        helpEmbed.embed.fields.push({name: ":scroll: Development", value: "`deleteuser`"})
+        helpEmbed.addField(":scroll: Development", "`deleteuser`")
       }
 
-      bot.createMessage(message.channel.id, helpEmbed)
+      bot.createMessage(message.channel.id, helpEmbed.show())
     } else {
       // detailed commands
       if (args[0] == "botinfo") {

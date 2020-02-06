@@ -1,4 +1,5 @@
 const MAX_PLOTS = 25
+const { Embed } = require("../lib/classes")
 // Math.round(Math.pow(1.90546071796, i))
 exports.run = async (bot) => {
 
@@ -21,14 +22,12 @@ exports.run = async (bot) => {
         const numberOfCurrentPlots = userdata.farm.length
         const priceOfNextPlot = Math.round(Math.pow(1.90546071796, numberOfCurrentPlots+1))
         if (userdata.money < priceOfNextPlot) {
-          const notEnoughEmbed = {
-            embed: {
-              title: "Insufficient Funds!",
-              description: `The next plot costs **${priceOfNextPlot}** <:farmbot_coin:648032810682023956>`,
-              color: bot.color.red
-            }
-          }
-          return bot.createMessage(message.channel.id, notEnoughEmbed)
+          const notEnoughEmbed = new Embed()
+            .setTitle("Insufficient Funds!")
+            .setDescription(`The next plot costs **${priceOfNextPlot}** <:farmbot_coin:648032810682023956>`)
+            .setColor(bot.color.red)
+
+          return bot.createMessage(message.channel.id, notEnoughEmbed.show())
         }
 
         await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
