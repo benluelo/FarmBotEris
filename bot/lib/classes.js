@@ -32,7 +32,7 @@ class Embed {
 
   /**
    * Sets the title of the embed.
-   * @param {String} title
+   * @param {String} title Title of embed
    */
   setTitle(title=null){
     this.self.embed.title = title
@@ -41,7 +41,7 @@ class Embed {
 
   /**
    * Sets the description of the embed.
-   * @param {String} description
+   * @param {String} description Description of embed
    */
   setDescription(description=null){
     this.self.embed.description = description
@@ -50,7 +50,7 @@ class Embed {
 
   /**
    * Sets the url of the embed.
-   * @param {(String | URL)} url
+   * @param {(String | URL)} url URL for the embed
    */
   setUrl(url=null){
     this.self.embed.url = url instanceof URL? url.href: url
@@ -59,7 +59,7 @@ class Embed {
 
   /**
    * Sets the color of the embed.
-   * @param {Number} color
+   * @param {Number} color Hexadecimal numeric hex color code
    */
   setColor(color=null){
     this.self.embed.color = color
@@ -76,8 +76,8 @@ class Embed {
 
   /**
    * Sets the footer of the embed.
-   * @param {String} text
-   * @param {(String | URL)} icon_url
+   * @param {String} text Text of the footer
+   * @param {(String | URL)} icon_url URL icon for the footer
    */
   setFooter(text=null, icon_url=null){
     this.self.embed.footer.text = text
@@ -87,7 +87,7 @@ class Embed {
 
   /**
    * Sets the url of the embed.
-   * @param {(String | URL)} url
+   * @param {(String | URL)} url URL of the thumbnail
    */
   setThumbnail(url=null){
     this.self.embed.thumbnail.url = url instanceof URL? url.href: url
@@ -96,9 +96,9 @@ class Embed {
 
   /**
    * Sets the author of the embed.
-   * @param {String} name
-   * @param {(String | URL)} url
-   * @param {(String | URL)} icon_url
+   * @param {String} name Name of the author
+   * @param {(String | URL)} url URL of the author title
+   * @param {(String | URL)} icon_url URL to the author icon
    */
   setAuthor(name=null, url=null, icon_url=null){
     this.self.embed.author.name = name
@@ -109,9 +109,9 @@ class Embed {
 
   /**
    * Adds a field to the embed. `name` and `value` are required.
-   * @param {String} name
-   * @param {String} value
-   * @param {Boolean} inline
+   * @param {String} name Title of the field
+   * @param {String} value Value of the field
+   * @param {Boolean} inline Whatever or not the field should be inline
    */
   addField(name, value, inline=false){
     this.self.embed.fields.push({
@@ -123,7 +123,21 @@ class Embed {
   }
 
   /**
+   * Adds a blank field to the embed
+   * @param {Boolean} inline Whatever or not the field should be inline
+   */
+  addBlankField(inline=false) {
+    this.self.embed.fields.push({
+      name: "\u200B",
+      value: "\u200B",
+      inline: inline
+    })
+    return this
+  }
+
+  /**
    * Returns an embed object literal for use in sending in messages.s
+   * @returns Eris embed object
    */
   show(){
     return this.self
