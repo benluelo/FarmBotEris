@@ -1,25 +1,21 @@
-// const all = require("./plant/all.js")
 const { parsePlotNumber } = require("../lib/parsePlotNumber.js")
 
 exports.run = (bot) => {
   bot.registerCommand("plant", (message, args) => {
-    // f!plant <plant> <plot>
-
-    // // check if planting all
-    // if(args[0] === "all"){
-    //   all.run(bot, message, args)
-    //   return
-    // }
+    // f!plant <plot> <crop>
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
       if (err) throw err
 
+      const plot = args[0]
+      const crop = args[1]
+
       // check specified plot
-      if (!args[1]) return bot.createMessage(message.channel.id, "You have to specify a plot to plant on!")
-      if (args[0] && args[1]) {
+      if (!plot) return bot.createMessage(message.channel.id, "You have to specify a plot to plant on!")
+      if (crop && plot) {
 
         // check if input is valid
-        let plotNumber = parsePlotNumber(args[1])
-        let truePlant = Object.keys(userdata.seeds.common).includes(args[0])
+        let plotNumber = parsePlotNumber(plot)
+        let truePlant = Object.keys(userdata.seeds.common).includes(crop)
         if (plotNumber !== false && truePlant) {
 
           if (!userdata) {
@@ -33,19 +29,19 @@ exports.run = (bot) => {
             await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
               {
                 $set: {
-                  [`farm.${plotNumber}.crop.planted`] : args[0],
+                  [`farm.${plotNumber}.crop.planted`] : crop,
                   [`farm.${plotNumber}.crop.datePlantedAt`] : Date.now()
                 }
               }
             )
-            bot.createMessage(message.channel.id, `:white_check_mark: Planted an ${args[0]} on ${args[1]}`)
+            bot.createMessage(message.channel.id, `Planted ${bot.plants[crop]} on \`${plot}\`!`)
           }
 
         } else {
           bot.createMessage(message.channel.id, "Invalid input! Please try again with the format `<plant> <letter><number>`.")
         }
       } else {
-        bot.createMessage(message.channel.id, "You have to specify a plant to plant!")
+        bot.createMessage(message.channel.id, "You have to specify a crop to plant!")
       }
     })
 
