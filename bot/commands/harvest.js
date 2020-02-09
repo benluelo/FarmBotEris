@@ -27,7 +27,8 @@ module.exports.run = async (bot) => {
                     [`farm.${plot}.crop.datePlantedAt`]: Date.now(),
                   },
                   $inc: {
-                    [`seeds.common.${userCrop.planted}.amount`]: 1
+                    [`seeds.common.${userCrop.planted}.amount`]: 1,
+                    [`seeds.common.${userCrop.planted}.level`]: 1
                   }
                 }
               ).then(() => {
@@ -61,7 +62,8 @@ module.exports.run = async (bot) => {
                       [`farm.${plotNumber}.crop.datePlantedAt`]: Date.now(),
                     },
                     $inc: {
-                      [`seeds.common.${userCrop.planted}.amount`]: 1
+                      [`seeds.common.${userCrop.planted}.amount`]: 1,
+                      [`seeds.common.${userCrop.planted}.level`]: 1
                     }
                   }
                 ).catch(err => {

@@ -56,6 +56,7 @@ bot.log = require("./src/logger.js").log
 bot.plants = require("./lib/plants.json")
 bot.cooldown = require("./src/cooldown.js")
 bot.getPriceOfSeeds = require("./lib/getPriceOfSeeds")
+bot.getLevel = (exp) => { return Math.floor(Math.log2(exp + 1)) }
 
 bot.startMessage = (message) => {
   bot.createMessage(message.channel.id, "You have to start farming first! Send `farm start` to start farming!")
@@ -70,7 +71,7 @@ bot.formatMoney = (value) => {
   return formatter.format(value).substr(1)
 }
 
-const init = async () => {
+(async () => {
   // load events
   fs.readdir("./bot/events/", (err, files) => {
     if (err) bot.log.error(err)
@@ -83,7 +84,6 @@ const init = async () => {
   // load commands
   const loader = require("./commands/meta/loader.js")
   loader.run(bot)
-}
-init()
+})()
 
 bot.connect()

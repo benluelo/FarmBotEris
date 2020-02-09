@@ -71,10 +71,7 @@ exports.run = (bot) => {
                 .setThumbnail("https://i.imgur.com/tHDIEKj.png")
 
               if (userCrop.planted != "dirt") {
-                infoEmbed.embed.fields.push({
-                  name: "Time until grown:",
-                  value: growthBar
-                })
+                infoEmbed.addField("Time until grown:", growthBar)
               }
 
               bot.createMessage(message.channel.id, infoEmbed.show())
@@ -83,7 +80,7 @@ exports.run = (bot) => {
 
         }
       } else {
-        bot.createMessage(message.channel.id, "Please add the plot/plant you want info on")
+        bot.createMessage(message.channel.id, "Please specify the plot you want info on!")
       }
     })
   }, bot.cooldown(15000))

@@ -111,7 +111,7 @@ class Embed {
    * Adds a field to the embed. `name` and `value` are required.
    * @param {String} name Title of the field
    * @param {String} value Value of the field
-   * @param {Boolean} inline Whatever or not the field should be inline
+   * @param {Boolean} inline Whether or not the field should be inline
    */
   addField(name, value, inline=false){
     this.self.embed.fields.push({
@@ -144,6 +144,38 @@ class Embed {
   }
 }
 
+class ProgressBar {
+  /**
+   * @param {Number} numerator
+   * @param {Number} denominator
+   * @param {Number} length - the length of the progress bar in characters.
+   */
+  constructor(numerator, denominator, length){
+    this.numerator = numerator
+    this.denominator = denominator
+    this.length = length
+  }
+
+  show() {
+    return "█".repeat((this.numerator / this.denominator) * this.length) + "░".repeat(this.length - ((this.numerator / this.denominator) * this.length))
+  }
+}
+
+class XPProgressBar extends ProgressBar {
+  constructor(exp, length=10){
+    const getLevel = (exp) => { return Math.log2(exp + 1) }
+    const numerator = exp - Math.pow(2, Math.trunc(getLevel(exp)))
+    const denominator = Math.pow(2, Math.trunc(getLevel(exp)))
+    super(numerator, denominator, length)
+  }
+
+  show() {
+    return `**${this.numerator}/${this.denominator}**xp\n` + super.show()
+  }
+}
+
 module.exports = {
-  Embed: Embed
+  Embed,
+  ProgressBar,
+  XPProgressBar
 }
