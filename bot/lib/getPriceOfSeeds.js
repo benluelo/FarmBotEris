@@ -32,8 +32,8 @@ const randomPrice = () => {
     max = max*1.15
   }
 }
-
 randomPrice()
+
 setInterval(() => {
   randomPrice()
 }, hour)

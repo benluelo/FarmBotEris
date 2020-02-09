@@ -157,14 +157,19 @@ class ProgressBar {
   }
 
   show() {
-    return "█".repeat((this.numerator / this.denominator) * this.length) + "░".repeat(this.length - ((this.numerator / this.denominator) * this.length))
+    const full = Math.floor((this.numerator / this.denominator) * this.length)
+    const empty = Math.ceil(this.length - ((this.numerator / this.denominator) * this.length))
+    console.log("num:", this.numerator, "den:", this.denominator)
+    console.log("full:", full, "empty:", empty)
+    return "█".repeat(full) + "░".repeat(empty)
   }
 }
 
 class XPProgressBar extends ProgressBar {
   constructor(exp, length=10){
     const getLevel = (exp) => { return Math.log2(exp + 1) }
-    const numerator = exp - Math.pow(2, Math.trunc(getLevel(exp)))
+    console.log(exp, Math.pow(2, Math.trunc(getLevel(exp))))
+    const numerator = exp + 1 - Math.pow(2, Math.trunc(getLevel(exp)))
     const denominator = Math.pow(2, Math.trunc(getLevel(exp)))
     super(numerator, denominator, length)
   }

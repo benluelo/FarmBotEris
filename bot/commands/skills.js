@@ -9,7 +9,8 @@ module.exports.run =  (bot) => {
         if (!args[0]) {
           let msg = new Embed()
           for (const seed in userdata.seeds.common) {
-            msg.addField(bot.plants[seed], `Level: **${bot.getLevel(userdata.seeds.common[seed].level)}**`, true)
+            const XPBar = new XPProgressBar(userdata.seeds.common[seed].level, 5)
+            msg.addField(bot.plants[seed], `Level: **${bot.getLevel(userdata.seeds.common[seed].level)}**` + "\n" + XPBar.show(), true)
           }
           return bot.createMessage(message.channel.id, msg.show())
         } else {
