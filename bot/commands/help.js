@@ -8,7 +8,8 @@ exports.run = (bot) => {
         .setTitle(`${commandName} Command`)
         .setDescription(description)
         .addField("Usage", usage)
-        .setFooter("[] - optional  |  <> - required").show()
+        .setFooter("[] - optional  |  <> - required")
+        .show()
       )
     }
 

@@ -5,13 +5,13 @@ const template = {
   description: null,
   usage: {
     name: "Usage:",
-    value: null
+    value: "\u200B"
   },
   examples: {
     name: "Examples:",
-    value: null
+    value: "\u200B"
   },
-  permissionLevel: null
+  permissionLevel: 0
 }
 
 fs.readdir("./bot/commands", async (err, files) => {

@@ -124,7 +124,7 @@ class Embed {
 
   /**
    * Adds a blank field to the embed
-   * @param {Boolean} inline Whatever or not the field should be inline
+   * @param {Boolean} inline Whether or not the field should be inline
    */
   addBlankField(inline=false) {
     this.self.embed.fields.push({
