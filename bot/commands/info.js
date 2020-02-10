@@ -1,6 +1,6 @@
 const ms = require("parse-ms")
 const { Embed } = require("../lib/classes")
-const { parsePlotNumber } = require("../lib/parsePlotNumber.js")
+const { parsePlotNumber } = require("../lib/parse-plot-number.js")
 
 function clamp(num, min, max) {
   return num <= min ? min : num >= max ? max : num

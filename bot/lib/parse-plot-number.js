@@ -1,4 +1,4 @@
-const funcs = require("./plotFunctions.js")
+const funcs = require("./plot-functions.js")
 // const { log } = require("../src/logger.js")
 
 module.exports = {

@@ -1,4 +1,4 @@
-const { parsePlotNumber } = require("../lib/parsePlotNumber.js")
+const { parsePlotNumber } = require("../lib/parse-plot-number.js")
 
 exports.run = (bot) => {
   bot.registerCommand("plant", (message, args) => {

@@ -1,4 +1,4 @@
-const { parsePlotNumber } = require("../lib/parsePlotNumber.js")
+const { parsePlotNumber } = require("../lib/parse-plot-number")
 
 module.exports.run = async (bot) => {
   bot.registerCommand("harvest", (message, args) => {

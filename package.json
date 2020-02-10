@@ -29,6 +29,7 @@
     "jsdoc": "^3.6.3",
     "mongodb": "^3.5.2",
     "parse-ms": "^2.1.0",
+    "readline-sync": "^1.4.10",
     "stack-trace": "0.0.10",
     "systeminformation": "^4.21.1"
   },
