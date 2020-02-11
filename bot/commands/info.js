@@ -1,6 +1,7 @@
 const ms = require("parse-ms")
-const { Embed } = require("../lib/classes")
+const { Embed, ProgressBar } = require("../lib/classes")
 const { parsePlotNumber } = require("../lib/parse-plot-number.js")
+const { parse } = require("twemoji")
 
 function clamp(num, min, max) {
   return num <= min ? min : num >= max ? max : num
@@ -58,17 +59,20 @@ exports.run = (bot) => {
                 let temptime = ms((userCrop.datePlantedAt + bot.config.farminfo.growTimes[userCrop.planted]) - Date.now())
                 timeUntilPlantFinished = `${temptime.hours}h ${temptime.minutes}m ${temptime.seconds}s\n`
               } else {
-                timeUntilPlantFinished = "0h 0m 0s\n"
+                timeUntilPlantFinished = "Fully grown!\n"
               }
 
-              let growthBar = timeUntilPlantFinished + "█".repeat(growthPercentage*10) + "░".repeat(10 - growthPercentage*10) + ` ${growthPercentage.toFixed(2) * 100}%`
+              const p = new ProgressBar(1, growthPercentage, 10)
 
+              let growthBar = timeUntilPlantFinished + p.show() + ` ${growthPercentage.toFixed(2) * 100}%`
+              const emojiURL = parse(bot.cropEmoji[userCrop.planted]).match(/https.*png/)[0]
+              console.log(emojiURL)
               const infoEmbed = new Embed()
-                .setAuthor(bot.user.username, bot.user.avatarURL)
+                // .setAuthor(bot.user.username, bot.user.avatarURL)
                 .setColor(bot.color.lightgreen)
-                .setDescription(`Info for plot #\`${args[0][0].toUpperCase() + args[0][1]}\``)
+                .setDescription(`Info for plot #\`${args[0].toUpperCase()}\``)
                 .addField("Currently planted:", bot.cropEmoji[userCrop.planted])
-                .setThumbnail("https://i.imgur.com/tHDIEKj.png")
+                .setThumbnail(emojiURL)
 
               if (userCrop.planted != "dirt") {
                 infoEmbed.addField("Time until grown:", growthBar)
