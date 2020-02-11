@@ -39,7 +39,7 @@ exports.run = (bot) => {
             return bot.createMessage(message.channel.id, `Planted ${bot.cropEmoji[crop]} on \`${plot}\`!`)
           }
         } else {
-          return bot.createMessage(message.channel.id, "Invalid input! Please try again with the format `<plant> <letter><number>`.")
+          return bot.createMessage(message.channel.id, "Invalid input! Please try again with the format `<letter><number> <plant>`.")
         }
       } else {
         return bot.createMessage(message.channel.id, "You have to specify a crop to plant!")
