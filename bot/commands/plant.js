@@ -36,7 +36,7 @@ exports.run = (bot) => {
                 }
               }
             )
-            return bot.createMessage(message.channel.id, `Planted ${bot.plants[crop]} on \`${plot}\`!`)
+            return bot.createMessage(message.channel.id, `Planted ${bot.cropEmoji[crop]} on \`${plot}\`!`)
           }
         } else {
           return bot.createMessage(message.channel.id, "Invalid input! Please try again with the format `<plant> <letter><number>`.")
@@ -54,7 +54,7 @@ exports.run = (bot) => {
       }
 
       if (!args[0]) return bot.createMessage(message.channel.id, "Please add the plant you want to plant")
-      if (!bot.plants[args[0]]) return bot.createMessage(message.channel.id, "Please include a vaild plant type")
+      if (!bot.cropEmoji[args[0]]) return bot.createMessage(message.channel.id, "Please include a vaild plant type")
       if (!userdata.seeds.common[args[0]].discovered) return // silent quit
 
       return bot.createMessage(message.channel.id, "Planting all!").then(async msg => {

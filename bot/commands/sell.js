@@ -11,7 +11,7 @@ exports.run = (bot) => {
         return bot.createMessage(message.channel.id, "You have to specify a plant to sell!")
       } else if (!args[1]) {
         // sell all of the specified crop
-        if (!bot.plants[args[0]]) {return bot.createMessage(message.channel.id, "Not a valid crop!") }
+        if (!bot.plants.includes([args[0]])) {return bot.createMessage(message.channel.id, "Not a valid crop!") }
         const seed = args[0]
         if (userdata.seeds.common[seed].amount != 0) {
           const totalSold = userdata.seeds.common[seed].amount
@@ -26,7 +26,7 @@ exports.run = (bot) => {
               }
             }
           )
-          return bot.createMessage(message.channel.id, `Sold **${totalSold}** ${bot.plants[seed]} for **${bot.formatMoney(cropValue)}**!`)
+          return bot.createMessage(message.channel.id, `Sold **${totalSold}** ${bot.cropEmoji[seed]} for **${bot.formatMoney(cropValue)}**!`)
         } else {
           return bot.createMessage(message.channel.id, `You don't have any ${args[0]}s to sell!`)
         }
@@ -35,7 +35,7 @@ exports.run = (bot) => {
         // sell the specified amount of the specified crop
 
         const seed = args[0]
-        if (!bot.plants[seed]) { return bot.createMessage(message.channel.id, "Not a valid crop!") }
+        if (!bot.plants.includes([seed])) { return bot.createMessage(message.channel.id, "Not a valid crop!") }
 
         const amount = parseInt(args[1])
         if (amount.toString() !== args[1]) { return bot.createMessage(message.channel.id, "You have to enter a valid number to sell!") }
@@ -50,7 +50,7 @@ exports.run = (bot) => {
               }
             }
           )
-          bot.createMessage(message.channel.id, `Sold **${amount}** ${bot.plants[seed]} for **${bot.formatMoney(cropValue)}**!`)
+          bot.createMessage(message.channel.id, `Sold **${amount}** ${bot.cropEmoji[seed]} for **${bot.formatMoney(cropValue)}**!`)
         } else {
           return bot.createMessage(message.channel.id, "You have to specify a crop to sell!")
         }

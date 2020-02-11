@@ -54,6 +54,7 @@ bot.config = require("./config.json")
 bot.color = require("./src/color.js")
 bot.log = require("./src/logger.js").log
 bot.plants = require("./lib/plants.json")
+bot.cropEmoji = require("./lib/crop-emoji.json")
 bot.cooldown = require("./src/cooldown.js")
 bot.getPriceOfSeeds = require("./lib/get-price-of-seeds")
 bot.getLevel = (exp) => { return Math.floor(Math.log2(exp + 1)) }

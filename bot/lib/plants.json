@@ -1,17 +1,15 @@
-{
-    "apple": "🍎",
-    "orange": "🍊",
-    "lemon": "🍋",
-    "pear": "🍐",
-    "cherry": "🍒",
-    "peach": "🍑",
-    "mango": "🥭",
-    "melon": "🍈",
-    "grapes": "🍇",
-    "strawberry": "🍓",
-    "watermelon": "🍉",
-    "banana": "🍌",
-    "pineapple": "🍍",
-    "dirt": "🟫",
-    "seedling": "🌱"
-}
+[
+    "apple",
+    "orange",
+    "lemon",
+    "pear",
+    "cherry",
+    "peach",
+    "mango",
+    "melon",
+    "grapes",
+    "strawberry",
+    "watermelon",
+    "banana",
+    "pineapple"
+]

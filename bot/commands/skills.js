@@ -10,15 +10,15 @@ module.exports.run =  (bot) => {
           let msg = new Embed()
           for (const seed in userdata.seeds.common) {
             const XPBar = new XPProgressBar(userdata.seeds.common[seed].level, 5)
-            msg.addField(bot.plants[seed], `Level: **${bot.getLevel(userdata.seeds.common[seed].level)}**` + "\n" + XPBar.show(), true)
+            msg.addField(bot.cropEmoji[seed], `Level: **${bot.getLevel(userdata.seeds.common[seed].level)}**` + "\n" + XPBar.show(), true)
           }
           return bot.createMessage(message.channel.id, msg.show())
         } else {
-          console.log(bot.plants[args[0]])
-          if (bot.plants[args[0]]) {
+          // console.log(bot.cropEmoji[args[0]])
+          if (bot.plants.includes([args[0]])) {
             const XPBar = new XPProgressBar(userdata.seeds.common[args[0]].level)
             let msg = new Embed()
-              .setTitle(bot.plants[args[0]])
+              .setTitle(bot.cropEmoji[args[0]])
               .addField(`Level: **${bot.getLevel(userdata.seeds.common[args[0]].level)}**`, XPBar.show())
             return bot.createMessage(message.channel.id, msg.show())
           } else {

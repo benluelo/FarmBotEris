@@ -67,7 +67,7 @@ exports.run = (bot) => {
                 .setAuthor(bot.user.username, bot.user.avatarURL)
                 .setColor(bot.color.lightgreen)
                 .setDescription(`Info for plot #\`${args[0][0].toUpperCase() + args[0][1]}\``)
-                .addField("Currently planted:", bot.plants[userCrop.planted])
+                .addField("Currently planted:", bot.cropEmoji[userCrop.planted])
                 .setThumbnail("https://i.imgur.com/tHDIEKj.png")
 
               if (userCrop.planted != "dirt") {

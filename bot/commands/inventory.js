@@ -21,7 +21,7 @@ exports.run = (bot) => {
       const gap = "  "
       for (let plant in userdata.seeds.common) {
         if (userdata.seeds.common[plant].amount !== 0) {
-          invItemList[bot.plants[plant]] = userdata.seeds.common[plant].amount
+          invItemList[bot.cropEmoji[plant]] = userdata.seeds.common[plant].amount
         }
       }
 

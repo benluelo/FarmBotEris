@@ -7,7 +7,7 @@ exports.run = (bot) => {
       let seeds = ""
       for (let crop in userdata.seeds.common) {
         if (userdata.seeds.common[crop].discovered) {
-          seeds += `${bot.plants[crop]} ${crop.charAt(0).toUpperCase() + crop.slice(1)} - \`$${bot.getPriceOfSeeds[crop]}\` \n`
+          seeds += `${bot.cropEmoji[crop]} ${crop.charAt(0).toUpperCase() + crop.slice(1)} - \`$${bot.getPriceOfSeeds[crop]}\` \n`
         }
       }
       const seedsEmbed = new Embed()

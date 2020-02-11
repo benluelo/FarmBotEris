@@ -40,6 +40,8 @@ exports.run = (bot) => {
           .addField(command.examples.name, command.examples.value)
           .setFooter("[] - optional  |  <> - required")
         return bot.createMessage(message.channel.id, helpEmbed.show())
+      } else {
+        bot.createMessage(message.channel.id, `${args[0]} isn't a command!`)
       }
     }
   }, bot.cooldown(15000))
