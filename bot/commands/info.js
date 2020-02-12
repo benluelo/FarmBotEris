@@ -1,11 +1,9 @@
 const ms = require("parse-ms")
-const { Embed, ProgressBar } = require("../lib/classes")
+const { Embed, ProgressBar, Attachment } = require("../lib/classes")
 const { parsePlotNumber } = require("../lib/parse-plot-number.js")
 // const { parse } = require("twemoji")
-const fs = require("fs")
-const { promisify } = require("util")
-const readFile = promisify(fs.readFile)
 // require("../images/png/pear.png")
+const fs = require("fs")
 
 function clamp(num, min, max) {
   return num <= min ? min : num >= max ? max : num
@@ -70,26 +68,22 @@ exports.run = (bot) => {
 
               let growthBar = timeUntilPlantFinished + p.show() + ` ${Math.floor(growthPercentage * 100)}%`
 
+              const attachment = new Attachment(userCrop.planted)
+
               // console.log(emojiURL)
               const infoEmbed = new Embed()
                 // .setAuthor(bot.user.username, bot.user.avatarURL)
                 .setColor(bot.color.lightgreen)
                 .setDescription(`Info for plot #\`${args[0].toUpperCase()}\``)
                 .addField("Currently planted:", bot.cropEmoji[userCrop.planted])
-                .setThumbnail("attachment://image.png")
+                .setThumbnail(attachment.link())
 
               if (userCrop.planted != "dirt") {
                 infoEmbed.addField("Time until grown:", growthBar)
               }
-
-              const f = await readFile(`./bot/images/png/${userCrop.planted}.png`)
               // console.log(f)
 
-              bot.createMessage(message.channel.id, infoEmbed.show(), [{
-                file: f,
-                name: "image.png"
-              }]
-              )
+              bot.createMessage(message.channel.id, infoEmbed.show(), attachment.send())
             }
           }
 

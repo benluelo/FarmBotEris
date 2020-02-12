@@ -1,3 +1,13 @@
+function getURL(obj) {
+  if (obj instanceof URL){
+    return obj.href
+  } else if (obj instanceof Attachment) {
+    return obj.link()
+  } else {
+    return obj
+  }
+}
+
 class Embed {
   /**
    * Creates a new ***Empty*** Embed.
@@ -50,10 +60,10 @@ class Embed {
 
   /**
    * Sets the url of the embed.
-   * @param {(String | URL)} url URL for the embed
+   * @param {(String | URL | Attachment)} url URL for the embed
    */
   setUrl(url=null){
-    this.self.embed.url = url instanceof URL? url.href: url
+    this.self.embed.url = getURL(url)
     return this
   }
 
@@ -77,33 +87,33 @@ class Embed {
   /**
    * Sets the footer of the embed.
    * @param {String} text Text of the footer
-   * @param {(String | URL)} icon_url URL icon for the footer
+   * @param {(String | URL | Attachment)} icon_url URL icon for the footer
    */
   setFooter(text=null, icon_url=null){
     this.self.embed.footer.text = text
-    this.self.embed.footer.icon_url = icon_url instanceof URL? icon_url.href: icon_url
+    this.self.embed.footer.icon_url = getURL(icon_url)
     return this
   }
 
   /**
    * Sets the url of the embed.
-   * @param {(String | URL)} url URL of the thumbnail
+   * @param {(String | URL | Attachment)} url URL of the thumbnail
    */
   setThumbnail(url=null){
-    this.self.embed.thumbnail.url = url instanceof URL? url.href: url
+    this.self.thumbnail.url = getURL(url)
     return this
   }
 
   /**
    * Sets the author of the embed.
    * @param {String} name Name of the author
-   * @param {(String | URL)} url URL of the author title
-   * @param {(String | URL)} icon_url URL to the author icon
+   * @param {(String | URL | Attachment)} url URL of the author title
+   * @param {(String | URL | Attachment)} icon_url URL to the author icon
    */
   setAuthor(name=null, url=null, icon_url=null){
     this.self.embed.author.name = name
-    this.self.embed.author.url = url instanceof URL? url.href: url
-    this.self.embed.author.icon_url = icon_url instanceof URL? icon_url.href: icon_url
+    this.self.embed.author.url = getURL(url)
+    this.self.embed.author.icon_url = getURL(icon_url)
     return this
   }
 
@@ -179,8 +189,30 @@ class XPProgressBar extends ProgressBar {
   }
 }
 
+const { readFileSync } = require("fs")
+class Attachment {
+  constructor(crop, size=150) {
+    this.crop = crop
+    this.size = size
+    this.file = readFileSync(`./bot/images/png/${crop}.png`)
+    this.name = `${crop}.png`
+  }
+
+  send() {
+    return {
+      file: this.file,
+      name: this.name
+    }
+  }
+
+  link() {
+    return `attachment://${this.name}`
+  }
+}
+
 module.exports = {
   Embed,
   ProgressBar,
-  XPProgressBar
+  XPProgressBar,
+  Attachment
 }
