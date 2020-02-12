@@ -1,4 +1,5 @@
 const chalk = require("chalk")
+const cropEmoji = require("../lib/crop-emoji.json")
 const { Embed } = require("../lib/classes")
 
 const DEBUG = true
@@ -53,11 +54,11 @@ exports.run = async (bot) => {
 
             // adds the plots to the message
             if (FARM[plot].crop.planted == "dirt") { // if dirt, add dirt (lol)
-              plotsMsg += bot.cropEmoji.dirt
+              plotsMsg += cropEmoji.dirt
             } else if (parseInt(Date.now() - FARM[plot].crop.datePlantedAt) >= parseInt(bot.config.farminfo.growTimes[FARM[plot].crop.planted])){ // if not dirt, and if the crop is grown, add the crop
-              plotsMsg += bot.cropEmoji[FARM[plot].crop.planted]
+              plotsMsg += cropEmoji[FARM[plot].crop.planted]
             } else { // if the crop in the plot isn't grown, add a seedling
-              plotsMsg += bot.cropEmoji.seedling
+              plotsMsg += cropEmoji.seedling
             }
 
             if (DEBUG) { console.log("Now:", Date.now()) }

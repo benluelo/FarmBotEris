@@ -11,7 +11,6 @@ module.exports.run = async (bot) => {
       if (userdata) {
         let farm = userdata.farm
         let totalPlots = 0
-        // let totalValue = 0
 
         // harvest all plots
         if (!args[0]) {
@@ -20,8 +19,6 @@ module.exports.run = async (bot) => {
             const userCrop = farm[plot].crop
 
             if ((userCrop.planted != "dirt") && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])){
-              // const cropValue = bot.getPriceOfSeeds[userCrop.planted] * (1 + bot.getLevel(userdata.seeds.common[userCrop.planted].amount))
-              // totalValue += cropValue
               await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
                 {
                   $set: {
@@ -30,8 +27,7 @@ module.exports.run = async (bot) => {
                   },
                   $inc: {
                     [`seeds.common.${userCrop.planted}.amount`]: 1,
-                    [`seeds.common.${userCrop.planted}.level`]: 1,
-                    // money: cropValue
+                    [`seeds.common.${userCrop.planted}.level`]: 1
                   }
                 }
               ).then(() => {
@@ -44,7 +40,7 @@ module.exports.run = async (bot) => {
           }
 
           bot.createMessage(message.channel.id,
-            `**${totalPlots}** plots harvested!`) // for a total of **${bot.formatMoney(totalValue)}** <:farmbot_coin:648032810682023956>!`)
+            `**${totalPlots}** plots harvested!`)
 
         } else {
           //harvest just one plot
@@ -58,7 +54,6 @@ module.exports.run = async (bot) => {
               const userCrop = userdata.farm[plotNumber].crop
 
               if ((userCrop.planted != "dirt") && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])) {
-                // const cropValue = bot.getPriceOfSeeds[userCrop.planted] * (1 + bot.getLevel(userdata.seeds.common[userCrop.planted].amount))
                 await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
                   {
                     $set: {
@@ -67,15 +62,14 @@ module.exports.run = async (bot) => {
                     },
                     $inc: {
                       [`seeds.common.${userCrop.planted}.amount`]: 1,
-                      [`seeds.common.${userCrop.planted}.level`]: 1,
-                      // money: cropValue
+                      [`seeds.common.${userCrop.planted}.level`]: 1
                     }
                   }
                 ).catch(err => {
                   console.log(err.message)
                 })
                 bot.createMessage(message.channel.id,
-                  `Harvested the **${userCrop.planted}** on \`${args[0]}\`!`)// , and made **${bot.formatMoney(cropValue)}** <:farmbot_coin:648032810682023956>!`)
+                  `Harvested the **${userCrop.planted}** on \`${args[0]}\`!`)
               } else {
                 bot.createMessage(message.channel.id, "Cannot harvest dirt!")
               }
