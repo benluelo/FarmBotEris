@@ -9,7 +9,6 @@ exports.run = bot => {
           .setColor(bot.color.lightgreen)
           .setDescription(`Balance: **${bot.formatMoney(userdata.money)}** <:farmbot_coin:648032810682023956>`)
         bot.createMessage(message.channel.id, moneyEmbed.show())
-        //bot.log.toFile("money test")      - crashes bot
       }
 
       if (!userdata) {

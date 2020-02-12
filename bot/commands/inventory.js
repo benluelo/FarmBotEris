@@ -1,6 +1,5 @@
+const smallNumbers = require("../lib/smallNumbers.json")
 const { Embed } = require("../lib/classes")
-const smallNumbers = ["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"]
-
 const getSmallNumbers = (number) => {
   number = number.toString()
   let numberString = ""
