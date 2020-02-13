@@ -15,7 +15,7 @@ exports.run = (bot) => {
         return bot.createMessage(message.channel.id, "You have to specify a plant to sell!")
       } else if (!args[1]) {
         // sell all of the specified crop
-        if (!plants.includes([args[0]])) {return bot.createMessage(message.channel.id, "Not a valid crop!") }
+        if (!plants.includes(args[0])) {return bot.createMessage(message.channel.id, "Not a valid crop!") }
         const seed = args[0]
         if (userdata.seeds.common[seed].amount != 0) {
           const totalSold = userdata.seeds.common[seed].amount
@@ -39,12 +39,15 @@ exports.run = (bot) => {
         // sell the specified amount of the specified crop
 
         const seed = args[0]
-        if (!plants.includes([seed])) { return bot.createMessage(message.channel.id, "Not a valid crop!") }
+        if (!plants.includes(seed)) { return bot.createMessage(message.channel.id, "Not a valid crop!") }
 
         const amount = parseInt(args[1])
         if (amount.toString() !== args[1]) { return bot.createMessage(message.channel.id, "You have to enter a valid number to sell!") }
 
         if (userdata.seeds.common[seed].amount >= amount) {
+          console.log(seed)
+          console.log("Seed price:", getPriceOfSeeds[seed])
+          console.log("Level:", bot.getLevel(userdata.seeds.common[seed].level))
           const cropValue = getPriceOfSeeds[seed] * bot.getLevel(userdata.seeds.common[seed].level) * amount
           await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
             {
@@ -76,7 +79,10 @@ exports.run = (bot) => {
         if (userdata) {
           for (let seed in userdata.seeds.common) {
             if (userdata.seeds.common[seed].amount != 0) {
-              const cropValue = getPriceOfSeeds[seed] * (bot.getLevel(userdata.seeds.common[seed].level))
+              console.log(seed)
+              console.log("Seed price:", getPriceOfSeeds[seed])
+              console.log("Level:", bot.getLevel(userdata.seeds.common[seed].level))
+              const cropValue = getPriceOfSeeds[seed] * (bot.getLevel(userdata.seeds.common[seed].level)) * userdata.seeds.common[seed].amount
               totalValue += cropValue
               totalSold += userdata.seeds.common[seed].amount
               await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },

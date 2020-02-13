@@ -100,7 +100,7 @@ class Embed {
    * @param {(String | URL | Attachment)} url URL of the thumbnail
    */
   setThumbnail(url=null){
-    this.self.thumbnail.url = getURL(url)
+    this.self.embed.thumbnail.url = getURL(url)
     return this
   }
 
