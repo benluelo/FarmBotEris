@@ -1,7 +1,7 @@
 const ms = require("parse-ms")
-const { Embed, ProgressBar, Attachment } = require("../lib/classes")
-const { parsePlotNumber } = require("../lib/parse-plot-number.js")
-const cropEmoji = require("../lib/crop-emoji.json")
+const { Embed, ProgressBar, Attachment } = require("../../lib/classes")
+const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
+const cropEmoji = require("../../lib/crop-emoji.json")
 
 function clamp(num, min, max) {
   return num <= min ? min : num >= max ? max : num

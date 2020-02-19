@@ -1,6 +1,6 @@
-const smallNumbers = require("../lib/smallNumbers.json")
-const cropEmoji = require("../lib/crop-emoji.json")
-const { Embed } = require("../lib/classes")
+const smallNumbers = require("../../lib/smallNumbers.json")
+const cropEmoji = require("../../lib/crop-emoji.json")
+const { Embed } = require("../../lib/classes")
 
 const getSmallNumbers = (number) => {
   number = number.toString()

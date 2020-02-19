@@ -1,6 +1,6 @@
 const chalk = require("chalk")
-const cropEmoji = require("../lib/crop-emoji.json")
-const { Embed } = require("../lib/classes")
+const cropEmoji = require("../../lib/crop-emoji.json")
+const { Embed } = require("../../lib/classes")
 
 const DEBUG = true
 

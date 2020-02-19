@@ -1,4 +1,4 @@
-const { Embed } = require("../lib/classes")
+const { Embed } = require("../../lib/classes")
 const { readdir } = require("fs")
 const commands = []
 

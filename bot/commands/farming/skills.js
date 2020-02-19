@@ -1,6 +1,6 @@
-const plants = require("../lib/plants.json")
-const cropEmoji = require("../lib/crop-emoji.json")
-const { Embed, XPProgressBar, Attachment } = require("../lib/classes.js")
+const plants = require("../../lib/plants.json")
+const cropEmoji = require("../../lib/crop-emoji.json")
+const { Embed, XPProgressBar, Attachment } = require("../../lib/classes.js")
 
 module.exports.run =  (bot) => {
   bot.registerCommand("skills", (message, args) => {

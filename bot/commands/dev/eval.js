@@ -1,5 +1,5 @@
 const { inspect } = require("util")
-const { Embed } = require("../lib/classes")
+const { Embed } = require("../../lib/classes")
 exports.run = (bot) => {
   bot.registerCommand("eval", (message, args) => {
     const toEval = args.join(" ")

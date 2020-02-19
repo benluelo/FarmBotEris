@@ -1,6 +1,6 @@
-const cropEmoji = require("../lib/crop-emoji.json")
-const getPriceOfSeeds = require("../lib/get-price-of-seeds")
-const { Embed } = require("../lib/classes")
+const cropEmoji = require("../../lib/crop-emoji.json")
+const getPriceOfSeeds = require("../../lib/get-price-of-seeds")
+const { Embed } = require("../../lib/classes")
 
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars

@@ -1,6 +1,6 @@
-const cropEmoji = require("../lib/crop-emoji.json")
-const getPriceOfSeeds = require("../lib/get-price-of-seeds")
-const plants = require("../lib/plants.json")
+const cropEmoji = require("../../lib/crop-emoji.json")
+const getPriceOfSeeds = require("../../lib/get-price-of-seeds")
+const plants = require("../../lib/plants.json")
 
 exports.run = (bot) => {
   bot.registerCommand("sell", (message, args) => {

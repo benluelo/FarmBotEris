@@ -1,5 +1,5 @@
 const MAX_PLOTS = 25
-const { Embed } = require("../lib/classes")
+const { Embed } = require("../../lib/classes")
 // Math.round(Math.pow(1.90546071796, i))
 exports.run = async (bot) => {
 

@@ -1,6 +1,6 @@
-const versionNumber = require("../../package").version
+const versionNumber = require("../../../package").version
 const ms = require("parse-ms")
-const { Embed } = require("../lib/classes.js")
+const { Embed } = require("../../lib/classes.js")
 
 exports.run = (bot) => {
   bot.registerCommand("botinfo", (message) => {

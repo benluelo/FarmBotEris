@@ -1,4 +1,4 @@
-const { Embed } = require("../lib/classes")
+const { Embed } = require("../../../lib/classes")
 
 module.exports.run = bot => {
   // eslint-disable-next-line no-unused-vars

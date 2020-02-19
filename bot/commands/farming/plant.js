@@ -1,5 +1,5 @@
-const cropEmoji = require("../lib/crop-emoji.json")
-const { parsePlotNumber } = require("../lib/parse-plot-number.js")
+const cropEmoji = require("../../lib/crop-emoji.json")
+const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
 
 exports.run = (bot) => {
   bot.registerCommand("plant", (message, args) => {

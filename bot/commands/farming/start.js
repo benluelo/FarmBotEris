@@ -1,6 +1,6 @@
-const { Embed } = require("../lib/classes")
+const { Embed } = require("../../lib/classes")
 const EmbedPaginator = require("eris-pagination")
-const flags = require("../lib/flags.json")
+const flags = require("../../lib/flags.json")
 
 exports.run = bot => {
   bot.registerCommand("start", (message, args) => {
@@ -35,7 +35,7 @@ exports.run = bot => {
         } else {
           const region = args[0]
           if (!flags[region]) { return bot.createMessage(message.channel.id, `${region} is not a valid region!`) }
-          const farmers = await require("../lib/get-farmers.js").run(region)
+          const farmers = await require("../../lib/get-farmers.js").run(region)
           console.log(farmers)
           bot.database.Userdata.insertOne({
             userID: message.author.id,

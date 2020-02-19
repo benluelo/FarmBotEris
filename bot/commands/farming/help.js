@@ -1,4 +1,4 @@
-const { Embed } = require("../lib/classes")
+const { Embed } = require("../../lib/classes")
 exports.run = (bot) => {
   bot.registerCommand("help", (message, args) => {
 

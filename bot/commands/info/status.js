@@ -1,6 +1,6 @@
 const ms = require("parse-ms")
 const si = require("systeminformation")
-const { Embed } = require("../lib/classes")
+const { Embed } = require("../../lib/classes")
 
 function formatBytes(bytes, decimals = 2) {
   if (bytes === 0) return "0 Bytes"
