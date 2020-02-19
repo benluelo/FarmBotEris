@@ -14,7 +14,7 @@ const template = {
   permissionLevel: 0
 }
 
-fs.readdir("./bot/commands", async (err, files) => {
+fs.readdir("../bot/commands", async (err, files) => {
   files.forEach(async file => {
     const fSplit = file.split(".")
     if (fSplit[1] !== "js") { return }
@@ -33,7 +33,7 @@ fs.readdir("./bot/commands", async (err, files) => {
     const permsTemp = rls.question(fSplit[0] + ".permissionLevel: ")
     copy.permissionLevel = permsTemp? permsTemp: template.permissionLevel
 
-    fs.writeFileSync(`./bot/help/${fSplit[0]}.json`, JSON.stringify(copy, null, 4))
+    fs.writeFileSync(`../bot/help/${fSplit[0]}.json`, JSON.stringify(copy, null, 4))
   })
 })
 

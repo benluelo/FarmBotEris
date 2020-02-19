@@ -1,4 +1,4 @@
-const emojis = require("./bot/lib/crop-emoji.json")
+const emojis = require("../bot/lib/crop-emoji.json")
 const twemoji = require("twemoji")
 const fs = require("fs")
 const fetch = require("node-fetch")
@@ -22,12 +22,12 @@ const { promisify } = require("util")
 
     const res = await fetch(new URL(url))
     const body = await res.text()
-    await writeFile(`./bot/images/svg/${emoji}.svg`, body)
+    await writeFile(`../bot/images/svg/${emoji}.svg`, body)
     console.log(`${emoji}.svg`, "Saved!")
   }
 })().then(() => {
   console.log("converting")
-  convertSvgFiles("./bot/images/svg")
+  convertSvgFiles("../bot/images/svg")
 })
 
 async function convertSvgFiles(dirPath) {
@@ -39,10 +39,10 @@ async function convertSvgFiles(dirPath) {
     console.log("filePaths:", filePaths)
 
     for (const filePath of filePaths) {
-      await converter.convertFile(`./bot/images/svg/${filePath}`, {
+      await converter.convertFile(`../bot/images/svg/${filePath}`, {
         height: 150,
         width: 150,
-        outputFilePath: `./bot/images/png/${filePath.split(".")[0]}.png`
+        outputFilePath: `../bot/images/png/${filePath.split(".")[0]}.png`
       })
     }
   } finally {

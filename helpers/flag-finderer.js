@@ -331,4 +331,4 @@ for (const flag in allflags){
   }
 }
 
-require("fs").writeFileSync("./bot/lib/flags.json", JSON.stringify(flagstowrite, null, 4))
+require("fs").writeFileSync("../bot/lib/flags.json", JSON.stringify(flagstowrite, null, 4))
