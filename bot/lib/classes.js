@@ -152,6 +152,10 @@ class Embed {
   show(){
     return this.self
   }
+
+  showContent(){
+    return this.self.embed
+  }
 }
 
 class ProgressBar {

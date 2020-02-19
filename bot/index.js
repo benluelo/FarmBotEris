@@ -16,7 +16,7 @@ const bot = new Eris.CommandClient(process.env.TOKEN, {
     GUILD_ROLE_UPDATE: true,
     MESSAGE_DELETE: true,
     MESSAGE_DELETE_BULK: true,
-    MESSAGE_UPDATE: true,
+    // MESSAGE_UPDATE: true,
     PRESENCE_UPDATE: true,
     TYPING_START: true,
     VOICE_STATE_UPDATE: true

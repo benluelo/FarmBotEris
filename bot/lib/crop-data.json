@@ -1,0 +1,86 @@
+{
+    "apple": {
+        "flavour": [
+            "sweet",
+            "sweet"
+        ],
+        "color": "red"
+    },
+    "orange": {
+        "flavour": [
+            "sweet",
+            "tart"
+        ],
+        "color": "orange"
+    },
+    "lemon": {
+        "flavour": [
+            "sweet",
+            "sour"
+        ],
+        "color": "yellow"
+    },
+    "pear": {
+        "flavour": [
+            "sweet",
+            "sweet"
+        ],
+        "color": "green"
+    },
+    "cherry": {
+        "flavour": [
+            "sweet",
+            "sour"
+        ],
+        "color": "red"
+    },
+    "peach": {
+        "flavour": [
+            "sweet",
+            "sweet"
+        ],
+        "color": "pink"
+    },
+    "mango": {
+        "flavour": [
+            "sour",
+            "sweet"
+        ],
+        "color": "pink"
+    },
+    "melon": {
+        "flavour": [
+            "sweet",
+            "sweet"
+        ],
+        "color": "green"
+    },
+    "grapes": {
+        "flavour": [
+            "sweet",
+            "tart"
+        ],
+        "color": "purple"
+    },
+    "strawberry": {
+        "flavour": [
+            "sweet",
+            "tart"
+        ],
+        "color": "red"
+    },
+    "banana": {
+        "flavour": [
+            "sweet",
+            "sweet"
+        ],
+        "color": "yellow"
+    },
+    "pineapple": {
+        "flavour": [
+            "sweet",
+            "tart"
+        ],
+        "color": "yellow"
+    }
+}
