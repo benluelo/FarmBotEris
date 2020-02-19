@@ -20,19 +20,3 @@ function loadCommands(bot, dirpath, depth=0) {
     }
   })
 }
-`
-├─commands
-│ ├─dev
-│ ├─farming
-│ │ └─npc
-│ └─info
-├─events
-├─help
-├─images
-│ ├─png
-│ └─svg
-├─lib
-├─logs
-│ └─errors
-└─src
-`
