@@ -7,7 +7,7 @@ exports.run = (bot) => {
         .setDescription(`${bot.user.username} disconnecting in 5 seconds\n**${bot.guilds.size}** servers\n**${bot.users.size}** users`)
         .setColor(bot.color.red)
 
-      bot.createMessage(message.channel.id, stopEmbed.show())
+      bot.createMessage(message.channel.id, stopEmbed)
       setTimeout(() => { bot.disconnect(); process.exit(0) }, 5000)
     } else if (args[0] == "restart") {
       const restartEmbed = new Embed()
@@ -15,7 +15,7 @@ exports.run = (bot) => {
         .setDescription(`${bot.user.username} restarting in 5 seconds\n**${bot.guilds.size}** servers\n**${bot.users.size}** users`)
         .setColor(bot.color.red)
 
-      bot.createMessage(message.channel.id, restartEmbed.show())
+      bot.createMessage(message.channel.id, restartEmbed)
       setTimeout(() => { bot.disconnect({reconnect: "auto"}) }, 10000)
     }
   }, {

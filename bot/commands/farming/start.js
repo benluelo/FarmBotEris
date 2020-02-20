@@ -63,62 +63,62 @@ exports.run = bot => {
               common: {
                 apple: {
                   discovered: true,
-                  level: 1,
+                  level: 0,
                   amount: 0
                 },
                 orange: {
                   discovered: true,
-                  level: 1,
+                  level: 0,
                   amount: 0
                 },
                 lemon: {
                   discovered: true,
-                  level: 1,
+                  level: 0,
                   amount: 0
                 },
                 pear: {
                   discovered: true,
-                  level: 1,
+                  level: 0,
                   amount: 0
                 },
                 cherry: {
                   discovered: true,
-                  level: 1,
+                  level: 0,
                   amount: 0
                 },
                 peach: {
                   discovered: true,
-                  level: 1,
+                  level: 0,
                   amount: 0
                 },
                 mango: {
                   discovered: true,
-                  level: 1,
+                  level: 0,
                   amount: 0
                 },
                 melon: {
                   discovered: true,
-                  level: 1,
+                  level: 0,
                   amount: 0
                 },
                 grapes: {
                   discovered: true,
-                  level: 1,
+                  level: 0,
                   amount: 0
                 },
                 strawberry: {
                   discovered: true,
-                  level: 1,
+                  level: 0,
                   amount: 0
                 },
                 banana: {
                   discovered: true,
-                  level: 1,
+                  level: 0,
                   amount: 0
                 },
                 pineapple: {
                   discovered: true,
-                  level: 1,
+                  level: 0,
                   amount: 0
                 }
               }
@@ -166,7 +166,7 @@ exports.run = bot => {
           bot.createMessage(message.channel.id, new Embed()
             .setTitle(`Welcome to ${bot.user.username}! ${flags[region]}`)
             .setDescription("Do `f!help` to display the full list of commands the bot has!")
-            .setColor(bot.color.lightgreen).show()
+            .setColor(bot.color.lightgreen)
           )
         }
       }

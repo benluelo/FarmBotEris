@@ -13,30 +13,28 @@ class Embed {
    * Creates a new ***Empty*** Embed.
    */
   constructor() {
-    this.self = {
-      embed: {
-        title: null,
-        description: null,
+    this.embed = {
+      title: null,
+      description: null,
+      url: null,
+      color: null,
+      timestamp: null,
+      footer: {
+        icon_url: null,
+        text: null
+      },
+      thumbnail: {
+        url: null
+      },
+      image: {
+        url: null
+      },
+      author: {
+        name: null,
         url: null,
-        color: null,
-        timestamp: null,
-        footer: {
-          icon_url: null,
-          text: null
-        },
-        thumbnail: {
-          url: null
-        },
-        image: {
-          url: null
-        },
-        author: {
-          name: null,
-          url: null,
-          icon_url: null
-        },
-        fields: []
-      }
+        icon_url: null
+      },
+      fields: []
     }
   }
 
@@ -45,7 +43,7 @@ class Embed {
    * @param {String} title Title of embed
    */
   setTitle(title=null){
-    this.self.embed.title = title
+    this.embed.title = title
     return this
   }
 
@@ -54,7 +52,7 @@ class Embed {
    * @param {String} description Description of embed
    */
   setDescription(description=null){
-    this.self.embed.description = description
+    this.embed.description = description
     return this
   }
 
@@ -63,7 +61,7 @@ class Embed {
    * @param {(String | URL | Attachment)} url URL for the embed
    */
   setUrl(url=null){
-    this.self.embed.url = getURL(url)
+    this.embed.url = getURL(url)
     return this
   }
 
@@ -72,7 +70,7 @@ class Embed {
    * @param {Number} color Hexadecimal numeric hex color code
    */
   setColor(color=null){
-    this.self.embed.color = color
+    this.embed.color = color
     return this
   }
 
@@ -80,7 +78,7 @@ class Embed {
    * Sets the timestamp of the embed to the moment at which it is called.
    */
   setTimestamp(){
-    this.self.embed.timestamp = new Date().toISOString()
+    this.embed.timestamp = new Date().toISOString()
     return this
   }
 
@@ -90,8 +88,8 @@ class Embed {
    * @param {(String | URL | Attachment)} icon_url URL icon for the footer
    */
   setFooter(text=null, icon_url=null){
-    this.self.embed.footer.text = text
-    this.self.embed.footer.icon_url = getURL(icon_url)
+    this.embed.footer.text = text
+    this.embed.footer.icon_url = getURL(icon_url)
     return this
   }
 
@@ -100,7 +98,7 @@ class Embed {
    * @param {(String | URL | Attachment)} url URL of the thumbnail
    */
   setThumbnail(url=null){
-    this.self.embed.thumbnail.url = getURL(url)
+    this.embed.thumbnail.url = getURL(url)
     return this
   }
 
@@ -111,9 +109,9 @@ class Embed {
    * @param {(String | URL | Attachment)} icon_url URL to the author icon
    */
   setAuthor(name=null, url=null, icon_url=null){
-    this.self.embed.author.name = name
-    this.self.embed.author.url = getURL(url)
-    this.self.embed.author.icon_url = getURL(icon_url)
+    this.embed.author.name = name
+    this.embed.author.url = getURL(url)
+    this.embed.author.icon_url = getURL(icon_url)
     return this
   }
 
@@ -124,7 +122,7 @@ class Embed {
    * @param {Boolean} inline Whether or not the field should be inline
    */
   addField(name, value, inline=false){
-    this.self.embed.fields.push({
+    this.embed.fields.push({
       name: name,
       value: value,
       inline: inline
@@ -137,7 +135,7 @@ class Embed {
    * @param {Boolean} inline Whether or not the field should be inline
    */
   addBlankField(inline=false) {
-    this.self.embed.fields.push({
+    this.embed.fields.push({
       name: "\u200B",
       value: "\u200B",
       inline: inline
@@ -145,16 +143,8 @@ class Embed {
     return this
   }
 
-  /**
-   * Returns an embed object literal for use in sending in messages.s
-   * @returns Eris embed object
-   */
-  show(){
-    return this.self
-  }
-
   showContent(){
-    return this.self.embed
+    return this.embed
   }
 }
 

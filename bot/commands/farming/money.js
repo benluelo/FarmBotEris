@@ -8,7 +8,7 @@ exports.run = bot => {
           .setAuthor(message.author.username, message.author.avatarURL)
           .setColor(bot.color.lightgreen)
           .setDescription(`Balance: **${bot.formatMoney(userdata.money)}** <:farmbot_coin:648032810682023956>`)
-        bot.createMessage(message.channel.id, moneyEmbed.show())
+        bot.createMessage(message.channel.id, moneyEmbed)
       }
 
       if (!userdata) {

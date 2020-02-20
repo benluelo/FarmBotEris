@@ -9,7 +9,7 @@ exports.run = (bot) => {
         .setDescription(description)
         .addField("Usage", usage)
         .setFooter("[] - optional  |  <> - required")
-        .show()
+        
       )
     }
 
@@ -30,7 +30,7 @@ exports.run = (bot) => {
         helpEmbed.addField(":scroll: Development", "`deleteuser`")
       }
 
-      bot.createMessage(message.channel.id, helpEmbed.show())
+      bot.createMessage(message.channel.id, helpEmbed)
     } else {
       // detailed commands
       if (args[0] == "botinfo") {

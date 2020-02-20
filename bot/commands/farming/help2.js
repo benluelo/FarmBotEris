@@ -29,7 +29,7 @@ exports.run = (bot) => {
         helpEmbed.addField(":scroll: Development", "`deleteuser`")
       }
 
-      bot.createMessage(message.channel.id, helpEmbed.show())
+      bot.createMessage(message.channel.id, helpEmbed)
     } else {
       if (commands.includes(args[0])) {
         const command = require(`../help/${args[0]}.json`)
@@ -39,7 +39,7 @@ exports.run = (bot) => {
           .addField(command.usage.name, command.usage.value)
           .addField(command.examples.name, command.examples.value)
           .setFooter("[] - optional  |  <> - required")
-        return bot.createMessage(message.channel.id, helpEmbed.show())
+        return bot.createMessage(message.channel.id, helpEmbed)
       } else {
         bot.createMessage(message.channel.id, `${args[0]} isn't a command!`)
       }

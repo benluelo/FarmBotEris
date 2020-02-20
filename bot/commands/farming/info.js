@@ -81,7 +81,7 @@ exports.run = (bot) => {
               }
               // console.log(f)
 
-              bot.createMessage(message.channel.id, infoEmbed.show(), attachment.send())
+              bot.createMessage(message.channel.id, infoEmbed, attachment.send())
             }
           }
 

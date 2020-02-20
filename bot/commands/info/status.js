@@ -56,6 +56,6 @@ exports.run = (bot) => {
       .addBlankField(true)
       .addField("Development Mode", developmentMode, true)
 
-    await bot.createMessage(message.channel.id, statusEmbed.show())
+    await bot.createMessage(message.channel.id, statusEmbed)
   }, bot.cooldown(30000))
 }

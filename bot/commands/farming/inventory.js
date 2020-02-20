@@ -49,7 +49,7 @@ exports.run = (bot) => {
         .setColor(bot.color.lightgreen)
         .setDescription(invItemString)
 
-      bot.createMessage(message.channel.id, invEmbed.show())
+      bot.createMessage(message.channel.id, invEmbed)
     })
   })
   bot.registerCommandAlias("inv", "inventory")

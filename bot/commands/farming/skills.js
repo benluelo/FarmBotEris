@@ -12,9 +12,10 @@ module.exports.run =  (bot) => {
           let msg = new Embed()
           for (const seed in userdata.seeds.common) {
             const XPBar = new XPProgressBar(userdata.seeds.common[seed].level, 5)
+            console.log(XPBar.show())
             msg.addField(cropEmoji[seed], `Level: **${XPBar.level()}**` + "\n" + XPBar.show(), true)
           }
-          return bot.createMessage(message.channel.id, msg.show())
+          return bot.createMessage(message.channel.id, msg)
         } else {
           if (plants.includes(args[0])) {
             const attachment = new Attachment(args[0])
@@ -24,7 +25,7 @@ module.exports.run =  (bot) => {
               .setThumbnail(attachment.link())
               .addField(`Level: **${XPBar.level()}**`, XPBar.show())
 
-            return bot.createMessage(message.channel.id, msg.show(), attachment.send())
+            return bot.createMessage(message.channel.id, msg, attachment.send())
           } else {
             return bot.createMessage(message.channel.id, `**${args[0]}** isn't a crop!`)
           }

@@ -27,7 +27,7 @@ exports.run = async (bot) => {
             .setDescription(`The next plot costs **${priceOfNextPlot}** <:farmbot_coin:648032810682023956>`)
             .setColor(bot.color.red)
 
-          return bot.createMessage(message.channel.id, notEnoughEmbed.show())
+          return bot.createMessage(message.channel.id, notEnoughEmbed)
         }
 
         await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
