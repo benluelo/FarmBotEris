@@ -1,5 +1,5 @@
 const fs = require("fs")
-const rls = require("readline-sync")
+const { question } = require("readline-sync")
 
 const template = {
   description: null,
@@ -21,16 +21,16 @@ fs.readdir("../bot/commands", async (err, files) => {
     console.log(fSplit[0])
     let copy = template
 
-    const descTemp = rls.question(fSplit[0] + ".description: ")
+    const descTemp = question(fSplit[0] + ".description: ")
     copy.description = descTemp? descTemp: template.description
 
-    const usageTemp = rls.question(fSplit[0] + ".usage.value: ")
+    const usageTemp = question(fSplit[0] + ".usage.value: ")
     copy.usage.value = usageTemp? usageTemp: template.usage.value
 
-    const exTemp = rls.question(fSplit[0] + ".examples.value: ")
+    const exTemp = question(fSplit[0] + ".examples.value: ")
     copy.examples.value = exTemp? exTemp: template.examples.value
 
-    const permsTemp = rls.question(fSplit[0] + ".permissionLevel: ")
+    const permsTemp = question(fSplit[0] + ".permissionLevel: ")
     copy.permissionLevel = permsTemp? permsTemp: template.permissionLevel
 
     fs.writeFileSync(`../bot/help/${fSplit[0]}.json`, JSON.stringify(copy, null, 4))

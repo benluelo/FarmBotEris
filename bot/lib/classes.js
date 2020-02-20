@@ -180,16 +180,24 @@ class ProgressBar {
 }
 
 class XPProgressBar extends ProgressBar {
-  constructor(exp, length=10){
-    const getLevel = (exp) => { return Math.log2(exp + 1) }
-    console.log(exp, Math.pow(2, Math.trunc(getLevel(exp))))
-    const numerator = exp + 1 - Math.pow(2, Math.trunc(getLevel(exp)))
-    const denominator = Math.pow(2, Math.trunc(getLevel(exp)))
+  constructor(exp, length=10, base=2){
+    const { getLevel } = require("../../helpers/level-test.js")
+    console.log(`base: ${base}, exp: ${exp}`)
+    const data = getLevel(base, exp)
+    console.log("data:", data)
+    // console.log(exp, temp)
+    const numerator = data.numerator
+    const denominator = data.denominator
     super(numerator, denominator, length)
+    this._level = data.level
   }
 
   show() {
     return `**${this.numerator}/${this.denominator}**xp\n` + super.show()
+  }
+
+  level() {
+    return this._level
   }
 }
 
@@ -219,4 +227,8 @@ module.exports = {
   ProgressBar,
   XPProgressBar,
   Attachment
+}
+
+const logx = (base, num) => {
+  return Math.log(num)/Math.log(base)
 }
