@@ -16,6 +16,7 @@ exports.run = (bot) => {
 
       if (userdata) {
         // console.log(userdata.requests)
+        // console.log(userdata)
         const newRequests = []
         if (userdata.requests.length < userdata.farmers.length) {
           while (userdata.requests.length + newRequests.length < userdata.farmers.length) {
@@ -37,37 +38,8 @@ exports.run = (bot) => {
         const marketEmbed = new Embed().setTitle("The Market").setColor(bot.color.darkgreen)
         const tempReq = userdata.requests.concat(newRequests)
         for (const request in tempReq) {
-          console.log(tempReq[request])
-          const farmer = userdata.farmers.find(npc => {
-            return npc.name == tempReq[request].name
-          })
-          console.log(farmer)
-          let msg = `**__ID__: **\`${parseInt(request) + 1}\`\n`
-          let value = 0
-          let rep = 0
-          msg += "**__Want__:**\n"
-          for (const w in tempReq[request].want) {
-            /** @type {1 | 1.15 | 1.30} */
-            const flavourMulti = 1 + (cropData[tempReq[request].want[w].crop].flavour.filter(x => x == farmer.preferences).length * 0.15)
-            const colorMulti = cropData[tempReq[request].want[w].crop].color == farmer.preferences ? 1.15 : 1
-            value += (
-              (getPriceOfSeeds[tempReq[request].want[w].crop] // hourly price of the seed
-               * tempReq[request].want[w].amount // the amount in the request
-               * tempReq[request].value) // the multiplier of the request (value)
-             * flavourMulti // fruit is favourite flavor? add corresponding value
-             * colorMulti) // fruit is favourite color? add 15% value
-
-            rep += (
-              (tempReq[request].want[w].amount // the amount in the request
-               * tempReq[request].reputation) // the multiplier of the request (reputation)
-             * flavourMulti // fruit is favourite flavor? add corresponding value
-             * colorMulti) // fruit is favourite color? add 15% value
-            msg += cropData[tempReq[request].want[w].crop].emoji + " x " + tempReq[request].want[w].amount + "\n"
-          }
-          msg += "**__Rewards__:**\n"
-          + "**├⮞   " + bot.formatMoney(value) + "** " + emoji.coin + "\n"
-          + "**└⮞   " + Math.ceil(rep) + "** rep"
-          marketEmbed.addField(farmer.emoji + " **" + farmer.name.match(/(\w+ [a-zA-Z])/)[0] + "." + "**", msg, true)
+          const a = parseRequest(tempReq[request], userdata.farmers, request)
+          marketEmbed.addField(a.farmer.emoji + " **" + a.farmer.name.match(/(\w+ [a-zA-Z])/)[0] + "." + "**", prettifyRequest(a), true)
         }
         bot.createMessage(message.channel.id, marketEmbed.addBlankField(true))
       }
@@ -168,10 +140,55 @@ exports.run = (bot) => {
       }
     })
   })
+
+  /**
+   * @param {{
+    id: Number,
+    want: String,
+    rewards: {
+      money: Number,
+      reputation: Number
+    }
+  }} req
+   */
+  function prettifyRequest(req) {
+    return (
+      `**__ID__: **\`${parseInt(req.id) + 1}\`\n` +
+      "**__Want__:**\n" +
+      req.want +
+      "\n**__Rewards__:**\n" +
+      `**├⮞ ${bot.formatMoney(req.rewards.money)} ${emoji.coin}\n` +
+      `**└⮞ **${req.rewards.reputation}** rep`
+    )
+  }
+}
+
+function parseRequest(request, userFarmers, id) {
+  console.log("request:", request)
+  console.log("id:", id)
+  console.log("userFarmers:", userFarmers)
+  const farmer = userFarmers.find(f => {
+    return f.name == request.name
+  })
+
+  const parsed = parseWants(farmer.preferences, request)
+
+  return {
+    id: parseInt(id) + 1,
+    want: readableReq(parsed.req),
+    rewards: {
+      money: parsed.val,
+      reputation: parsed.rep
+    },
+    farmer: {
+      name: farmer.name,
+      emoji: farmer.emoji
+    }
+  }
 }
 
 /**
- *
+ * Makes sense of the requests.
  * @param {Object} request
  * @param {Object[]} request.want
  * @param {String} request.want[].crop
@@ -183,14 +200,13 @@ exports.run = (bot) => {
  * @param {import("../../../lib/farmer-data.js").colors} preferences.color
  */
 function parseWants(preferences, request) {
-  /**
-   * @type {{val: Number, rep: Number, req: {emoji: String, amount: Number}[]}}}
-   */
+  /** @type {{val: Number, rep: Number, req: {emoji: String, amount: Number}[]}} */
   const parsed = {
     val: 0,
     rep: 0,
     req: []
   }
+
   for (const w in request.want) {
     /** @type {0 | 0.15 | 0.30} */
     const flavourMulti = (cropData[request.want[w].crop].flavour.filter(x => x == preferences.taste).length * 0.15)
@@ -201,24 +217,31 @@ function parseWants(preferences, request) {
     /** @type {1 | 1.15 | 1.30 | 1.45} */
     const totalMulti = 1 + flavourMulti + colorMulti
 
-    parsed.val +=
-    (
+    parsed.val += (
       (
         getPriceOfSeeds[request.want[w].crop] * request.want[w].amount * request.value
       ) * totalMulti
     )
 
-    parsed.rep +=
-    (
+    parsed.rep += Math.ceil(
       (
         request.want[w].amount * request.reputation
       ) * totalMulti
     )
+
     parsed.req.push({
       emoji: cropData[request.want[w].crop].emoji,
       amount: request.want[w].amount
     })
   }
-
   return parsed
+}
+
+/**
+ * @param {{emoji: String, amount: Number}[]} req
+ */
+function readableReq(req) {
+  return req.map(r => {
+    return `${r.emoji} x **${r.amount}**`
+  }).join("\n")
 }
