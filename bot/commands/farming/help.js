@@ -9,7 +9,7 @@ exports.run = (bot) => {
         .setDescription(description)
         .addField("Usage", usage)
         .setFooter("[] - optional  |  <> - required")
-        
+
       )
     }
 

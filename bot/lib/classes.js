@@ -10,32 +10,52 @@ function getURL(obj) {
 
 class Embed {
   /**
-   * Creates a new ***Empty*** Embed.
+   * Creates a new Embed.
+   * @param {Object} [embed]
+   * @param {String} [embed.title] - The title of the embed.
+   * @param {String} [embed.description] - The description of the embed.
+   * @param {(String | URL | Attachment)} [embed.url] - The url of the embed.
+   * @param {Number} [embed.color] - The color of the embed.
+   * @param {String} [embed.timestamp] - The timestamp of the embed.
+   * @param {Object} [embed.footer] - The footer of the embed.
+   * @param {(String | URL | Attachment)} [embed.footer.icon_url] - The footer icon.
+   * @param {String} [embed.footer.text] - The footer text.
+   * @param {Object} [embed.thumbnail] - The embed thumbnail.
+   * @param {(String | URL | Attachment)} [embed.thumbnail.url] - The url of the thumbnail.
+   * @param {Object} [embed.image] - The embed image.
+   * @param {(String | URL | Attachment)} [embed.image.url] - The url of the image.
+   * @param {Object} [embed.author] - The author of the embed.
+   * @param {String} [embed.author.name] - The name of the author.
+   * @param {(String | URL | Attachment)} [embed.author.url] - The url of the author's image.
+   * @param {(String | URL | Attachment)} [embed.author.icon_url] - The url of the author's icon.
+   * @param {Object[]} [embed.fields] - The fields of the embed.
+   * @param {String} [embed.fields.name] - The name of the field.
+   * @param {String} [embed.fields.value] - The content of the field.
    */
-  constructor() {
-    this.embed = {
-      title: null,
-      description: null,
+  constructor(embed={
+    title: null,
+    description: null,
+    url: null,
+    color: null,
+    timestamp: null,
+    footer: {
+      icon_url: null,
+      text: null
+    },
+    thumbnail: {
+      url: null
+    },
+    image: {
+      url: null
+    },
+    author: {
+      name: null,
       url: null,
-      color: null,
-      timestamp: null,
-      footer: {
-        icon_url: null,
-        text: null
-      },
-      thumbnail: {
-        url: null
-      },
-      image: {
-        url: null
-      },
-      author: {
-        name: null,
-        url: null,
-        icon_url: null
-      },
-      fields: []
-    }
+      icon_url: null
+    },
+    fields: []
+  }) {
+    this.embed =  embed
   }
 
   /**
@@ -163,18 +183,24 @@ class ProgressBar {
   show() {
     const full = Math.floor((this.numerator / this.denominator) * this.length)
     const empty = Math.ceil(this.length - ((this.numerator / this.denominator) * this.length))
-    console.log("num:", this.numerator, "den:", this.denominator)
-    console.log("full:", full, "empty:", empty)
+    // console.log("num:", this.numerator, "den:", this.denominator)
+    // console.log("full:", full, "empty:", empty)
     return "█".repeat(full) + "░".repeat(empty)
   }
 }
 
 class XPProgressBar extends ProgressBar {
+  /**
+   *
+   * @param {Number} exp - The emount of experience points. Must be `>= 0`.
+   * @param {Number} [length=10] - The length of the progress bar, in characters. Default is 10. Must be `>= 2`.
+   * @param {Number} [base=2] - The base for the level calculation. Must be `>= 2`.
+   */
   constructor(exp, length=10, base=2){
     const { getLevel } = require("../../helpers/level-test.js")
-    console.log(`base: ${base}, exp: ${exp}`)
+    // console.log(`base: ${base}, exp: ${exp}`)
     const data = getLevel(base, exp)
-    console.log("data:", data)
+    // console.log("data:", data)
     // console.log(exp, temp)
     const numerator = data.numerator
     const denominator = data.denominator
@@ -186,7 +212,7 @@ class XPProgressBar extends ProgressBar {
     return `**${this.numerator}/${this.denominator}**xp\n` + super.show()
   }
 
-  level() {
+  get level() {
     return this._level
   }
 }
