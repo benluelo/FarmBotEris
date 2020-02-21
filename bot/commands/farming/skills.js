@@ -1,5 +1,4 @@
-const plants = require("../../lib/plants.json")
-const cropEmoji = require("../../lib/crop-emoji.json")
+const cropData = require("../../lib/crop-data.json")
 const { Embed, XPProgressBar, Attachment } = require("../../lib/classes.js")
 
 module.exports.run =  (bot) => {
@@ -13,11 +12,11 @@ module.exports.run =  (bot) => {
           for (const seed in userdata.seeds.common) {
             const XPBar = new XPProgressBar(userdata.seeds.common[seed].level, 5)
             console.log(XPBar.show())
-            msg.addField(cropEmoji[seed], `Level: **${XPBar.level()}**` + "\n" + XPBar.show(), true)
+            msg.addField(cropData[seed], `Level: **${XPBar.level()}**` + "\n" + XPBar.show(), true)
           }
           return bot.createMessage(message.channel.id, msg)
         } else {
-          if (plants.includes(args[0])) {
+          if (cropData[args[0]]) {
             const attachment = new Attachment(args[0])
             const XPBar = new XPProgressBar(userdata.seeds.common[args[0]].level)
             let msg = new Embed()

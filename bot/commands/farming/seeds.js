@@ -1,4 +1,4 @@
-const cropEmoji = require("../../lib/crop-emoji.json")
+const cropData = require("../../lib/crop-data.json")
 const getPriceOfSeeds = require("../../lib/get-price-of-seeds")
 const { Embed } = require("../../lib/classes")
 
@@ -10,7 +10,7 @@ exports.run = (bot) => {
       let seeds = ""
       for (let crop in userdata.seeds.common) {
         if (userdata.seeds.common[crop].discovered) {
-          seeds += `${cropEmoji[crop]} ${crop.charAt(0).toUpperCase() + crop.slice(1)} - \`$${getPriceOfSeeds[crop]}\` \n`
+          seeds += `${cropData[crop].emoji} ${crop.charAt(0).toUpperCase() + crop.slice(1)} - \`$${getPriceOfSeeds[crop]}\` \n`
         }
       }
       const seedsEmbed = new Embed()

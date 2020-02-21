@@ -3,3 +3,4 @@ node_modules
 bot/logs
 out
 bot/images/*/*
+helpers/crop-maker.js

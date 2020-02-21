@@ -1,13 +1,22 @@
-const farmerEmoji = require("./farmer-emoji.json")
-// console.log(farmerEmoji)
+const farmerData = require("./farmer-data.json")
 class NPC {
-  constructor(name, wealth=0.5, gender="male", preferences={color: "purple", taste: "sweet"}){
+  /**
+   * Creates a new NPC.
+   * @param {String} name - The name of the NPC.
+   * @param {("male"  | "female")} gender - The gender of the NPC. Either "male" or "female".
+   * @param {Number} [wealth] - The wealth of the NPC. Must be `0 <= x <= 1`.
+   * @param {{color: String, taste: String}} [preferences] - The preferences of the NPC.
+   */
+  constructor(name, gender, wealth, preferences){
     this.name = name
-    this.wealth = wealth
-    this.preferences = preferences
+    this.wealth = wealth || Math.random()
+    this.preferences = preferences || {
+      color: farmerData.preferences.color[Math.floor(Math.random() * farmerData.prefercolor.length)],
+      taste: farmerData.preferences.taste[Math.floor(Math.random() * farmerData.prefertaste.length)]
+    }
     this.level = 0
     this.gender = gender
-    this.emoji = farmerEmoji[this.gender][Math.floor(Math.random() * farmerEmoji[this.gender].length)]
+    this.emoji = farmerData[this.gender][Math.floor(Math.random() * farmerData[this.gender].length)]
   }
 
   /**

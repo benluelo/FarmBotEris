@@ -13,7 +13,7 @@ exports.run = bot => {
           let myEmbeds = []
 
           let count = 0
-          let embed = new Embed()
+          let embed = new Embed({ title: "Send `farm start <region>` to start farming!" })
           for (const flag in flags){
             count++
             embed.addField(flag, flags[flag], true)
@@ -21,19 +21,16 @@ exports.run = bot => {
             if (count === 12){
               count = 0
               myEmbeds.push(embed.showContent())
-              embed = new Embed()
+              embed = new Embed({ title: "Send `farm start <region>` to start farming!" })
             }
-            // messageFlags += `${flag}: ${flags[flag]}\n`
           }
           if (count !== 0){
             myEmbeds.push(embed.showContent())
           }
 
-          // console.log(myEmbeds)
-
           return await EmbedPaginator.createPaginationEmbed(message, myEmbeds)
         } else {
-          const region = args[0]
+          const region = args.join(" ").toLowerCase()
           if (!flags[region]) { return bot.createMessage(message.channel.id, `${region} is not a valid region!`) }
           const farmers = await require("../../lib/get-farmers.js").run(region)
           console.log(farmers)
@@ -164,7 +161,7 @@ exports.run = bot => {
             farmers: farmers
           })
           bot.createMessage(message.channel.id, new Embed()
-            .setTitle(`Welcome to ${bot.user.username}! ${flags[region]}`)
+            .setTitle(`Welcome to ${bot.user.username}, ${message.author.username}! ${flags[region]}`)
             .setDescription("Do `f!help` to display the full list of commands the bot has!")
             .setColor(bot.color.lightgreen)
           )

@@ -1,6 +1,5 @@
-const cropEmoji = require("../../lib/crop-emoji.json")
+const cropData = require("../../lib/crop-data.json")
 const getPriceOfSeeds = require("../../lib/get-price-of-seeds")
-const plants = require("../../lib/plants.json")
 
 exports.run = (bot) => {
   bot.registerCommand("sell", (message, args) => {
@@ -14,9 +13,9 @@ exports.run = (bot) => {
       if (!args[0]) {
         return bot.createMessage(message.channel.id, "You have to specify a plant to sell!")
       } else if (!args[1]) {
-        // sell all of the specified crop
-        if (!plants.includes(args[0])) {return bot.createMessage(message.channel.id, "Not a valid crop!") }
         const seed = args[0]
+        // sell all of the specified crop
+        if (!cropData[seed]) {return bot.createMessage(message.channel.id, "Not a valid crop!") }
         if (userdata.seeds.common[seed].amount != 0) {
           const totalSold = userdata.seeds.common[seed].amount
           const cropValue = getPriceOfSeeds[seed] * bot.getLevel(userdata.seeds.common[seed].level) * totalSold
@@ -30,7 +29,7 @@ exports.run = (bot) => {
               }
             }
           )
-          return bot.createMessage(message.channel.id, `Sold **${totalSold}** ${cropEmoji[seed]} for **${bot.formatMoney(cropValue)}**!`)
+          return bot.createMessage(message.channel.id, `Sold **${totalSold}** ${cropData[seed].emoji} for **${bot.formatMoney(cropValue)}**!`)
         } else {
           return bot.createMessage(message.channel.id, `You don't have any ${args[0]}s to sell!`)
         }
@@ -39,7 +38,7 @@ exports.run = (bot) => {
         // sell the specified amount of the specified crop
 
         const seed = args[0]
-        if (!plants.includes(seed)) { return bot.createMessage(message.channel.id, "Not a valid crop!") }
+        if (!cropData[seed]) { return bot.createMessage(message.channel.id, "Not a valid crop!") }
 
         const amount = parseInt(args[1])
         if (amount.toString() !== args[1]) { return bot.createMessage(message.channel.id, "You have to enter a valid number to sell!") }
@@ -57,7 +56,7 @@ exports.run = (bot) => {
               }
             }
           )
-          bot.createMessage(message.channel.id, `Sold **${amount}** ${cropEmoji[seed]} for **${bot.formatMoney(cropValue)}**!`)
+          bot.createMessage(message.channel.id, `Sold **${amount}** ${cropData[seed].emoji} for **${bot.formatMoney(cropValue)}**!`)
         } else {
           return bot.createMessage(message.channel.id, "You have to specify a crop to sell!")
         }

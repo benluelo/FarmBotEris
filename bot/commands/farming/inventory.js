@@ -1,5 +1,5 @@
 const smallNumbers = require("../../lib/smallNumbers.json")
-const cropEmoji = require("../../lib/crop-emoji.json")
+const cropData = require("../../lib/crop-data.json")
 const { Embed } = require("../../lib/classes")
 
 const getSmallNumbers = (number) => {
@@ -23,7 +23,7 @@ exports.run = (bot) => {
       const gap = "  "
       for (let plant in userdata.seeds.common) {
         if (userdata.seeds.common[plant].amount !== 0) {
-          invItemList[cropEmoji[plant]] = userdata.seeds.common[plant].amount
+          invItemList[cropData[plant].emoji] = userdata.seeds.common[plant].amount
         }
       }
 

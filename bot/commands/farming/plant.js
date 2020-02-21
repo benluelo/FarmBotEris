@@ -1,4 +1,4 @@
-const cropEmoji = require("../../lib/crop-emoji.json")
+const cropData = require("../../lib/crop-data.json")
 const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
 
 exports.run = (bot) => {
@@ -37,7 +37,7 @@ exports.run = (bot) => {
                 }
               }
             )
-            return bot.createMessage(message.channel.id, `Planted ${cropEmoji[crop]} on \`${plot}\`!`)
+            return bot.createMessage(message.channel.id, `Planted ${cropData[crop].emoji} on \`${plot}\`!`)
           }
         } else {
           return bot.createMessage(message.channel.id, "Invalid input! Please try again with the format `<letter><number> <plant>`.")
@@ -55,7 +55,7 @@ exports.run = (bot) => {
       }
 
       if (!args[0]) return bot.createMessage(message.channel.id, "Please add the plant you want to plant")
-      if (!cropEmoji[args[0]]) return bot.createMessage(message.channel.id, "Please include a vaild plant type")
+      if (!cropData[args[0]]) return bot.createMessage(message.channel.id, "Please include a vaild plant type")
       if (!userdata.seeds.common[args[0]].discovered) return // silent quit
 
       return bot.createMessage(message.channel.id, "Planting all!").then(async msg => {

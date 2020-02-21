@@ -1,5 +1,6 @@
 const MAX_PLOTS = 25
 const { Embed } = require("../../lib/classes")
+const emoji = require("../../lib/emoji.json")
 // Math.round(Math.pow(1.90546071796, i))
 exports.run = async (bot) => {
 
@@ -24,7 +25,7 @@ exports.run = async (bot) => {
         if (userdata.money < priceOfNextPlot) {
           const notEnoughEmbed = new Embed()
             .setTitle("Insufficient Funds!")
-            .setDescription(`The next plot costs **${priceOfNextPlot}** <:farmbot_coin:648032810682023956>`)
+            .setDescription(`The next plot costs **${priceOfNextPlot}** ${emoji.coin}`)
             .setColor(bot.color.red)
 
           return bot.createMessage(message.channel.id, notEnoughEmbed)
@@ -47,7 +48,7 @@ exports.run = async (bot) => {
         }).then(res => {
           bot.createMessage(
             message.channel.id,
-            `Plot purchased for **${bot.formatMoney(priceOfNextPlot)}**<:farmbot_coin:648032810682023956>! You now own ${res.value.farm.length + 1} plots!${res.value.farm.length + 1 === MAX_PLOTS ? " This is the maximum amount of plots!" : ""}`
+            `Plot purchased for **${bot.formatMoney(priceOfNextPlot)}** ${emoji.coin}! You now own ${res.value.farm.length + 1} plots!${res.value.farm.length + 1 === MAX_PLOTS ? " This is the maximum amount of plots!" : ""}`
           )
         })
       }
