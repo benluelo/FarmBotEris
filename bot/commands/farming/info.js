@@ -1,7 +1,7 @@
 const ms = require("parse-ms")
 const { Embed, ProgressBar, Attachment } = require("../../lib/classes")
 const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
-const cropData = require("../../lib/crop-data.json")
+const cropData = require("../../lib/crop-data.js")
 const emoji = require("../../lib/emoji.json")
 
 function clamp(num, min, max) {

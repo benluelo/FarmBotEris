@@ -1,4 +1,4 @@
-const emojis = require("../bot/lib/crop-data.json")
+const emojis = require("../bot/lib/crop-data.js")
 const twemoji = require("twemoji")
 const fs = require("fs")
 const fetch = require("node-fetch")

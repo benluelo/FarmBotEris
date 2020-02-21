@@ -1,5 +1,5 @@
 const smallNumbers = require("../../lib/small-numbers.json")
-const cropData = require("../../lib/crop-data.json")
+const cropData = require("../../lib/crop-data.js")
 const { Embed } = require("../../lib/classes")
 
 const getSmallNumbers = (number) => {

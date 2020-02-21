@@ -1,6 +1,6 @@
 const { Embed } = require("../../../lib/classes")
 const { NPC } = require("../../../lib/npc.js")
-const cropData = require("../../../lib/crop-data.json")
+const cropData = require("../../../lib/crop-data.js")
 const getPriceOfSeeds = require("../../../lib/get-price-of-seeds")
 const emoji = require("../../../lib/emoji.json")
 
@@ -168,4 +168,57 @@ exports.run = (bot) => {
       }
     })
   })
+}
+
+/**
+ *
+ * @param {Object} request
+ * @param {Object[]} request.want
+ * @param {String} request.want[].crop
+ * @param {Number} request.want[].amount
+ * @param {Number} request.value
+ * @param {Number} request.reputation
+ * @param {Object} preferences
+ * @param {import("../../../lib/farmer-data.js").tastes} preferences.taste
+ * @param {import("../../../lib/farmer-data.js").colors} preferences.color
+ */
+function parseWants(preferences, request) {
+  /**
+   * @type {{val: Number, rep: Number, req: {emoji: String, amount: Number}[]}}}
+   */
+  const parsed = {
+    val: 0,
+    rep: 0,
+    req: []
+  }
+  for (const w in request.want) {
+    /** @type {0 | 0.15 | 0.30} */
+    const flavourMulti = (cropData[request.want[w].crop].flavour.filter(x => x == preferences.taste).length * 0.15)
+
+    /** @type {0 | 0.15} */
+    const colorMulti = cropData[request.want[w].crop].color == preferences.color ? 0.15 : 0
+
+    /** @type {1 | 1.15 | 1.30 | 1.45} */
+    const totalMulti = 1 + flavourMulti + colorMulti
+
+    parsed.val +=
+    (
+      (
+        getPriceOfSeeds[request.want[w].crop] * request.want[w].amount * request.value
+      ) * totalMulti
+    )
+
+    parsed.rep +=
+    (
+      (
+        request.want[w].amount * request.reputation
+      ) * totalMulti
+    )
+    parsed.req.push({
+      emoji: cropData[request.want[w].crop].emoji,
+      amount: request.want[w].amount
+    })
+  }
+
+  return parsed
 }

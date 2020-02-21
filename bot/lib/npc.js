@@ -1,4 +1,4 @@
-const farmerData = require("./farmer-data.json")
+const farmerData = require("./farmer-data.js")
 class NPC {
   /**
    * Creates a new NPC.

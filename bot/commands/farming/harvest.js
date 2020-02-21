@@ -1,5 +1,5 @@
 const { parsePlotNumber } = require("../../lib/parse-plot-number")
-const cropData = require("../../lib/crop-data.json")
+const cropData = require("../../lib/crop-data.js")
 
 module.exports.run = async (bot) => {
   bot.registerCommand("harvest", (message, args) => {

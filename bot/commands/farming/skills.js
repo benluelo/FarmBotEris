@@ -1,4 +1,4 @@
-const cropData = require("../../lib/crop-data.json")
+const cropData = require("../../lib/crop-data.js")
 const { Embed, XPProgressBar, Attachment } = require("../../lib/classes.js")
 
 module.exports.run =  (bot) => {

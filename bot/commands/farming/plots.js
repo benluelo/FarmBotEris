@@ -1,5 +1,5 @@
 const chalk = require("chalk")
-const cropData = require("../../lib/crop-data.json")
+const cropData = require("../../lib/crop-data.js")
 const emoji = require("../../lib/emoji.json")
 const { Embed } = require("../../lib/classes")
 

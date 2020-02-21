@@ -1,4 +1,4 @@
-const cropData = require("../../lib/crop-data.json")
+const cropData = require("../../lib/crop-data.js")
 const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
 
 exports.run = (bot) => {
