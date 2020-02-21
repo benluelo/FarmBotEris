@@ -33,7 +33,7 @@ const bot = new Eris.CommandClient(process.env.TOKEN, {
 // database connection
 const { initDb, getDb } = require("./src/database.js")
 initDb((err) => {
-  if (err) throw err
+  if (err) { throw err }
 })
 setTimeout(() => {
   const client = getDb()
@@ -72,7 +72,7 @@ bot.formatMoney = (value) => {
 (async () => {
   // load events
   fs.readdir("./bot/events/", (err, files) => {
-    if (err) bot.log.error(err)
+    if (err) { bot.log.error(err) }
     files.forEach(file => {
       const eventFunction = require(`./events/${file}`)
       const eventName = file.split(".")[0]

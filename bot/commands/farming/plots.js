@@ -10,7 +10,7 @@ exports.run = async (bot) => {
 
     // attempt to find the user in the system
     bot.database.Userdata.findOne({ userID: message.author.id }, (err, userdata) => {
-      if (err) {bot.log.error(err)}
+      if (err) { bot.log.error(err) }
 
       // if the user is NOT in the database, tell them to start
       if (!userdata) {
@@ -25,8 +25,8 @@ exports.run = async (bot) => {
         const userFarm = userdata.farm
 
         // initialize message variables
-        var plotsMsg = "" // top of message (numbers)
-        var plotsMsgTop = "<:blank:645355907206742023>" // rest of message (letters and plots)
+        let plotsMsg = "" // top of message (numbers)
+        let plotsMsgTop = "<:blank:645355907206742023>" // rest of message (letters and plots)
 
         // send message to let the user know the farm is being built, then build the farm
         bot.createMessage(message.channel.id, "Building farm...")
@@ -42,17 +42,17 @@ exports.run = async (bot) => {
               // D * * * * *
               // E * * * * *
               // adds the letters and numbers as they are needed
-              if (plot < 5) {
+              if (5 > plot) {
                 plotsMsgTop += emoji.numbers[plot]
               }
-              if (plot % 5 === 0) {
-                plotsMsg += "\n" + emoji.letters[Math.floor(plot/5)]
+              if (0 === plot % 5) {
+                plotsMsg += "\n" + emoji.letters[Math.floor(plot / 5)]
               }
 
               if (DEBUG) { console.log(userFarm[plot].crop.planted) }
 
               // adds the plots to the message
-              if (userFarm[plot].crop.planted == "dirt") { // if dirt, add dirt (lol)
+              if ("dirt" == userFarm[plot].crop.planted) { // if dirt, add dirt (lol)
                 plotsMsg += emoji.dirt
               } else if (parseInt(Date.now() - userFarm[plot].crop.datePlantedAt) >= parseInt(bot.config.farminfo.growTimes[userFarm[plot].crop.planted])) { // if not dirt, and if the crop is grown, add the crop
                 plotsMsg += cropData[userFarm[plot].crop.planted].emoji

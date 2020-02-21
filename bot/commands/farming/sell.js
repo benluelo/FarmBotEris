@@ -6,7 +6,7 @@ exports.run = (bot) => {
     // f!sell <plant> [amount]
 
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
-      if (err) throw err
+      if (err) { throw err }
 
       if (!userdata) { return bot.startMessage(message) }
 
@@ -15,8 +15,8 @@ exports.run = (bot) => {
       } else if (!args[1]) {
         const seed = args[0]
         // sell all of the specified crop
-        if (!cropData[seed]) {return bot.createMessage(message.channel.id, "Not a valid crop!") }
-        if (userdata.seeds.common[seed].amount != 0) {
+        if (!cropData[seed]) { return bot.createMessage(message.channel.id, "Not a valid crop!") }
+        if (0 != userdata.seeds.common[seed].amount) {
           const totalSold = userdata.seeds.common[seed].amount
           const cropValue = getPriceOfSeeds[seed] * bot.getLevel(userdata.seeds.common[seed].level) * totalSold
           await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
@@ -65,7 +65,7 @@ exports.run = (bot) => {
   }, bot.cooldown(5000)).registerSubcommand("all", (message) => {
 
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
-      if (err) bot.log.error(err)
+      if (err) { bot.log.error(err) }
       if (!userdata) {
         return bot.startMessage(message)
       }
@@ -76,8 +76,8 @@ exports.run = (bot) => {
         let totalValue = 0
 
         if (userdata) {
-          for (let seed in userdata.seeds.common) {
-            if (userdata.seeds.common[seed].amount != 0) {
+          for (const seed in userdata.seeds.common) {
+            if (0 != userdata.seeds.common[seed].amount) {
               console.log(seed)
               console.log("Seed price:", getPriceOfSeeds[seed])
               console.log("Level:", bot.getLevel(userdata.seeds.common[seed].level))

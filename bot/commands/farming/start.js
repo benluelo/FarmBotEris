@@ -64,95 +64,95 @@ exports.run = bot => {
                   amount: 0
                 },
                 orange: {
-                  discovered: true,
+                  discovered: false,
                   level: 0,
                   amount: 0
                 },
                 lemon: {
-                  discovered: true,
+                  discovered: false,
                   level: 0,
                   amount: 0
                 },
                 pear: {
-                  discovered: true,
+                  discovered: false,
                   level: 0,
                   amount: 0
                 },
                 cherry: {
-                  discovered: true,
+                  discovered: false,
                   level: 0,
                   amount: 0
                 },
                 peach: {
-                  discovered: true,
+                  discovered: false,
                   level: 0,
                   amount: 0
                 },
                 mango: {
-                  discovered: true,
+                  discovered: false,
                   level: 0,
                   amount: 0
                 },
                 melon: {
-                  discovered: true,
+                  discovered: false,
                   level: 0,
                   amount: 0
                 },
                 grapes: {
-                  discovered: true,
+                  discovered: false,
                   level: 0,
                   amount: 0
                 },
                 strawberry: {
-                  discovered: true,
+                  discovered: false,
                   level: 0,
                   amount: 0
                 },
                 banana: {
-                  discovered: true,
+                  discovered: false,
                   level: 0,
                   amount: 0
                 },
                 pineapple: {
-                  discovered: true,
+                  discovered: false,
                   level: 0,
                   amount: 0
                 }
               }
               // uncommon:{
               //     rose: {
-              //         discovered: true,
+              //         discovered: false,
               //
               //     }
 
               // },
               // rare: {
               //     corn: {
-              //         discovered: true,
+              //         discovered: false,
               //
               //     }
               // },
               // epic: {
               //     tulip: {
-              //         discovered: true,
+              //         discovered: false,
               //
               //     }
               // },
               // legendary: {
               //     broccoli: {
-              //         discovered: true,
+              //         discovered: false,
               //
               //     }
               // },
               // mythical:{
               //     carrot: {
-              //         discovered: true,
+              //         discovered: false,
               //
               //     }
               // },
               // seasonal:{
               //     christmas_tree: {
-              //         discovered: true,
+              //         discovered: false,
               //
               //     }
               // }

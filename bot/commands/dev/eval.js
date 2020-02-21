@@ -13,7 +13,7 @@ exports.run = (bot) => {
           .setColor(bot.color.lightgreen)
           .addField(":scroll: Script", `\`\`\`javascript\n${toEval}\n\`\`\``)
           .addField(":white_check_mark: Result", `\`\`\`javascript\n${evaluated}\n\`\`\``)
-          .addField(":alarm_clock: Evaluation Time", `${hrDiff[0] > 0 ? `${hrDiff[0]}s` : ""}${hrDiff[1] / 1000000}ms.`)
+          .addField(":alarm_clock: Evaluation Time", `${0 < hrDiff[0] ? `${hrDiff[0]}s` : ""}${hrDiff[1] / 1000000}ms.`)
 
         bot.createMessage(message.channel.id, evalEmbed)
       } else {

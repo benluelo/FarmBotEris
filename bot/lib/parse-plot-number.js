@@ -9,13 +9,13 @@ module.exports = {
     console.log("str:", str)
 
     let plotNumber
-    let temp = str.split("")
+    const temp = str.split("")
 
     // if the split string has more than 2 elements (a letter and a number), return false
     if (temp[2]) { return false }
 
     // check that the plot is in <letter> <number> format
-    if (funcs.isAlpha(temp[0]) && funcs.isNumeric(temp[1]) && temp.length == 2) {
+    if (funcs.isAlpha(temp[0]) && funcs.isNumeric(temp[1]) && 2 == temp.length) {
 
       // if correct format, create an object that holds the plot coordinates
       const a = {
@@ -38,11 +38,11 @@ module.exports = {
 const funcs = {
 
   isAlpha: function (str) {
-    var code, i, len
+    let code, i, len
 
-    for (i = 0, len = str.length; i < len; i++){
+    for (i = 0, len = str.length; i < len; i++) {
       code = str.charCodeAt(i)
-      if (!(code > 64 && code < 91) && /* upper alpha (A-Z) */ !(code > 96 && code < 123)) { /* lower alpha (a-z) */
+      if (!(64 < code && 91 > code) && /* upper alpha (A-Z) */ !(96 < code && 123 > code)) { /* lower alpha (a-z) */
         return false
       }
     }
@@ -50,18 +50,18 @@ const funcs = {
   },
 
   isNumeric: function (str) {
-    var code, i, len
+    let code, i, len
 
     for (i = 0, len = str.length; i < len; i++) {
       code = str.charCodeAt(i)
-      if ((!code > 47 && code < 58) /* numeric (0-9) */ ) {
+      if ((47 < !code && 58 > code) /* numeric (0-9) */ ) {
         return false
       }
     }
     return true
   },
 
-  formatLetterForPlotNumber: function (str){
+  formatLetterForPlotNumber: function (str) {
     switch (str) {
     case ("a"): return "0"
     case ("b"): return "1"
@@ -71,9 +71,9 @@ const funcs = {
     }
   },
 
-  formatNumberForPlotNumber: function (str){
-    if (parseInt(str) > 0) {
-      return (parseInt(str)-1).toString()
+  formatNumberForPlotNumber: function (str) {
+    if (0 < parseInt(str)) {
+      return (parseInt(str) - 1).toString()
     } else {
       return "0"
     }

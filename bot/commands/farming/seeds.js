@@ -6,9 +6,9 @@ exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   bot.registerCommand("seeds", (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
-      if (err){ bot.log.error(err) }
+      if (err) { bot.log.error(err) }
       let seeds = ""
-      for (let crop in userdata.seeds.common) {
+      for (const crop in userdata.seeds.common) {
         if (userdata.seeds.common[crop].discovered) {
           seeds += `${cropData[crop].emoji} ${crop.charAt(0).toUpperCase() + crop.slice(1)} - \`$${getPriceOfSeeds[crop]}\` \n`
         }

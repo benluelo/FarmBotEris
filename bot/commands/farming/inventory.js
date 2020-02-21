@@ -14,33 +14,33 @@ const getSmallNumbers = (number) => {
 exports.run = (bot) => {
   bot.registerCommand("inventory", (message) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
-      if (err) {bot.log.error(err)}
+      if (err) { bot.log.error(err) }
 
       // gather inv
-      let invItemList = {}
+      const invItemList = {}
       let invItemString = ""
       let inter = 0
       const gap = "  "
-      for (let plant in userdata.seeds.common) {
-        if (userdata.seeds.common[plant].amount !== 0) {
+      for (const plant in userdata.seeds.common) {
+        if (0 !== userdata.seeds.common[plant].amount) {
           invItemList[cropData[plant].emoji] = userdata.seeds.common[plant].amount
         }
       }
 
-      if (invItemList.length == 0) {invItemString = "When you harvest your crops, they'll show up here!"}
+      if (0 == invItemList.length) { invItemString = "When you harvest your crops, they'll show up here!" }
 
       // sort the numbers
-      let sortable = []
-      for (let item in invItemList) {
+      const sortable = []
+      for (const item in invItemList) {
         sortable.push([item, invItemList[item]])
       }
       sortable.sort(function(a, b) {
         return a[1] - b[1]
       })
 
-      for (let i = sortable.length-1; i >= 0 ; i--) {
+      for (let i = sortable.length - 1; 0 <= i ; i--) {
         invItemString += `${sortable[i][0]}${getSmallNumbers(sortable[i][1])}${gap}`
-        if (inter === 5) { invItemString += "\n"; inter = 0 } else {inter+=1}
+        if (5 === inter) { invItemString += "\n"; inter = 0 } else { inter += 1 }
       }
 
       // make embed

@@ -10,16 +10,16 @@ module.exports.run = async (bot) => {
         return
       }
       if (userdata) {
-        let farm = userdata.farm
+        const farm = userdata.farm
         let totalPlots = 0
 
         // harvest all plots
         if (!args[0]) {
-          for (let plot in farm) {
+          for (const plot in farm) {
 
             const userCrop = farm[plot].crop
 
-            if ((userCrop.planted != "dirt") && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])) {
+            if (("dirt" != userCrop.planted) && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])) {
               await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
                 {
                   $set: {
@@ -44,17 +44,17 @@ module.exports.run = async (bot) => {
             `**${totalPlots}** plots harvested!`)
 
         } else {
-          //harvest just one plot
+          // harvest just one plot
 
-          let plotNumber = parsePlotNumber(args[0])
-          if (plotNumber !== false) {
+          const plotNumber = parsePlotNumber(args[0])
+          if (false !== plotNumber) {
 
             if (plotNumber >= userdata.farm.length) {
               return bot.createMessage(message.channel.id, "You don't own that plot!")
             } else {
               const userCrop = userdata.farm[plotNumber].crop
 
-              if ((userCrop.planted != "dirt") && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])) {
+              if (("dirt" != userCrop.planted) && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])) {
                 await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
                   {
                     $set: {

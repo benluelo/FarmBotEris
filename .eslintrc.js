@@ -50,19 +50,29 @@ module.exports = {
         ],
         "no-shadow": [
             "error",
-            "always"
+            {
+                "builtinGlobals": false,
+                "hoist": "functions",
+                "allow": []
+            }
         ],
         "yoda": [
             "error",
             "always"
         ],
-        "prefer-const": [
-            "warn",
-            "always"
-        ],
-        "no-var": [
+        "block-spacing": [
             "error",
             "always"
+        ],
+        "prefer-const": [
+            "warn",
+            {
+                "destructuring": "any",
+                "ignoreReadBeforeAssign": false
+            }
+        ],
+        "no-var": [
+            "error"
         ],
         "no-confusing-arrow": [
             "error",

@@ -7,7 +7,7 @@ exports.run = async (bot) => {
   bot.registerCommand("buy", (message) => {
 
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
-      if (err) {bot.log.error(err)}
+      if (err) { bot.log.error(err) }
       if (!userdata) {
         bot.startMessage(message)
         return
@@ -21,7 +21,7 @@ exports.run = async (bot) => {
         }
 
         const numberOfCurrentPlots = userdata.farm.length
-        const priceOfNextPlot = Math.round(Math.pow(1.90546071796, numberOfCurrentPlots+1))
+        const priceOfNextPlot = Math.round(Math.pow(1.90546071796, numberOfCurrentPlots + 1))
         if (userdata.money < priceOfNextPlot) {
           const notEnoughEmbed = new Embed()
             .setTitle("Insufficient Funds!")

@@ -8,7 +8,7 @@ module.exports.run =  (bot) => {
 
       if (userdata) {
         if (!args[0]) {
-          let msg = new Embed()
+          const msg = new Embed()
           for (const seed in userdata.seeds.common) {
             const XPBar = new XPProgressBar(userdata.seeds.common[seed].level, 5)
             console.log(XPBar.show())
@@ -19,7 +19,7 @@ module.exports.run =  (bot) => {
           if (cropData[args[0]]) {
             const attachment = new Attachment(args[0])
             const XPBar = new XPProgressBar(userdata.seeds.common[args[0]].level)
-            let msg = new Embed()
+            const msg = new Embed()
               .setTitle(`${args[0][0].toUpperCase() + args[0].substr(1)}`)
               .setThumbnail(attachment.link())
               .addField(`Level: **${XPBar.level()}**`, XPBar.show())

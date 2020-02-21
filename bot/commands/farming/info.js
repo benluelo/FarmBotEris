@@ -11,12 +11,12 @@ function clamp(num, min, max) {
 exports.run = (bot) => {
   bot.registerCommand("info", async (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
-      if (err) throw err
+      if (err) { throw err }
 
       // check for plant/plot info
       if (args[0]) {
-        let plotNumber = parsePlotNumber(args[0])
-        if (plotNumber !== false) {
+        const plotNumber = parsePlotNumber(args[0])
+        if (false !== plotNumber) {
 
           if (!userdata) {
             bot.startMessage(message)
@@ -39,7 +39,7 @@ exports.run = (bot) => {
               ) /
               bot.config.farminfo.growTimes[userCrop.planted])
 
-              let growthPercentage = clamp(
+              const growthPercentage = clamp(
                 (
                   (
                     Date.now() -
@@ -56,8 +56,8 @@ exports.run = (bot) => {
 
               // calculate the time until growth
               let timeUntilPlantFinished
-              if (bot.config.farminfo.growTimes[userCrop.planted] - (Date.now() - userCrop.datePlantedAt) > 0) {
-                let temptime = ms((userCrop.datePlantedAt + bot.config.farminfo.growTimes[userCrop.planted]) - Date.now())
+              if (0 < bot.config.farminfo.growTimes[userCrop.planted] - (Date.now() - userCrop.datePlantedAt)) {
+                const temptime = ms((userCrop.datePlantedAt + bot.config.farminfo.growTimes[userCrop.planted]) - Date.now())
                 timeUntilPlantFinished = `${temptime.hours}h ${temptime.minutes}m ${temptime.seconds}s\n`
               } else {
                 timeUntilPlantFinished = "Fully grown!\n"
@@ -65,7 +65,7 @@ exports.run = (bot) => {
 
               const p = new ProgressBar(growthPercentage, 1, 10)
 
-              let growthBar = timeUntilPlantFinished + p.show() + ` ${Math.floor(growthPercentage * 100)}%`
+              const growthBar = timeUntilPlantFinished + p.show() + ` ${Math.floor(growthPercentage * 100)}%`
 
               const attachment = new Attachment(userCrop.planted)
 
@@ -74,10 +74,10 @@ exports.run = (bot) => {
                 // .setAuthor(bot.user.username, bot.user.avatarURL)
                 .setColor(bot.color.lightgreen)
                 .setDescription(`Info for plot #\`${args[0].toUpperCase()}\``)
-                .addField("Currently planted:", cropData[userCrop.planted]? cropData[userCrop.planted].emoji: emoji.dirt)
+                .addField("Currently planted:", cropData[userCrop.planted] ? cropData[userCrop.planted].emoji : emoji.dirt)
                 .setThumbnail(attachment.link())
 
-              if (userCrop.planted != "dirt") {
+              if ("dirt" != userCrop.planted) {
                 infoEmbed.addField("Time until grown:", growthBar)
               }
               // console.log(f)
