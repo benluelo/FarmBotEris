@@ -58,6 +58,8 @@ class Embed {
     this.embed =  embed
   }
 
+  // #region Embed methods
+
   /**
    * Sets the title of the embed.
    * @param {String} title Title of embed
@@ -166,6 +168,8 @@ class Embed {
   showContent(){
     return this.embed
   }
+
+  // #endregion Embed methods
 }
 
 class ProgressBar {
@@ -183,8 +187,6 @@ class ProgressBar {
   show() {
     const full = Math.floor((this.numerator / this.denominator) * this.length)
     const empty = Math.ceil(this.length - ((this.numerator / this.denominator) * this.length))
-    // console.log("num:", this.numerator, "den:", this.denominator)
-    // console.log("full:", full, "empty:", empty)
     return "█".repeat(full) + "░".repeat(empty)
   }
 }
