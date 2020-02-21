@@ -214,7 +214,7 @@ class XPProgressBar extends ProgressBar {
     return `**${this.numerator}/${this.denominator}**xp\n` + super.show()
   }
 
-  get level() {
+  level() {
     return this._level
   }
 }
@@ -247,6 +247,7 @@ module.exports = {
   Attachment
 }
 
+// eslint-disable-next-line no-unused-vars
 const logx = (base, num) => {
   return Math.log(num)/Math.log(base)
 }

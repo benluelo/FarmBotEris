@@ -10,7 +10,7 @@ exports.run = async (bot) => {
 
     // attempt to find the user in the system
     bot.database.Userdata.findOne({ userID: message.author.id }, (err, userdata) => {
-      if (err) bot.log.error(err)
+      if (err) {bot.log.error(err)}
 
       // if the user is NOT in the database, tell them to start
       if (!userdata) {
@@ -54,7 +54,7 @@ exports.run = async (bot) => {
               // adds the plots to the message
               if (userFarm[plot].crop.planted == "dirt") { // if dirt, add dirt (lol)
                 plotsMsg += emoji.dirt
-              } else if (parseInt(Date.now() - userFarm[plot].crop.datePlantedAt) >= parseInt(bot.config.farminfo.growTimes[userFarm[plot].crop.planted])){ // if not dirt, and if the crop is grown, add the crop
+              } else if (parseInt(Date.now() - userFarm[plot].crop.datePlantedAt) >= parseInt(bot.config.farminfo.growTimes[userFarm[plot].crop.planted])) { // if not dirt, and if the crop is grown, add the crop
                 plotsMsg += cropData[userFarm[plot].crop.planted].emoji
               } else { // if the crop in the plot isn't grown, add a seedling
                 plotsMsg += emoji.seedling
@@ -69,7 +69,7 @@ exports.run = async (bot) => {
             msg.edit(
               {
                 ...new Embed().setTitle(`${message.author.username}'s farm!`).setDescription(`${plotsMsgTop + plotsMsg}`).setColor(bot.color.darkgreen),
-                ...{content: ""}
+                ...{ content: "" }
               }
             )
           })

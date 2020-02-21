@@ -1,4 +1,4 @@
-const smallNumbers = require("../../lib/smallNumbers.json")
+const smallNumbers = require("../../lib/small-numbers.json")
 const cropData = require("../../lib/crop-data.json")
 const { Embed } = require("../../lib/classes")
 
@@ -14,7 +14,7 @@ const getSmallNumbers = (number) => {
 exports.run = (bot) => {
   bot.registerCommand("inventory", (message) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
-      if (err) bot.log.error(err)
+      if (err) {bot.log.error(err)}
 
       // gather inv
       let invItemList = {}
@@ -27,7 +27,7 @@ exports.run = (bot) => {
         }
       }
 
-      if (invItemList.length == 0) invItemString = "When you harvest your crops, they'll show up here!"
+      if (invItemList.length == 0) {invItemString = "When you harvest your crops, they'll show up here!"}
 
       // sort the numbers
       let sortable = []

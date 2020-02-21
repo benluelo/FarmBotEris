@@ -1,4 +1,5 @@
 const { parsePlotNumber } = require("../../lib/parse-plot-number")
+const cropData = require("../../lib/crop-data.json")
 
 module.exports.run = async (bot) => {
   bot.registerCommand("harvest", (message, args) => {
@@ -18,7 +19,7 @@ module.exports.run = async (bot) => {
 
             const userCrop = farm[plot].crop
 
-            if ((userCrop.planted != "dirt") && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])){
+            if ((userCrop.planted != "dirt") && ((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])) {
               await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
                 {
                   $set: {
@@ -33,8 +34,8 @@ module.exports.run = async (bot) => {
               ).then(() => {
                 totalPlots += 1
 
-              }).catch(err => {
-                console.log(err.message)
+              }).catch(error => {
+                console.log(error.message)
               })
             }
           }
@@ -65,11 +66,11 @@ module.exports.run = async (bot) => {
                       [`seeds.common.${userCrop.planted}.level`]: 1
                     }
                   }
-                ).catch(err => {
-                  console.log(err.message)
+                ).catch(error => {
+                  console.log(error.message)
                 })
                 bot.createMessage(message.channel.id,
-                  `Harvested the **${userCrop.planted}** on \`${args[0]}\`!`)
+                  `Harvested the **${cropData[userCrop.planted].emoji}** on \`${(args[0]).toUpperCase()}\`!`)
               } else {
                 bot.createMessage(message.channel.id, "Cannot harvest dirt!")
               }
