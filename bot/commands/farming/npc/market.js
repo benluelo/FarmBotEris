@@ -15,7 +15,7 @@ exports.run = (bot) => {
       }
 
       if (userdata) {
-
+        bot.createMessage(message.channel.id, "YOUR REQUESTS SIRE")
       }
     })
     const marketEmbed = new Embed()
