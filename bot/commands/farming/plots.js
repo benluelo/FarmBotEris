@@ -43,10 +43,10 @@ exports.run = async (bot) => {
               // E * * * * *
               // adds the letters and numbers as they are needed
               if (plot < 5) {
-                plotsMsgTop += bot.config.farminfo.msgNums[plot]
+                plotsMsgTop += emoji.numbers[plot]
               }
               if (plot % 5 === 0) {
-                plotsMsg += "\n" + bot.config.farminfo.msgLtrs[Math.floor(plot/5)]
+                plotsMsg += "\n" + emoji.letters[Math.floor(plot/5)]
               }
 
               if (DEBUG) { console.log(userFarm[plot].crop.planted) }

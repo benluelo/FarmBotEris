@@ -2,6 +2,7 @@ const ms = require("parse-ms")
 const { Embed, ProgressBar, Attachment } = require("../../lib/classes")
 const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
 const cropData = require("../../lib/crop-data.json")
+const emoji = require("../../lib/emoji.json")
 
 function clamp(num, min, max) {
   return num <= min ? min : num >= max ? max : num
@@ -73,7 +74,7 @@ exports.run = (bot) => {
                 // .setAuthor(bot.user.username, bot.user.avatarURL)
                 .setColor(bot.color.lightgreen)
                 .setDescription(`Info for plot #\`${args[0].toUpperCase()}\``)
-                .addField("Currently planted:", cropData[userCrop.planted].emoji)
+                .addField("Currently planted:", cropData[userCrop.planted]? cropData[userCrop.planted].emoji: emoji.dirt)
                 .setThumbnail(attachment.link())
 
               if (userCrop.planted != "dirt") {
