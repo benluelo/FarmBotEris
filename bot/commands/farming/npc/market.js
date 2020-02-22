@@ -21,7 +21,7 @@ exports.run = (bot) => {
           // get new requests
             const randomNPC = userdata.farmers[Math.floor(Math.random() * userdata.farmers.length)]
             newRequests.push(
-              new NPC(randomNPC.name, randomNPC.gender, randomNPC.wealth, randomNPC.preferences)
+              new NPC(randomNPC.name, randomNPC.unlockableCrop, randomNPC.gender, randomNPC.wealth, randomNPC.preferences)
                 .newRequest(userdata.seeds.common)
             )
           }
@@ -88,7 +88,6 @@ exports.run = (bot) => {
         const enoughCrops = (() => {
           const temp = {}
           for (const req in a.want) {
-            console.log(userdata.seeds.common[a.want[req].name].amount)
             if (userdata.seeds.common[a.want[req].name].amount < a.want[req].amount) {
               return false
             } else {
