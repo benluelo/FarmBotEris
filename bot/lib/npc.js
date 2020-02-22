@@ -1,4 +1,5 @@
 const farmerData = require("./farmer-data.js")
+
 class NPC {
   /**
    * Creates a new NPC.
@@ -25,8 +26,6 @@ class NPC {
    * @param {Object.<string, {discovered: Boolean, level: Number, amount: Number}>} crops - the crops that the user has unlocked.
    */
   newRequest(crops) {
-
-    console.log(Object.keys(crops))
 
     const rand = Math.random()
     const want = []
@@ -65,16 +64,40 @@ class NPC {
         }
       }
     }
-    console.log(discoveredCrops)
-    return {
+
+    /**
+     * @type {Request}
+     */
+    const r = {
       name: this.name,
       want: want,
       value: (this.wealth * rand) * 10,
       reputation: (1 - (this.wealth * rand)) * 10
     }
+    return r
   }
 }
 
 module.exports = {
   NPC
 }
+
+/**
+ * @typedef {Object} Request
+ * @prop {String} Request.name - the name of the farmer who's request this is.
+ * @prop {Object[]} want - what the farmer wants.
+ * @prop {String} want[].crop - the crop they want.
+ * @prop {Number} want[].amount - the amount of the crop they want.
+ * @prop {Number} value - how much they are willling to pay.
+ * @prop {Number} reputation - how much reputation filling the request gives.
+ */
+
+/**
+ * @typedef {Object} Farmer
+ * @prop {String} name - the name of the Farmer.
+ * @prop {Number} wealth - the wealth of the Farmer.
+ * @prop {{color: import("../lib/farmer-data.js").colors, taste: import("../lib/farmer-data.js").tastes}} preferences - the preferences of the Farmer.
+ * @prop {Number} level - the level of the Farmer (I.e. their experience points).
+ * @prop {("male" | "female")} gender -  the gender of the Farmer.
+ * @prop {String} emoji - the emoji of the Farmer.
+ */

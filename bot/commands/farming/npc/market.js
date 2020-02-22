@@ -37,7 +37,7 @@ exports.run = (bot) => {
         const tempReq = userdata.requests.concat(newRequests)
         for (const request in tempReq) {
           const a = parseRequest(tempReq[request], userdata.farmers, request)
-          marketEmbed.addField(a.farmer.emoji + " **" + a.farmer.name.match(/(\w+ [a-zA-Z])/)[0] + "." + "**", prettifyRequest(a).join("\n"), true)
+          marketEmbed.addField(a.farmer.emoji + " **" + a.farmer.name.match(/(\w+ [a-zA-Z])/)[0] + "." + "**", prettifyParsedRequest(a).join("\n"), true)
         }
         bot.createMessage(message.channel.id, marketEmbed.addBlankField(true))
       }
@@ -58,7 +58,7 @@ exports.run = (bot) => {
         const marketViewEmbed = new Embed()
 
         const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
-        const p = prettifyRequest(a)
+        const p = prettifyParsedRequest(a)
 
         marketViewEmbed
           .setTitle(a.farmer.emoji + " **" + a.farmer.name + "**")
@@ -83,38 +83,20 @@ exports.run = (bot) => {
         if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return bot.createMessage(message.channel.id, `**${args[0]}** is not a valid order ID!`) }
         const marketFilledEmbed = new Embed()
 
-        const farmer = userdata.farmers.find(npc => npc.name === userdata.requests[orderID].name)
-        let msg = `**__ID__: **\`${orderID + 1}\`\n`
-        let value = 0
-        let rep = 0
-        msg += "**__Want__:**\n"
-        for (const w in userdata.requests[orderID].want) {
-          /** @type {1 | 1.15 | 1.30} */
-          const flavourMulti = 1 + (cropData[userdata.requests[orderID].want[w].crop].flavour.filter(x => x == farmer.preferences).length * 0.15)
-          const colorMulti = cropData[userdata.requests[orderID].want[w].crop].color == farmer.preferences ? 1.15 : 1
-          value += (
-            (getPriceOfSeeds[userdata.requests[orderID].want[w].crop] // hourly price of the seed
-             * userdata.requests[orderID].want[w].amount // the amount in the request
-             * userdata.requests[orderID].value) // the multiplier of the request (value)
-           * flavourMulti // fruit is favourite flavor? add corresponding value
-           * colorMulti) // fruit is favourite color? add 15% value
+        const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
+        const p = prettifyParsedRequest(a)
 
-          rep += (
-            (userdata.requests[orderID].want[w].amount // the amount in the request
-             * userdata.requests[orderID].reputation) // the multiplier of the request (reputation)
-           * flavourMulti // fruit is favourite flavor? add corresponding value
-           * colorMulti) // fruit is favourite color? add 15% value
-          msg += cropData[userdata.requests[orderID].want[w].crop].emoji + " x " + userdata.requests[orderID].want[w].amount + "\n"
-        }
-        msg += "**__Rewards__:**\n"
-        + "**├⮞   " + bot.formatMoney(value) + "** " + emoji.coin + "\n"
-        + "**└⮞   " + Math.ceil(rep) + "** rep"
-
-        bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
+        marketFilledEmbed
+          .setTitle(a.farmer.emoji + " **" + a.farmer.name + "**")
+          .setDescription(p.shift())
+          .addField(p.shift(), p.shift())
+          .addField(p.shift(), p.join("\n"))
+        await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
           $pull: { ["requests"]: userdata.requests[orderID] },
-          $inc: { "money": value, [`farmers.${userdata.farmers.findIndex(npc => npc.name === userdata.requests[orderID].name)}.level`]: Math.ceil(rep) }
+          $inc: {
+            "money": a.rewards.money,
+            [`farmers.${userdata.farmers.findIndex(npc => npc.name === userdata.requests[orderID].name)}.level`]: a.rewards.reputation }
         })
-        marketFilledEmbed.setTitle(farmer.emoji + " **" + farmer.name + "**").setDescription(msg)
         bot.createMessage(message.channel.id, marketFilledEmbed)
       }
     })
@@ -122,20 +104,20 @@ exports.run = (bot) => {
 
   /**
    * @param {{
-    id: Number,
-    want: String,
-    rewards: {
-      money: Number,
-      reputation: Number
-    }
-  }} req
+      id: Number,
+      want: {name: String, emoji: String, amount: Number}[],
+      rewards: {
+        money: Number,
+        reputation: Number
+      }
+    }} req
    */
-  function prettifyRequest(req) {
+  function prettifyParsedRequest(req) {
     return [
       "**__ID__: **" +
       `\`${parseInt(req.id)}\``,
       "**__Want__:**",
-      req.want,
+      readableReq(req.want),
       "**__Rewards__:**",
       `**├⮞ ${bot.formatMoney(req.rewards.money)} ${emoji.coin}`,
       `**└⮞ **${req.rewards.reputation}** rep`
@@ -143,10 +125,12 @@ exports.run = (bot) => {
   }
 }
 
+/**
+ * @param {import("../../../lib/npc.js").Request} request
+ * @param {import("../../../lib/npc.js").Farmer[]} userFarmers
+ * @param {(Number | String)} id
+ */
 function parseRequest(request, userFarmers, id) {
-  console.log("request:", request)
-  console.log("id:", id)
-  console.log("userFarmers:", userFarmers)
   const farmer = userFarmers.find(f => {
     return f.name == request.name
   })
@@ -155,7 +139,7 @@ function parseRequest(request, userFarmers, id) {
 
   return {
     id: parseInt(id) + 1,
-    want: readableReq(parsed.req),
+    want: parsed.req,
     rewards: {
       money: parsed.val,
       reputation: parsed.rep
@@ -180,7 +164,7 @@ function parseRequest(request, userFarmers, id) {
  * @param {import("../../../lib/farmer-data.js").colors} preferences.color
  */
 function parseWants(preferences, request) {
-  /** @type {{val: Number, rep: Number, req: {emoji: String, amount: Number}[]}} */
+  /** @type {{val: Number, rep: Number, req: {name: String, emoji: String, amount: Number}[]}} */
   const parsed = {
     val: 0,
     rep: 0,
@@ -210,6 +194,7 @@ function parseWants(preferences, request) {
     )
 
     parsed.req.push({
+      name: request.want[w].crop,
       emoji: cropData[request.want[w].crop].emoji,
       amount: request.want[w].amount
     })
@@ -218,7 +203,7 @@ function parseWants(preferences, request) {
 }
 
 /**
- * @param {{emoji: String, amount: Number}[]} req
+ * @param {{name: String, emoji: String, amount: Number}[]} req
  */
 function readableReq(req) {
   return req.map(r => {
