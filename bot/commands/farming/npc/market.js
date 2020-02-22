@@ -15,8 +15,6 @@ exports.run = (bot) => {
       }
 
       if (userdata) {
-        // console.log(userdata.requests)
-        // console.log(userdata)
         const newRequests = []
         if (userdata.requests.length < userdata.farmers.length) {
           while (userdata.requests.length + newRequests.length < userdata.farmers.length) {
@@ -39,7 +37,7 @@ exports.run = (bot) => {
         const tempReq = userdata.requests.concat(newRequests)
         for (const request in tempReq) {
           const a = parseRequest(tempReq[request], userdata.farmers, request)
-          marketEmbed.addField(a.farmer.emoji + " **" + a.farmer.name.match(/(\w+ [a-zA-Z])/)[0] + "." + "**", prettifyRequest(a), true)
+          marketEmbed.addField(a.farmer.emoji + " **" + a.farmer.name.match(/(\w+ [a-zA-Z])/)[0] + "." + "**", prettifyRequest(a).join("\n"), true)
         }
         bot.createMessage(message.channel.id, marketEmbed.addBlankField(true))
       }
@@ -54,39 +52,20 @@ exports.run = (bot) => {
       }
 
       if (userdata) {
-        if (!args[0]) { return bot.createMessage(message.channel.id, "You have to specify an order to fill!") }
+        if (!args[0]) { return bot.createMessage(message.channel.id, "You have to specify an order to view!") }
         const orderID = parseInt(args[0]) - 1
         if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return bot.createMessage(message.channel.id, `**${args[0]}** is not a valid order ID!`) }
-        const marketFilledEmbed = new Embed()
+        const marketViewEmbed = new Embed()
 
-        const farmer = userdata.farmers.find(npc => npc.name === userdata.requests[orderID].name)
-        let msg = `**__ID__: **\`${orderID + 1}\`\n`
-        let value = 0
-        let rep = 0
-        msg += "**__Want__:**\n"
-        for (const w in userdata.requests[orderID].want) {
-          /** @type {1 | 1.15 | 1.30} */
-          const flavourMulti = 1 + (cropData[userdata.requests[orderID].want[w].crop].flavour.filter(x => x == farmer.preferences).length * 0.15)
-          const colorMulti = cropData[userdata.requests[orderID].want[w].crop].color == farmer.preferences ? 1.15 : 1
-          value += (
-            (getPriceOfSeeds[userdata.requests[orderID].want[w].crop] // hourly price of the seed
-             * userdata.requests[orderID].want[w].amount // the amount in the request
-             * userdata.requests[orderID].value) // the multiplier of the request (value)
-           * flavourMulti // fruit is favourite flavor? add corresponding value
-           * colorMulti) // fruit is favourite color? add 15% value
+        const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
+        const p = prettifyRequest(a)
 
-          rep += (
-            (userdata.requests[orderID].want[w].amount // the amount in the request
-             * userdata.requests[orderID].reputation) // the multiplier of the request (reputation)
-           * flavourMulti // fruit is favourite flavor? add corresponding value
-           * colorMulti) // fruit is favourite color? add 15% value
-          msg += cropData[userdata.requests[orderID].want[w].crop].emoji + " x " + userdata.requests[orderID].want[w].amount + "\n"
-        }
-        msg += "**__Rewards__:**\n"
-        + "**├⮞   " + bot.formatMoney(value) + "** " + emoji.coin + "\n"
-        + "**└⮞   " + Math.ceil(rep) + "** rep"
-        marketFilledEmbed.setTitle(farmer.emoji + " **" + farmer.name + "**").setDescription(msg)
-        bot.createMessage(message.channel.id, marketFilledEmbed)
+        marketViewEmbed
+          .setTitle(a.farmer.emoji + " **" + a.farmer.name + "**")
+          .setDescription(p.shift())
+          .addField(p.shift(), p.shift())
+          .addField(p.shift(), p.join("\n"))
+        bot.createMessage(message.channel.id, marketViewEmbed)
       }
     })
   })
@@ -152,14 +131,15 @@ exports.run = (bot) => {
   }} req
    */
   function prettifyRequest(req) {
-    return (
-      `**__ID__: **\`${parseInt(req.id) + 1}\`\n` +
-      "**__Want__:**\n" +
-      req.want +
-      "\n**__Rewards__:**\n" +
-      `**├⮞ ${bot.formatMoney(req.rewards.money)} ${emoji.coin}\n` +
+    return [
+      "**__ID__: **" +
+      `\`${parseInt(req.id)}\``,
+      "**__Want__:**",
+      req.want,
+      "**__Rewards__:**",
+      `**├⮞ ${bot.formatMoney(req.rewards.money)} ${emoji.coin}`,
       `**└⮞ **${req.rewards.reputation}** rep`
-    )
+    ]
   }
 }
 
