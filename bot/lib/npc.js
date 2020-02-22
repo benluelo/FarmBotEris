@@ -33,7 +33,7 @@ class NPC {
 
     const rand = Math.random()
     const want = []
-    let discoveredCrops = []
+    const discoveredCrops = []
 
     for (const crop in crops) {
       if (crops[crop].discovered) {
