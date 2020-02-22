@@ -105,7 +105,7 @@ exports.run = (bot) => {
   /**
    * @param {{
       id: Number,
-      want: {name: String, emoji: String, amount: Number}[],
+      want: {name: import("../../../lib/crop-data.js").CropName, emoji: import("../../../lib/crop-data.js").CropEmoji, amount: Number}[],
       rewards: {
         money: Number,
         reputation: Number
@@ -153,18 +153,13 @@ function parseRequest(request, userFarmers, id) {
 
 /**
  * Makes sense of the requests.
- * @param {Object} request
- * @param {Object[]} request.want
- * @param {String} request.want[].crop
- * @param {Number} request.want[].amount
- * @param {Number} request.value
- * @param {Number} request.reputation
  * @param {Object} preferences
  * @param {import("../../../lib/farmer-data.js").tastes} preferences.taste
  * @param {import("../../../lib/farmer-data.js").colors} preferences.color
+ * @param {import("../../../lib/npc.js").Request} request
  */
 function parseWants(preferences, request) {
-  /** @type {{val: Number, rep: Number, req: {name: String, emoji: String, amount: Number}[]}} */
+  /** @type {{val: Number, rep: Number, req: {name: import("../../../lib/crop-data.js").CropName, emoji: import("../../../lib/crop-data.js").CropEmoji, amount: Number}[]}} */
   const parsed = {
     val: 0,
     rep: 0,

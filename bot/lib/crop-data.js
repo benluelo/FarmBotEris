@@ -2,13 +2,21 @@
 
 /**
  * @typedef {Object} Crop
- * @property {("🍎" | "🍊" | "🍋" | "🍐" | "🍒" | "🍑" | "🥭" | "🍈" | "🍇" | "🍓" | "🍌" | "🍍")} crop.emoji
+ * @property {CropEmoji} crop.emoji
  * @property {import("../lib/farmer-data.js").colors} crop.color
  * @property {import("../lib/farmer-data.js").tastes[]} crop.flavour
  */
 
 /**
- * @type {Object.<string, Crop>}
+ * @typedef {("🍎" | "🍊" | "🍋" | "🍐" | "🍒" | "🍑" | "🥭" | "🍈" | "🍇" | "🍓" | "🍌" | "🍍")} CropEmoji
+ */
+
+/**
+ * @typedef {("apple" | "orange" | "lemon" | "pear" | "cherry" | "peach" | "mango" | "melon" | "grapes" | "strawberry" | "banana" | "pineapple")} CropName
+ */
+
+/**
+ * @type {Object<string, Crop>}
  */
 module.exports = {
   "apple": {
