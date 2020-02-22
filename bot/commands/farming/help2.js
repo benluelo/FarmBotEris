@@ -3,10 +3,10 @@ const { readdir } = require("fs")
 const commands = []
 
 readdir("./bot/help", async (err, files) => {
-  if (err) throw err
+  if (err) { throw err }
   files.forEach(async (file) => {
     const fSplit = file.split(".")
-    if (fSplit[1] !== "json") { return }
+    if ("json" !== fSplit[1]) { return }
     commands.push(fSplit[0])
   })
 })
@@ -25,14 +25,14 @@ exports.run = (bot) => {
       if (message.author.id == bot.ownersIDS[0] || message.author.id == bot.ownersIDS[1]) {
         helpEmbed.addField(":avocado: Admin", "`eval`, `stop`")
       }
-      if (process.env.DEVELOPMENT == "true") {
+      if ("true" == process.env.DEVELOPMENT) {
         helpEmbed.addField(":scroll: Development", "`deleteuser`")
       }
 
       bot.createMessage(message.channel.id, helpEmbed)
     } else {
       if (commands.includes(args[0])) {
-        const command = require(`../help/${args[0]}.json`)
+        const command = require(`../../help/${args[0]}.json`)
         const helpEmbed = new Embed()
           .setTitle(command.title)
           .setDescription(command.description)

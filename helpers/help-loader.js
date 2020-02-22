@@ -1,4 +1,5 @@
 const fs = require("fs")
+const path = require("path")
 const { question } = require("readline-sync")
 
 const template = {
@@ -14,27 +15,37 @@ const template = {
   permissionLevel: 0
 }
 
-fs.readdir("../bot/commands", async (err, files) => {
-  files.forEach(async file => {
-    const fSplit = file.split(".")
-    if (fSplit[1] !== "js") { return }
-    console.log(fSplit[0])
-    let copy = template
+console.log(path.resolve(__dirname, "../bot/commands"))
 
-    const descTemp = question(fSplit[0] + ".description: ")
-    copy.description = descTemp? descTemp: template.description
+;(function getFiles(dir, depth = 0) {
+  fs.readdir(dir, async (err, files) => {
+    if (err) { console.log(err) }
+    files.forEach(file => {
+      if (fs.lstatSync(`${dir}/${file}`).isDirectory()) {
+        getFiles(`${dir}/${file}`, depth + 1)
+      }
+      const fSplit = file.split(".")
+      if ("js" !== fSplit[1]) { return }
+      console.log(fSplit[0])
+      const copy = template
 
-    const usageTemp = question(fSplit[0] + ".usage.value: ")
-    copy.usage.value = usageTemp? usageTemp: template.usage.value
+      const descTemp = question(fSplit[0] + ".description: ")
+      copy.description = descTemp ? descTemp : template.description
 
-    const exTemp = question(fSplit[0] + ".examples.value: ")
-    copy.examples.value = exTemp? exTemp: template.examples.value
+      const usageTemp = question(fSplit[0] + ".usage.value: ")
+      copy.usage.value = usageTemp ? usageTemp : template.usage.value
 
-    const permsTemp = question(fSplit[0] + ".permissionLevel: ")
-    copy.permissionLevel = permsTemp? permsTemp: template.permissionLevel
+      const exTemp = question(fSplit[0] + ".examples.value: ")
+      copy.examples.value = exTemp ? exTemp : template.examples.value
 
-    fs.writeFileSync(`../bot/help/${fSplit[0]}.json`, JSON.stringify(copy, null, 4))
+      const permsTemp = question(fSplit[0] + ".permissionLevel: ")
+      copy.permissionLevel = permsTemp ? permsTemp : template.permissionLevel
+
+      // console.log(path.resolve(__dirname, "../".repeat(depth), `./bot/help/${fSplit[0]}.json`))
+
+      fs.writeFileSync(`./bot/help/${fSplit[0]}.json`, JSON.stringify(copy, null, 4))
+    })
   })
-})
+})(path.resolve(__dirname, "../bot/commands/"))
 
 // rl.close()
