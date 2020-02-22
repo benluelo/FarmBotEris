@@ -3,6 +3,7 @@ const { NPC } = require("../../../lib/npc.js")
 const cropData = require("../../../lib/crop-data.js")
 const getPriceOfSeeds = require("../../../lib/get-price-of-seeds")
 const emoji = require("../../../lib/emoji.json")
+const { getLevel } = require("../../../../helpers/level-test.js")
 
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
@@ -21,7 +22,7 @@ exports.run = (bot) => {
           // get new requests
             const randomNPC = userdata.farmers[Math.floor(Math.random() * userdata.farmers.length)]
             newRequests.push(
-              new NPC(randomNPC.name, randomNPC.unlockableCrop, randomNPC.gender, randomNPC.wealth, randomNPC.preferences)
+              new NPC(randomNPC.name, randomNPC.gender, randomNPC.unlockableCrop, randomNPC.wealth, randomNPC.preferences)
                 .newRequest(userdata.seeds.common)
             )
           }
@@ -81,7 +82,7 @@ exports.run = (bot) => {
         if (!args[0]) { return bot.createMessage(message.channel.id, "You have to specify an order to fill!") }
         const orderID = parseInt(args[0]) - 1
         if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return bot.createMessage(message.channel.id, `**${args[0]}** is not a valid order ID!`) }
-        const marketFilledEmbed = new Embed()
+        const marketFilledEmbed = new Embed({ color: bot.color.lightgreen })
 
         const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
 
@@ -103,18 +104,38 @@ exports.run = (bot) => {
 
         marketFilledEmbed
           .setTitle(a.farmer.emoji + " **" + a.farmer.name + "**")
-          .setDescription(p.shift())
+          .setDescription("**Order Filled!**\n" + p.shift())
           .addField(p.shift(), p.shift())
           .addField(p.shift(), p.join("\n"))
 
-        await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
+        const farmerIndex = userdata.farmers.findIndex(f => f.name === userdata.requests[orderID].name)
+
+        const { value } = await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
           $pull: { ["requests"]: userdata.requests[orderID] },
           $inc: {
             "money": a.rewards.money,
-            [`farmers.${userdata.farmers.findIndex(f => f.name === userdata.requests[orderID].name)}.level`]: a.rewards.reputation,
+            [`farmers.${farmerIndex}.level`]: a.rewards.reputation,
             ...enoughCrops
           }
-        })
+        }, { returnOriginal: false })
+
+        /** @type {import("../../../lib/user.js").UserData} */
+        const user2 = value
+
+        const levelBefore = getLevel(2 + user2.farmers[farmerIndex].wealth, a.farmer.level).level
+        const levelAfter = getLevel(2 + user2.farmers[farmerIndex].wealth, user2.farmers[farmerIndex].level).level
+        console.log("before:", levelBefore)
+        console.log("after:", levelAfter)
+        if (levelBefore < levelAfter) {
+          marketFilledEmbed.addField("**__Friendship Increase!__**", `You've become closer friends with **${a.farmer.name}**!\n**Friendship Level** increased from **${levelBefore}** to **${levelAfter}**!`)
+        }
+        if (levelAfter >= userdata.farmers[farmerIndex].unlockLevel && levelBefore < userdata.farmers[farmerIndex].unlockLevel) {
+          console.log(bot.database.Userdata)
+          marketFilledEmbed.addField("**__New Crop!__**", `You've become really good friends with **${a.farmer.name}**! They've decided to give you a new seed for your farm as a token of your friendship!\n**Unlocked:** ${cropData[user2.farmers[farmerIndex].unlockableCrop].emoji}`)
+          await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
+            $set: { [`seeds.common.${user2.farmers[farmerIndex].unlockableCrop}.discovered`]: true }
+          })
+        }
         bot.createMessage(message.channel.id, marketFilledEmbed)
       }
     })
@@ -164,7 +185,8 @@ function parseRequest(request, userFarmers, id) {
     },
     farmer: {
       name: farmer.name,
-      emoji: farmer.emoji
+      emoji: farmer.emoji,
+      level: farmer.level
     }
   }
 }
@@ -185,8 +207,10 @@ function parseWants(preferences, request) {
   }
 
   for (const w in request.want) {
+
+    console.log(request.want[w].crop, cropData[request.want[w].crop])
     /** @type {0 | 0.15 | 0.30} */
-    const flavourMulti = (cropData[request.want[w].crop].flavour.filter(x => x == preferences.taste).length * 0.15)
+    const flavourMulti = cropData[request.want[w].crop].flavour.filter(x => x == preferences.taste).length * 0.15
 
     /** @type {0 | 0.15} */
     const colorMulti = cropData[request.want[w].crop].color == preferences.color ? 0.15 : 0

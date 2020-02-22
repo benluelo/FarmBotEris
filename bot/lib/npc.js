@@ -20,7 +20,8 @@ class NPC {
     }
     this.level = 0
     /** @const */
-    this.unlockLevel = 5 + Math.round(this.wealth * 5)
+    this.unlockLevel = Math.round(this.wealth * 5)
+    console.log(this.gender)
     this.emoji = farmerData.emoji[this.gender][Math.floor(Math.random() * farmerData.emoji[this.gender].length)]
   }
 
@@ -40,6 +41,8 @@ class NPC {
       }
     }
 
+    console.log("original:", discoveredCrops)
+
     // add one random crop from the list of discovered crops to the requests
     // if there is only one crop discovered, add a random amount of those to want
     // otherwise, check a random number against the wealth (more wealth = more possible requests)
@@ -56,16 +59,21 @@ class NPC {
         crop: discoveredCrops[randIndex],
         amount: Math.ceil(Math.random() * this.wealth * 10)
       })
+      // console.log("before splice:", discoveredCrops)
       discoveredCrops.splice(randIndex, 1)
+      // console.log("after splice:", discoveredCrops)
       for (const crop in discoveredCrops) {
         if (Math.random() < this.wealth) {
           want.push({
-            crop: crop,
+            crop: discoveredCrops[crop],
             amount: Math.ceil(Math.random() * this.wealth * 10)
           })
-          discoveredCrops = discoveredCrops.filter(c => c != crop)
+          // console.log("before filter:", discoveredCrops)
+          // discoveredCrops = discoveredCrops.filter(c => c != crop)
+          // console.log("after filter:", discoveredCrops)
         }
       }
+      console.log(want)
     }
 
     /**
