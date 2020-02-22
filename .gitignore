@@ -2,5 +2,4 @@ node_modules
 .env
 bot/logs
 out
-bot/images/*/*
 helpers/crop-maker.js
