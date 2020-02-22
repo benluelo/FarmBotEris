@@ -1,5 +1,5 @@
 function getURL(obj) {
-  if (obj instanceof URL){
+  if (obj instanceof URL) {
     return obj.href
   } else if (obj instanceof Attachment) {
     return obj.link()
@@ -32,7 +32,7 @@ class Embed {
    * @param {String} [embed.fields.name] - The name of the field.
    * @param {String} [embed.fields.value] - The content of the field.
    */
-  constructor(embed={
+  constructor(embed = {
     title: null,
     description: null,
     url: null,
@@ -76,10 +76,9 @@ class Embed {
         url: null,
         icon_url: null
       },
-      fields: [], 
+      fields: [],
       ...embed
     }
-    console.log(this.embed)
   }
 
   // #region Embed methods
@@ -88,7 +87,7 @@ class Embed {
    * Sets the title of the embed.
    * @param {String} title Title of embed
    */
-  setTitle(title=null){
+  setTitle(title = null) {
     this.embed.title = title
     return this
   }
@@ -97,7 +96,7 @@ class Embed {
    * Sets the description of the embed.
    * @param {String} description Description of embed
    */
-  setDescription(description=null){
+  setDescription(description = null) {
     this.embed.description = description
     return this
   }
@@ -106,7 +105,7 @@ class Embed {
    * Sets the url of the embed.
    * @param {(String | URL | Attachment)} url URL for the embed
    */
-  setUrl(url=null){
+  setUrl(url = null) {
     this.embed.url = getURL(url)
     return this
   }
@@ -115,7 +114,7 @@ class Embed {
    * Sets the color of the embed.
    * @param {Number} color Hexadecimal numeric hex color code
    */
-  setColor(color=null){
+  setColor(color = null) {
     this.embed.color = color
     return this
   }
@@ -123,7 +122,7 @@ class Embed {
   /**
    * Sets the timestamp of the embed to the moment at which it is called.
    */
-  setTimestamp(){
+  setTimestamp() {
     this.embed.timestamp = new Date().toISOString()
     return this
   }
@@ -133,7 +132,7 @@ class Embed {
    * @param {String} text Text of the footer
    * @param {(String | URL | Attachment)} icon_url URL icon for the footer
    */
-  setFooter(text=null, icon_url=null){
+  setFooter(text = null, icon_url = null) {
     this.embed.footer.text = text
     this.embed.footer.icon_url = getURL(icon_url)
     return this
@@ -143,7 +142,7 @@ class Embed {
    * Sets the url of the embed.
    * @param {(String | URL | Attachment)} url URL of the thumbnail
    */
-  setThumbnail(url=null){
+  setThumbnail(url = null) {
     this.embed.thumbnail.url = getURL(url)
     return this
   }
@@ -154,7 +153,7 @@ class Embed {
    * @param {(String | URL | Attachment)} url URL of the author title
    * @param {(String | URL | Attachment)} icon_url URL to the author icon
    */
-  setAuthor(name=null, url=null, icon_url=null){
+  setAuthor(name = null, url = null, icon_url = null) {
     this.embed.author.name = name
     this.embed.author.url = getURL(url)
     this.embed.author.icon_url = getURL(icon_url)
@@ -167,7 +166,7 @@ class Embed {
    * @param {String} value Value of the field
    * @param {Boolean} inline Whether or not the field should be inline
    */
-  addField(name, value, inline=false){
+  addField(name, value, inline = false) {
     this.embed.fields.push({
       name: name,
       value: value,
@@ -180,7 +179,7 @@ class Embed {
    * Adds a blank field to the embed
    * @param {Boolean} inline Whether or not the field should be inline
    */
-  addBlankField(inline=false) {
+  addBlankField(inline = false) {
     this.embed.fields.push({
       name: "\u200B",
       value: "\u200B",
@@ -189,7 +188,7 @@ class Embed {
     return this
   }
 
-  showContent(){
+  showContent() {
     return this.embed
   }
 
@@ -202,7 +201,7 @@ class ProgressBar {
    * @param {Number} denominator
    * @param {Number} length - the length of the progress bar in characters.
    */
-  constructor(numerator, denominator, length){
+  constructor(numerator, denominator, length) {
     this.numerator = numerator
     this.denominator = denominator
     this.length = length
@@ -222,7 +221,7 @@ class XPProgressBar extends ProgressBar {
    * @param {Number} [length=10] - The length of the progress bar, in characters. Default is 10. Must be `>= 2`.
    * @param {Number} [base=2] - The base for the level calculation. Must be `>= 2`.
    */
-  constructor(exp, length=10, base=2){
+  constructor(exp, length = 10, base = 2) {
     const { getLevel } = require("../../helpers/level-test.js")
     // console.log(`base: ${base}, exp: ${exp}`)
     const data = getLevel(base, exp)
@@ -245,10 +244,10 @@ class XPProgressBar extends ProgressBar {
 
 const { readFileSync } = require("fs")
 class Attachment {
-  constructor(crop, size=150) {
+  constructor(crop, size = 150) {
     this.crop = crop
     this.size = size
-    this.file = readFileSync(`./bot/images/png/${crop}.png`)
+    this.file = readFileSync(require("path").resolve(`./bot/images/png/${crop}.png`))
     this.name = `${crop}.png`
   }
 
@@ -273,5 +272,5 @@ module.exports = {
 
 // eslint-disable-next-line no-unused-vars
 const logx = (base, num) => {
-  return Math.log(num)/Math.log(base)
+  return Math.log(num) / Math.log(base)
 }
