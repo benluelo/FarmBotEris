@@ -11,6 +11,7 @@ const getSmallNumbers = (number) => {
   return numberString
 }
 
+/** @param {import("../../index.js").Bot} bot */
 exports.run = (bot) => {
   bot.registerCommand("inventory", (message) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {

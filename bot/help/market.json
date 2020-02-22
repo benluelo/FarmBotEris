@@ -1,12 +1,13 @@
 {
-    "description": null,
+    "title": "market",
+    "description": "Shows all the current requests for trading goods",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "farm market [option]​"
     },
     "examples": {
         "name": "Examples:",
-        "value": "​"
+        "value": "farm market view <order id>​\nfarm market fill <order id>"
     },
-    "permissionLevel": 0
+    "permissionLevel": 2048
 }

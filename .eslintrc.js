@@ -97,6 +97,10 @@ module.exports = {
                 ],
                 "allowSamePrecedence": true
             }
+        ],
+        "arrow-parens": [
+            "error",
+            "always"
         ]
     }
 }

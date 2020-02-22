@@ -1,6 +1,7 @@
 const cropData = require("../../lib/crop-data.js")
 const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
 
+/** @param {import("../../index.js").Bot} bot */
 exports.run = (bot) => {
   bot.registerCommand("plant", (message, args) => {
     // f!plant <plot> <crop>
@@ -58,7 +59,7 @@ exports.run = (bot) => {
       if (!cropData[args[0]]) { return bot.createMessage(message.channel.id, "Please include a vaild plant type") }
       if (!userdata.seeds.common[args[0]].discovered) { return } // silent quit
 
-      return bot.createMessage(message.channel.id, "Planting all!").then(async msg => {
+      return bot.createMessage(message.channel.id, "Planting all!").then(async (msg) => {
 
         let totalPlots = 0
 

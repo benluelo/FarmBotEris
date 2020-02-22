@@ -2,6 +2,9 @@ const Eris = require("eris")
 const fs = require("fs")
 require("dotenv").config({ path: ".env" })
 
+/**
+ * @type {Bot}
+ */
 const bot = new Eris.CommandClient(process.env.TOKEN, {
   disableEveryone: true,
   defaultImageFormat: "png",
@@ -31,19 +34,19 @@ const bot = new Eris.CommandClient(process.env.TOKEN, {
 })
 
 // database connection
-const { initDb, getDb } = require("./src/database.js")
-initDb((err) => {
+const { initDb } = require("./src/database.js")
+initDb((err, db) => {
   if (err) { throw err }
-})
-setTimeout(() => {
-  const client = getDb()
-  const dbObject = {
-    db: client,
-    Userdata: client.db("farmbot").collection("farm"),
+  if (db) {
+    const client = db
+    const dbObject = {
+      db: client,
+      Userdata: client.db("farmbot").collection("farm"),
+    }
+    bot.database = dbObject
+    bot.log.dbconnect("Successfully connected to database!")
   }
-  bot.database = dbObject
-  bot.log.dbconnect("Successfully connected to database!")
-}, 4000)
+})
 
 // add onto bot var
 bot.ownersIDS = [
@@ -54,12 +57,15 @@ bot.config = require("./config.json")
 bot.color = require("./src/color.js")
 bot.log = require("./src/logger.js").log
 bot.cooldown = require("./src/cooldown.js")
-bot.getLevel = (exp) => { return Math.floor(Math.log2(exp + 1)) }
 
+/**
+ * @param {import("eris").Message} message
+ */
 bot.startMessage = (message) => {
   bot.createMessage(message.channel.id, "You have to start farming first! Send `farm start` to start farming!")
 }
 
+/** @param {Number} value */
 bot.formatMoney = (value) => {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -85,3 +91,19 @@ bot.formatMoney = (value) => {
 })()
 
 bot.connect()
+
+/**
+ * @typedef {import("eris").CommandClient & BotVars} Bot
+ */
+
+/**
+ * @typedef {Object} BotVars
+ * @prop {Object} database
+ * @prop {import("mongodb").MongoClient} database.db - the databaase
+ * @prop {import("mongodb").Collection} database.Userdata - the userdata collection (`farmbot -> farm`)
+ */
+
+/**
+ * @type {BotVars}
+ */
+const b = 4

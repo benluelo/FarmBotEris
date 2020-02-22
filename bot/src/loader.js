@@ -1,7 +1,10 @@
 const fs = require("fs")
 const path = require("path")
 
-exports.run = (bot) => {
+/**
+ * @param {import("../index.js").Bot} bot
+ */
+module.exports.run = (bot) => {
   loadCommands(bot, path.join(__dirname, "../commands"))
 }
 

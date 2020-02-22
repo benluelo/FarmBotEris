@@ -1,12 +1,10 @@
 {
-    "description": null,
+    "title": "deleteuser",
+    "description": "To delete a user from the database",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm deleteuser [@mention]"
     },
-    "examples": {
-        "name": "Examples:",
-        "value": "​"
-    },
-    "permissionLevel": 0
+    "examples": false,
+    "permissionLevel": 2048
 }

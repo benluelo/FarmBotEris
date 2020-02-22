@@ -3,6 +3,7 @@ const path = require("path")
 const { question } = require("readline-sync")
 
 const template = {
+  title: null,
   description: null,
   usage: {
     name: "Usage:",
@@ -29,17 +30,18 @@ console.log(path.resolve(__dirname, "../bot/commands"))
       console.log(fSplit[0])
       const copy = template
 
-      const descTemp = question(fSplit[0] + ".description: ")
-      copy.description = descTemp ? descTemp : template.description
+      copy.title = fSplit[0]
+      // const descTemp = question(fSplit[0] + ".description: ")
+      // copy.description = descTemp ? descTemp : template.description
 
-      const usageTemp = question(fSplit[0] + ".usage.value: ")
-      copy.usage.value = usageTemp ? usageTemp : template.usage.value
+      // const usageTemp = question(fSplit[0] + ".usage.value: ")
+      // copy.usage.value = usageTemp ? usageTemp : template.usage.value
 
-      const exTemp = question(fSplit[0] + ".examples.value: ")
-      copy.examples.value = exTemp ? exTemp : template.examples.value
+      // const exTemp = question(fSplit[0] + ".examples.value: ")
+      // copy.examples.value = exTemp ? exTemp : template.examples.value
 
-      const permsTemp = question(fSplit[0] + ".permissionLevel: ")
-      copy.permissionLevel = permsTemp ? permsTemp : template.permissionLevel
+      // const permsTemp = question(fSplit[0] + ".permissionLevel: ")
+      // copy.permissionLevel = permsTemp ? permsTemp : template.permissionLevel
 
       // console.log(path.resolve(__dirname, "../".repeat(depth), `./bot/help/${fSplit[0]}.json`))
 

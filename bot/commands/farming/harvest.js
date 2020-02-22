@@ -1,6 +1,7 @@
 const { parsePlotNumber } = require("../../lib/parse-plot-number")
 const cropData = require("../../lib/crop-data.js")
 
+/** @param {import("../../index.js").Bot} bot */
 module.exports.run = async (bot) => {
   bot.registerCommand("harvest", (message, args) => {
 
@@ -34,7 +35,7 @@ module.exports.run = async (bot) => {
               ).then(() => {
                 totalPlots += 1
 
-              }).catch(error => {
+              }).catch((error) => {
                 console.log(error.message)
               })
             }
@@ -66,7 +67,7 @@ module.exports.run = async (bot) => {
                       [`seeds.common.${userCrop.planted}.level`]: 1
                     }
                   }
-                ).catch(error => {
+                ).catch((error) => {
                   console.log(error.message)
                 })
                 bot.createMessage(message.channel.id,

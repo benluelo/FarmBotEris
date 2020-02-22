@@ -1,12 +1,10 @@
 {
-    "description": null,
+    "title": "botinfo",
+    "description": "Shows general information about the bot",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm botinfo"
     },
-    "examples": {
-        "name": "Examples:",
-        "value": "​"
-    },
-    "permissionLevel": 0
+    "examples": false,
+    "permissionLevel": 2048
 }

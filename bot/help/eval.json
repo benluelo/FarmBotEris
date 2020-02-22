@@ -1,12 +1,13 @@
 {
-    "description": null,
+    "title": "eval",
+    "description": "no",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​no"
     },
     "examples": {
         "name": "Examples:",
-        "value": "​"
+        "value": "​no"
     },
-    "permissionLevel": 0
+    "permissionLevel": 2048
 }

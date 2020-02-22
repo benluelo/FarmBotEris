@@ -1,10 +1,12 @@
 
 const { Embed } = require("../../lib/classes")
 const emoji = require("../../lib/emoji.json")
-exports.run = bot => {
+
+/** @param {import("../../index.js").Bot} bot */
+exports.run = (bot) => {
   bot.registerCommand("money", (message) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, (err, userdata) => {
-      if (err) {bot.log.error(err)}
+      if (err) { bot.log.error(err) }
       if (userdata) {
         const moneyEmbed = new Embed()
           .setAuthor(message.author.username, message.author.avatarURL)

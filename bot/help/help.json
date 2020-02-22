@@ -1,12 +1,13 @@
 {
-    "description": null,
+    "title": "help",
+    "description": "To show information about all the commands",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm help [command]"
     },
     "examples": {
         "name": "Examples:",
-        "value": "​"
+        "value": "farm help harvest​"
     },
-    "permissionLevel": 0
+    "permissionLevel": 2048
 }

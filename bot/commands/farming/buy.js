@@ -2,6 +2,7 @@ const MAX_PLOTS = 25
 const { Embed } = require("../../lib/classes")
 const emoji = require("../../lib/emoji.json")
 // Math.round(Math.pow(1.90546071796, i))
+/** @param {import("../../index.js").Bot} bot */
 exports.run = async (bot) => {
 
   bot.registerCommand("buy", (message) => {
@@ -45,7 +46,7 @@ exports.run = async (bot) => {
           $inc: {
             money: -priceOfNextPlot
           }
-        }).then(res => {
+        }).then((res) => {
           bot.createMessage(
             message.channel.id,
             `Plot purchased for **${bot.formatMoney(priceOfNextPlot)}** ${emoji.coin}! You now own ${res.value.farm.length + 1} plots!${res.value.farm.length + 1 === MAX_PLOTS ? " This is the maximum amount of plots!" : ""}`

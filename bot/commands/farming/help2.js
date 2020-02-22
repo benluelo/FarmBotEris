@@ -35,10 +35,15 @@ exports.run = (bot) => {
         const command = require(`../../help/${args[0]}.json`)
         const helpEmbed = new Embed()
           .setTitle(command.title)
+          .setColor(bot.color.darkgreen)
           .setDescription(command.description)
           .addField(command.usage.name, command.usage.value)
-          .addField(command.examples.name, command.examples.value)
           .setFooter("[] - optional  |  <> - required")
+
+        if (command.examples) {
+          helpEmbed.addField(command.examples.name, command.examples.value)
+        }
+
         return bot.createMessage(message.channel.id, helpEmbed)
       } else {
         bot.createMessage(message.channel.id, `${args[0]} isn't a command!`)

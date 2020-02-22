@@ -8,6 +8,7 @@ function clamp(num, min, max) {
   return num <= min ? min : num >= max ? max : num
 }
 
+/** @param {import("../../index.js").Bot} bot */
 exports.run = (bot) => {
   bot.registerCommand("info", async (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {

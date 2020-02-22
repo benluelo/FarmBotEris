@@ -1,12 +1,13 @@
 {
-    "description": null,
+    "title": "info",
+    "description": "To show information on a plot in your farm",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm info <plot>"
     },
     "examples": {
         "name": "Examples:",
-        "value": "​"
+        "value": "​farm info a1"
     },
-    "permissionLevel": 0
+    "permissionLevel": 2048
 }

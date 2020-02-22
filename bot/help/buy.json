@@ -1,12 +1,10 @@
 {
-    "description": null,
+    "title": "buy",
+    "description": "To buy a new plot for your farm",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "farm buy​"
     },
-    "examples": {
-        "name": "Examples:",
-        "value": "​"
-    },
-    "permissionLevel": 0
+    "examples": false,
+    "permissionLevel": 2048
 }

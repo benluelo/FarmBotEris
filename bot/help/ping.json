@@ -1,12 +1,10 @@
 {
-    "description": null,
+    "title": "ping",
+    "description": "To view the time response from the bot to discord",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm ping"
     },
-    "examples": {
-        "name": "Examples:",
-        "value": "​"
-    },
-    "permissionLevel": 0
+    "examples": false,
+    "permissionLevel": 2048
 }

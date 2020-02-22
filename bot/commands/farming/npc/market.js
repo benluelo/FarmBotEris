@@ -5,6 +5,7 @@ const getPriceOfSeeds = require("../../../lib/get-price-of-seeds")
 const emoji = require("../../../lib/emoji.json")
 const { getLevel } = require("../../../../helpers/level-test.js")
 
+/** @param {import("../../../index.js").Bot} bot */
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   const command = bot.registerCommand("market", /** @param {import("eris").Message} message @param {String[]} args */ (message, args) => {
@@ -48,10 +49,6 @@ exports.run = (bot) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {Error} err @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
       if (err) { throw err }
 
-      if (!userdata) {
-        bot.startMessage(message)
-      }
-
       if (userdata) {
         if (!args[0]) { return bot.createMessage(message.channel.id, "You have to specify an order to view!") }
         const orderID = parseInt(args[0]) - 1
@@ -67,16 +64,14 @@ exports.run = (bot) => {
           .addField(p.shift(), p.shift())
           .addField(p.shift(), p.join("\n"))
         bot.createMessage(message.channel.id, marketViewEmbed)
+      } else {
+        bot.startMessage(message)
       }
     })
   })
   command.registerSubcommand("fill", /** @param {import("eris").Message} message @param {String[]} args */ (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {Error} err @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
       if (err) { throw err }
-
-      if (!userdata) {
-        bot.startMessage(message)
-      }
 
       if (userdata) {
         if (!args[0]) { return bot.createMessage(message.channel.id, "You have to specify an order to fill!") }
@@ -137,6 +132,8 @@ exports.run = (bot) => {
           })
         }
         bot.createMessage(message.channel.id, marketFilledEmbed)
+      } else {
+        bot.startMessage(message)
       }
     })
   })

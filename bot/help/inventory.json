@@ -1,12 +1,10 @@
 {
-    "description": null,
+    "title": "inventory",
+    "description": "Shows all the items in your inventory",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm inventory"
     },
-    "examples": {
-        "name": "Examples:",
-        "value": "​"
-    },
-    "permissionLevel": 0
+    "examples": false,
+    "permissionLevel": 2048
 }

@@ -1,12 +1,13 @@
 {
-    "description": null,
+    "title": "harvest",
+    "description": "To collect all your seeds from your plots",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "farm harvest [plot]​"
     },
     "examples": {
         "name": "Examples:",
-        "value": "​"
+        "value": "​farm harvest a1"
     },
-    "permissionLevel": 0
+    "permissionLevel": 2048
 }

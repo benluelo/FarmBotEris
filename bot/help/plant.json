@@ -1,5 +1,6 @@
 {
-    "description": null,
+    "title": "plant",
+    "description": "To plant a seed on a plot",
     "usage": {
         "name": "Usage:",
         "value": "​"

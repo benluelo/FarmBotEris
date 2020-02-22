@@ -1,12 +1,10 @@
 {
-    "description": null,
+    "title": "money",
+    "description": "To view how much <:farmbot_coin:648032810682023956> you have",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm money"
     },
-    "examples": {
-        "name": "Examples:",
-        "value": "​"
-    },
-    "permissionLevel": 0
+    "examples": false,
+    "permissionLevel": 2048
 }
