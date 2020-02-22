@@ -5,19 +5,22 @@ class NPC {
    * Creates a new NPC.
    * @param {String} name - The name of the NPC.
    * @param {("male"  | "female")} gender - The gender of the NPC. Either "male" or "female".
+   * @param {import("./crop-data.js").CropName} unlockableCrop - the crop that this user will unlock when they hit their unlock level (between `5` and `10`).
    * @param {Number} [wealth] - The wealth of the NPC. Must be `0 <= x <= 1`.
-   * @param {{color: String, taste: String}} [preferences] - The preferences of the NPC.
+   * @param {{color: import("./farmer-data.js").colors, taste: import("./farmer-data.js").tastes}} [preferences] - The preferences of the NPC.
    */
-  constructor(name, gender, wealth, preferences) {
-    console.log(farmerData)
+  constructor(name, gender, unlockableCrop, wealth, preferences) {
     this.name = name
+    this.gender = gender
+    this.unlockableCrop = unlockableCrop
     this.wealth = wealth || Math.random()
     this.preferences = preferences || {
       color: farmerData.preferences.color[Math.floor(Math.random() * farmerData.preferences.color.length)],
       taste: farmerData.preferences.taste[Math.floor(Math.random() * farmerData.preferences.taste.length)]
     }
     this.level = 0
-    this.gender = gender
+    /** @const */
+    this.unlockLevel = 5 + Math.round(this.wealth * 5)
     this.emoji = farmerData.emoji[this.gender][Math.floor(Math.random() * farmerData.emoji[this.gender].length)]
   }
 
@@ -25,7 +28,7 @@ class NPC {
    * Creates a new request for the market.
    * @param {Object<string, {discovered: Boolean, level: Number, amount: Number}>} crops - the crops that the user has unlocked.
    */
-  newRequest(crops, test) {
+  newRequest(crops) {
 
     const rand = Math.random()
     const want = []
@@ -95,9 +98,11 @@ module.exports = {
 /**
  * @typedef {Object} Farmer
  * @prop {String} name - the name of the Farmer.
+ * @prop {("male" | "female")} gender -  the gender of the Farmer.
+ * @prop {import("./crop-data.js").CropName} unlockableCrop - the crop that this user will unlock when they hit their unlock level.
  * @prop {Number} wealth - the wealth of the Farmer.
  * @prop {{color: import("./farmer-data.js").colors, taste: import("./farmer-data.js").tastes}} preferences - the preferences of the Farmer.
  * @prop {Number} level - the level of the Farmer (i.e. their experience points).
- * @prop {("male" | "female")} gender -  the gender of the Farmer.
+ * @prop {Number} unlockLevel - the level that the farmer will unlock their crop at  (between `5` and `10`).
  * @prop {String} emoji - the emoji of the Farmer.
  */

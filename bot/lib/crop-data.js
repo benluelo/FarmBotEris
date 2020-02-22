@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 
 /**
- * @typedef {Object} Crop
+ * @typedef {Object} CropData
  * @property {CropEmoji} crop.emoji
  * @property {import("../lib/farmer-data.js").colors} crop.color
  * @property {import("../lib/farmer-data.js").tastes[]} crop.flavour
@@ -16,7 +16,7 @@
  */
 
 /**
- * @type {Object<string, Crop>}
+ * @type {Object<string, CropData>}
  */
 module.exports = {
   "apple": {

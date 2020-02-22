@@ -6,8 +6,8 @@ const emoji = require("../../../lib/emoji.json")
 
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
-  const command = bot.registerCommand("market", (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+  const command = bot.registerCommand("market", /** @param {import("eris").Message} message @param {String[]} args */ (message, args) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {Error} err @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
       if (err) { throw err }
 
       if (!userdata) {
@@ -43,8 +43,8 @@ exports.run = (bot) => {
       }
     })
   }, bot.cooldown(15000))
-  command.registerSubcommand("view", (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+  command.registerSubcommand("view", /** @param {import("eris").Message} message @param {String[]} args */ (message, args) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {Error} err @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
       if (err) { throw err }
 
       if (!userdata) {
@@ -69,8 +69,8 @@ exports.run = (bot) => {
       }
     })
   })
-  command.registerSubcommand("fill", (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+  command.registerSubcommand("fill", /** @param {import("eris").Message} message @param {String[]} args */ (message, args) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {Error} err @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
       if (err) { throw err }
 
       if (!userdata) {
@@ -84,6 +84,22 @@ exports.run = (bot) => {
         const marketFilledEmbed = new Embed()
 
         const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
+
+        const enoughCrops = (() => {
+          const temp = {}
+          for (const req in a.want) {
+            console.log(userdata.seeds.common[a.want[req].name].amount)
+            if (userdata.seeds.common[a.want[req].name].amount < a.want[req].amount) {
+              return false
+            } else {
+              temp[`seeds.common.${a.want[req].name}.amount`] = -(a.want[req].amount)
+            }
+          }
+          return temp
+        })()
+
+        if (!enoughCrops) { return bot.createMessage(message.channel.id, "You don't have enough crops to fill this order!") }
+
         const p = prettifyParsedRequest(a)
 
         marketFilledEmbed
@@ -91,11 +107,14 @@ exports.run = (bot) => {
           .setDescription(p.shift())
           .addField(p.shift(), p.shift())
           .addField(p.shift(), p.join("\n"))
+
         await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
           $pull: { ["requests"]: userdata.requests[orderID] },
           $inc: {
             "money": a.rewards.money,
-            [`farmers.${userdata.farmers.findIndex(npc => npc.name === userdata.requests[orderID].name)}.level`]: a.rewards.reputation }
+            [`farmers.${userdata.farmers.findIndex(f => f.name === userdata.requests[orderID].name)}.level`]: a.rewards.reputation,
+            ...enoughCrops
+          }
         })
         bot.createMessage(message.channel.id, marketFilledEmbed)
       }

@@ -1,6 +1,12 @@
 const flags = require("./flags.json")
 
 class User {
+  /**
+   *
+   * @param {import("eris").User} author - the author of the message.
+   * @param {String} region
+   * @param {import("./npc").Farmer[]} farmers
+   */
   constructor(author, region, farmers) {
     this.userID = author.id,
     this.userTag = author.username + "#" + author.discriminator,
@@ -95,6 +101,33 @@ class User {
 module.exports = {
   User
 }
+
+/**
+ * @typedef {Object} UserData
+ * @prop {String} userID - the ID of the user.
+ * @prop {String} userTag - the username and discriminator of the user.
+ * @prop {String} userID - the ID of the user.
+ * @prop {Object} region - the region that the user is in.
+ * @prop {String} region.name - the name of the region.
+ * @prop {String} region.flag - the flag of the region.
+ * @prop {Number} messagesUserSent
+ * @prop {Number} botCommandsUsed
+ * @prop {Number} money - the amount of money the user has.
+ * @prop {Plot[]} farm - the user's farm.
+ * @prop {Object} seeds - the user's seeds.
+ * @prop {Object<string, {discovered: Boolean, level: Number, amount: Number}} seeds.common
+ * @prop {import("./npc").Request[]} requests - the user's current requests.
+ * @prop {import("./npc").Farmer[]} farmers - the farmers in the user's village.
+ */
+
+/**
+ * @typedef {Object} Plot
+ * @prop {Object} crop
+ * @prop {import("./crop-data.js").CropName} crop.planted - the crop currently planted on the plot.
+ * @prop {Number} crop.datePlantedAt - the time that the crop was planted at.
+ * @prop {Boolean} fertilized - whether or not the plot is fertilized. **Not yet implimented!**
+ * @prop {Boolean} watered - whether or not the plot is watered. **Not yet implimented!**
+ */
 
 // uncommon:{
 //     rose: {
