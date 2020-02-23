@@ -24,14 +24,14 @@ const log = {
    * The default log; logs to the console in cyan.
    * @param  {...any} args - what you would like to log.
    */
-  default(...args){
+  default(...args) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
       chalk.cyan(`[LOG][DEFAULT][${getDate()}]`),
       args.join(" ")
     )
   },
-  connect(...args){
+  connect(...args) {
     /**
      * Log for when the bot connects; logs to the console in green.
      * @param  {...any} args - what you would like to log.
@@ -46,7 +46,7 @@ const log = {
    * Log for when the database connects; logs to the console in lime.
    * @param  {...any} args - what you would like to log.
    */
-  dbconnect(...args){
+  dbconnect(...args) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
       chalk.keyword("lime")(`[LOG][DBCONNECT][${getDate()}]`),
@@ -57,7 +57,7 @@ const log = {
    * Log the commands being loaded into the bot
    * @param  {...any} args - cmd that was loaded
    */
-  commandLoad(...args){
+  commandLoad(...args) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
       chalk.keyword("cyan")(`[LOG][CMD LOAD][${getDate()}]`),
@@ -68,7 +68,7 @@ const log = {
    * Log the directory of commands being loaded into the bot
    * @param  {...any} args - directory that was loaded
    */
-  directoryLoad(...args){
+  directoryLoad(...args) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
       chalk.blue(`[LOG][DIR LOAD][${getDate()}]`),
@@ -80,7 +80,7 @@ const log = {
    * that the function was called at and to the console (in red).
    * @param {...any} args - what you would like to log.
    */
-  error(...args){
+  error(...args) {
     // get().forEach(callSite => {
     //   console.log(callSite.getFileName())
     // })
@@ -92,7 +92,7 @@ const log = {
       chalk.red.bold(`${fileName}:`),
       args.join(" ")
     )
-    fs.writeFile(`${process.cwd()}/bot/logs/errors/${fileName}`, p + "\n" + args.join("\n"), err => {
+    fs.writeFile(`${process.cwd()}/bot/logs/errors/${fileName}`, p + "\n" + args.join("\n"), (err) => {
       if (err) { throw err }
       console.log(
         chalk.red.bold(`${fileName}:`),
@@ -101,18 +101,18 @@ const log = {
     })
   },
   /**
-   * Logs to a file for use in long-term debugging and/or statstics. Also logs to the
+   * Logs to a file for use in long-term debugging and/or statistics. Also logs to the
    * console, in yellow.
    * @param  {...any} args - what you would like to log.
    */
-  toFile(...args){
+  toFile(...args) {
     const p = basename(get()[1].getFileName())
     console.log(
       chalk.white.bold(`${p}:`),
       chalk.yellow(`[LOG][TO FILE][${getDate()}]`),
       args.join(" ")
     )
-    toFileStream.write(p + " | " + args.join("\n")+ "\n")
+    toFileStream.write(p + " | " + args.join("\n") + "\n")
   },
 }
 

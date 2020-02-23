@@ -58,7 +58,11 @@ module.exports = {
         ],
         "yoda": [
             "error",
-            "always"
+            "always",
+            {
+                "exceptRange": true,
+                "onlyEquality": true
+            }
         ],
         "block-spacing": [
             "error",

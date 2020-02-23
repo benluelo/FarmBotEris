@@ -1,5 +1,5 @@
 {
-  "name": "farmboteris",
+  "name": "farmbot",
   "version": "1.0.0",
   "description": "farmbot, but written in eris for future-proofing",
   "main": "bot/index.js",

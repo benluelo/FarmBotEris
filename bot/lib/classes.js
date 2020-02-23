@@ -217,7 +217,7 @@ class ProgressBar {
 class XPProgressBar extends ProgressBar {
   /**
    *
-   * @param {Number} exp - The emount of experience points. Must be `>= 0`.
+   * @param {Number} exp - The amount of experience points. Must be `>= 0`.
    * @param {Number} [length=10] - The length of the progress bar, in characters. Default is 10. Must be `>= 2`.
    * @param {Number} [base=2] - The base for the level calculation. Must be `>= 2`.
    */

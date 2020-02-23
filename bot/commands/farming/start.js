@@ -3,7 +3,7 @@ const EmbedPaginator = require("eris-pagination")
 const flags = require("../../lib/flags.json")
 const { User } = require("../../lib/user.js")
 
-exports.run = bot => {
+exports.run = (bot) => {
   bot.registerCommand("start", (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
       if (err) { bot.log.error(err) }

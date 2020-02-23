@@ -322,10 +322,10 @@ const legalflags = [
 ]
 
 
-let flagstowrite = {}
+const flagstowrite = {}
 
-for (const flag in allflags){
-  if (legalflags.includes(allflags[flag])){
+for (const flag in allflags) {
+  if (legalflags.includes(allflags[flag])) {
     console.log(flag)
     flagstowrite[allflags[flag]] = flag
   }

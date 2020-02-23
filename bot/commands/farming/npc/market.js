@@ -103,7 +103,7 @@ exports.run = (bot) => {
           .addField(p.shift(), p.shift())
           .addField(p.shift(), p.join("\n"))
 
-        const farmerIndex = userdata.farmers.findIndex(f => f.name === userdata.requests[orderID].name)
+        const farmerIndex = userdata.farmers.findIndex((f) => f.name === userdata.requests[orderID].name)
 
         const { value } = await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
           $pull: { ["requests"]: userdata.requests[orderID] },
@@ -167,7 +167,7 @@ exports.run = (bot) => {
  * @param {(Number | String)} id
  */
 function parseRequest(request, userFarmers, id) {
-  const farmer = userFarmers.find(f => {
+  const farmer = userFarmers.find((f) => {
     return f.name == request.name
   })
 
@@ -207,7 +207,7 @@ function parseWants(preferences, request) {
 
     console.log(request.want[w].crop, cropData[request.want[w].crop])
     /** @type {0 | 0.15 | 0.30} */
-    const flavourMulti = cropData[request.want[w].crop].flavour.filter(x => x == preferences.taste).length * 0.15
+    const flavourMulti = cropData[request.want[w].crop].flavour.filter((x) => x == preferences.taste).length * 0.15
 
     /** @type {0 | 0.15} */
     const colorMulti = cropData[request.want[w].crop].color == preferences.color ? 0.15 : 0
@@ -240,7 +240,7 @@ function parseWants(preferences, request) {
  * @param {{name: String, emoji: String, amount: Number}[]} req
  */
 function readableReq(req) {
-  return req.map(r => {
+  return req.map((r) => {
     return `${r.emoji} x **${r.amount}**`
   }).join("\n")
 }

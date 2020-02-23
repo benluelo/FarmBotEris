@@ -58,8 +58,8 @@ exports.run = (bot) => {
               // calculate the time until growth
               let timeUntilPlantFinished
               if (0 < bot.config.farminfo.growTimes[userCrop.planted] - (Date.now() - userCrop.datePlantedAt)) {
-                const temptime = ms((userCrop.datePlantedAt + bot.config.farminfo.growTimes[userCrop.planted]) - Date.now())
-                timeUntilPlantFinished = `${temptime.hours}h ${temptime.minutes}m ${temptime.seconds}s\n`
+                const timeSincePlanted = ms((userCrop.datePlantedAt + bot.config.farminfo.growTimes[userCrop.planted]) - Date.now())
+                timeUntilPlantFinished = `${timeSincePlanted.hours}h ${timeSincePlanted.minutes}m ${timeSincePlanted.seconds}s\n`
               } else {
                 timeUntilPlantFinished = "Fully grown!\n"
               }

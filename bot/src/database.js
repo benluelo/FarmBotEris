@@ -4,7 +4,7 @@ const config = require("../config.json")
 let _db
 
 /**
- * This is just for typehinting lol
+ * This is just for type hinting lol
  * @param {InitDbCallback} callback
  */
 function initDb(callback) {

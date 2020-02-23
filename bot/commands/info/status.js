@@ -3,19 +3,19 @@ const si = require("systeminformation")
 const { Embed } = require("../../lib/classes")
 
 function formatBytes(bytes, decimals = 2) {
-  if (bytes === 0) {return "0 Bytes"}
+  if (!bytes) { return "0 Bytes" }
   const k = 1024
-  const dm = decimals < 0 ? 0 : decimals
+  const dm = 0 > decimals ? 0 : decimals
   const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
   const i = Math.floor(Math.log(bytes) / Math.log(k))
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
 }
 
 // get system info
-let systemInfo = {}
+const systemInfo = {}
 setInterval( async () => {
-  systemInfo.mem = `${formatBytes(await si.mem().then(data => data.used))} : ${formatBytes(await si.mem().then(data => data.total))}`
-  systemInfo.cpu = `${Math.round(await si.currentLoad().then(data => data.currentload))}%`
+  systemInfo.mem = `${formatBytes(await si.mem().then((data) => data.used))} : ${formatBytes(await si.mem().then((data) => data.total))}`
+  systemInfo.cpu = `${Math.round(await si.currentLoad().then((data) => data.currentload))}%`
 }, 10000)
 
 exports.run = (bot) => {
@@ -33,7 +33,7 @@ exports.run = (bot) => {
     // get bot properties
     const readySince = new Date(bot.startTime)
     const uptime = ms(bot.uptime)
-    const onlineUsers = bot.users.filter(user => !user.bot).length
+    const onlineUsers = bot.users.filter((user) => !user.bot).length
 
     const statusEmbed = new Embed()
       .setTitle(`${bot.user.username} Status`)
@@ -57,5 +57,9 @@ exports.run = (bot) => {
       .addField("Development Mode", developmentMode, true)
 
     await bot.createMessage(message.channel.id, statusEmbed)
-  }, bot.cooldown(30000))
+  }, {
+    requirements: {
+      userIDs: bot.ownersIDS
+    }
+  })
 }

@@ -21,7 +21,7 @@ console.log(path.resolve(__dirname, "../bot/commands"))
 ;(function getFiles(dir, depth = 0) {
   fs.readdir(dir, async (err, files) => {
     if (err) { console.log(err) }
-    files.forEach(file => {
+    files.forEach((file) => {
       if (fs.lstatSync(`${dir}/${file}`).isDirectory()) {
         getFiles(`${dir}/${file}`, depth + 1)
       }

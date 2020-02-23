@@ -125,8 +125,8 @@ module.exports = {
  * @prop {Object} crop
  * @prop {import("./crop-data.js").CropName} crop.planted - the crop currently planted on the plot.
  * @prop {Number} crop.datePlantedAt - the time that the crop was planted at.
- * @prop {Boolean} fertilized - whether or not the plot is fertilized. **Not yet implimented!**
- * @prop {Boolean} watered - whether or not the plot is watered. **Not yet implimented!**
+ * @prop {Boolean} fertilized - whether or not the plot is fertilized. **Not yet implemented!**
+ * @prop {Boolean} watered - whether or not the plot is watered. **Not yet implemented!**
  */
 
 // uncommon:{
