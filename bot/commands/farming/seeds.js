@@ -8,6 +8,7 @@ exports.run = (bot) => {
   bot.registerCommand("seeds", (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../lib/user.js").UserData} userdata */ async (err, userdata) => {
       if (err) { bot.log.error(err) }
+
       let seeds = ""
       for (const crop in userdata.seeds.common) {
         if (userdata.seeds.common[crop].discovered) {

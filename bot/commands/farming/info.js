@@ -12,17 +12,13 @@ function clamp(num, min, max) {
 exports.run = (bot) => {
   bot.registerCommand("info", async (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
-      if (err) { throw err }
+      if (err) { bot.log.error(err) }
 
       // check for plant/plot info
       if (args[0]) {
         const plotNumber = parsePlotNumber(args[0])
         if (false !== plotNumber) {
 
-          if (!userdata) {
-            bot.startMessage(message)
-            return
-          }
           if (userdata) {
             if (process.env.DEBUG === "true") { console.log(plotNumber) }
 
@@ -90,8 +86,9 @@ exports.run = (bot) => {
 
               bot.createMessage(message.channel.id, infoEmbed, attachment.send())
             }
+          } else {
+            bot.startMessage(message)
           }
-
         }
       } else {
         bot.createMessage(message.channel.id, "Please specify the plot you want info on!")

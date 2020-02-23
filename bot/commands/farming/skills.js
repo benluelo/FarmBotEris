@@ -37,6 +37,8 @@ module.exports.run = (bot) => {
             return bot.createMessage(message.channel.id, `**${args[0]}** isn't a crop!`)
           }
         }
+      } else {
+        bot.startMessage(message)
       }
     })
   })

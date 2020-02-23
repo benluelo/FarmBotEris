@@ -10,11 +10,7 @@ exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   const command = bot.registerCommand("market", (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
-      if (err) { throw err }
-
-      if (!userdata) {
-        bot.startMessage(message)
-      }
+      if (err) { bot.log.error(err) }
 
       if (userdata) {
         const newRequests = []
@@ -42,12 +38,14 @@ exports.run = (bot) => {
           marketEmbed.addField(a.farmer.emoji + " **" + a.farmer.name.match(/(\w+ [a-zA-Z])/)[0] + "." + "**", prettifyParsedRequest(a).join("\n"), true)
         }
         bot.createMessage(message.channel.id, marketEmbed.addBlankField(true))
+      } else {
+        bot.startMessage(message)
       }
     })
   }, bot.cooldown(15000))
   command.registerSubcommand("view", (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
-      if (err) { throw err }
+      if (err) { bot.log.error(err) }
 
       if (userdata) {
         if (!args[0]) { return bot.createMessage(message.channel.id, "You have to specify an order to view!") }
@@ -72,7 +70,7 @@ exports.run = (bot) => {
   })
   command.registerSubcommand("fill", (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
-      if (err) { throw err }
+      if (err) { bot.log.error(err) }
 
       if (userdata) {
         if (!args[0]) { return bot.createMessage(message.channel.id, "You have to specify an order to fill!") }

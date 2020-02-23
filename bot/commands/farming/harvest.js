@@ -6,6 +6,7 @@ module.exports.run = async (bot) => {
   bot.registerCommand("harvest", (message, args) => {
 
     bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../lib/user.js").UserData} userdata */ async (err, userdata) => {
+      if (err) { bot.log.error(err) }
 
       if (userdata) {
         const farm = userdata.farm
@@ -69,7 +70,7 @@ module.exports.run = async (bot) => {
                     }
                   }
                 ).catch((error) => {
-                  if (process.env.DEBUG === "true") { console.log(error.message) }
+                  if (err) { bot.log.error(error) }
                 })
                 bot.createMessage(message.channel.id,
                   `Harvested the **${cropData[userCrop.planted].emoji}** on \`${(args[0]).toUpperCase()}\`!`)

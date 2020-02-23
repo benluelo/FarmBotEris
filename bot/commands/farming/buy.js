@@ -10,10 +10,7 @@ exports.run = async (bot) => {
 
     bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../lib/user.js").UserData} userdata */ async (err, userdata) => {
       if (err) { bot.log.error(err) }
-      if (!userdata) {
-        bot.startMessage(message)
-        return
-      }
+
       if (userdata) {
         if (userdata.farm.length >= MAX_PLOTS) {
           return bot.createMessage(
@@ -53,6 +50,8 @@ exports.run = async (bot) => {
             `Plot purchased for **${bot.formatMoney(priceOfNextPlot)}** ${emoji.coin}! You now own ${res.value.farm.length + 1} plots!${res.value.farm.length + 1 === MAX_PLOTS ? " This is the maximum amount of plots!" : ""}`
           )
         })
+      } else {
+        bot.startMessage(message)
       }
     })
   }, bot.cooldown(60000))
