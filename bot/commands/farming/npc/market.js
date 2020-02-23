@@ -119,13 +119,17 @@ exports.run = (bot) => {
 
         const levelBefore = getLevel(2 + user2.farmers[farmerIndex].wealth, a.farmer.level).level
         const levelAfter = getLevel(2 + user2.farmers[farmerIndex].wealth, user2.farmers[farmerIndex].level).level
-        console.log("before:", levelBefore)
-        console.log("after:", levelAfter)
+
+        if (process.env.DEBUG === "true") {
+          console.log("before:", levelBefore)
+          console.log("after:", levelAfter)
+        }
+
         if (levelBefore < levelAfter) {
           marketFilledEmbed.addField("**__Friendship Increase!__**", `You've become closer friends with **${a.farmer.name}**!\n**Friendship Level** increased from **${levelBefore}** to **${levelAfter}**!`)
         }
         if (levelAfter >= userdata.farmers[farmerIndex].unlockLevel && levelBefore < userdata.farmers[farmerIndex].unlockLevel) {
-          console.log(bot.database.Userdata)
+          if (process.env.DEBUG === "true") { console.log(bot.database.Userdata) }
           marketFilledEmbed.addField("**__New Crop!__**", `You've become really good friends with **${a.farmer.name}**! They've decided to give you a new seed for your farm as a token of your friendship!\n**Unlocked:** ${cropData[user2.farmers[farmerIndex].unlockableCrop].emoji}`)
           await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
             $set: { [`seeds.common.${user2.farmers[farmerIndex].unlockableCrop}.discovered`]: true }
@@ -205,7 +209,7 @@ function parseWants(preferences, request) {
 
   for (const w in request.want) {
 
-    console.log(request.want[w].crop, cropData[request.want[w].crop])
+    if (process.env.DEBUG === "true") { console.log(request.want[w].crop, cropData[request.want[w].crop]) }
     /** @type {0 | 0.15 | 0.30} */
     const flavourMulti = cropData[request.want[w].crop].flavour.filter((x) => x == preferences.taste).length * 0.15
 

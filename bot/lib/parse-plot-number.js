@@ -6,7 +6,7 @@ module.exports = {
    */
   parsePlotNumber: function (str) {
 
-    console.log("str:", str)
+    if (process.env.DEBUG === "true") { console.log("str:", str) }
 
     let plotNumber
     const temp = str.split("")

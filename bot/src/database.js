@@ -9,7 +9,7 @@ let _db
  */
 function initDb(callback) {
   if (_db) {
-    console.warn("trying to init DB again!")
+    if (process.env.DEBUG === "true") { console.warn("trying to init DB again!") }
     return callback(null, _db)
   }
   client.connect(config.db.connectionString, config.db.connectionOptions, (err, db) => {

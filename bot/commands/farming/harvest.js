@@ -36,7 +36,7 @@ module.exports.run = async (bot) => {
                 totalPlots += 1
 
               }).catch((error) => {
-                console.log(error.message)
+                if (process.env.DEBUG === "true") { console.log(error.message) }
               })
             }
           }
@@ -68,7 +68,7 @@ module.exports.run = async (bot) => {
                     }
                   }
                 ).catch((error) => {
-                  console.log(error.message)
+                  if (process.env.DEBUG === "true") { console.log(error.message) }
                 })
                 bot.createMessage(message.channel.id,
                   `Harvested the **${cropData[userCrop.planted].emoji}** on \`${(args[0]).toUpperCase()}\`!`)

@@ -21,7 +21,9 @@ class NPC {
     this.level = 0
     /** @const */
     this.unlockLevel = Math.round(this.wealth * 5)
-    console.log(this.gender)
+
+    if (process.env.DEBUG === "true") { console.log(this.gender) }
+
     this.emoji = farmerData.emoji[this.gender][Math.floor(Math.random() * farmerData.emoji[this.gender].length)]
   }
 
@@ -41,7 +43,7 @@ class NPC {
       }
     }
 
-    console.log("original:", discoveredCrops)
+    if (process.env.DEBUG === "true") { console.log("original:", discoveredCrops) }
 
     // add one random crop from the list of discovered crops to the requests
     // if there is only one crop discovered, add a random amount of those to want
@@ -73,7 +75,7 @@ class NPC {
           // console.log("after filter:", discoveredCrops)
         }
       }
-      console.log(want)
+      if (process.env.DEBUG === "true") { console.log(want) }
     }
 
     /**
