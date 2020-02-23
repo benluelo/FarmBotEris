@@ -61,6 +61,7 @@ exports.run = (bot) => {
         marketViewEmbed
           .setTitle(a.farmer.emoji + " **" + a.farmer.name + "**")
           .setDescription(p.shift())
+          .setColor(bot.color.darkgreen)
           .addField(p.shift(), p.shift())
           .addField(p.shift(), p.join("\n"))
         bot.createMessage(message.channel.id, marketViewEmbed)

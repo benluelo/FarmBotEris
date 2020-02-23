@@ -20,7 +20,13 @@ exports.run = (bot) => {
         if (!cropData[seed]) { return bot.createMessage(message.channel.id, "Not a valid crop!") }
         if (0 != userdata.seeds.common[seed].amount) {
           const totalSold = userdata.seeds.common[seed].amount
-          const cropValue = getPriceOfSeeds[seed] * getLevel(userdata.seeds.common[seed].level).level * totalSold
+          let cropValue = getPriceOfSeeds[seed] * totalSold
+
+          // to make sure theres a level otherwise the level is 0 and the price times 0, would just be 0
+          if (getLevel(userdata.seeds.common[seed].level).level !== 0) {
+            cropValue *= getLevel(userdata.seeds.common[seed].level).level
+          }
+
           await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
             {
               $set: {

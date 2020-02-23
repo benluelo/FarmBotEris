@@ -6,10 +6,7 @@ module.exports.run = async (bot) => {
   bot.registerCommand("harvest", (message, args) => {
 
     bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../lib/user.js").UserData} userdata */ async (err, userdata) => {
-      if (!userdata) {
-        bot.startMessage(message)
-        return
-      }
+
       if (userdata) {
         const farm = userdata.farm
         let totalPlots = 0
@@ -41,8 +38,12 @@ module.exports.run = async (bot) => {
             }
           }
 
-          bot.createMessage(message.channel.id,
-            `**${totalPlots}** plots harvested!`)
+          if (totalPlots !== 0) {
+            bot.createMessage(message.channel.id,
+              `**${totalPlots}** plots harvested!`)
+          } else {
+            bot.createMessage(message.channel.id, "Nothing to harvest")
+          }
 
         } else {
           // harvest just one plot
@@ -78,6 +79,8 @@ module.exports.run = async (bot) => {
             }
           }
         }
+      } else {
+        bot.startMessage(message)
       }
     })
   }, bot.cooldown(15000))

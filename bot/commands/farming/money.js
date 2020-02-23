@@ -9,7 +9,7 @@ exports.run = (bot) => {
       if (err) { bot.log.error(err) }
       if (userdata) {
         const moneyEmbed = new Embed()
-          .setAuthor(message.author.username, message.author.avatarURL)
+          .setAuthor(message.author.username, null, message.author.avatarURL)
           .setColor(bot.color.lightgreen)
           .setDescription(`Balance: **${bot.formatMoney(userdata.money)}** ${emoji.coin}`)
         bot.createMessage(message.channel.id, moneyEmbed)

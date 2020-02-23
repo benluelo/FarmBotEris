@@ -4,7 +4,7 @@ const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
 /** @param {import("../../index.js").Bot} bot */
 exports.run = (bot) => {
   bot.registerCommand("plant", (message, args) => {
-    // f!plant <plot> <crop>
+
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
       if (err) { throw err }
 
