@@ -24,21 +24,24 @@ exports.run = (bot) => {
             return
           }
           if (userdata) {
-            console.log(plotNumber)
+            if (process.env.DEBUG === "true") { console.log(plotNumber) }
+
             if (plotNumber >= userdata.farm.length) {
               bot.createMessage(message.channel.id, "You don't own that plot!")
               return
             } else {
               const userCrop = userdata.farm[plotNumber].crop
-              console.log(JSON.stringify(userCrop))
+              if (process.env.DEBUG === "true") {
+                console.log(JSON.stringify(userCrop))
 
-              // console.log(JSON.stringify(userdata, null, 4))
+                // console.log(JSON.stringify(userdata, null, 4))
 
-              console.log((
-                Date.now() -
-                userCrop.datePlantedAt
-              ) /
-              bot.config.farminfo.growTimes[userCrop.planted])
+                console.log((
+                  Date.now() -
+                  userCrop.datePlantedAt
+                ) /
+                bot.config.farminfo.growTimes[userCrop.planted])
+              }
 
               const growthPercentage = clamp(
                 (
@@ -52,14 +55,16 @@ exports.run = (bot) => {
                 1
               )
 
-              console.log("Time difference:", (Date.now() - userCrop.datePlantedAt))
-              console.log("growthPercentage:", growthPercentage)
+              if (process.env.DEBUG === "true") {
+                console.log("Time difference:", (Date.now() - userCrop.datePlantedAt))
+                console.log("growthPercentage:", growthPercentage)
+              }
 
               // calculate the time until growth
               let timeUntilPlantFinished
               if (0 < bot.config.farminfo.growTimes[userCrop.planted] - (Date.now() - userCrop.datePlantedAt)) {
-                const temptime = ms((userCrop.datePlantedAt + bot.config.farminfo.growTimes[userCrop.planted]) - Date.now())
-                timeUntilPlantFinished = `${temptime.hours}h ${temptime.minutes}m ${temptime.seconds}s\n`
+                const timeSincePlanted = ms((userCrop.datePlantedAt + bot.config.farminfo.growTimes[userCrop.planted]) - Date.now())
+                timeUntilPlantFinished = `${timeSincePlanted.hours}h ${timeSincePlanted.minutes}m ${timeSincePlanted.seconds}s\n`
               } else {
                 timeUntilPlantFinished = "Fully grown!\n"
               }

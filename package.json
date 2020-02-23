@@ -1,10 +1,10 @@
 {
-  "name": "farmboteris",
+  "name": "farmbot",
   "version": "1.0.0",
   "description": "farmbot, but written in eris for future-proofing",
   "main": "bot/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "update": "git pull origin master && npm i"
   },
   "repository": {
     "type": "git",

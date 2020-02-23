@@ -4,12 +4,12 @@ const config = require("../config.json")
 let _db
 
 /**
- * This is just for typehinting lol
+ * This is just for type hinting lol
  * @param {InitDbCallback} callback
  */
 function initDb(callback) {
   if (_db) {
-    console.warn("trying to init DB again!")
+    if (process.env.DEBUG === "true") { console.warn("trying to init DB again!") }
     return callback(null, _db)
   }
   client.connect(config.db.connectionString, config.db.connectionOptions, (err, db) => {

@@ -46,10 +46,14 @@ exports.run = (bot) => {
         if (amount.toString() !== args[1]) { return bot.createMessage(message.channel.id, "You have to enter a valid number to sell!") }
 
         if (userdata.seeds.common[seed].amount >= amount) {
-          console.log(seed)
-          console.log("Seed price:", getPriceOfSeeds[seed])
-          console.log("Level:", getLevel(userdata.seeds.common[seed].level).level)
-          const cropValue = getPriceOfSeeds[seed] * getLevel(userdata.seeds.common[seed].level).level * amount
+
+          if (process.env.DEBUG === "true") {
+            console.log(seed)
+            console.log("Seed price:", getPriceOfSeeds[seed])
+            console.log("Level:", bot.getLevel(userdata.seeds.common[seed].level))
+          }
+
+          const cropValue = getPriceOfSeeds[seed] * bot.getLevel(userdata.seeds.common[seed].level) * amount
           await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
             {
               $inc: {
@@ -80,10 +84,14 @@ exports.run = (bot) => {
         if (userdata) {
           for (const seed in userdata.seeds.common) {
             if (0 != userdata.seeds.common[seed].amount) {
-              console.log(seed)
-              console.log("Seed price:", getPriceOfSeeds[seed])
-              console.log("Level:", getLevel(userdata.seeds.common[seed].level).level)
-              const cropValue = getPriceOfSeeds[seed] * (getLevel(userdata.seeds.common[seed].level).level) * userdata.seeds.common[seed].amount
+
+              if (process.env.DEBUG === "true") {
+                console.log(seed)
+                console.log("Seed price:", getPriceOfSeeds[seed])
+                console.log("Level:", bot.getLevel(userdata.seeds.common[seed].level))
+              }
+
+              const cropValue = getPriceOfSeeds[seed] * (bot.getLevel(userdata.seeds.common[seed].level)) * userdata.seeds.common[seed].amount
               totalValue += cropValue
               totalSold += userdata.seeds.common[seed].amount
               await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },

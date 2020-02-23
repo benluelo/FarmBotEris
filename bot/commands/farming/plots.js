@@ -3,6 +3,7 @@ const cropData = require("../../lib/crop-data.js")
 const emoji = require("../../lib/emoji.json")
 const { Embed } = require("../../lib/classes")
 
+// eslint-disable-next-line no-unused-vars
 const DEBUG = false
 
 /** @param {import("../../../index.js").Bot} bot */
@@ -33,9 +34,9 @@ exports.run = async (bot) => {
         bot.createMessage(message.channel.id, "Building farm...")
           .then((msg) => {
             for (const plot in userFarm) {
-              if (DEBUG) { console.log(chalk.keyword("brown")("CHECKING PLOT #"), plot) }
+              if (process.env.DEBUG === "true") { console.log(chalk.keyword("brown")("CHECKING PLOT #"), plot) }
 
-              // this builds the farm, i really dont want to explain it lol but here goes
+              // this builds the farm, i really don't want to explain it lol but here goes
               //   1 2 3 4 5
               // A * * * * *
               // B * * * * *
@@ -50,7 +51,7 @@ exports.run = async (bot) => {
                 plotsMsg += "\n" + emoji.letters[Math.floor(plot / 5)]
               }
 
-              if (DEBUG) { console.log(userFarm[plot].crop.planted) }
+              if (process.env.DEBUG === "true") { console.log(userFarm[plot].crop.planted) }
 
               // adds the plots to the message
               if ("dirt" == userFarm[plot].crop.planted) { // if dirt, add dirt (lol)
@@ -61,9 +62,9 @@ exports.run = async (bot) => {
                 plotsMsg += emoji.seedling
               }
 
-              if (DEBUG) { console.log("Now:", Date.now()) }
-              if (DEBUG) { console.log("Planted at:", userFarm[plot].crop.datePlantedAt) }
-              if (DEBUG) { console.log("Time Difference:", (Date.now() - userFarm[plot].crop.datePlantedAt)) }
+              if (process.env.DEBUG === "true") { console.log("Now:", Date.now()) }
+              if (process.env.DEBUG === "true") { console.log("Planted at:", userFarm[plot].crop.datePlantedAt) }
+              if (process.env.DEBUG === "true") { console.log("Time Difference:", (Date.now() - userFarm[plot].crop.datePlantedAt)) }
             }
 
             // edit the originally sent message

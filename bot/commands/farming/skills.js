@@ -12,7 +12,9 @@ module.exports.run = (bot) => {
           const msg = new Embed()
           for (const seed in userdata.seeds.common) {
             const XPBar = new XPProgressBar(userdata.seeds.common[seed].level, 5)
-            console.log(XPBar.show())
+
+            if (process.env.DEBUG === "true") { console.log(XPBar.show()) }
+
             msg.addField(cropData[seed].emoji, `Level: **${XPBar.level()}**` + "\n" + XPBar.show(), true)
           }
           return bot.createMessage(message.channel.id, msg)

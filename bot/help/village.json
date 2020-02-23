@@ -1,13 +1,10 @@
 {
     "title": "village",
-    "description": null,
+    "description": "Shows you the village of all the people and their levels",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm village"
     },
-    "examples": {
-        "name": "Examples:",
-        "value": "​"
-    },
+    "examples": false,
     "permissionLevel": 0
 }

@@ -8,7 +8,7 @@ const { promisify } = require("util")
 // const converter = createConverter()
 
 // add dirt to the emojis lol
-emojis.dirt = { emoji: require("../bot/lib/emoji.json").dirt}
+emojis.dirt = { emoji: require("../bot/lib/emoji.json").dirt }
 
 ;(async () => {
   const writeFile = promisify(fs.writeFile)

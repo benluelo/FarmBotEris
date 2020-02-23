@@ -1,13 +1,13 @@
 {
     "title": "stop",
-    "description": null,
+    "description": "stops/restarts the bot",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm stop [restart]"
     },
     "examples": {
         "name": "Examples:",
-        "value": "​"
+        "value": "​farm stop\nfarm stop restart"
     },
-    "permissionLevel": 0
+    "permissionLevel": 2
 }

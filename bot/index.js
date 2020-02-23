@@ -26,7 +26,7 @@ const bot = new Eris.CommandClient(process.env.TOKEN, {
   }
 }, {
   description: "description of bot",
-  prefix: ["f!", "farm ", "@mention"], // most likey will be changed lol
+  prefix: ["f!", "farm ", "@mention"], // most likely will be changed lol
   ignoreBots: true,
   owner: "ben & tyler",
   defaultHelpCommand: false,
@@ -79,7 +79,7 @@ bot.formatMoney = (value) => {
   // load events
   fs.readdir("./bot/events/", (err, files) => {
     if (err) { bot.log.error(err) }
-    files.forEach(file => {
+    files.forEach((file) => {
       const eventFunction = require(`./events/${file}`)
       const eventName = file.split(".")[0]
       bot.on(eventName, (...args) => eventFunction.run(bot, ...args))
@@ -99,7 +99,7 @@ bot.connect()
 /**
  * @typedef {Object} BotVars
  * @prop {Object} database
- * @prop {import("mongodb").MongoClient} database.db - the databaase
+ * @prop {import("mongodb").MongoClient} database.db - the database
  * @prop {import("mongodb").Collection} database.Userdata - the userdata collection (`farmbot -> farm`)
  */
 

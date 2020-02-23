@@ -21,7 +21,7 @@ const cooldown = (length) => {
   return {
     cooldown: length,
     cooldownMessage: () => {
-      return `cooldown is ${length/1000} seconds pls slow down`
+      return `cooldown is ${length / 1000} seconds pls slow down`
     },
     cooldownExclusions: {
       channelIDs: [

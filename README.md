@@ -1,6 +1,6 @@
 # FarmBot
 
-### A Discord bot in progress, writen in NodeJS
+### A Discord bot in progress, written in NodeJS
 
 ---
 

@@ -1,13 +1,10 @@
 {
     "title": "skills",
-    "description": null,
+    "description": "Shows the level of all your seeds",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm skills"
     },
-    "examples": {
-        "name": "Examples:",
-        "value": "​"
-    },
+    "examples": false,
     "permissionLevel": 0
 }

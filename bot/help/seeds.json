@@ -1,13 +1,10 @@
 {
     "title": "seeds",
-    "description": null,
+    "description": "To get all the seeds and their prices that they sell for per seed",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm seeds"
     },
-    "examples": {
-        "name": "Examples:",
-        "value": "​"
-    },
+    "examples": false,
     "permissionLevel": 0
 }

@@ -18,12 +18,12 @@ exports.run = (bot) => {
         .setTitle("Help Command")
         .setDescription("A full list of commands")
         .setColor(bot.color.lightgreen)
-        .addField(":seedling: General", "`buy`, `money`, `plots`")
-        .addField(":gear: Utility", "`botinfo`, `help`, `ping`")
+        .addField(":seedling: General", "`buy`, `harvest`, `inventory`, `market`, `money`, `plant`, `plots`, `seeds`, `sell`, `skills`, `village`")
+        .addField(":gear: Utility", "`botinfo`, `help`, `info`, `ping`")
 
       // checks to see if it should add more info
       if (message.author.id == bot.ownersIDS[0] || message.author.id == bot.ownersIDS[1]) {
-        helpEmbed.addField(":avocado: Admin", "`eval`, `stop`")
+        helpEmbed.addField(":avocado: Admin", "`eval`, `stop`, `status`")
       }
       if ("true" == process.env.DEVELOPMENT) {
         helpEmbed.addField(":scroll: Development", "`deleteuser`")

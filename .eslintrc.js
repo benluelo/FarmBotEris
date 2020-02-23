@@ -56,10 +56,14 @@ module.exports = {
                 "allow": []
             }
         ],
-        "yoda": [
-            "error",
-            "always"
-        ],
+        // "yoda": [
+        //     "error",
+        //     "always",
+        //     {
+        //         "exceptRange": true,
+        //         "onlyEquality": true
+        //     }
+        // ],
         "block-spacing": [
             "error",
             "always"
