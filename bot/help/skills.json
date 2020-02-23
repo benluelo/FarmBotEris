@@ -3,8 +3,11 @@
     "description": "Shows the level of all your seeds",
     "usage": {
         "name": "Usage:",
-        "value": "​farm skills"
+        "value": "​farm skills [seed]"
     },
-    "examples": false,
+    "examples": {
+        "name": "Examples:",
+        "value": "farm skills apple"
+    },
     "permissionLevel": 0
 }

@@ -46,7 +46,7 @@ exports.run = (bot) => {
 
       // make embed
       const invEmbed = new Embed()
-        .setAuthor(`${message.author.username}'s Inventory`, message.author.avatarURL)
+        .setAuthor(`${message.author.username}'s Inventory`, null,  message.author.avatarURL)
         .setColor(bot.color.lightgreen)
         .setDescription(invItemString)
 
