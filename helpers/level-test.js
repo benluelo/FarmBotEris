@@ -8,7 +8,7 @@
 const getLevel = (base, exp, level = 1) => {
   const tempSum = Math.floor(((1 - Math.pow(base, level)) / (1 - base)))
   const previous = Math.floor((1 - Math.pow(base, level - 1)) / (1 - base))
-  if (tempSum < exp) {
+  if (tempSum <= exp) {
     return getLevel(base, exp, level + 1)
   } else {
     return {
@@ -22,3 +22,5 @@ const getLevel = (base, exp, level = 1) => {
 module.exports = {
   getLevel
 }
+
+console.log(getLevel(2, 1))
