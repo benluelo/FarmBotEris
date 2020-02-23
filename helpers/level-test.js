@@ -22,5 +22,3 @@ const getLevel = (base, exp, level = 1) => {
 module.exports = {
   getLevel
 }
-
-console.log(getLevel(2, 1))
