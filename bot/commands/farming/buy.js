@@ -2,12 +2,13 @@ const MAX_PLOTS = 25
 const { Embed } = require("../../lib/classes")
 const emoji = require("../../lib/emoji.json")
 // Math.round(Math.pow(1.90546071796, i))
+
 /** @param {import("../../index.js").Bot} bot */
 exports.run = async (bot) => {
 
   bot.registerCommand("buy", (message) => {
 
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../lib/user.js").UserData} userdata */ async (err, userdata) => {
       if (err) { bot.log.error(err) }
       if (!userdata) {
         bot.startMessage(message)

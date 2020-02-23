@@ -1,4 +1,6 @@
 const { Embed } = require("../../lib/classes")
+
+/** @param {import("../../../index.js").Bot} bot */
 exports.run = (bot) => {
   bot.registerCommand("help", (message, args) => {
 
@@ -14,7 +16,7 @@ exports.run = (bot) => {
     }
 
     // if <PREFIX>help was typed
-    if (args.length == 0) {
+    if (0 == args.length) {
       const helpEmbed = new Embed()
         .setTitle("Help Command")
         .setDescription("A full list of commands")
@@ -26,26 +28,26 @@ exports.run = (bot) => {
       if (message.author.id == bot.ownersIDS[0] || message.author.id == bot.ownersIDS[1]) {
         helpEmbed.addField(":avocado: Admin", "`eval`, `stop`")
       }
-      if (process.env.DEVELOPMENT == "true") {
+      if ("true" == process.env.DEVELOPMENT) {
         helpEmbed.addField(":scroll: Development", "`deleteuser`")
       }
 
       bot.createMessage(message.channel.id, helpEmbed)
     } else {
       // detailed commands
-      if (args[0] == "botinfo") {
+      if ("botinfo" == args[0]) {
         sendHelp("Botinfo", "To display infomation about the bot", "f!botinfo")
       }
-      if (args[0] == "eval") {
+      if ("eval" == args[0]) {
         sendHelp("Eval", "Eval any JS code", "f!eval <code>")
       }
-      if (args[0] == "help") {
+      if ("help" == args[0]) {
         sendHelp("Help", "To show help for all the commands in the bot", "f!help `[command name]`")
       }
-      if (args[0] == "ping") {
+      if ("ping" == args[0]) {
         sendHelp("Ping", "Shows the response time from the bot to Discord", "f!ping")
       }
-      if (args[0] == "stop") {
+      if ("stop" == args[0]) {
         sendHelp("Stop", "Stops or restarts the bot", "f!stop [restart]")
       }
     }

@@ -5,7 +5,7 @@ const cropData = require("../../lib/crop-data.js")
 module.exports.run = async (bot) => {
   bot.registerCommand("harvest", (message, args) => {
 
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../lib/user.js").UserData} userdata */ async (err, userdata) => {
       if (!userdata) {
         bot.startMessage(message)
         return

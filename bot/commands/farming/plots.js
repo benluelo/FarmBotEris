@@ -5,11 +5,12 @@ const { Embed } = require("../../lib/classes")
 
 const DEBUG = false
 
+/** @param {import("../../../index.js").Bot} bot */
 exports.run = async (bot) => {
   bot.registerCommand("plots", (message) => {
 
     // attempt to find the user in the system
-    bot.database.Userdata.findOne({ userID: message.author.id }, (err, userdata) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../lib/user.js").UserData} userdata */ (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       // if the user is NOT in the database, tell them to start
@@ -30,7 +31,7 @@ exports.run = async (bot) => {
 
         // send message to let the user know the farm is being built, then build the farm
         bot.createMessage(message.channel.id, "Building farm...")
-          .then(msg => {
+          .then((msg) => {
             for (const plot in userFarm) {
               if (DEBUG) { console.log(chalk.keyword("brown")("CHECKING PLOT #"), plot) }
 

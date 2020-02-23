@@ -8,8 +8,8 @@ const { getLevel } = require("../../../../helpers/level-test.js")
 /** @param {import("../../../index.js").Bot} bot */
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
-  const command = bot.registerCommand("market", /** @param {import("eris").Message} message @param {String[]} args */ (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {Error} err @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
+  const command = bot.registerCommand("market", (message, args) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
       if (err) { throw err }
 
       if (!userdata) {
@@ -45,8 +45,8 @@ exports.run = (bot) => {
       }
     })
   }, bot.cooldown(15000))
-  command.registerSubcommand("view", /** @param {import("eris").Message} message @param {String[]} args */ (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {Error} err @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
+  command.registerSubcommand("view", (message, args) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
       if (err) { throw err }
 
       if (userdata) {
@@ -69,8 +69,8 @@ exports.run = (bot) => {
       }
     })
   })
-  command.registerSubcommand("fill", /** @param {import("eris").Message} message @param {String[]} args */ (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {Error} err @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
+  command.registerSubcommand("fill", (message, args) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
       if (err) { throw err }
 
       if (userdata) {
@@ -103,7 +103,7 @@ exports.run = (bot) => {
           .addField(p.shift(), p.shift())
           .addField(p.shift(), p.join("\n"))
 
-        const farmerIndex = userdata.farmers.findIndex(f => f.name === userdata.requests[orderID].name)
+        const farmerIndex = userdata.farmers.findIndex((f) => f.name === userdata.requests[orderID].name)
 
         const { value } = await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
           $pull: { ["requests"]: userdata.requests[orderID] },
@@ -167,7 +167,7 @@ exports.run = (bot) => {
  * @param {(Number | String)} id
  */
 function parseRequest(request, userFarmers, id) {
-  const farmer = userFarmers.find(f => {
+  const farmer = userFarmers.find((f) => {
     return f.name == request.name
   })
 
@@ -207,7 +207,7 @@ function parseWants(preferences, request) {
 
     console.log(request.want[w].crop, cropData[request.want[w].crop])
     /** @type {0 | 0.15 | 0.30} */
-    const flavourMulti = cropData[request.want[w].crop].flavour.filter(x => x == preferences.taste).length * 0.15
+    const flavourMulti = cropData[request.want[w].crop].flavour.filter((x) => x == preferences.taste).length * 0.15
 
     /** @type {0 | 0.15} */
     const colorMulti = cropData[request.want[w].crop].color == preferences.color ? 0.15 : 0
@@ -240,7 +240,7 @@ function parseWants(preferences, request) {
  * @param {{name: String, emoji: String, amount: Number}[]} req
  */
 function readableReq(req) {
-  return req.map(r => {
+  return req.map((r) => {
     return `${r.emoji} x **${r.amount}**`
   }).join("\n")
 }
