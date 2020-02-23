@@ -1,16 +1,20 @@
 /**
+ * @module src/get-user
+ */
+
+/**
  * Gets a user from the database.
  * @param {String} userID - the user's id
  * @param {GetUserCallback} cb - the callback
  */
-function getUser(userID, cb) {
-  this.database.Userdata.findOne({ userID: userID }, /** @param {import("../../lib/user.js").UserData} userdata */ (err, userdata) => {
-    if (err) {
-      return cb(err)
+module.exports = function getUser(userID, cb) {
+  this.database.Userdata.findOne({ userID: userID }, /** @param {import("../lib/user.js").UserData} u */ (e, u) => {
+    if (e) {
+      return cb(e)
     }
 
-    if (userdata) {
-      return cb(null, userdata)
+    if (u) {
+      return cb(null, u)
     } else {
       return cb(null, null)
     }
@@ -18,9 +22,9 @@ function getUser(userID, cb) {
 }
 
 /**
- * @typedef {function():GetUserCallbackObject} GetUserCallback
  * @callback GetUserCallback
- * @param {GetUserCallbackObject} callback
+ * @param {import("mongodb").MongoError} err
+ * @param {import("../lib/user.js").UserData} userdata - the user's data
  */
 
 /**
@@ -28,8 +32,6 @@ function getUser(userID, cb) {
  * @property {import("mongodb").MongoError} err
  * @property {import("../lib/user.js").UserData} userdata - the user's data
  */
-
-module.exports = getUser
 
 // let PowerOf2 = {
 //   [Symbol.iterator]() {

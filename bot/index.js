@@ -55,7 +55,7 @@ bot.ownersIDS = [
 ]
 bot.config = require("./config.json")
 bot.color = require("./src/color.js")
-bot.log = require("./src/logger.js").log
+bot.log = require("./src/logger.js")
 bot.cooldown = require("./src/cooldown.js")
 
 bot.getUser = require("./src/get-user.js")
@@ -103,8 +103,8 @@ bot.connect()
  * @prop {Object} database
  * @prop {import("mongodb").MongoClient} database.db - the database
  * @prop {import("mongodb").Collection} database.Userdata - the userdata collection (`farmbot -> farm`)
- * @prop {}
- * @prop {import("./src/get-user.js").getUser} getUser
+ * @prop {import("./src/logger.js")} log
+ * @prop {import("./src/get-user.js")} getUser
  */
 
 /**
