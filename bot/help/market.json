@@ -9,5 +9,5 @@
         "name": "Examples:",
         "value": "farm market view <order id>​\nfarm market fill <order id>"
     },
-    "permissionLevel": 2048
+    "permissionLevel": 0
 }

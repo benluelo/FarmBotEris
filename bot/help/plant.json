@@ -3,11 +3,11 @@
     "description": "To plant a seed on a plot",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm plant <plot> <seed>"
     },
     "examples": {
         "name": "Examples:",
-        "value": "​"
+        "value": "​farm plant a1 apple\nfarm plant all apple"
     },
     "permissionLevel": 0
 }

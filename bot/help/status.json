@@ -1,13 +1,10 @@
 {
     "title": "status",
-    "description": null,
+    "description": "The status of the bot, (more detailed version of `farm botinfo`)",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm status"
     },
-    "examples": {
-        "name": "Examples:",
-        "value": "​"
-    },
-    "permissionLevel": 0
+    "examples": false,
+    "permissionLevel": 1
 }

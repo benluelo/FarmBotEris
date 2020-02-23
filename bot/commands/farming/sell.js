@@ -70,7 +70,7 @@ exports.run = (bot) => {
         return bot.startMessage(message)
       }
 
-      bot.createMessage(message.channel.id, "Selling all!").then(async msg => {
+      bot.createMessage(message.channel.id, "Selling all!").then(async (msg) => {
 
         let totalSold = 0
         let totalValue = 0

@@ -56,7 +56,7 @@ exports.run = (bot) => {
       }
 
       if (!args[0]) { return bot.createMessage(message.channel.id, "Please add the plant you want to plant") }
-      if (!cropData[args[0]]) { return bot.createMessage(message.channel.id, "Please include a vaild plant type") }
+      if (!cropData[args[0]]) { return bot.createMessage(message.channel.id, "Please include a valid plant type") }
       if (!userdata.seeds.common[args[0]].discovered) { return } // silent quit
 
       return bot.createMessage(message.channel.id, "Planting all!").then(async (msg) => {
@@ -77,7 +77,7 @@ exports.run = (bot) => {
               })
             }
           }
-          msg.edit(`Succesfully planted ${totalPlots} plots!`)
+          msg.edit(`Successfully planted ${totalPlots} plots!`)
         }
       })
     })

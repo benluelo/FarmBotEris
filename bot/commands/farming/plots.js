@@ -30,11 +30,11 @@ exports.run = async (bot) => {
 
         // send message to let the user know the farm is being built, then build the farm
         bot.createMessage(message.channel.id, "Building farm...")
-          .then(msg => {
+          .then((msg) => {
             for (const plot in userFarm) {
               if (DEBUG) { console.log(chalk.keyword("brown")("CHECKING PLOT #"), plot) }
 
-              // this builds the farm, i really dont want to explain it lol but here goes
+              // this builds the farm, i really don't want to explain it lol but here goes
               //   1 2 3 4 5
               // A * * * * *
               // B * * * * *

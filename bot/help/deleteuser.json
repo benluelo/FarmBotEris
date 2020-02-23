@@ -6,5 +6,5 @@
         "value": "​farm deleteuser [@mention]"
     },
     "examples": false,
-    "permissionLevel": 2048
+    "permissionLevel": 3
 }

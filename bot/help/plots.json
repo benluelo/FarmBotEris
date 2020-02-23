@@ -1,13 +1,10 @@
 {
     "title": "plots",
-    "description": null,
+    "description": "Shows all your farm plots",
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm plots"
     },
-    "examples": {
-        "name": "Examples:",
-        "value": "​"
-    },
+    "examples": false,
     "permissionLevel": 0
 }

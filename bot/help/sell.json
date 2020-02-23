@@ -3,7 +3,7 @@
     "description": null,
     "usage": {
         "name": "Usage:",
-        "value": "​"
+        "value": "​farm sell <plant> [amount]"
     },
     "examples": {
         "name": "Examples:",
