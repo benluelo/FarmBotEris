@@ -8,7 +8,7 @@
  * @param {GetUserCallback} cb - the callback
  */
 module.exports = function getUser(userID, cb) {
-  this.database.Userdata.findOne({ userID: userID }, /** @param {import("../lib/user.js").UserData} u */ (e, u) => {
+  this.database.Userdata.findOne({ userID: userID }, /** @param {import("../lib/user.js").User} u */ (e, u) => {
     if (e) {
       return cb(e)
     }
@@ -24,13 +24,13 @@ module.exports = function getUser(userID, cb) {
 /**
  * @callback GetUserCallback
  * @param {import("mongodb").MongoError} err
- * @param {import("../lib/user.js").UserData} userdata - the user's data
+ * @param {import("../lib/user.js").User} userdata - the user's data
  */
 
 /**
  * @typedef {Object} GetUserCallbackObject
  * @property {import("mongodb").MongoError} err
- * @property {import("../lib/user.js").UserData} userdata - the user's data
+ * @property {import("../lib/user.js").User} userdata - the user's data
  */
 
 // let PowerOf2 = {

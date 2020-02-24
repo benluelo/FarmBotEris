@@ -1,4 +1,3 @@
-const { Embed } = require("../../../lib/classes")
 const { NPC } = require("../../../lib/npc.js")
 const cropData = require("../../../lib/crop-data.js")
 const getPriceOfSeeds = require("../../../lib/get-price-of-seeds")
@@ -9,11 +8,14 @@ const { getLevel } = require("../../../../helpers/level-test.js")
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   const command = bot.registerCommand("market", (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {
         const newRequests = []
+
+        let messageToSend
+
         if (userdata.requests.length < userdata.farmers.length) {
           while (userdata.requests.length + newRequests.length < userdata.farmers.length) {
           // get new requests
@@ -23,7 +25,7 @@ exports.run = (bot) => {
                 .newRequest(userdata.seeds.common)
             )
           }
-          bot.createMessage(message.channel.id, "You have new requests!")
+          messageToSend = await bot.createMessage(message.channel.id, "You have new requests!")
 
           await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
             $push: {
@@ -31,27 +33,45 @@ exports.run = (bot) => {
             }
           })
         }
-        const marketEmbed = new Embed().setTitle("The Market").setColor(bot.color.darkgreen)
+        const marketEmbed = new bot.embed().setTitle("The Market").setColor(bot.color.market)
         const tempReq = userdata.requests.concat(newRequests)
         for (const request in tempReq) {
           const a = parseRequest(tempReq[request], userdata.farmers, request)
           marketEmbed.addField(a.farmer.emoji + " **" + a.farmer.name.match(/(\w+ [a-zA-Z])/)[0] + "." + "**", prettifyParsedRequest(a).join("\n"), true)
         }
-        bot.createMessage(message.channel.id, marketEmbed.addBlankField(true))
+        marketEmbed.addBlankField(true)
+
+        if (!messageToSend) {
+          bot.createMessage(message.channel.id, marketEmbed)
+        } else {
+          await messageToSend.edit({
+            ...marketEmbed,
+            ...{ content: "You have new requests!" }
+          })
+        }
+
       } else {
         bot.startMessage(message)
       }
     })
   }, bot.cooldown(15000))
   command.registerSubcommand("view", (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {
-        if (!args[0]) { return bot.createMessage(message.channel.id, "You have to specify an order to view!") }
+        if (!args[0]) { return bot.createMessage(message.channel.id, new bot.embed()
+          .setDescription("You have to specify an order to view!")
+          .setColor(bot.color.error)) 
+        }
         const orderID = parseInt(args[0]) - 1
-        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return bot.createMessage(message.channel.id, `**${args[0]}** is not a valid order ID!`) }
-        const marketViewEmbed = new Embed()
+        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { 
+          return bot.createMessage(message.channel.id, new bot.embed()
+            .setDescription(`**${args[0]}** is not a valid order ID!`)
+            .setColor(bot.color.error)
+          ) 
+        }
+        const marketViewEmbed = new bot.embed()
 
         const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
         const p = prettifyParsedRequest(a)
@@ -59,7 +79,7 @@ exports.run = (bot) => {
         marketViewEmbed
           .setTitle(a.farmer.emoji + " **" + a.farmer.name + "**")
           .setDescription(p.shift())
-          .setColor(bot.color.darkgreen)
+          .setColor(bot.color.market)
           .addField(p.shift(), p.shift())
           .addField(p.shift(), p.join("\n"))
         bot.createMessage(message.channel.id, marketViewEmbed)
@@ -69,14 +89,20 @@ exports.run = (bot) => {
     })
   })
   command.registerSubcommand("fill", (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../../lib/user.js").UserData} userdata */ async (err, userdata) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {
-        if (!args[0]) { return bot.createMessage(message.channel.id, "You have to specify an order to fill!") }
+        if (!args[0]) { return bot.createMessage(message.channel.id, new bot.embed()
+          .setDescription("You have to specify an order to fill!")
+          .setColor(bot.color.error)) 
+        }
+
         const orderID = parseInt(args[0]) - 1
-        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return bot.createMessage(message.channel.id, `**${args[0]}** is not a valid order ID!`) }
-        const marketFilledEmbed = new Embed({ color: bot.color.lightgreen })
+        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return bot.createMessage(message.channel.id, new bot.embed()
+          .setDescription(`**${args[0]}** is not a valid order ID!`)
+          .setColor(bot.color.red)) }
+        const marketFilledEmbed = new bot.embed()
 
         const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
 
@@ -92,12 +118,16 @@ exports.run = (bot) => {
           return temp
         })()
 
-        if (!enoughCrops) { return bot.createMessage(message.channel.id, "You don't have enough crops to fill this order!") }
+        if (!enoughCrops) { return bot.createMessage(message.channel.id, new bot.embed()
+          .setDescription("You don't have enough crops to fill this order!")
+          .setColor(bot.color.red)) 
+        }
 
         const p = prettifyParsedRequest(a)
 
         marketFilledEmbed
           .setTitle(a.farmer.emoji + " **" + a.farmer.name + "**")
+          .setColor(bot.color.market)
           .setDescription("**Order Filled!**\n" + p.shift())
           .addField(p.shift(), p.shift())
           .addField(p.shift(), p.join("\n"))
@@ -113,7 +143,7 @@ exports.run = (bot) => {
           }
         }, { returnOriginal: false })
 
-        /** @type {import("../../../lib/user.js").UserData} */
+        /** @type {import("../../../lib/user.js").User} */
         const user2 = value
 
         const levelBefore = getLevel(2 + user2.farmers[farmerIndex].wealth, a.farmer.level).level

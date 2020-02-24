@@ -1,23 +1,38 @@
 const flags = require("./flags.json")
+const { PERMISSIONS } = require("./help-info.js")
 
+
+/**
+ * @typedef {User} User
+ * @class
+ */
 class User {
   /**
-   *
    * @param {import("eris").User} author - the author of the message.
    * @param {String} region
    * @param {import("./npc").Farmer[]} farmers
    */
   constructor(author, region, farmers) {
+    /** @prop {String} - the ID of the user. */
     this.userID = author.id,
+    /** @prop {String} - the username and discriminator of the user. */
     this.userTag = author.username + "#" + author.discriminator,
+    /** @prop {Object} region - the region that the user is in. */
     this.nickname = author.username,
+    /** @prop {Object} */
     this.region = {
+      /** @prop {String} - the name of the region. */
       name: region,
+      /** @prop {String} - the flag of the region. */
       flag: flags[region]
     },
+    /** @prop {Number} */
     this.messagesUserSent = 0,
+    /** @prop {Number} */
     this.botCommandsUsed = 0,
+    /** @prop {Number} - the amount of money the user has. */
     this.money = 0,
+    /** @prop {Plot[]} - the user's farm. */
     this.farm = [
       {
         crop: {
@@ -28,8 +43,10 @@ class User {
         watered: false
       }
     ],
+    /** @prop {Object<object, {Object<object, Seed}>} seeds - the user's seeds. */
     this.seeds = {
       // 🍎🍊🍋🍐🍒🍑🥭🍈🍇🍓🍌🍍
+      /** @prop {Object<string, Seed>} */
       common: {
         apple: {
           discovered: true,
@@ -93,8 +110,14 @@ class User {
         }
       }
     },
+    /** @prop {import("./npc").Request[]} - the user's current requests. */
     this.requests = [],
-    this.farmers = farmers
+    /** @prop {import("./npc").Farmer[]} - the farmers in the user's village. */
+    this.farmers = farmers,
+    /** @prop {import("./help-info").PermissionsSymbol} - the farmers in the user's village. */
+    this.permissions = PERMISSIONS.EVERYONE
+
+    console.log(this)
   }
 }
 
@@ -103,30 +126,18 @@ module.exports = {
 }
 
 /**
- * @typedef {Object} UserData
- * @prop {String} userID - the ID of the user.
- * @prop {String} userTag - the username and discriminator of the user.
- * @prop {String} userID - the ID of the user.
- * @prop {Object} region - the region that the user is in.
- * @prop {String} region.name - the name of the region.
- * @prop {String} region.flag - the flag of the region.
- * @prop {Number} messagesUserSent
- * @prop {Number} botCommandsUsed
- * @prop {Number} money - the amount of money the user has.
- * @prop {Plot[]} farm - the user's farm.
- * @prop {Object} seeds - the user's seeds.
- * @prop {Object<string, {discovered: Boolean, level: Number, amount: Number}} seeds.common
- * @prop {import("./npc").Request[]} requests - the user's current requests.
- * @prop {import("./npc").Farmer[]} farmers - the farmers in the user's village.
- */
-
-/**
  * @typedef {Object} Plot
  * @prop {Object} crop
  * @prop {import("./crop-data.js").CropName} crop.planted - the crop currently planted on the plot.
  * @prop {Number} crop.datePlantedAt - the time that the crop was planted at.
  * @prop {Boolean} fertilized - whether or not the plot is fertilized. **Not yet implemented!**
  * @prop {Boolean} watered - whether or not the plot is watered. **Not yet implemented!**
+
+/**
+ * @typedef {Object} Seed
+ * @prop {Boolean} discovered - whether or not the crop has been discovered.
+ * @prop {Number} level - the level of the seed (i.e. it's experience level).
+ * @prop {Number} amount - the amount of the seed that the user has in their inventory.
  */
 
 // uncommon:{

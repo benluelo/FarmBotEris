@@ -1,18 +1,9 @@
 const { Embed } = require("../../lib/classes")
-const { readdir } = require("fs")
-const commands = []
+const help = require("../../lib/help-info.js")
 
-readdir("./bot/help", async (err, files) => {
-  if (err) { throw err }
-  files.forEach(async (file) => {
-    const fSplit = file.split(".")
-    if ("json" !== fSplit[1]) { return }
-    commands.push(fSplit[0])
-  })
-})
-
-exports.run = (bot) => {
-  bot.registerCommand("help2", (message, args) => {
+/** @param {import("../../index.js").Bot} bot */
+module.exports.run = (bot) => {
+  bot.registerCommand("help", (message, args) => {
     if (!args[0]) {
       const helpEmbed = new Embed()
         .setTitle("Help Command")
@@ -22,7 +13,7 @@ exports.run = (bot) => {
         .addField(":gear: Utility", "`botinfo`, `help`, `info`, `ping`")
 
       // checks to see if it should add more info
-      if (message.author.id == bot.ownersIDs[0] || message.author.id == bot.ownersIDs[1]) {
+      if (bot.ownersIDs.includes(message.author.id)) {
         helpEmbed.addField(":avocado: Admin", "`eval`, `stop`, `status`")
       }
       if ("true" == process.env.DEVELOPMENT) {
@@ -31,20 +22,9 @@ exports.run = (bot) => {
 
       bot.createMessage(message.channel.id, helpEmbed)
     } else {
-      if (commands.includes(args[0])) {
-        const command = require(`../../help/${args[0]}.json`)
-        const helpEmbed = new Embed()
-          .setTitle(command.title.charAt(0).toUpperCase() + command.title.slice(1))
-          .setColor(bot.color.lightgreen)
-          .setDescription(command.description)
-          .addField(command.usage.name, command.usage.value)
-          .setFooter("[] - optional  |  <> - required")
-
-        if (command.examples) {
-          helpEmbed.addField(command.examples.name, command.examples.value)
-        }
-
-        return bot.createMessage(message.channel.id, helpEmbed)
+      const req = helpEmbeds[args[0]]
+      if (req) {
+        return bot.createMessage(message.channel.id, req)
       } else {
         bot.createMessage(message.channel.id, `${args[0]} isn't a command!`)
       }

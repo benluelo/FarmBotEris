@@ -7,7 +7,7 @@ exports.run = (bot) => {
   bot.registerCommand("sell", (message, args) => {
     // f!sell <plant> [amount]
 
-    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../lib/user.js").UserData} userdata */ async (err, userdata) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {

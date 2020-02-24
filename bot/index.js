@@ -42,6 +42,7 @@ bot.cooldown = require("./src/cooldown.js")
 bot.formatMoney = require("./src/format-money.js")
 bot.getUser = require("./src/get-user.js")
 bot.startMessage = require("./src/start-message.js")
+bot.embed = require("./lib/classes").Embed
 
 require("./src/command-loader.js")(bot)
 require("./src/event-loader.js")(bot)

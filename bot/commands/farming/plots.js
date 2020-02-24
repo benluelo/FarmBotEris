@@ -8,7 +8,7 @@ exports.run = async (bot) => {
   bot.registerCommand("plots", (message) => {
 
     // attempt to find the user in the system
-    bot.database.Userdata.findOne({ userID: message.author.id }, /** @param {import("../../lib/user.js").UserData} userdata */ (err, userdata) => {
+    bot.database.Userdata.findOne({ userID: message.author.id }, (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       // if the user IS in the database, do stuff

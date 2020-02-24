@@ -1,5 +1,5 @@
 const ms = require("parse-ms")
-const { Embed, ProgressBar, Attachment } = require("../../lib/classes")
+const { ProgressBar, Attachment } = require("../../lib/classes")
 const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
 const cropData = require("../../lib/crop-data.js")
 const emoji = require("../../lib/emoji.json")
@@ -23,7 +23,7 @@ exports.run = (bot) => {
             if (process.env.DEBUG === "true") { console.log(plotNumber) }
 
             if (plotNumber >= userdata.farm.length) {
-              bot.createMessage(message.channel.id, "You don't own that plot!")
+              bot.createMessage(message.channel.id, new bot.embed().error("You don't own that plot!"))
               return
             } else {
               const userCrop = userdata.farm[plotNumber].crop
@@ -72,8 +72,8 @@ exports.run = (bot) => {
               const attachment = new Attachment(userCrop.planted)
 
               // console.log(emojiURL)
-              const infoEmbed = new Embed()
-                // .setAuthor(bot.user.username, bot.user.avatarURL)
+              const infoEmbed = new bot.embed()
+                .setAuthor(bot.user.username, null, bot.user.avatarURL)
                 .setColor(bot.color.lightgreen)
                 .setDescription(`Info for plot #\`${args[0].toUpperCase()}\``)
                 .addField("Currently planted:", cropData[userCrop.planted] ? cropData[userCrop.planted].emoji : emoji.dirt)

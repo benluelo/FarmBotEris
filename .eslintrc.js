@@ -109,6 +109,10 @@ module.exports = {
         "arrow-parens": [
             "error",
             "always"
+        ],
+        "no-cond-assign": [
+            "error",
+            "except-parens"
         ]
     }
 }

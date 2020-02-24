@@ -8,6 +8,10 @@ function getURL(obj) {
   }
 }
 
+/**
+ * @class
+ * @typedef {Embed} Embed
+ */
 class Embed {
   /**
    * Creates a new Embed.
@@ -185,6 +189,16 @@ class Embed {
       value: "\u200B",
       inline: inline
     })
+    return this
+  }
+
+  /**
+   * Send a preset error message
+   * @param {String} message Message to show user
+   */
+  error(message = "") {
+    this.embed.title = message
+    this.embed.color = 0xFF0000
     return this
   }
 
