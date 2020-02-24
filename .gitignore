@@ -3,6 +3,5 @@ node_modules
 bot/logs
 out
 helpers/crop-maker.js
-
 .vs/
 .vscode/
