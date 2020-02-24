@@ -22,7 +22,7 @@ exports.run = (bot) => {
         .addField(":gear: Utility", "`botinfo`, `help`, `info`, `ping`")
 
       // checks to see if it should add more info
-      if (message.author.id == bot.ownersIDS[0] || message.author.id == bot.ownersIDS[1]) {
+      if (message.author.id == bot.ownersIDs[0] || message.author.id == bot.ownersIDs[1]) {
         helpEmbed.addField(":avocado: Admin", "`eval`, `stop`, `status`")
       }
       if ("true" == process.env.DEVELOPMENT) {

@@ -4,25 +4,24 @@ const config = require("../config.json")
 let _db
 
 /**
- * This is just for type hinting lol
- * @param {InitDbCallback} callback
+ * @param {import("../index.js").Bot} bot
  */
-module.exports = function (callback) {
-  if (_db) {
-    if (process.env.DEBUG === "true") { console.warn("trying to init DB again!") }
-    return callback(null, _db)
-  }
+module.exports = (bot) => {
   client.connect(config.db.connectionString, config.db.connectionOptions, (err, db) => {
-    if (err) {
-      return callback(err)
+    if (err) { throw err }
+
+    if (_db) {
+      if (process.env.DEBUG === "true") { console.warn("trying to init DB again!") }
     }
     _db = db
-    return callback(null, _db)
+    if (db) {
+      const c = db
+      const dbObject = {
+        db: c,
+        Userdata: c.db("farmbot").collection("farm"),
+      }
+      bot.database = dbObject
+      bot.log.dbconnect("Successfully connected to database!")
+    }
   })
 }
-
-/**
- * @callback InitDbCallback
- * @param {?import("mongodb").MongoError} err
- * @param {?import("mongodb").MongoClient} db
- */

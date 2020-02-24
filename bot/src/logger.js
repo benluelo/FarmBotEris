@@ -19,7 +19,7 @@ const getDate = () => {
   return date.toLocaleString()
 }
 
-module.exports = class Log {
+class Log {
   /**
    * The default log; logs to the console in cyan.
    * @param {...} args - what you would like to log.
@@ -112,3 +112,5 @@ module.exports = class Log {
     toFileStream.write(p + " | " + args.join("\n") + "\n")
   }
 }
+
+module.exports = Log

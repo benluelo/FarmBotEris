@@ -24,7 +24,7 @@ exports.run = (bot) => {
     }
   }, {
     requirements: {
-      userIDs: bot.ownersIDS
+      userIDs: bot.ownersIDs
     }
   })
 }

@@ -4,7 +4,7 @@ const path = require("path")
 /**
  * @param {import("../index.js").Bot} bot
  */
-module.exports.run = (bot) => {
+module.exports = (bot) => {
   loadCommands(bot, path.join(__dirname, "../commands"))
 }
 

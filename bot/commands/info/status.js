@@ -59,7 +59,7 @@ exports.run = (bot) => {
     await bot.createMessage(message.channel.id, statusEmbed)
   }, {
     requirements: {
-      userIDs: bot.ownersIDS
+      userIDs: bot.ownersIDs
     }
   })
 }
