@@ -32,6 +32,7 @@ const bot = new Eris.CommandClient(process.env.TOKEN, {
   defaultHelpCommand: false,
   ignoreSelf: true
 })
+exports.bot = bot
 
 // database connection
 const { initDb } = require("./src/database.js")
@@ -58,6 +59,7 @@ bot.color = require("./src/color.js")
 bot.log = require("./src/logger.js")
 bot.cooldown = require("./src/cooldown.js")
 
+bot.formatMoney = require("./src/format-money.js")
 bot.getUser = require("./src/get-user.js")
 
 /**
@@ -65,16 +67,6 @@ bot.getUser = require("./src/get-user.js")
  */
 bot.startMessage = (message) => {
   bot.createMessage(message.channel.id, "You have to start farming first! Send `farm start` to start farming!")
-}
-
-/** @param {Number} value */
-bot.formatMoney = (value) => {
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2
-  })
-  return formatter.format(value).substr(1)
 }
 
 (async () => {
@@ -103,11 +95,16 @@ bot.connect()
  * @prop {Object} database
  * @prop {import("mongodb").MongoClient} database.db - the database
  * @prop {import("mongodb").Collection} database.Userdata - the userdata collection (`farmbot -> farm`)
- * @prop {import("./src/logger.js")} log
+ * @prop {import("./src/logger.js")} log - different ways to log stuff.
+ * @prop {import("./src/format-money.js")} formatMoney - formats a monetary amount for sending in messages.
  * @prop {import("./src/get-user.js")} getUser
+ * @prop {import("./src/cooldown")} cooldown
+ * @prop {import("./src/color.js")} color - the different colors for the bot.
  */
 
 /**
  * @type {BotVars}
  */
-const b = 4
+// const b = 4
+
+new RegExp(/{.+&.+}/)

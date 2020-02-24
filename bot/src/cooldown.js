@@ -17,7 +17,7 @@
  * @param {Number} length - the length of the cooldown to set, in milliseconds.
  * @returns {CooldownObject} {@link CooldownObject}
  */
-const cooldown = (length) => {
+module.exports = (length) => {
   return {
     cooldown: length,
     cooldownMessage: () => {
@@ -30,5 +30,3 @@ const cooldown = (length) => {
     }
   }
 }
-
-module.exports = cooldown
