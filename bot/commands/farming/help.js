@@ -1,32 +1,29 @@
 const { Embed } = require("../../lib/classes")
+const { readdir } = require("fs")
+const commands = []
 
-/** @param {import("../../../index.js").Bot} bot */
+readdir("./bot/help", async (err, files) => {
+  if (err) { throw err }
+  files.forEach(async (file) => {
+    const fSplit = file.split(".")
+    if ("json" !== fSplit[1]) { return }
+    commands.push(fSplit[0])
+  })
+})
+
 exports.run = (bot) => {
-  bot.registerCommand("help", (message, args) => {
-
-    // Function to send more detailed info about commands
-    const sendHelp = (commandName, description, usage) => {
-      bot.createMessage(message.channel.id, new Embed()
-        .setTitle(`${commandName} Command`)
-        .setDescription(description)
-        .addField("Usage", usage)
-        .setFooter("[] - optional  |  <> - required")
-
-      )
-    }
-
-    // if <PREFIX>help was typed
-    if (0 == args.length) {
+  bot.registerCommand("help2", (message, args) => {
+    if (!args[0]) {
       const helpEmbed = new Embed()
         .setTitle("Help Command")
         .setDescription("A full list of commands")
         .setColor(bot.color.lightgreen)
-        .addField(":seedling: General", "`buy`, `money`, `plots`")
-        .addField(":gear: Utility", "`botinfo`, `help`, `ping`")
+        .addField(":seedling: General", "`buy`, `harvest`, `inventory`, `market`, `money`, `plant`, `plots`, `seeds`, `sell`, `skills`, `village`")
+        .addField(":gear: Utility", "`botinfo`, `help`, `info`, `ping`")
 
       // checks to see if it should add more info
       if (message.author.id == bot.ownersIDs[0] || message.author.id == bot.ownersIDs[1]) {
-        helpEmbed.addField(":avocado: Admin", "`eval`, `stop`")
+        helpEmbed.addField(":avocado: Admin", "`eval`, `stop`, `status`")
       }
       if ("true" == process.env.DEVELOPMENT) {
         helpEmbed.addField(":scroll: Development", "`deleteuser`")
@@ -34,23 +31,23 @@ exports.run = (bot) => {
 
       bot.createMessage(message.channel.id, helpEmbed)
     } else {
-      // detailed commands
-      if ("botinfo" == args[0]) {
-        sendHelp("Botinfo", "To display infomation about the bot", "f!botinfo")
-      }
-      if ("eval" == args[0]) {
-        sendHelp("Eval", "Eval any JS code", "f!eval <code>")
-      }
-      if ("help" == args[0]) {
-        sendHelp("Help", "To show help for all the commands in the bot", "f!help `[command name]`")
-      }
-      if ("ping" == args[0]) {
-        sendHelp("Ping", "Shows the response time from the bot to Discord", "f!ping")
-      }
-      if ("stop" == args[0]) {
-        sendHelp("Stop", "Stops or restarts the bot", "f!stop [restart]")
+      if (commands.includes(args[0])) {
+        const command = require(`../../help/${args[0]}.json`)
+        const helpEmbed = new Embed()
+          .setTitle(command.title.charAt(0).toUpperCase() + command.title.slice(1))
+          .setColor(bot.color.lightgreen)
+          .setDescription(command.description)
+          .addField(command.usage.name, command.usage.value)
+          .setFooter("[] - optional  |  <> - required")
+
+        if (command.examples) {
+          helpEmbed.addField(command.examples.name, command.examples.value)
+        }
+
+        return bot.createMessage(message.channel.id, helpEmbed)
+      } else {
+        bot.createMessage(message.channel.id, `${args[0]} isn't a command!`)
       }
     }
-
   }, bot.cooldown(15000))
 }

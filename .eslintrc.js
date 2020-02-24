@@ -48,6 +48,10 @@ module.exports = {
             "error",
             "always"
         ],
+        "quote-props": [
+            "error",
+            "as-needed"
+        ],
         "no-shadow": [
             "error",
             {
