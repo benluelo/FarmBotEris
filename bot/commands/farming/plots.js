@@ -1,7 +1,6 @@
 const chalk = require("chalk")
 const cropData = require("../../lib/crop-data.js")
 const emoji = require("../../lib/emoji.json")
-const { Embed } = require("../../lib/classes")
 
 /** @param {import("../../../index.js").Bot} bot */
 exports.run = async (bot) => {
@@ -60,7 +59,7 @@ exports.run = async (bot) => {
           // edit the originally sent message
           msg.edit(
             {
-              ...new Embed().setAuthor(`${message.author.username}'s farm!`, null, message.author.avatarURL).setDescription(`${plotsMsgTop + plotsMsg}`).setColor(bot.color.lightgreen),
+              ...new bot.embed().setAuthor(`${message.author.username}'s farm!`, null, message.author.avatarURL).setDescription(`${plotsMsgTop + plotsMsg}`).setColor(bot.color.lightgreen),
               ...{ content: "" }
             }
           )

@@ -1,5 +1,5 @@
 const cropData = require("../../lib/crop-data.js")
-const { Embed, XPProgressBar, Attachment } = require("../../lib/classes.js")
+const { XPProgressBar, Attachment } = require("../../lib/classes.js")
 
 /** @param {import("../../index.js").Bot} bot */
 module.exports.run = (bot) => {
@@ -9,7 +9,7 @@ module.exports.run = (bot) => {
 
       if (userdata) {
         if (!args[0]) {
-          const skillsEmbed = new Embed()
+          const skillsEmbed = new bot.embed()
             .setAuthor(message.author.username, null, message.author.avatarURL)
             .setColor(bot.color.lightgreen)
 
@@ -25,7 +25,7 @@ module.exports.run = (bot) => {
           if (cropData[args[0]]) {
             const attachment = new Attachment(args[0])
             const XPBar = new XPProgressBar(userdata.seeds.common[args[0]].level)
-            const seedSkillEmbed = new Embed()
+            const seedSkillEmbed = new bot.embed()
               .setAuthor(message.author.username, null, message.author.avatarURL)
               .setColor(bot.color.lightgreen)
               .setTitle(`${args[0][0].toUpperCase() + args[0].substr(1)}`)
@@ -34,7 +34,7 @@ module.exports.run = (bot) => {
 
             return bot.createMessage(message.channel.id, seedSkillEmbed, attachment.send())
           } else {
-            return bot.createMessage(message.channel.id, `**${args[0]}** isn't a crop!`)
+            return bot.createMessage(message.channel.id, new bot.embed().error(`**${args[0]}** isn't a crop!`))
           }
         }
       } else {

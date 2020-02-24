@@ -1,8 +1,7 @@
-const { Embed } = require("../../lib/classes")
 exports.run = (bot) => {
   bot.registerCommand("stop", (message, args) => {
     if (0 == args.length) {
-      const stopEmbed = new Embed()
+      const stopEmbed = new bot.embed()
         .setTitle("Stopping Bot")
         .setDescription(`${bot.user.username} disconnecting in 5 seconds\n**${bot.guilds.size}** servers\n**${bot.users.size}** users`)
         .setColor(bot.color.red)
@@ -10,7 +9,7 @@ exports.run = (bot) => {
       bot.createMessage(message.channel.id, stopEmbed)
       setTimeout(() => { bot.disconnect(); process.exit(0) }, 5000)
     } else if ("restart" == args[0]) {
-      const restartEmbed = new Embed()
+      const restartEmbed = new bot.embed()
         .setTitle("Restarting Bot")
         .setDescription(`${bot.user.username} restarting in 5 seconds\n**${bot.guilds.size}** servers\n**${bot.users.size}** users`)
         .setColor(bot.color.red)

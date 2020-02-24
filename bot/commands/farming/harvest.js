@@ -40,10 +40,9 @@ module.exports.run = async (bot) => {
           }
 
           if (totalPlots !== 0) {
-            bot.createMessage(message.channel.id,
-              `**${totalPlots}** plots harvested!`)
+            return bot.createMessage(message.channel.id, new bot.embed().success(`**${totalPlots}** plots harvested!`))
           } else {
-            bot.createMessage(message.channel.id, "Nothing to harvest")
+            bot.createMessage(message.channel.id, new bot.embed().error("Nothing to harvest"))
           }
 
         } else {
@@ -53,7 +52,7 @@ module.exports.run = async (bot) => {
           if (false !== plotNumber) {
 
             if (plotNumber >= userdata.farm.length) {
-              return bot.createMessage(message.channel.id, "You don't own that plot!")
+              return bot.createMessage(message.channel.id, new bot.embed().error("You don't own that plot!"))
             } else {
               const userCrop = userdata.farm[plotNumber].crop
 
@@ -72,10 +71,9 @@ module.exports.run = async (bot) => {
                 ).catch((error) => {
                   if (err) { bot.log.error(error) }
                 })
-                bot.createMessage(message.channel.id,
-                  `Harvested the **${cropData[userCrop.planted].emoji}** on \`${(args[0]).toUpperCase()}\`!`)
+                bot.createMessage(message.channel.id, new bot.embed().success(`Harvested the **${cropData[userCrop.planted].emoji}** on \`${(args[0]).toUpperCase()}\`!`))
               } else {
-                bot.createMessage(message.channel.id, "Cannot harvest dirt!")
+                bot.createMessage(message.channel.id, new bot.embed().error("Cannot harvest dirt!"))
               }
             }
           }

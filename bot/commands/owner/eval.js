@@ -1,5 +1,4 @@
 const { inspect } = require("util")
-const { Embed } = require("../../lib/classes")
 exports.run = (bot) => {
   bot.registerCommand("eval", (message, args) => {
     const toEval = args.join(" ")
@@ -8,7 +7,7 @@ exports.run = (bot) => {
       if (toEval) {
         const hrStart = process.hrtime()
         const hrDiff = process.hrtime(hrStart)
-        const evalEmbed = new Embed()
+        const evalEmbed = new bot.embed()
           .setTitle("Evaluation")
           .setColor(bot.color.lightgreen)
           .addField(":scroll: Script", `\`\`\`javascript\n${toEval}\n\`\`\``)

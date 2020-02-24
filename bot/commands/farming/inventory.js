@@ -1,6 +1,5 @@
 const smallNumbers = require("../../lib/small-numbers.json")
 const cropData = require("../../lib/crop-data.js")
-const { Embed } = require("../../lib/classes")
 
 const getSmallNumbers = (number) => {
   number = number.toString()
@@ -46,7 +45,7 @@ exports.run = (bot) => {
         }
 
         // make embed
-        const invEmbed = new Embed()
+        const invEmbed = new bot.embed()
           .setAuthor(`${message.author.username}'s Inventory`, null,  message.author.avatarURL)
           .setColor(bot.color.lightgreen)
           .setDescription(invItemString)

@@ -1,6 +1,5 @@
 const cropData = require("../../lib/crop-data.js")
 const getPriceOfSeeds = require("../../lib/get-price-of-seeds")
-const { Embed } = require("../../lib/classes")
 
 /** @param {import("../../../index.js").Bot} bot */
 exports.run = (bot) => {
@@ -15,7 +14,7 @@ exports.run = (bot) => {
           seeds += `${cropData[crop].emoji} ${crop.charAt(0).toUpperCase() + crop.slice(1)} - \`$${getPriceOfSeeds[crop]}\` \n`
         }
       }
-      const seedsEmbed = new Embed()
+      const seedsEmbed = new bot.embed()
         .setTitle("Seeds")
         .setDescription("Prices update every hour\n" + seeds)
         .setColor(bot.color.lightgreen)

@@ -66,9 +66,7 @@ exports.run = (bot) => {
               }
 
               const p = new ProgressBar(growthPercentage, 1, 10)
-
               const growthBar = timeUntilPlantFinished + p.show() + ` ${Math.floor(growthPercentage * 100)}%`
-
               const attachment = new Attachment(userCrop.planted)
 
               // console.log(emojiURL)
@@ -91,7 +89,7 @@ exports.run = (bot) => {
           }
         }
       } else {
-        bot.createMessage(message.channel.id, "Please specify the plot you want info on!")
+        bot.createMessage(message.channel.id, new bot.embed().error("Please specify the plot you want info on!"))
       }
     })
   }, bot.cooldown(15000))

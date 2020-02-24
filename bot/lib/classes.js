@@ -202,6 +202,16 @@ class Embed {
     return this
   }
 
+  /**
+   * Send a preset success message
+   * @param {String} message Message to show user
+   */
+  success(message = "") {
+    this.embed.description = message
+    this.embed.color = 0x00FF00
+    return this
+  }
+
   showContent() {
     return this.embed
   }

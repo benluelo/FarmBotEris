@@ -1,6 +1,5 @@
 const ms = require("parse-ms")
 const si = require("systeminformation")
-const { Embed } = require("../../lib/classes")
 
 function formatBytes(bytes, decimals = 2) {
   if (!bytes) { return "0 Bytes" }
@@ -35,7 +34,7 @@ exports.run = (bot) => {
     const uptime = ms(bot.uptime)
     const onlineUsers = bot.users.filter((user) => !user.bot).length
 
-    const statusEmbed = new Embed()
+    const statusEmbed = new bot.embed()
       .setTitle(`${bot.user.username} Status`)
       .setColor(bot.color.lightgreen)
       .setThumbnail(bot.user.avatarURL)

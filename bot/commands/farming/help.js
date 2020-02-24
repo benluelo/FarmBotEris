@@ -1,11 +1,10 @@
-const { Embed } = require("../../lib/classes")
 const help = require("../../lib/help-info.js")
 
 /** @param {import("../../index.js").Bot} bot */
 module.exports.run = (bot) => {
   bot.registerCommand("help", (message, args) => {
     if (!args[0]) {
-      const helpEmbed = new Embed()
+      const helpEmbed = new bot.embed()
         .setTitle("Help Command")
         .setDescription("A full list of commands")
         .setColor(bot.color.lightgreen)

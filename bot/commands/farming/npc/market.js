@@ -60,16 +60,13 @@ exports.run = (bot) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {
-        if (!args[0]) { return bot.createMessage(message.channel.id, new bot.embed()
-          .setDescription("You have to specify an order to view!")
-          .setColor(bot.color.error)) 
+        if (!args[0]) {
+          return bot.createMessage(message.channel.id, new bot.embed().error("You have to specify an order to view!"))
         }
+
         const orderID = parseInt(args[0]) - 1
-        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { 
-          return bot.createMessage(message.channel.id, new bot.embed()
-            .setDescription(`**${args[0]}** is not a valid order ID!`)
-            .setColor(bot.color.error)
-          ) 
+        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) {
+          return bot.createMessage(message.channel.id, new bot.embed().error(`**${args[0]}** is not a valid order ID!`))
         }
         const marketViewEmbed = new bot.embed()
 
@@ -93,9 +90,8 @@ exports.run = (bot) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {
-        if (!args[0]) { return bot.createMessage(message.channel.id, new bot.embed()
-          .setDescription("You have to specify an order to fill!")
-          .setColor(bot.color.error)) 
+        if (!args[0]) {
+          return bot.createMessage(message.channel.id, new bot.embed().error("You have to specify an order to fill!"))
         }
 
         const orderID = parseInt(args[0]) - 1
@@ -118,9 +114,8 @@ exports.run = (bot) => {
           return temp
         })()
 
-        if (!enoughCrops) { return bot.createMessage(message.channel.id, new bot.embed()
-          .setDescription("You don't have enough crops to fill this order!")
-          .setColor(bot.color.red)) 
+        if (!enoughCrops) {
+          return new bot.embed().error("You don't have enough crops to fill this order!")
         }
 
         const p = prettifyParsedRequest(a)
@@ -137,7 +132,7 @@ exports.run = (bot) => {
         const { value } = await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
           $pull: { ["requests"]: userdata.requests[orderID] },
           $inc: {
-            "money": a.rewards.money,
+            money: a.rewards.money,
             [`farmers.${farmerIndex}.level`]: a.rewards.reputation,
             ...enoughCrops
           }
