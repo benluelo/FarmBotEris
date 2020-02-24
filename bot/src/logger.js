@@ -19,8 +19,6 @@ const getDate = () => {
   return date.toLocaleString()
 }
 
-
-
 module.exports = class Log {
   /**
    * The default log; logs to the console in cyan.

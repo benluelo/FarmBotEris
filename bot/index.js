@@ -35,8 +35,7 @@ const bot = new Eris.CommandClient(process.env.TOKEN, {
 exports.bot = bot
 
 // database connection
-const { initDb } = require("./src/database.js")
-initDb((err, db) => {
+require("./src/database.js")((err, db) => {
   if (err) { throw err }
   if (db) {
     const client = db
@@ -62,14 +61,9 @@ bot.cooldown = require("./src/cooldown.js")
 bot.formatMoney = require("./src/format-money.js")
 bot.getUser = require("./src/get-user.js")
 
-/**
- * @param {import("eris").Message} message
- */
-bot.startMessage = (message) => {
-  bot.createMessage(message.channel.id, "You have to start farming first! Send `farm start` to start farming!")
-}
+bot.startMessage = require("./src/start-message.js")
 
-(async () => {
+;(async () => {
   // load events
   fs.readdir("./bot/events/", (err, files) => {
     if (err) { bot.log.error(err) }
@@ -100,6 +94,7 @@ bot.connect()
  * @prop {import("./src/get-user.js")} getUser
  * @prop {import("./src/cooldown")} cooldown
  * @prop {import("./src/color.js")} color - the different colors for the bot.
+ * @prop {import("./src/start-message.js")} startMessage - the message to send when the user isn't in the database (i.e. hasn't started yet).
  */
 
 /**

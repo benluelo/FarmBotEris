@@ -7,7 +7,7 @@ let _db
  * This is just for type hinting lol
  * @param {InitDbCallback} callback
  */
-function initDb(callback) {
+module.exports = function (callback) {
   if (_db) {
     if (process.env.DEBUG === "true") { console.warn("trying to init DB again!") }
     return callback(null, _db)
@@ -19,10 +19,6 @@ function initDb(callback) {
     _db = db
     return callback(null, _db)
   })
-}
-
-module.exports = {
-  initDb
 }
 
 /**
