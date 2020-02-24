@@ -19,12 +19,12 @@ for (;;) {
 console.log(path.join(__dirname,  "./bot/commands",dir))
 
 const template =
-`const { Embed } = require("../../lib/classes")
-
-/** @param {import("../../index.js").Bot} bot */
-exports.run = async (bot) => {
-  bot.registerCommand("${name}", (message) => {
-  }, bot.cooldown(${parseInt(cooldown)}))
+`const { Embed } = require("../../lib/classes")\r
+\r
+/** @param {import("../../index.js").Bot} bot */\r
+exports.run = async (bot) => {\r
+  bot.registerCommand("${name}", (message) => {\r
+  }, bot.cooldown(${parseInt(cooldown)}))\r
 }`
 
 fs.writeFileSync(path.join(__dirname,  "./bot/commands", dir) + "/" + name + ".js", template)
