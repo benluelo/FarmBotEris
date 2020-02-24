@@ -6,15 +6,16 @@ const name = question("file name? ")
 const cooldown = question("cooldown length? ")
 
 let dir = ""
-let depth = 1
+let depth = 0
 for (;;) {
   const temp = question(`directory to write to? (commands/${dir}): `)
   console.log(temp)
   if (!temp.trim() == "") {
-    dir += "/" + temp
+    dir += temp + "/"
   } else {
     break
   }
+  depth++
 }
 
 console.log(path.join(__dirname,  "./bot/commands",dir))
@@ -24,7 +25,7 @@ const template =
 \r
 /** @param {import("../${"../".repeat(depth)}index.js").Bot} bot */\r
 exports.run = async (bot) => {\r
-  bot.registerCommand("${name}", (message) => {\r
+  bot.registerCommand("${name}", (message, args) => {\r
   }, bot.cooldown(${parseInt(cooldown)}))\r
 }`
 
