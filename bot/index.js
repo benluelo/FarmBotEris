@@ -1,8 +1,8 @@
-const Eris = require("eris")
+const FarmBotClass = require("./lib/classes").FarmBotClass
 require("dotenv").config({ path: ".env" })
 
 /** @type {Bot} */
-const bot = new Eris.CommandClient(process.env.TOKEN, {
+const bot = new FarmBotClass(process.env.TOKEN, {
   disableEveryone: true,
   defaultImageFormat: "png",
   disableEvents: {
