@@ -1,14 +1,14 @@
 /**
  * @typedef {Object} CommandHelpObject
- * @prop {String} description - the description for the command
+ * @prop {String} description - the description for the command.
  * @prop {String} usage - how to use the command.
  * @prop {(String | Boolean)} examples - examples of how to use the command. `false` if there are no examples.
- * @prop {PermissionsSymbol} permissionLevel
+ * @prop {PermissionsLevels} permissionLevel
  * @prop {CategoriesSymbol} category
  */
 
 /**
- * @typedef {Symbol} PermissionsSymbol
+ * @typedef {(0 | 1 | 2 | 3)} PermissionsLevels
  */
 /**
  * @typedef {Symbol} CategoriesSymbol
@@ -16,28 +16,40 @@
 
 /**
  * The different permission levels for a command.
- * @readonly
- * @type {Object<string, PermissionsSymbol>}
+ * @typedef {Object} PERMISSIONS
+ * @property {PermissionsLevels} EVERYONE - commands that everyone has access to.
+ * @property {PermissionsLevels} MODERATORS - commands that only bot moderators have access to.
+ * @property {PermissionsLevels} ADMINS - commands that only bot admins have access to.
+ * @property {PermissionsLevels} DEVELOPERS - commands that are only to be used by the developers (i.e. only Ben & Tyler).
  */
-const PERMISSIONS = {
-  EVERYONE: Symbol("everyone"),
-  MODERATORS: Symbol("moderators"),
-  OWNERS: Symbol("owners"),
-  /** Only to be used for development purposes. */
-  DEVELOPMENT: Symbol("development")
-}
+/**
+ * @type {PERMISSIONS}
+ */
+const PERMISSIONS = Object.freeze({
+  EVERYONE: 0,
+  MODERATORS: 1,
+  ADMINS: 2,
+  DEVELOPERS: 3
+})
 
 /**
  * The different categories of commands.
- * @readonly
- * @type {Object<string, CategoriesSymbol>}
+ * @typedef {Object} CATEGORIES
+ * @property {CategoriesSymbol} FARMING - commands related to farming.
+ * @property {CategoriesSymbol} DEVELOPMENT - commands used for bot development.
+ * @property {CategoriesSymbol} UTILITY - useful commands for information about the bot.
+ * @property {CategoriesSymbol} OWNER - commands that are only to be used by the owners (i.e. only Ben & Tyler).
  */
-const CATEGORIES = {
+/**
+ * @readonly
+ * @type {CATEGORIES}
+ */
+const CATEGORIES = Object.freeze({
   FARMING: Symbol("farming"),
-  DEVELOPER: Symbol("development"),
   UTILITY: Symbol("utility"),
-  OWNER: Symbol("owner")
-}
+  OWNER: Symbol("owner"),
+  DEVELOPMENT: Symbol("development")
+})
 
 /** @type {Object<string, CommandHelpObject>} */
 const commands = {
@@ -59,18 +71,18 @@ const commands = {
     description: "Delete a user from the database.",
     usage: "farm deleteuser [@mention]",
     examples: false,
-    permissionLevel: PERMISSIONS.DEVELOPMENT,
-    category: CATEGORIES.DEVELOPER
+    permissionLevel: PERMISSIONS.DEVELOPERS,
+    category: CATEGORIES.DEVELOPMENT
   },
   eval: {
     description: "no",
     usage:  "​no",
     examples: "​no",
-    permissionLevel: PERMISSIONS.OWNERS,
+    permissionLevel: PERMISSIONS.DEVELOPERS,
     category: CATEGORIES.OWNER
   },
   harvest: {
-    description: "To collect all your seeds from your plots",
+    description: "Harvest your crops.",
     usage: "farm harvest [plot]​",
     examples: "​farm harvest a1",
     permissionLevel: PERMISSIONS.EVERYONE,
@@ -93,7 +105,7 @@ const commands = {
   },
   money: {
     title: "money",
-    description: "To view how much <:farmbot_coin:648032810682023956> you have",
+    description: `View your current ${require("./emoji.json").coin} balance.`,
     usage: "​farm money",
     examples: false,
     permissionLevel: PERMISSIONS.EVERYONE,
@@ -169,15 +181,15 @@ const commands = {
     usage: "​farm status",
     examples: false,
     permissionLevel: PERMISSIONS.MODERATORS,
-    category: CATEGORIES.OWNER
+    category: CATEGORIES.UTILITY
   },
   stop: {
     title: "stop",
     description: "stops/restarts the bot",
     usage: "​farm stop [restart]",
     examples: "​farm stop\nfarm stop restart",
-    permissionLevel: PERMISSIONS.OWNERS,
-    category: CATEGORIES.OWNER
+    permissionLevel: PERMISSIONS.DEVELOPERS,
+    category: CATEGORIES.UTILITY
   },
   village: {
     title: "village",
@@ -194,15 +206,32 @@ const { Embed } = require("../lib/classes")
 /** @type {Object<string, import("../lib/classes.js").Embed>} */
 const helpEmbeds = {}
 
-const fullHelpEmbeds = {}
+const fullHelp = {}
 
 for (const perm in PERMISSIONS) {
-  fullHelpEmbeds[PERMISSIONS[perm]] = []
+  fullHelp[PERMISSIONS[perm]] = []
 }
+
+console.log(fullHelp)
+
+/**
+ * @type {Object<number, {
+    CATEGORY_FARMING: String[],
+    CATEGORY_UTILITY: String[],
+    CATEGORY_OWNER: String[],
+    CATEGORY_DEVELOPMENT: String[]
+  }>}
+ */
+const fullHelpEmbeds = Object.fromEntries(Object.values(PERMISSIONS).map(((val) => {
+  return [val, Object.fromEntries(Object.values(CATEGORIES).map(((cat) => {
+    return [cat, []]
+  })))]
+})))
 
 for (const command in commands) {
   const current = commands[command]
-  fullHelpEmbeds[current.permissionLevel].push(command)
+  console.log(current)
+  fullHelp[current.permissionLevel].push(command)
   const e = new Embed()
     .setTitle(`Help for \`${command}\``)
     .setDescription(current.description)
@@ -210,8 +239,19 @@ for (const command in commands) {
   if (current.examples) { e.addField("**__Examples__:**", `\`\`\`${current.examples}\`\`\``) }
   helpEmbeds[command] = e
 }
+console.log(fullHelp)
+
+// make a different embed for each permission level. each successive level has all the permissions of the previous level.
+
 
 console.log(fullHelpEmbeds)
+
+for (const permission in fullHelp) {
+  console.log("permission level:", permission)
+  for (const category in fullHelp[permission]) {
+    console.log("category:", fullHelp[permission][category], commands[fullHelp[permission][category]].category)
+  }
+}
 
 module.exports = {
   PERMISSIONS,

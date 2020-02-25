@@ -169,7 +169,10 @@ exports.run = (bot) => {
   /**
    * @param {{
       id: Number,
-      want: {name: import("../../../lib/crop-data.js").CropName, emoji: import("../../../lib/crop-data.js").CropEmoji, amount: Number}[],
+      want: {
+        name: import("../../../lib/crop-data.js").CropName,
+        emoji: import("../../../lib/crop-data.js").CropEmoji,
+        amount: Number}[],
       rewards: {
         money: Number,
         reputation: Number
