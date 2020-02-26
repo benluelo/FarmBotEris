@@ -23,7 +23,7 @@ exports.run = (bot) => {
             if (process.env.DEBUG === "true") { console.log(plotNumber) }
 
             if (plotNumber >= userdata.farm.length) {
-              message.send(new bot.embed().error("You don't own that plot!"))
+              message.send(new bot.embed().uhoh("You don't own that plot!"))
               return
             } else {
               const userCrop = userdata.farm[plotNumber].crop
@@ -89,7 +89,7 @@ exports.run = (bot) => {
           }
         }
       } else {
-        message.send(new bot.embed().error("Please specify the plot you want info on!"))
+        message.send(new bot.embed().uhoh("Please specify the plot you want info on!"))
       }
     })
   }, bot.cooldown(15000))

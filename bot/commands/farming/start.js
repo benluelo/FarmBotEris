@@ -46,7 +46,7 @@ exports.run = (bot) => {
         }
       }
       if (userdata) {
-        message.send(new bot.embed().error(`You've already started farming, ${message.author.username}!`))
+        message.send(new bot.embed().uhoh(`You've already started farming, ${message.author.username}!`))
       }
     })
   }, bot.cooldown(60000))

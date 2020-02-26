@@ -1,5 +1,5 @@
 /**
- * @type {Object} - the different colors for the bot.
+ * @type {Object<string, number>} - the different colors for the bot.
  */
 module.exports = {
   market: 0x964b00,

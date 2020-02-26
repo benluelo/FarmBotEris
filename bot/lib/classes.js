@@ -180,7 +180,7 @@ class Embed {
   }
 
   /**
-   * Adds a blank field to the embed
+   * Adds a blank field to the embed.
    * @param {Boolean} inline Whether or not the field should be inline
    */
   addBlankField(inline = false) {
@@ -193,11 +193,12 @@ class Embed {
   }
 
   /**
-   * Send a preset error message
-   * @param {String} message Message to show user
+   * Sends a pre-formatted uh-oh message.
+   * @param {String} message - the uh-oh message to send to the user.
    */
-  error(message = "") {
-    this.embed.title = message
+  uhoh(message = "") {
+    this.embed.title = "Uh-oh!"
+    this.embed.description = message
     this.embed.color = 0xFF0000
     return this
   }

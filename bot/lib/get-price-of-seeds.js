@@ -28,8 +28,8 @@ const randomPrice = () => {
   let max = 1.5
   for (const seed in seedsPrice) {
     seedsPrice[seed] = getRandomNumber(min, max)
-    min = min * 1.15
-    max = max * 1.15
+    min = min * 1.30
+    max = max * 1.30
   }
 }
 randomPrice()

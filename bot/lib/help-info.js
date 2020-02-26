@@ -278,8 +278,6 @@ for (const i in fullHelpEmbeds) {
   fullHelpEmbeds[i] = tempEmbed
 }
 
-console.log(JSON.stringify(fullHelpEmbeds, null, 4))
-
 module.exports = {
   PERMISSIONS,
   CATEGORIES,

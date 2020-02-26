@@ -13,7 +13,7 @@ exports.run = async (bot) => {
 
       if (userdata) {
         if (userdata.farm.length >= MAX_PLOTS) {
-          return message.send(new bot.embed().error(`${message.author.username}, you already have the maximum number of plots!`))
+          return message.send(new bot.embed().uhoh(`${message.author.username}, you already have the maximum number of plots!`))
         }
 
         const numberOfCurrentPlots = userdata.farm.length

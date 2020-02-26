@@ -60,12 +60,12 @@ exports.run = (bot) => {
 
       if (userdata) {
         if (!args[0]) {
-          return message.send(new bot.embed().error("You have to specify an order to view!"))
+          return message.send(new bot.embed().uhoh("You have to specify an order to view!"))
         }
 
         const orderID = parseInt(args[0]) - 1
         if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) {
-          return message.send(new bot.embed().error(`**${args[0]}** is not a valid order ID!`))
+          return message.send(new bot.embed().uhoh(`**${args[0]}** is not a valid order ID!`))
         }
         const marketViewEmbed = new bot.embed()
 
@@ -90,7 +90,7 @@ exports.run = (bot) => {
 
       if (userdata) {
         if (!args[0]) {
-          return message.send(new bot.embed().error("You have to specify an order to fill!"))
+          return message.send(new bot.embed().uhoh("You have to specify an order to fill!"))
         }
 
         const orderID = parseInt(args[0]) - 1
@@ -114,7 +114,7 @@ exports.run = (bot) => {
         })()
 
         if (!enoughCrops) {
-          return new bot.embed().error("You don't have enough crops to fill this order!")
+          return new bot.embed().uhoh("You don't have enough crops to fill this order!")
         }
 
         const p = prettifyParsedRequest(a)

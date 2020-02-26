@@ -13,11 +13,11 @@ exports.run = (bot) => {
       if (userdata) {
 
         if (!args[0]) {
-          return message.send(new bot.embed().error("You have to specify a plant to sell!"))
+          return message.send(new bot.embed().uhoh("You have to specify a plant to sell!"))
         } else if (!args[1]) {
           const seed = args[0]
           // sell all of the specified crop
-          if (!cropData[seed]) { return message.send(new bot.embed().error("Not a valid crop!")) }
+          if (!cropData[seed]) { return message.send(new bot.embed().uhoh("Not a valid crop!")) }
           if (0 != userdata.seeds.common[seed].amount) {
             const totalSold = userdata.seeds.common[seed].amount
             let cropValue = getPriceOfSeeds[seed] * totalSold
@@ -39,17 +39,17 @@ exports.run = (bot) => {
             )
             return message.send(new bot.embed().success(`Sold **${totalSold}** ${cropData[seed].emoji} for **${bot.formatMoney(cropValue)}**!`))
           } else {
-            return message.send(new bot.embed().error(`You don't have any ${args[0]}s to sell!`))
+            return message.send(new bot.embed().uhoh(`You don't have any ${args[0]}s to sell!`))
           }
         } else if (args[0] && args[1]) {
 
           // sell the specified amount of the specified crop
 
           const seed = args[0]
-          if (!cropData[seed]) { return message.send(new bot.embed().error("Not a valid crop!")) }
+          if (!cropData[seed]) { return message.send(new bot.embed().uhoh("Not a valid crop!")) }
 
           const amount = parseInt(args[1])
-          if (amount.toString() !== args[1]) { return message.send(new bot.embed().error("You have to enter a valid number to sell!")) }
+          if (amount.toString() !== args[1]) { return message.send(new bot.embed().uhoh("You have to enter a valid number to sell!")) }
 
           if (userdata.seeds.common[seed].amount >= amount) {
 
@@ -70,7 +70,7 @@ exports.run = (bot) => {
             )
             message.send(new bot.embed().success(`Sold **${amount}** ${cropData[seed].emoji} for **${bot.formatMoney(cropValue)}**!`))
           } else {
-            return message.send(new bot.embed().error("You have to specify a crop to sell!"))
+            return message.send(new bot.embed().uhoh("You have to specify a crop to sell!"))
           }
         }
       } else {

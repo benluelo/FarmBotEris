@@ -42,7 +42,7 @@ module.exports.run = async (bot) => {
           if (totalPlots !== 0) {
             return message.send(new bot.embed().success(`**${totalPlots}** plots harvested!`))
           } else {
-            message.send(new bot.embed().error("Nothing to harvest"))
+            message.send(new bot.embed().uhoh("Nothing to harvest"))
           }
 
         } else {
@@ -52,7 +52,7 @@ module.exports.run = async (bot) => {
           if (false !== plotNumber) {
 
             if (plotNumber >= userdata.farm.length) {
-              return message.send(new bot.embed().error("You don't own that plot!"))
+              return message.send(new bot.embed().uhoh("You don't own that plot!"))
             } else {
               const userCrop = userdata.farm[plotNumber].crop
 
@@ -73,7 +73,7 @@ module.exports.run = async (bot) => {
                 })
                 message.send(new bot.embed().success(`Harvested the **${cropData[userCrop.planted].emoji}** on \`${(args[0]).toUpperCase()}\`!`))
               } else {
-                message.send(new bot.embed().error("Cannot harvest dirt!"))
+                message.send(new bot.embed().uhoh("Cannot harvest dirt!"))
               }
             }
           }

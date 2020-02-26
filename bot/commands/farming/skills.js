@@ -14,6 +14,7 @@ module.exports.run = (bot) => {
             .setColor(bot.color.lightgreen)
 
           for (const seed in userdata.seeds.common) {
+            if (!userdata.seeds.common[seed].discovered) { continue }
             const XPBar = new XPProgressBar(userdata.seeds.common[seed].level, 5)
 
             if (process.env.DEBUG === "true") { console.log(XPBar.show()) }
@@ -22,19 +23,20 @@ module.exports.run = (bot) => {
           }
           return message.send(skillsEmbed)
         } else {
-          if (cropData[args[0]]) {
-            const attachment = new Attachment(args[0])
-            const XPBar = new XPProgressBar(userdata.seeds.common[args[0]].level)
+          const crop = args[0]
+          if (cropData[crop] && userdata.seeds.common[crop].discovered) {
+            const attachment = new Attachment(crop)
+            const XPBar = new XPProgressBar(userdata.seeds.common[crop].level)
             const seedSkillEmbed = new bot.embed()
               .setAuthor(message.author.username, null, message.author.avatarURL)
               .setColor(bot.color.lightgreen)
-              .setTitle(`${args[0][0].toUpperCase() + args[0].substr(1)}`)
+              .setTitle(`${crop[0].toUpperCase() + crop.substr(1)}`)
               .setThumbnail(attachment.link())
               .addField(`Level: **${XPBar.level()}**`, XPBar.show())
 
             return message.send(seedSkillEmbed, attachment.send())
           } else {
-            return message.send(new bot.embed().error(`**${args[0]}** isn't a crop!`))
+            return message.send(new bot.embed().uhoh(`**${crop}** isn't one of your crops!`))
           }
         }
       } else {
