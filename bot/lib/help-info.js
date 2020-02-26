@@ -41,7 +41,6 @@ const PERMISSIONS = Object.freeze({
  * @property {CategoriesSymbol} DEVELOPMENT - commands used for bot development.
  */
 /**
- * @readonly
  * @type {CATEGORIES}
  */
 const CATEGORIES = Object.freeze({
@@ -62,7 +61,7 @@ const commands = {
   },
   buy: {
     description: "Buy a new plot for your farm.",
-    usage: "Usage:",
+    usage: "farm buy",
     examples: false,
     permissionLevel: PERMISSIONS.EVERYONE,
     category: CATEGORIES.FARMING
@@ -161,9 +160,9 @@ const commands = {
   },
   sell: {
     title: "sell",
-    description: null,
-    usage:  "​farm sell <plant> [amount]",
-    examples: "", // here need edit _______________i don't know what you changed________ i hadnt done anything yet ill get it tho ------------ oh okay -- fucking ctrl-s
+    description: "Sell a crop in your inventory.",
+    usage:  "​farm sell <amount> <crop>",
+    examples: "farm sell 45 apple\nfarm sell all apple", // here need edit _______________i don't know what you changed________ i hadnt done anything yet ill get it tho ------------ oh okay -- fucking ctrl-s
     permissionLevel: PERMISSIONS.EVERYONE,
     category: CATEGORIES.FARMING
   },

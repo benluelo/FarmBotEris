@@ -5,7 +5,7 @@ const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
 module.exports.run = (bot) => {
   bot.registerCommand("plant", (message, args) => {
 
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {
@@ -19,7 +19,7 @@ module.exports.run = (bot) => {
 
           // check if input is valid
           const plotNumber = parsePlotNumber(plot)
-          if (!cropData[args[0]] || !userdata.seeds.common[args[0]].discovered) { return message.send(new bot.embed().uhoh("Please include a valid plant type")) }
+          if (!cropData[crop] || !userdata.seeds.common[crop].discovered) { return message.send(new bot.embed().uhoh("Please include a valid plant type")) }
           if (false !== plotNumber) {
 
             if (plotNumber >= userdata.farm.length) {
@@ -49,12 +49,12 @@ module.exports.run = (bot) => {
     })
   }, bot.cooldown(5000)).registerSubcommand("all", (message, args) => {
 
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {
 
-        if (!args[0]) { return message.send(new bot.embed().uhoh("Please add the plant you want to plant")) }
+        if (!args[0]) { return message.send(new bot.embed().uhoh("Please specify the crop you want to plant!")) }
         if (!cropData[args[0]] || !userdata.seeds.common[args[0]].discovered) { return message.send(new bot.embed().uhoh("Please include a valid plant type")) }
 
         return message.send("Planting all!").then(async (msg) => {
