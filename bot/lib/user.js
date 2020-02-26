@@ -1,5 +1,6 @@
 const flags = require("./flags.json")
 const { PERMISSIONS } = require("./help-info.js")
+const { ownerIDs } = require("../config.json")
 
 
 /**
@@ -114,9 +115,8 @@ class User {
     this.requests = [],
     /** @prop {import("./npc").Farmer[]} - the farmers in the user's village. */
     this.farmers = farmers,
-    /** @prop {import("./help-info").PermissionsSymbol} - the farmers in the user's village. */
-    this.permissions = PERMISSIONS.EVERYONE
-
+    /** @prop {import("./help-info").PermissionsLevels} - the farmers in the user's village. */
+    this.permissions = ownerIDs.includes(author.id) ? +Infinity : PERMISSIONS.EVERYONE
     console.log(this)
   }
 }

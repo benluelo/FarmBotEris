@@ -31,10 +31,7 @@ const bot = new FarmBotClass(process.env.TOKEN, {
 })
 
 // add onto bot var
-bot.ownersIDs = [
-  "527729016849956874", // ben
-  "295255543596187650" // tyler
-]
+bot.ownersIDs = require("./config.json").ownersIDs
 bot.config = require("./config.json")
 bot.color = require("./src/color.js")
 bot.log = require("./src/logger.js")

@@ -19,8 +19,8 @@
  * @typedef {Object} PERMISSIONS
  * @property {PermissionsLevels} EVERYONE - commands that everyone has access to.
  * @property {PermissionsLevels} MODERATORS - commands that only bot moderators have access to.
- * @property {PermissionsLevels} ADMINS - commands that only bot admins have access to.
- * @property {PermissionsLevels} DEVELOPERS - commands that are only to be used by the developers (i.e. only Ben & Tyler).
+ * @property {PermissionsLevels} OWNERS - commands that only bot admins have access to.
+ * @property {PermissionsLevels} DEVELOPMENT - commands that are only to be used by the developers (i.e. only Ben & Tyler).
  */
 /**
  * @type {PERMISSIONS}
@@ -28,27 +28,27 @@
 const PERMISSIONS = Object.freeze({
   EVERYONE: 0,
   MODERATORS: 1,
-  ADMINS: 2,
-  DEVELOPERS: 3
+  OWNERS: 2,
+  DEVELOPMENT: 3
 })
 
 /**
  * The different categories of commands.
  * @typedef {Object} CATEGORIES
  * @property {CategoriesSymbol} FARMING - commands related to farming.
- * @property {CategoriesSymbol} DEVELOPMENT - commands used for bot development.
  * @property {CategoriesSymbol} UTILITY - useful commands for information about the bot.
  * @property {CategoriesSymbol} OWNER - commands that are only to be used by the owners (i.e. only Ben & Tyler).
+ * @property {CategoriesSymbol} DEVELOPMENT - commands used for bot development.
  */
 /**
  * @readonly
  * @type {CATEGORIES}
  */
 const CATEGORIES = Object.freeze({
-  FARMING: Symbol("farming"),
-  UTILITY: Symbol("utility"),
-  OWNER: Symbol("owner"),
-  DEVELOPMENT: Symbol("development")
+  FARMING: Symbol("🌱 Farming"),
+  UTILITY: Symbol("⚙️ Utility"),
+  OWNER: Symbol("🥑 Owner"),
+  DEVELOPMENT: Symbol("📜 Development")
 })
 
 /** @type {Object<string, CommandHelpObject>} */
@@ -71,14 +71,14 @@ const commands = {
     description: "Delete a user from the database.",
     usage: "farm deleteuser [@mention]",
     examples: false,
-    permissionLevel: PERMISSIONS.DEVELOPERS,
+    permissionLevel: PERMISSIONS.DEVELOPMENT,
     category: CATEGORIES.DEVELOPMENT
   },
   eval: {
     description: "no",
     usage:  "​no",
     examples: "​no",
-    permissionLevel: PERMISSIONS.DEVELOPERS,
+    permissionLevel: PERMISSIONS.OWNERS,
     category: CATEGORIES.OWNER
   },
   harvest: {
@@ -188,7 +188,7 @@ const commands = {
     description: "stops/restarts the bot",
     usage: "​farm stop [restart]",
     examples: "​farm stop\nfarm stop restart",
-    permissionLevel: PERMISSIONS.DEVELOPERS,
+    permissionLevel: PERMISSIONS.DEVELOPMENT,
     category: CATEGORIES.UTILITY
   },
   village: {
@@ -198,6 +198,15 @@ const commands = {
     examples: false,
     permissionLevel: PERMISSIONS.EVERYONE,
     category: CATEGORIES.FARMING
+  }
+}
+
+// remove development commands if in production
+if (!(process.env.DEVELOPMENT == "true")) {
+  for (const cmd in commands) {
+    if (commands[cmd].permissionLevel == PERMISSIONS.DEVELOPMENT) {
+      delete commands[cmd]
+    }
   }
 }
 
@@ -211,8 +220,6 @@ const fullHelp = {}
 for (const perm in PERMISSIONS) {
   fullHelp[PERMISSIONS[perm]] = []
 }
-
-console.log(fullHelp)
 
 /**
  * @type {Object<number, {
@@ -230,7 +237,6 @@ const fullHelpEmbeds = Object.fromEntries(Object.values(PERMISSIONS).map(((val) 
 
 for (const command in commands) {
   const current = commands[command]
-  console.log(current)
   fullHelp[current.permissionLevel].push(command)
   const e = new Embed()
     .setTitle(`Help for \`${command}\``)
@@ -239,21 +245,42 @@ for (const command in commands) {
   if (current.examples) { e.addField("**__Examples__:**", `\`\`\`${current.examples}\`\`\``) }
   helpEmbeds[command] = e
 }
-console.log(fullHelp)
 
 // make a different embed for each permission level. each successive level has all the permissions of the previous level.
 
-
-console.log(fullHelpEmbeds)
-
-for (const permission in fullHelp) {
-  console.log("permission level:", permission)
-  for (const category in fullHelp[permission]) {
-    console.log("category:", fullHelp[permission][category], commands[fullHelp[permission][category]].category)
+for (const i in fullHelp) {
+  for (const com in fullHelp[i]) {
+    for (const permlvl in fullHelpEmbeds) {
+      if (i <= permlvl) {
+        fullHelpEmbeds[permlvl][commands[fullHelp[i][com]].category].push(fullHelp[i][com])
+      }
+    }
   }
 }
 
+// create the actual embeds now lol
+for (const i in fullHelpEmbeds) {
+  const PERM_LEVEL = Object.keys(PERMISSIONS).find((key) => {
+    console.log(i)
+    console.log(PERMISSIONS[key])
+    return PERMISSIONS[key] == i
+  })
+  const tempEmbed = new Embed()
+    .setTitle("Help for FarmBot")
+    .setFooter(process.env.DEVELOPMENT ? PERM_LEVEL : null)
+  Object.getOwnPropertySymbols(fullHelpEmbeds[i]).forEach((cat) => {
+    if (fullHelpEmbeds[i][cat].length != 0) {
+      tempEmbed.addField(`**${cat.description}**`, fullHelpEmbeds[i][cat].map((e) => { return `\`${e}\`` }).join(", "))
+    }
+  })
+  fullHelpEmbeds[i] = tempEmbed
+}
+
+console.log(JSON.stringify(fullHelpEmbeds, null, 4))
+
 module.exports = {
   PERMISSIONS,
-  CATEGORIES
+  CATEGORIES,
+  fullHelpEmbeds,
+  helpEmbeds
 }
