@@ -288,39 +288,11 @@ class Attachment {
   }
 }
 
-const { CommandClient } = require("eris")
-class FarmBotClass extends CommandClient {
-  constructor(token, options, commandOptions) {
-    super(token, options, commandOptions)
-  }
-  async onMessageCreate(msg) {
-    // copied from Client.js (don't actually think this is being used as i don't know how to use em lmao)
-    /**
-    * Create a message in a channel
-    * Note: If you want to DM someone, the user ID is **not** the DM channel ID. use Client.getDMChannel() to get the DM channel for a user
-    * @arg {String | Array | Object} content A string, array of strings, or object. If an object is passed:
-    * @arg {String} content.content A content string
-    * @arg {Object} [content.embed] An embed object. See [the official Discord API documentation entry](https://discordapp.com/developers/docs/resources/channel#embed-object) for object structure
-    * @arg {Boolean} [content.tts] Set the message TTS flag
-    * @arg {Boolean} [content.disableEveryone] Whether to filter @everyone/@here or not (overrides default)
-    * @arg {Object | Object[]} [file] A file object (or an Array of them)
-    * @arg {Buffer} file.file A buffer containing file data
-    * @arg {String} file.name What to name the file
-    * @returns {Promise<Message>}
-    */
-    msg.send = (content, file) => {
-      return this.createMessage(msg.channel.id, content, file)
-    }
-    super.onMessageCreate(msg)
-  }
-}
-
 module.exports = {
   Embed,
   ProgressBar,
   XPProgressBar,
-  Attachment,
-  FarmBotClass
+  Attachment
 }
 
 // eslint-disable-next-line no-unused-vars

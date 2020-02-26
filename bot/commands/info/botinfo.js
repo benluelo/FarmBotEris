@@ -12,6 +12,6 @@ exports.run = (bot) => {
       .addField(":hourglass: Uptime", botUptime)
       .addField(":rosette: Version:", versionNumber)
     message.send(infoEmbed)
-  }, bot.cooldown(15000)
+  }, bot.cooldown(3000)
   )
 }

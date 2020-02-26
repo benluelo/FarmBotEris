@@ -53,7 +53,7 @@ exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(15000))
+  }, bot.cooldown(30000))
   command.registerSubcommand("view", (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
       if (err) { bot.log.error(err) }
@@ -83,7 +83,7 @@ exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  })
+  }, bot.cooldown(10000))
   command.registerSubcommand("fill", (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
       if (err) { bot.log.error(err) }
@@ -94,7 +94,7 @@ exports.run = (bot) => {
         }
 
         const orderID = parseInt(args[0]) - 1
-        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return message.sned(new bot.embed()
+        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return message.send(new bot.embed()
           .setDescription(`**${args[0]}** is not a valid order ID!`)
           .setColor(bot.color.red)) }
         const marketFilledEmbed = new bot.embed()
@@ -158,12 +158,12 @@ exports.run = (bot) => {
             $set: { [`seeds.common.${user2.farmers[farmerIndex].unlockableCrop}.discovered`]: true }
           })
         }
-        message.sned(marketFilledEmbed)
+        message.send(marketFilledEmbed)
       } else {
         bot.startMessage(message)
       }
     })
-  })
+  }, bot.cooldown(10000))
 
   /**
    * @param {{

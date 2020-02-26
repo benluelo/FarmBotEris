@@ -21,5 +21,5 @@ exports.run = (bot) => {
         .setTimestamp()
       await message.send(seedsEmbed)
     })
-  })
+  }, bot.cooldown(3000))
 }

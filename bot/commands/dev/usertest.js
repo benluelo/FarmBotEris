@@ -1,4 +1,4 @@
-/** @param {import("../../index.js").Bot} bot */
+/** @param {import("../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
   bot.registerCommand("usertest", (message, args) => {
     bot.getUser(message.author.id, (err, userdata) => {
@@ -7,7 +7,7 @@ module.exports.run = (bot) => {
       }
 
       if (userdata) {
-        console.log(userdata)
+        console.log("userdata! " + userdata.nickname)
       } else {
         console.log("no userdata :(")
       }

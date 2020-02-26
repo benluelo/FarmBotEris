@@ -1,4 +1,4 @@
-/** @param {import("../../index.js").Bot} bot */
+/** @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   bot.registerCommand("money", (message) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, (err, userdata) => {
@@ -14,6 +14,6 @@ exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(15000))
+  }, bot.cooldown(2000))
   bot.registerCommandAlias("cash", "money")
 }

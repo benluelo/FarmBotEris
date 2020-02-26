@@ -4,7 +4,7 @@ const { User } = require("../../lib/user.js")
 
 // console.log(PERMISSIONS)
 
-/** @param {import("../../../index.js").Bot} bot */
+/** @param {import("../../lib/FarmBotClient")} bot */
 exports.run = (bot) => {
   bot.registerCommand("start", (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
@@ -20,7 +20,7 @@ exports.run = (bot) => {
           let embed = new bot.embed({ title: "Send `farm start <region>` to start farming!" })
           for (const flag in flags) {
             count++
-            embed.addField(flag, flags[flag], true)
+            embed.addField(flag.toLowerCase().split(" ").map(), flags[flag], true)
 
             if (12 === count) {
               count = 0
@@ -35,12 +35,12 @@ exports.run = (bot) => {
           return await EmbedPaginator.createPaginationEmbed(message, myEmbeds)
         } else {
           const region = args.join(" ").toLowerCase()
-          if (!flags[region]) { return message.send(`${region} is not a valid region!`) }
+          if (!flags[region]) { return message.send(new bot.embed().uhno(`Couldn't find **"${region}"** anywhere on a map... maybe try somewhere else?`)) }
           const farmers = await require("../../lib/get-farmers.js").run(region)
           bot.database.Userdata.insertOne(new User(message.author, region, farmers))
           message.send(new bot.embed()
             .setTitle(`Welcome to ${bot.user.username}, ${message.author.username}! ${flags[region]}`)
-            .setDescription("Do `f!help` to display the full list of commands the bot has!")
+            .setDescription("Do `farm help` to display the full list of commands the bot has!")
             .setColor(bot.color.lightgreen)
           )
         }
@@ -49,5 +49,5 @@ exports.run = (bot) => {
         message.send(new bot.embed().uhoh(`You've already started farming, ${message.author.username}!`))
       }
     })
-  }, bot.cooldown(60000))
+  }, bot.cooldown(5000))
 }

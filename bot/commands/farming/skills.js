@@ -43,5 +43,5 @@ module.exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  })
+  }, bot.cooldown(5000))
 }

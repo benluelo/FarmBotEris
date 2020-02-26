@@ -51,5 +51,5 @@ exports.run = async (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(60000))
+  }, bot.cooldown(5000))
 }

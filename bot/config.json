@@ -8,17 +8,17 @@
   "farminfo": {
     "growTimes": {
       "apple": 30000,
-      "orange": 30000,
-      "lemon": 30000,
-      "pear": 30000,
-      "cherry": 30000,
-      "peach": 30000,
-      "mango": 30000,
-      "melon": 30000,
-      "grapes": 30000,
-      "strawberry": 30000,
-      "banana": 30000,
-      "pineapple": 30000
+      "orange": 300000,
+      "lemon": 900000,
+      "pear": 1800000,
+      "cherry": 3600000,
+      "peach": 5400000,
+      "mango": 10800000,
+      "melon": 16200000,
+      "grapes": 25200000,
+      "strawberry": 34200000,
+      "banana": 37800000,
+      "pineapple": 43200000
     }
   },
   "ownersIDs": [

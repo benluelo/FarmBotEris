@@ -19,8 +19,8 @@ exports.run = (bot) => {
 
           // check if input is valid
           const plotNumber = parsePlotNumber(plot)
-          const truePlant = Object.keys(userdata.seeds.common).includes(crop)
-          if (false !== plotNumber && truePlant) {
+          if (!cropData[args[0]] || !userdata.seeds.common[args[0]].discovered) { return message.send(new bot.embed().uhoh("Please include a valid plant type")) }
+          if (false !== plotNumber) {
 
             if (plotNumber >= userdata.farm.length) {
               return message.send(new bot.embed().uhoh("You don't own that plot!"))
@@ -55,8 +55,7 @@ exports.run = (bot) => {
       if (userdata) {
 
         if (!args[0]) { return message.send(new bot.embed().uhoh("Please add the plant you want to plant")) }
-        if (!cropData[args[0]]) { return message.send(new bot.embed().uhoh("Please include a valid plant type")) }
-        if (!userdata.seeds.common[args[0]].discovered) { return } // silent quit
+        if (!cropData[args[0]] || !userdata.seeds.common[args[0]].discovered) { return message.send(new bot.embed().uhoh("Please include a valid plant type")) }
 
         return message.send("Planting all!").then(async (msg) => {
 
@@ -80,5 +79,5 @@ exports.run = (bot) => {
       }
     })
 
-  }, bot.cooldown(15000))
+  }, bot.cooldown(5000))
 }

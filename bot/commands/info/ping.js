@@ -5,5 +5,5 @@ exports.run = (bot) => {
     message.send("Pinging...").then((msg) => {
       msg.edit(new bot.embed().success("Pong! " + (Date.now() - startTime) + "ms."))
     })
-  }, bot.cooldown(5000))
+  }, bot.cooldown(1000))
 }

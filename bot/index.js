@@ -1,8 +1,8 @@
-const { FarmBotClass } = require("./lib/classes")
+const FarmBotClient = require("./lib/FarmBotClient.js")
 require("dotenv").config({ path: ".env" })
 
-/** @type {Bot} */
-const bot = new FarmBotClass(process.env.TOKEN, {
+/** @type {import("./lib/FarmBotClient.js")} */
+const bot = new FarmBotClient(process.env.TOKEN, {
   disableEveryone: true,
   defaultImageFormat: "png",
   disableEvents: {
@@ -33,35 +33,11 @@ const bot = new FarmBotClass(process.env.TOKEN, {
 // add onto bot var
 bot.ownersIDs = require("./config.json").ownersIDs
 bot.config = require("./config.json")
-bot.color = require("./src/color.js")
-bot.log = require("./src/logger.js")
-bot.cooldown = require("./src/cooldown.js")
-bot.formatMoney = require("./src/format-money.js")
-bot.getUser = require("./src/get-user.js")
-bot.startMessage = require("./src/start-message.js")
 bot.embed = require("./lib/classes").Embed
 
 require("./src/command-loader.js")(bot)
 require("./src/event-loader.js")(bot)
-require("./src/database.js")(bot)
+
+bot.initDB()
 
 bot.connect()
-
-/**
- * The variables that get added onto the bot.
- * @typedef {Object} BotVars
- * @prop {String} ownersIDs
- * @prop {import("./src/color.js")} color - the different colors for the bot.
- * @prop {import("./src/logger.js")} log - different ways to log stuff.
- * @prop {import("./src/cooldown")} cooldown
- * @prop {import("./src/format-money.js")} formatMoney - formats a monetary amount for sending in messages.
- * @prop {import("./src/get-user.js")} getUser
- * @prop {import("./src/start-message.js")} startMessage - the message to send when the user isn't in the database (i.e. hasn't started yet).
- * @prop {Object} database
- * @prop {import("mongodb").MongoClient} database.db - the database
- * @prop {import("mongodb").Collection} database.Userdata - the userdata collection (`farmbot -> farm`)
- */
-
-/**
- * @typedef {import("eris").CommandClient & BotVars} Bot
- */

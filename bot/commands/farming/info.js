@@ -8,7 +8,7 @@ function clamp(num, min, max) {
   return num <= min ? min : num >= max ? max : num
 }
 
-/** @param {import("../../index.js").Bot} bot */
+/** @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   bot.registerCommand("info", async (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
@@ -92,5 +92,5 @@ exports.run = (bot) => {
         message.send(new bot.embed().uhoh("Please specify the plot you want info on!"))
       }
     })
-  }, bot.cooldown(15000))
+  }, bot.cooldown(3000))
 }

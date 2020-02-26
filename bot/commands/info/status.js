@@ -60,5 +60,5 @@ exports.run = (bot) => {
     requirements: {
       userIDs: bot.ownersIDs
     }
-  })
+  }, bot.cooldown(2000))
 }

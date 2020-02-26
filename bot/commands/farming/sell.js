@@ -2,7 +2,7 @@ const cropData = require("../../lib/crop-data.js")
 const getPriceOfSeeds = require("../../lib/get-price-of-seeds")
 const { getLevel } = require("../../../helpers/level-test.js")
 
-/** @param {import("../../index.js").Bot} bot */
+/** @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   bot.registerCommand("sell", (message, args) => {
     // f!sell <plant> [amount]
@@ -120,5 +120,5 @@ exports.run = (bot) => {
       }
     })
 
-  }, bot.cooldown(15000))
+  }, bot.cooldown(5000))
 }
