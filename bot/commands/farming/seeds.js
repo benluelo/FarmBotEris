@@ -19,7 +19,7 @@ exports.run = (bot) => {
         .setDescription("Prices update every hour\n" + seeds)
         .setColor(bot.color.lightgreen)
         .setTimestamp()
-      await bot.createMessage(message.channel.id, seedsEmbed)
+      await message.send(seedsEmbed)
     })
   })
 }

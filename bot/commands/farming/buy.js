@@ -13,7 +13,7 @@ exports.run = async (bot) => {
 
       if (userdata) {
         if (userdata.farm.length >= MAX_PLOTS) {
-          return bot.createMessage(message.channel.id, new bot.embed().error(`${message.author.username}, you already have the maximum number of plots!`))
+          return message.send(new bot.embed().error(`${message.author.username}, you already have the maximum number of plots!`))
         }
 
         const numberOfCurrentPlots = userdata.farm.length
@@ -24,7 +24,7 @@ exports.run = async (bot) => {
             .setDescription(`The next plot costs **${priceOfNextPlot}** ${emoji.coin}`)
             .setColor(bot.color.error)
 
-          return bot.createMessage(message.channel.id, notEnoughEmbed)
+          return message.send(notEnoughEmbed)
         }
 
         await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
@@ -45,7 +45,7 @@ exports.run = async (bot) => {
           const plotGotEmbed = new bot.embed()
             .setDescription(`Plot purchased for **${bot.formatMoney(priceOfNextPlot)}**! You now own ${res.value.farm.length + 1} plots!${res.value.farm.length + 1 === MAX_PLOTS ? " This is the maximum amount of plots!" : ""}`)
             .setColor(bot.color.success)
-          return bot.createMessage(message.channel.id, plotGotEmbed)
+          return message.send(plotGotEmbed)
         })
       } else {
         bot.startMessage(message)

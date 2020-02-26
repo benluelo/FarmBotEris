@@ -50,7 +50,7 @@ exports.run = (bot) => {
           .setColor(bot.color.lightgreen)
           .setDescription(invItemString)
 
-        bot.createMessage(message.channel.id, invEmbed)
+        message.send(invEmbed)
       } else {
         bot.startMessage(message)
       }

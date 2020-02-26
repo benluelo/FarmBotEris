@@ -14,7 +14,7 @@ exports.run = (bot) => {
         const crop = args[1]
 
         // check specified plot
-        if (!plot) { return bot.createMessage(message.channel.id, new bot.embed().error("You have to specify a plot to plant on!")) }
+        if (!plot) { return message.send(new bot.embed().error("You have to specify a plot to plant on!")) }
         if (crop && plot) {
 
           // check if input is valid
@@ -23,10 +23,10 @@ exports.run = (bot) => {
           if (false !== plotNumber && truePlant) {
 
             if (plotNumber >= userdata.farm.length) {
-              return bot.createMessage(message.channel.id, new bot.embed().error("You don't own that plot!"))
+              return message.send(new bot.embed().error("You don't own that plot!"))
             }
             if ("dirt" != userdata.farm[plotNumber].crop.planted) {
-              return bot.createMessage(message.channel.id, new bot.embed().error(`There's already a crop planted on plot \`${plot}\`!`))
+              return message.send(new bot.embed().error(`There's already a crop planted on plot \`${plot}\`!`))
             }
             await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
               {
@@ -36,12 +36,12 @@ exports.run = (bot) => {
                 }
               }
             )
-            return bot.createMessage(message.channel.id, new bot.embed().success(`Planted ${cropData[crop].emoji} on \`${plot}\`!`))
+            return message.send(new bot.embed().success(`Planted ${cropData[crop].emoji} on \`${plot}\`!`))
           } else {
-            return bot.createMessage(message.channel.id, new bot.embed().error("Invalid input! Please try again with the format `<letter><number> <plant>`."))
+            return message.send(new bot.embed().error("Invalid input! Please try again with the format `<letter><number> <plant>`."))
           }
         } else {
-          return bot.createMessage(message.channel.id, new bot.embed().error("You have to specify a crop to plant!"))
+          return message.send(new bot.embed().error("You have to specify a crop to plant!"))
         }
       } else {
         bot.startMessage(message)
@@ -54,11 +54,11 @@ exports.run = (bot) => {
 
       if (userdata) {
 
-        if (!args[0]) { return bot.createMessage(message.channel.id, new bot.embed().error("Please add the plant you want to plant")) }
-        if (!cropData[args[0]]) { return bot.createMessage(message.channel.id, new bot.embed().error("Please include a valid plant type")) }
+        if (!args[0]) { return message.send(new bot.embed().error("Please add the plant you want to plant")) }
+        if (!cropData[args[0]]) { return message.send(new bot.embed().error("Please include a valid plant type")) }
         if (!userdata.seeds.common[args[0]].discovered) { return } // silent quit
 
-        return bot.createMessage(message.channel.id, "Planting all!").then(async (msg) => {
+        return message.send("Planting all!").then(async (msg) => {
 
           let totalPlots = 0
 

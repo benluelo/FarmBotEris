@@ -241,6 +241,8 @@ for (const command in commands) {
   const e = new Embed()
     .setTitle(`Help for \`${command}\``)
     .setDescription(current.description)
+    .setColor(0x00b3b3)
+    .setFooter("<> - required  |  [] - optional")
     .addField("**__Usage__:**", `\`\`\`${current.usage}\`\`\``)
   if (current.examples) { e.addField("**__Examples__:**", `\`\`\`${current.examples}\`\`\``) }
   helpEmbeds[command] = e
@@ -261,12 +263,12 @@ for (const i in fullHelp) {
 // create the actual embeds now lol
 for (const i in fullHelpEmbeds) {
   const PERM_LEVEL = Object.keys(PERMISSIONS).find((key) => {
-    console.log(i)
-    console.log(PERMISSIONS[key])
     return PERMISSIONS[key] == i
   })
   const tempEmbed = new Embed()
-    .setTitle("Help for FarmBot")
+    .setTitle("FarmBot Help")
+    .setDescription("This is the full list of commands for FarmBot. Send `farm help <command>` for detailed information about a specific command.")
+    .setColor(0x00b3b3)
     .setFooter(process.env.DEVELOPMENT ? PERM_LEVEL : null)
   Object.getOwnPropertySymbols(fullHelpEmbeds[i]).forEach((cat) => {
     if (fullHelpEmbeds[i][cat].length != 0) {

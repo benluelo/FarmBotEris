@@ -20,7 +20,7 @@ module.exports.run = (bot) => {
 
             skillsEmbed.addField(cropData[seed].emoji, `Level: **${XPBar.level()}**` + "\n" + XPBar.show(), true)
           }
-          return bot.createMessage(message.channel.id, skillsEmbed)
+          return message.send(skillsEmbed)
         } else {
           if (cropData[args[0]]) {
             const attachment = new Attachment(args[0])
@@ -32,9 +32,9 @@ module.exports.run = (bot) => {
               .setThumbnail(attachment.link())
               .addField(`Level: **${XPBar.level()}**`, XPBar.show())
 
-            return bot.createMessage(message.channel.id, seedSkillEmbed, attachment.send())
+            return message.send(seedSkillEmbed, attachment.send())
           } else {
-            return bot.createMessage(message.channel.id, new bot.embed().error(`**${args[0]}** isn't a crop!`))
+            return message.send(new bot.embed().error(`**${args[0]}** isn't a crop!`))
           }
         }
       } else {

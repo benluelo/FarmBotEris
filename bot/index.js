@@ -1,4 +1,4 @@
-const FarmBotClass = require("./lib/classes").FarmBotClass
+const { FarmBotClass } = require("./lib/classes")
 require("dotenv").config({ path: ".env" })
 
 /** @type {Bot} */

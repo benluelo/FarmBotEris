@@ -6,14 +6,14 @@ exports.run = (bot) => {
         const deleteUserEmbed = new bot.embed().error(`**${message.author.username} (${message.author.id})**, account has been deleted`)
 
         bot.database.Userdata.deleteOne({ userID: message.author.id })
-        message.sendMessage(deleteUserEmbed)
+        message.send(deleteUserEmbed)
       } else {
         // delete someones elses account
         const userToDelete = message.mentions[0]
         const deleteUserEmbed = new bot.embed().error(`**${userToDelete.username} (${userToDelete.id})**, account has been deleted`)
 
         bot.database.Userdata.deleteOne({ userID: userToDelete.id })
-        message.sendMessage(deleteUserEmbed)
+        message.send(deleteUserEmbed)
       }
     }, {
       requirements: {

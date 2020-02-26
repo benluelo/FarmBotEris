@@ -287,8 +287,8 @@ class Attachment {
   }
 }
 
-const Eris = require("eris")
-class FarmBotClass extends Eris.CommandClient {
+const { CommandClient } = require("eris")
+class FarmBotClass extends CommandClient {
   constructor(token, options, commandOptions) {
     super(token, options, commandOptions)
   }
@@ -307,8 +307,8 @@ class FarmBotClass extends Eris.CommandClient {
     * @arg {String} file.name What to name the file
     * @returns {Promise<Message>}
     */
-    msg.sendMessage = (content, file) => {
-      this.createMessage(msg.channel.id, content, file)
+    msg.send = (content, file) => {
+      return this.createMessage(msg.channel.id, content, file)
     }
     super.onMessageCreate(msg)
   }

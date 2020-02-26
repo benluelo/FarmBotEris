@@ -55,7 +55,7 @@ exports.run = (bot) => {
       .addBlankField(true)
       .addField("Development Mode", developmentMode, true)
 
-    await bot.createMessage(message.channel.id, statusEmbed)
+    await message.send(statusEmbed)
   }, {
     requirements: {
       userIDs: bot.ownersIDs

@@ -35,10 +35,10 @@ exports.run = (bot) => {
           return await EmbedPaginator.createPaginationEmbed(message, myEmbeds)
         } else {
           const region = args.join(" ").toLowerCase()
-          if (!flags[region]) { return bot.createMessage(message.channel.id, `${region} is not a valid region!`) }
+          if (!flags[region]) { return message.send(`${region} is not a valid region!`) }
           const farmers = await require("../../lib/get-farmers.js").run(region)
           bot.database.Userdata.insertOne(new User(message.author, region, farmers))
-          bot.createMessage(message.channel.id, new bot.embed()
+          message.send(new bot.embed()
             .setTitle(`Welcome to ${bot.user.username}, ${message.author.username}! ${flags[region]}`)
             .setDescription("Do `f!help` to display the full list of commands the bot has!")
             .setColor(bot.color.lightgreen)
@@ -46,7 +46,7 @@ exports.run = (bot) => {
         }
       }
       if (userdata) {
-        bot.createMessage(message.channel.id, new bot.embed().error(`You've already started farming, ${message.author.username}!`))
+        message.send(new bot.embed().error(`You've already started farming, ${message.author.username}!`))
       }
     })
   }, bot.cooldown(60000))

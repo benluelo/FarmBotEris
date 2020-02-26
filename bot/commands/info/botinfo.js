@@ -11,7 +11,7 @@ exports.run = (bot) => {
       .addField(":date: Created On:", botCreation)
       .addField(":hourglass: Uptime", botUptime)
       .addField(":rosette: Version:", versionNumber)
-    bot.createMessage(message.channel.id, infoEmbed)
+    message.send(infoEmbed)
   }, bot.cooldown(15000)
   )
 }

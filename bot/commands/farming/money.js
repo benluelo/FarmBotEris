@@ -9,7 +9,7 @@ exports.run = (bot) => {
           .setAuthor(message.author.username, null, message.author.avatarURL)
           .setColor(bot.color.lightgreen)
           .setDescription(`Balance: **${bot.formatMoney(userdata.money)}**`)
-        bot.createMessage(message.channel.id, moneyEmbed)
+        message.send(moneyEmbed)
       } else {
         bot.startMessage(message)
       }

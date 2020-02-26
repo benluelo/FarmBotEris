@@ -21,7 +21,7 @@ exports.run = async (bot) => {
         let plotsMsgTop = "<:blank:645355907206742023>" // rest of message (letters and plots)
 
         // send message to let the user know the farm is being built, then build the farm
-        bot.createMessage(message.channel.id, "Building farm...").then((msg) => {
+        message.send("Building farm...").then((msg) => {
           for (const plot in userFarm) {
             if (process.env.DEBUG === "true") { console.log(chalk.keyword("brown")("CHECKING PLOT #"), plot) }
 

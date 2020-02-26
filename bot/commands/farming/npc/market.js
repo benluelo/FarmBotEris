@@ -24,7 +24,7 @@ exports.run = (bot) => {
                 .newRequest(userdata.seeds.common)
             )
           }
-          messageToSend = await bot.createMessage(message.channel.id, "You have new requests!")
+          messageToSend = await message.send("You have new requests!")
 
           await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
             $push: {
@@ -41,7 +41,7 @@ exports.run = (bot) => {
         marketEmbed.addBlankField(true)
 
         if (!messageToSend) {
-          bot.createMessage(message.channel.id, marketEmbed)
+          message.send(marketEmbed)
         } else {
           await messageToSend.edit({
             ...marketEmbed,
@@ -60,12 +60,12 @@ exports.run = (bot) => {
 
       if (userdata) {
         if (!args[0]) {
-          return bot.createMessage(message.channel.id, new bot.embed().error("You have to specify an order to view!"))
+          return message.send(new bot.embed().error("You have to specify an order to view!"))
         }
 
         const orderID = parseInt(args[0]) - 1
         if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) {
-          return bot.createMessage(message.channel.id, new bot.embed().error(`**${args[0]}** is not a valid order ID!`))
+          return message.send(new bot.embed().error(`**${args[0]}** is not a valid order ID!`))
         }
         const marketViewEmbed = new bot.embed()
 
@@ -78,7 +78,7 @@ exports.run = (bot) => {
           .setColor(bot.color.market)
           .addField(p.shift(), p.shift())
           .addField(p.shift(), p.join("\n"))
-        bot.createMessage(message.channel.id, marketViewEmbed)
+        message.send(marketViewEmbed)
       } else {
         bot.startMessage(message)
       }
@@ -90,11 +90,11 @@ exports.run = (bot) => {
 
       if (userdata) {
         if (!args[0]) {
-          return bot.createMessage(message.channel.id, new bot.embed().error("You have to specify an order to fill!"))
+          return message.send(new bot.embed().error("You have to specify an order to fill!"))
         }
 
         const orderID = parseInt(args[0]) - 1
-        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return bot.createMessage(message.channel.id, new bot.embed()
+        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return message.sned(new bot.embed()
           .setDescription(`**${args[0]}** is not a valid order ID!`)
           .setColor(bot.color.red)) }
         const marketFilledEmbed = new bot.embed()
@@ -158,7 +158,7 @@ exports.run = (bot) => {
             $set: { [`seeds.common.${user2.farmers[farmerIndex].unlockableCrop}.discovered`]: true }
           })
         }
-        bot.createMessage(message.channel.id, marketFilledEmbed)
+        message.sned(marketFilledEmbed)
       } else {
         bot.startMessage(message)
       }
@@ -185,8 +185,8 @@ exports.run = (bot) => {
       "**__Want__:**",
       readableReq(req.want),
       "**__Rewards__:**",
-      `**├⮞ ${bot.formatMoney(req.rewards.money)}`,
-      `**└⮞ **${req.rewards.reputation}** rep`
+      `**├> ${bot.formatMoney(req.rewards.money)}`,
+      `**└> **${req.rewards.reputation}** rep`
     ]
   }
 }
@@ -270,7 +270,7 @@ function parseWants(preferences, request) {
  * @param {{name: String, emoji: String, amount: Number}[]} req
  */
 function readableReq(req) {
-  return req.map((r) => {
-    return `${r.emoji} x **${r.amount}**`
+  return req.map((r, i) => {
+    return `${(i == req.length - 1) ? "└" : "├"}> ${r.emoji} x **${r.amount}**`
   }).join("\n")
 }

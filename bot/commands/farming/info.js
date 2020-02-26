@@ -23,7 +23,7 @@ exports.run = (bot) => {
             if (process.env.DEBUG === "true") { console.log(plotNumber) }
 
             if (plotNumber >= userdata.farm.length) {
-              bot.createMessage(message.channel.id, new bot.embed().error("You don't own that plot!"))
+              message.send(new bot.embed().error("You don't own that plot!"))
               return
             } else {
               const userCrop = userdata.farm[plotNumber].crop
@@ -82,14 +82,14 @@ exports.run = (bot) => {
               }
               // console.log(f)
 
-              bot.createMessage(message.channel.id, infoEmbed, attachment.send())
+              message.send(infoEmbed, attachment.send())
             }
           } else {
             bot.startMessage(message)
           }
         }
       } else {
-        bot.createMessage(message.channel.id, new bot.embed().error("Please specify the plot you want info on!"))
+        message.send(new bot.embed().error("Please specify the plot you want info on!"))
       }
     })
   }, bot.cooldown(15000))

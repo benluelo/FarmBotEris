@@ -14,7 +14,7 @@ module.exports.run = (bot) => {
           const progressBar = new XPProgressBar(userdata.farmers[farmer].level, 10, userdata.farmers[farmer].wealth + 2)
           villageEmbed.addField(userdata.farmers[farmer].name, userdata.farmers[farmer].emoji + " Level  **" + progressBar.level() + "**\n" + progressBar.show(), true)
         }
-        bot.createMessage(message.channel.id, villageEmbed.addBlankField(true))
+        message.send(villageEmbed.addBlankField(true))
       } else {
         bot.startMessage(message)
       }

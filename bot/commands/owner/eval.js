@@ -14,12 +14,12 @@ exports.run = (bot) => {
           .addField(":white_check_mark: Result", `\`\`\`javascript\n${evaluated}\n\`\`\``)
           .addField(":alarm_clock: Evaluation Time", `${0 < hrDiff[0] ? `${hrDiff[0]}s` : ""}${hrDiff[1] / 1000000}ms.`)
 
-        bot.createMessage(message.channel.id, evalEmbed)
+        message.send(evalEmbed)
       } else {
-        bot.createMessage(message.channel.id, "Error while evaluating: `cannot evaluate nothing`")  // its a hard word ik FCKN LISTEN OK ITS 4AM 4AM!!!!!LOL     - leave that there for production lmao - agreed
+        message.send("Error while evaluating: `cannot evaluate nothing`")  // its a hard word ik FCKN LISTEN OK ITS 4AM 4AM!!!!!LOL     - leave that there for production lmao - agreed
       }
     } catch (e) {
-      bot.createMessage(message.channel.id, `Error while evaluating: \`${e.message}\``)
+      message.send(`Error while evaluating: \`${e.message}\``)
     }
   }, {
     requirements: {
