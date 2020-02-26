@@ -35,11 +35,11 @@ exports.run = (bot) => {
           return await EmbedPaginator.createPaginationEmbed(message, myEmbeds)
         } else {
           const region = args.join(" ").toLowerCase()
-          if (!flags[region]) { return message.send(new bot.embed().uhno(`Couldn't find **"${region}"** anywhere on a map... maybe try somewhere else?`)) }
+          if (!flags[region]) { return message.send(new bot.embed().uhoh(`Couldn't find **"${region}"** anywhere on a map... maybe try somewhere else?`)) }
           const farmers = await require("../../lib/get-farmers.js").run(region)
           bot.database.Userdata.insertOne(new User(message.author, region, farmers))
           message.send(new bot.embed()
-            .setTitle(`Welcome to ${bot.user.username}, ${message.author.username}! ${flags[region]}`)
+            .setTitle(`Welcome to ${bot.user.username}, ${message.author.username}!  ${flags[region]}`)
             .setDescription("Do `farm help` to display the full list of commands the bot has!")
             .setColor(bot.color.lightgreen)
           )

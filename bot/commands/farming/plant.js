@@ -36,7 +36,7 @@ module.exports.run = (bot) => {
                 }
               }
             )
-            return message.send(new bot.embed().success(`Planted ${cropData[crop].emoji} on \`${plot}\`!`))
+            return message.send(new bot.embed().success(`Planted ${cropData[crop].emoji} on \`${plot.charAt(0).toUpperCase() + plot.slice(1)}\`!`))
           } else {
             return message.send(new bot.embed().uhoh("Invalid input! Please try again with the format `<letter><number> <plant>`."))
           }
@@ -74,7 +74,7 @@ module.exports.run = (bot) => {
               })
             }
           }
-          msg.edit(new bot.embed().success(`Successfully planted ${totalPlots} plots!`))
+          msg.edit(new bot.embed().success(`Successfully planted ${cropData[args[0]].emoji} on ${totalPlots} plots!`))
         })
       }
     })

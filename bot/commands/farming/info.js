@@ -16,8 +16,8 @@ exports.run = (bot) => {
 
       // check for plant/plot info
       if (args[0]) {
-        const plotNumber = parsePlotNumber(args[0])
-        if (false !== plotNumber) {
+        const plotNumber = parsePlotNumber(args[0]) // plotNumber returns false and NaN depending on the input // doesn't act how you think it will
+        if (plotNumber !== false) { // this is broken asf
 
           if (userdata) {
             if (process.env.DEBUG === "true") { console.log(plotNumber) }
@@ -84,6 +84,8 @@ exports.run = (bot) => {
           } else {
             bot.startMessage(message)
           }
+        } else {
+          message.send(new bot.embed().uhoh("Please enter a valid plot format! `<letter><number>`"))
         }
       } else {
         message.send(new bot.embed().uhoh("Please specify the plot you want info on!"))

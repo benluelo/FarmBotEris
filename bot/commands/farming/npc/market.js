@@ -94,9 +94,7 @@ exports.run = (bot) => {
         }
 
         const orderID = parseInt(args[0]) - 1
-        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return message.send(new bot.embed()
-          .setDescription(`**${args[0]}** is not a valid order ID!`)
-          .setColor(bot.color.red)) }
+        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return message.send(new bot.embed().uhoh(`**${args[0]}** is not a valid order ID!`)) }
         const marketFilledEmbed = new bot.embed()
 
         const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
