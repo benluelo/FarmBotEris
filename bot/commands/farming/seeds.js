@@ -1,7 +1,7 @@
 const cropData = require("../../lib/crop-data.js")
 const getPriceOfSeeds = require("../../lib/get-price-of-seeds")
 
-/** @param {import("../../lib/FarmBotClient.js")} bot */
+/** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   bot.registerCommand("seeds", (message, args) => {

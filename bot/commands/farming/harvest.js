@@ -1,7 +1,7 @@
 const { parsePlotNumber } = require("../../lib/parse-plot-number")
 const cropData = require("../../lib/crop-data.js")
 
-/** @param {import("../../lib/FarmBotClient.js")} bot */
+/** @private @param {import("../../lib/FarmBotClient.js")} bot */
 module.exports.run = async (bot) => {
   bot.registerCommand("harvest", (message, args) => {
 

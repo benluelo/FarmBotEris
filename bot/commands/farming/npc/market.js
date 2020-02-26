@@ -3,7 +3,7 @@ const cropData = require("../../../lib/crop-data.js")
 const getPriceOfSeeds = require("../../../lib/get-price-of-seeds")
 const { getLevel } = require("../../../../helpers/level-test.js")
 
-/** @param {import("../../../lib/FarmBotClient.js")} bot */
+/** @private @param {import("../../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   const command = bot.registerCommand("market", (message, args) => {
@@ -164,17 +164,20 @@ exports.run = (bot) => {
   }, bot.cooldown(10000))
 
   /**
+   * @description Prettify the request.
    * @param {{
-      id: Number,
+      id: number,
       want: {
         name: import("../../../lib/crop-data.js").CropName,
         emoji: import("../../../lib/crop-data.js").CropEmoji,
-        amount: Number}[],
+        amount: number
+      }[],
       rewards: {
-        money: Number,
-        reputation: Number
+        money: number,
+        reputation: number
       }
-    }} req
+    }} req - The request to prettify.
+   * @returns {String} The prettified request.
    */
   function prettifyParsedRequest(req) {
     return [
@@ -190,9 +193,11 @@ exports.run = (bot) => {
 }
 
 /**
- * @param {import("../../../lib/npc.js").Request} request
- * @param {import("../../../lib/npc.js").Farmer[]} userFarmers
- * @param {(Number | String)} id
+ * @description Parse the provided request.
+ * @param {import("../../../lib/npc.js").Request} request - The request object.
+ * @param {import("../../../lib/npc.js").Farmer[]} userFarmers - The user's farmers (their "village").
+ * @param {(Number | String)} id - The ID of the request.
+ * @returns {Object} The parsed request.
  */
 function parseRequest(request, userFarmers, id) {
   const farmer = userFarmers.find((f) => {
@@ -217,11 +222,12 @@ function parseRequest(request, userFarmers, id) {
 }
 
 /**
- * Makes sense of the requests.
- * @param {Object} preferences
- * @param {import("../../../lib/farmer-data.js").tastes} preferences.taste
- * @param {import("../../../lib/farmer-data.js").colors} preferences.color
- * @param {import("../../../lib/npc.js").Request} request
+ * @description Makes sense of the requests.
+ * @param {Object} preferences - The farmer's preferences object.
+ * @param {import("../../../lib/farmer-data.js").tastes} preferences.taste - Their prefered tastes.
+ * @param {import("../../../lib/farmer-data.js").colors} preferences.color - Their prefered colors.
+ * @param {import("../../../lib/npc.js").Request} request - The request object from the user: {@link import("../../../user.js").User}.
+ * @returns {{val: Number, rep: Number, req: {name: import("../../../lib/crop-data.js").CropName, emoji: import("../../../lib/crop-data.js").CropEmoji, amount: Number}[]}} An array of the different items in the request.
  */
 function parseWants(preferences, request) {
   /** @type {{val: Number, rep: Number, req: {name: import("../../../lib/crop-data.js").CropName, emoji: import("../../../lib/crop-data.js").CropEmoji, amount: Number}[]}} */
@@ -265,7 +271,9 @@ function parseWants(preferences, request) {
 }
 
 /**
- * @param {{name: String, emoji: String, amount: Number}[]} req
+ * @description Makes the parsed requests readable and good for sending to the user.
+ * @param {{name: String, emoji: String, amount: Number}[]} req - The request.
+ * @returns {String} The reqdable request.
  */
 function readableReq(req) {
   return req.map((r, i) => {

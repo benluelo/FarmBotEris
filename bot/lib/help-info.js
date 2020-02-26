@@ -1,8 +1,8 @@
 /**
  * @typedef {Object} CommandHelpObject
- * @prop {String} description - the description for the command.
- * @prop {String} usage - how to use the command.
- * @prop {(String | Boolean)} examples - examples of how to use the command. `false` if there are no examples.
+ * @prop {String} description - The description for the command.
+ * @prop {String} usage - How to use the command.
+ * @prop {(String | Boolean)} examples - Examples of how to use the command. `false` if there are no examples.
  * @prop {PermissionsLevels} permissionLevel
  * @prop {CategoriesSymbol} category
  */
@@ -15,12 +15,12 @@
  */
 
 /**
- * The different permission levels for a command.
+ * @description The different permission levels for a command.
  * @typedef {Object} PERMISSIONS
- * @property {PermissionsLevels} EVERYONE - commands that everyone has access to.
- * @property {PermissionsLevels} MODERATORS - commands that only bot moderators have access to.
- * @property {PermissionsLevels} OWNERS - commands that only bot admins have access to.
- * @property {PermissionsLevels} DEVELOPMENT - commands that are only to be used by the developers (i.e. only Ben & Tyler).
+ * @prop {PermissionsLevels} EVERYONE - Commands that everyone has access to.
+ * @prop {PermissionsLevels} MODERATORS - Commands that only bot moderators have access to.
+ * @prop {PermissionsLevels} OWNERS - Commands that only bot admins have access to.
+ * @prop {PermissionsLevels} DEVELOPMENT - Commands that are only to be used by the developers (i.e. only Ben & Tyler).
  */
 /**
  * @type {PERMISSIONS}
@@ -33,12 +33,12 @@ const PERMISSIONS = Object.freeze({
 })
 
 /**
- * The different categories of commands.
+ * @description The different categories of commands.
  * @typedef {Object} CATEGORIES
- * @property {CategoriesSymbol} FARMING - commands related to farming.
- * @property {CategoriesSymbol} UTILITY - useful commands for information about the bot.
- * @property {CategoriesSymbol} OWNER - commands that are only to be used by the owners (i.e. only Ben & Tyler).
- * @property {CategoriesSymbol} DEVELOPMENT - commands used for bot development.
+ * @prop {CategoriesSymbol} FARMING - Commands related to farming.
+ * @prop {CategoriesSymbol} UTILITY - Useful commands for information about the bot.
+ * @prop {CategoriesSymbol} OWNER - Commands that are only to be used by the owners (i.e. only Ben & Tyler).
+ * @prop {CategoriesSymbol} DEVELOPMENT - Commands used for bot development.
  */
 /**
  * @type {CATEGORIES}

@@ -14,7 +14,7 @@ exports.run = (bot) => {
         .setDescription(`${bot.user.username} restarting in 5 seconds\n**${bot.guilds.size}** servers\n**${bot.users.size}** users`)
         .setColor(bot.color.red)
 
-        message.send(restartEmbed)
+      message.send(restartEmbed)
       setTimeout(() => { bot.disconnect({ reconnect: "auto" }) }, 10000)
     }
   }, {

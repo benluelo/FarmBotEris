@@ -1,6 +1,6 @@
 const help = require("../../lib/help-info.js")
 
-/** @param {import("../../lib/FarmBotClient.js")} bot */
+/** @private @param {import("../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
   bot.registerCommand("help", (message, args) => {
     bot.getUser(message.author.id, (err, userdata) => {

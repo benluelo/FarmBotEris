@@ -1,14 +1,21 @@
 const ms = require("parse-ms")
 const { ProgressBar, Attachment } = require("../../lib/classes")
 const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
-const cropData = require("../../lib/crop-data.js")
-const emoji = require("../../lib/emoji.json")
+// const cropData = require("../../lib/crop-data.js")
+// const emoji = require("../../lib/emoji.json")
 
+/**
+ * @description Clamps a number between two provided values.
+ * @param {Number} num - The number to clamp.
+ * @param {Number} min - The minimum value for the number.
+ * @param {Number} max - The maximum value for the number.
+ * @returns {Number} The clamped number.
+ */
 function clamp(num, min, max) {
   return num <= min ? min : num >= max ? max : num
 }
 
-/** @param {import("../../lib/FarmBotClient.js")} bot */
+/** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   bot.registerCommand("info", async (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {

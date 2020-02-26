@@ -4,7 +4,7 @@ const { User } = require("../../lib/user.js")
 
 // console.log(PERMISSIONS)
 
-/** @param {import("../../lib/FarmBotClient")} bot */
+/** @private @param {import("../../lib/FarmBotClient")} bot */
 exports.run = (bot) => {
   bot.registerCommand("start", (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {

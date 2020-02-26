@@ -1,5 +1,5 @@
-/** @param {import("../../lib/FarmBotClient.js")} bot */
-exports.run = (bot) => {
+/** @private @param {import("../../lib/FarmBotClient.js")} bot */
+module.exports.run = (bot) => {
   if ("true" == process.env.DEVELOPMENT) {
     bot.registerCommand("deleteuser", (message) => {
       if (!message.mentions[0]) {

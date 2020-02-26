@@ -2,7 +2,7 @@ const cropData = require("../../lib/crop-data.js")
 const getPriceOfSeeds = require("../../lib/get-price-of-seeds")
 const { getLevel } = require("../../../helpers/level-test.js")
 
-/** @param {import("../../lib/FarmBotClient.js")} bot */
+/** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   bot.registerCommand("sell", (message, args) => {
     // f!sell <plant> [amount]
@@ -29,7 +29,7 @@ exports.run = (bot) => {
           if (userdata.seeds.common[crop].amount >= numAmount) {
 
             if (process.env.DEBUG === "true") {
-              console.log(crop)
+              console.log("Crop:", crop)
               console.log("Seed price:", getPriceOfSeeds[crop])
               console.log("Level:", getLevel(userdata.seeds.common[crop].level).level)
             }

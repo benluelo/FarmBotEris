@@ -2,9 +2,9 @@
 
 /**
  * @typedef {Object} CropData
- * @property {CropEmoji} crop.emoji
- * @property {import("../lib/farmer-data.js").colors} crop.color
- * @property {import("../lib/farmer-data.js").tastes[]} crop.flavour
+ * @prop {CropEmoji} crop.emoji
+ * @prop {import("../lib/farmer-data.js").colors} crop.color
+ * @prop {import("../lib/farmer-data.js").tastes[]} crop.flavour
  */
 
 /**

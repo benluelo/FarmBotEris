@@ -1,4 +1,4 @@
-/** @param {import("../../lib/FarmBotClient.js")} bot */
+/** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   bot.registerCommand("money", (message) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, (err, userdata) => {

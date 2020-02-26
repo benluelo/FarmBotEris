@@ -8,11 +8,16 @@ class FarmBotClient extends CommandClient {
   constructor(token, options, commandOptions) {
     super(token, options, commandOptions)
 
+    /**
+     * @type {Object}
+     * @prop {import("mongodb").MongoClient} database.db - The database.
+     * @prop {import("mongodb").Collection} database.Userdata - The userdata collection (`farmbot -> farm`).
+     */
     this.database = undefined
     this.db = undefined
 
     /**
-     * @type {Object<string, number>} - the different colors for the bot.
+     * @type {Object<string, number>} - The different colors for the bot.
      */
     this.color = {
       market: 0x964b00,
@@ -27,18 +32,20 @@ class FarmBotClient extends CommandClient {
   async onMessageCreate(msg) {
     // copied from Client.js (don't actually think this is being used as i don't know how to use em lmao)
     /**
-    * Create a message in a channel
-    * Note: If you want to DM someone, the user ID is **not** the DM channel ID. use Client.getDMChannel() to get the DM channel for a user
-    * @arg {String | Array | Object} content A string, array of strings, or object. If an object is passed:
-    * @arg {String} content.content A content string
-    * @arg {Object} [content.embed] An embed object. See [the official Discord API documentation entry](https://discordapp.com/developers/docs/resources/channel#embed-object) for object structure
-    * @arg {Boolean} [content.tts] Set the message TTS flag
-    * @arg {Boolean} [content.disableEveryone] Whether to filter @everyone/@here or not (overrides default)
-    * @arg {Object | Object[]} [file] A file object (or an Array of them)
-    * @arg {Buffer} file.file A buffer containing file data
-    * @arg {String} file.name What to name the file
-    * @returns {Promise<Message>}
-    */
+     * @description
+     * Create a message in a channel.
+     * Note: If you want to DM someone, the user ID is **not** the DM channel ID. use Client.getDMChannel() to get the DM channel for a user.
+     *
+     * @param {String | Array | Object} content - A string, array of strings, or object. If an object is passed:
+     * @param {String} content.content - A content string.
+     * @param {Object} [content.embed] - An embed object. See [the official Discord API documentation entry](https://discordapp.com/developers/docs/resources/channel#embed-object) for object structure.
+     * @param {Boolean} [content.tts] - Set the message TTS flag.
+     * @param {Boolean} [content.disableEveryone] - Whether to filter @everyone/@here or not (overrides default).
+     * @param {Object | Object[]} [file] - A file object (or an Array of them).
+     * @param {Buffer} file.file - A buffer containing file data.
+     * @param {String} file.name - What to name the file.
+     * @returns {Promise<import("eris").Message>} - The message that was sent.
+     */
     msg.send = (content, file) => {
       return this.createMessage(msg.channel.id, content, file)
     }
@@ -46,7 +53,9 @@ class FarmBotClient extends CommandClient {
   }
 
   /**
-   * @param {import("eris").Message} message - the message that was sent to the command.
+   * @description Sends a message telling the user that they haven't started with the bot yet.
+   * @param {import("eris").Message} message - The message that was sent to the command.
+   * @returns {Promise<import("eris").Message>} - The message that was sent to the user.
    */
   startMessage(message) {
     return message.send(new this.embed().uhoh(`You have to start farming first, **${message.author.username}**! Send \`farm start\` to start farming!`))
@@ -55,15 +64,15 @@ class FarmBotClient extends CommandClient {
   /**
    * @callback GetUserCallback
    * @param {import("mongodb").MongoError} err
-   * @param {import("../lib/user.js").User} userdata - the user's data
+   * @param {import("../lib/user.js").User} userdata - The user's data.
    */
   /**
-   * Gets a user from the database.
-   * @param {String} userID - the user's id
-   * @param {GetUserCallback} cb - the callback
+   * @description Gets a user from the database.
+   * @param {String} userID - The user's id.
+   * @param {GetUserCallback} cb - The callback.
    */
   getUser(userID, cb) {
-    this.database.Userdata.findOne({ userID: userID }, /** @param {import("../lib/user.js").User} u */ (e, u) => {
+    this.database.Userdata.findOne({ userID: userID }, (e, u) => {
       if (e) {
         return cb(e)
       }
@@ -77,7 +86,9 @@ class FarmBotClient extends CommandClient {
   }
 
   /**
-   * @param {Number} value - the amount you want to format as money.
+   * @description Formats money for sending to the user. Appends the coin emoji to the end.
+   * @param {Number} value - The amount you want to format as money.
+   * @returns {String} - The formatted money amount.
    */
   formatMoney(value) {
     const formatter = new Intl.NumberFormat("en-US", {
@@ -89,9 +100,9 @@ class FarmBotClient extends CommandClient {
   }
 
   /**
-   * Returns a cooldown object for the Eris `CommandClient.registerCommand()` method.
-   * @param {Number} length - the length of the cooldown to set, in milliseconds.
-   * @returns {CooldownObject} {@link CooldownObject}
+   * @description Returns a cooldown object for the Eris `CommandClient.registerCommand()` method.
+   * @param {Number} length - The length of the cooldown to set, in milliseconds.
+   * @returns {CooldownObject} {@link CooldownObject}.
    */
   cooldown(length) {
     return {
@@ -106,21 +117,21 @@ class FarmBotClient extends CommandClient {
       }
     }
     /**
-     * Channel ID; a string containing only numbers.
+     * @description Channel ID; a string containing only numbers.
      * @typedef {String} ChannelID
      */
     /**
-     * The cooldown object for the Eris `CommandClient.registerCommand()` method.
+     * @description The cooldown object for the Eris `CommandClient.registerCommand()` method.
      * @typedef {Object} CooldownObject
-     * @property {Number} cooldown - the length of the cooldown.
-     * @property {function():String} cooldownMessage - the message to send when the command is used when the cooldown is still active.
-     * @property {Object} cooldownExclusions - any exclusions to the cooldown.
-     * @property {ChannelID[]} cooldownExclusions.channelIDs - {@link ChannelID} exclusions to the cooldown.
+     * @prop {Number} cooldown - The length of the cooldown.
+     * @prop {function():String} cooldownMessage - The message to send when the command is used when the cooldown is still active.
+     * @prop {Object} cooldownExclusions - Any exclusions to the cooldown.
+     * @prop {ChannelID[]} cooldownExclusions.channelIDs - {@link ChannelID} Exclusions to the cooldown.
      */
   }
 
   /**
-   * Initiates the database.
+   * @description Initiates the database.
    */
   async initDB() {
     const client = require("mongodb").MongoClient
@@ -135,11 +146,6 @@ class FarmBotClient extends CommandClient {
       this._db = db
       if (db) {
         const c = db
-        /**
-         * @type {Object} database
-         * @prop {import("mongodb").MongoClient} database.db - the database
-         * @prop {import("mongodb").Collection} database.Userdata - the userdata collection (`farmbot -> farm`)
-         */
         this.database = {
           db: c,
           Userdata: c.db("farmbot").collection("farm"),

@@ -1,6 +1,12 @@
 const ms = require("parse-ms")
 const si = require("systeminformation")
 
+/**
+ * @description Formats bytes.
+ * @param {Number} bytes - Number of bytes.
+ * @param {Number} decimals - Decimal precision. Defaults to `2`.
+ * @returns {String} The formatted bytes.
+ */
 function formatBytes(bytes, decimals = 2) {
   if (!bytes) { return "0 Bytes" }
   const k = 1024
@@ -17,7 +23,7 @@ setInterval( async () => {
   systemInfo.cpu = `${Math.round(await si.currentLoad().then((data) => data.currentload))}%`
 }, 10000)
 
-/** @param {import("../../lib/FarmBotClient.js")} bot */
+/** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   bot.registerCommand("status", async (message, args) => {

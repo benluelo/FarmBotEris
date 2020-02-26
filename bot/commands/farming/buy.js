@@ -1,9 +1,9 @@
 const MAX_PLOTS = 25
 const { Embed } = require("../../lib/classes")
 const emoji = require("../../lib/emoji.json")
-// Math.round(Math.pow(1.90546071796, i))
+// a Math.round(Math.pow(1.90546071796, i))
 
-/** @param {import("../../lib/FarmBotClient.js")} bot */
+/** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = async (bot) => {
 
   bot.registerCommand("buy", (message) => {

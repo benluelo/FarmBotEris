@@ -2,7 +2,7 @@ const chalk = require("chalk")
 const cropData = require("../../lib/crop-data.js")
 const emoji = require("../../lib/emoji.json")
 
-/** @param {import("../../lib/FarmBotClient.js")} bot */
+/** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = async (bot) => {
   bot.registerCommand("plots", (message) => {
 
@@ -25,13 +25,17 @@ exports.run = async (bot) => {
           for (const plot in userFarm) {
             if (process.env.DEBUG === "true") { console.log(chalk.keyword("brown")("CHECKING PLOT #"), plot) }
 
-            // this builds the farm, i really don't want to explain it lol but here goes
-            //   1 2 3 4 5
-            // A * * * * *
-            // B * * * * *
-            // C * * * * *
-            // D * * * * *
-            // E * * * * *
+            /**
+             * @private
+             * Farm format:
+             *   1 2 3 4 5
+             * A * * * * *
+             * B * * * * *
+             * C * * * * *
+             * D * * * * *
+             * E * * * * *
+             */
+
             // adds the letters and numbers as they are needed
             if (5 > plot) {
               plotsMsgTop += emoji.numbers[plot]
