@@ -43,7 +43,7 @@ exports.run = async (bot) => {
           }
         }).then((res) => {
           const plotGotEmbed = new bot.embed()
-            .setDescription(`Plot purchased for **${bot.formatMoney(priceOfNextPlot)}** ${emoji.coin}! You now own ${res.value.farm.length + 1} plots!${res.value.farm.length + 1 === MAX_PLOTS ? " This is the maximum amount of plots!" : ""}`)
+            .setDescription(`Plot purchased for **${bot.formatMoney(priceOfNextPlot)}**! You now own ${res.value.farm.length + 1} plots!${res.value.farm.length + 1 === MAX_PLOTS ? " This is the maximum amount of plots!" : ""}`)
             .setColor(bot.color.success)
           return bot.createMessage(message.channel.id, plotGotEmbed)
         })

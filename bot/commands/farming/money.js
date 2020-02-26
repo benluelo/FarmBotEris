@@ -1,5 +1,3 @@
-const emoji = require("../../lib/emoji.json")
-
 /** @param {import("../../index.js").Bot} bot */
 exports.run = (bot) => {
   bot.registerCommand("money", (message) => {
@@ -10,7 +8,7 @@ exports.run = (bot) => {
         const moneyEmbed = new bot.embed()
           .setAuthor(message.author.username, null, message.author.avatarURL)
           .setColor(bot.color.lightgreen)
-          .setDescription(`Balance: **${bot.formatMoney(userdata.money)}** ${emoji.coin}`)
+          .setDescription(`Balance: **${bot.formatMoney(userdata.money)}**`)
         bot.createMessage(message.channel.id, moneyEmbed)
       } else {
         bot.startMessage(message)

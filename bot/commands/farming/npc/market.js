@@ -1,7 +1,6 @@
 const { NPC } = require("../../../lib/npc.js")
 const cropData = require("../../../lib/crop-data.js")
 const getPriceOfSeeds = require("../../../lib/get-price-of-seeds")
-const emoji = require("../../../lib/emoji.json")
 const { getLevel } = require("../../../../helpers/level-test.js")
 
 /** @param {import("../../../index.js").Bot} bot */
@@ -186,7 +185,7 @@ exports.run = (bot) => {
       "**__Want__:**",
       readableReq(req.want),
       "**__Rewards__:**",
-      `**├⮞ ${bot.formatMoney(req.rewards.money)} ${emoji.coin}`,
+      `**├⮞ ${bot.formatMoney(req.rewards.money)}`,
       `**└⮞ **${req.rewards.reputation}** rep`
     ]
   }
