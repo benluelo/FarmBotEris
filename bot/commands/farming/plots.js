@@ -2,7 +2,7 @@ const chalk = require("chalk")
 const cropData = require("../../lib/crop-data.js")
 const emoji = require("../../lib/emoji.json")
 
-/** @param {import("../../../index.js").Bot} bot */
+/** @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = async (bot) => {
   bot.registerCommand("plots", (message) => {
 

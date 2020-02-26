@@ -1,3 +1,4 @@
+/** @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   if ("true" == process.env.DEVELOPMENT) {
     bot.registerCommand("deleteuser", (message) => {

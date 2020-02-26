@@ -1,6 +1,6 @@
 const { XPProgressBar } = require("../../../lib/classes")
 
-/** @param {import("../../../index.js").Bot} bot */
+/** @param {import("../../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   bot.registerCommand("village", (message, args) => {

@@ -1,6 +1,7 @@
 const versionNumber = require("../../../package").version
 const ms = require("parse-ms")
 
+/** @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   bot.registerCommand("botinfo", (message) => {
     const botCreation = bot.ownersIDs.includes(message.author.id) ? `${new Date(bot.user.createdAt).toUTCString()}` : bot.user.createdAt

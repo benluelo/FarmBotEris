@@ -1,9 +1,7 @@
 const fs = require("fs")
 const path = require("path")
 
-/**
- * @param {import("../index.js").Bot} bot
- */
+/** @param {import("../lib/FarmBotClient.js")} bot */
 module.exports = (bot) => {
   loadCommands(bot, path.join(__dirname, "../commands"))
 }

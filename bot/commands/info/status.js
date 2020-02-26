@@ -17,6 +17,7 @@ setInterval( async () => {
   systemInfo.cpu = `${Math.round(await si.currentLoad().then((data) => data.currentload))}%`
 }, 10000)
 
+/** @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   bot.registerCommand("status", async (message, args) => {

@@ -3,7 +3,7 @@ const cropData = require("../../../lib/crop-data.js")
 const getPriceOfSeeds = require("../../../lib/get-price-of-seeds")
 const { getLevel } = require("../../../../helpers/level-test.js")
 
-/** @param {import("../../../index.js").Bot} bot */
+/** @param {import("../../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   const command = bot.registerCommand("market", (message, args) => {

@@ -1,8 +1,8 @@
 const cropData = require("../../lib/crop-data.js")
 const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
 
-/** @param {import("../../index.js").Bot} bot */
-exports.run = (bot) => {
+/** @param {import("../../lib/FarmBotClient.js")} bot */
+module.exports.run = (bot) => {
   bot.registerCommand("plant", (message, args) => {
 
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {

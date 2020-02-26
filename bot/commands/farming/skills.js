@@ -1,7 +1,7 @@
 const cropData = require("../../lib/crop-data.js")
 const { XPProgressBar, Attachment } = require("../../lib/classes.js")
 
-/** @param {import("../../index.js").Bot} bot */
+/** @param {import("../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
   bot.registerCommand("skills", (message, args) => {
     bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {

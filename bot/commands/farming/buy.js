@@ -3,7 +3,7 @@ const { Embed } = require("../../lib/classes")
 const emoji = require("../../lib/emoji.json")
 // Math.round(Math.pow(1.90546071796, i))
 
-/** @param {import("../../index.js").Bot} bot */
+/** @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = async (bot) => {
 
   bot.registerCommand("buy", (message) => {
