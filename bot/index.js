@@ -16,6 +16,7 @@ const bot = new FarmBotClient(process.env.TOKEN, {
     GUILD_ROLE_UPDATE: true,
     MESSAGE_DELETE: true,
     MESSAGE_DELETE_BULK: true,
+    // eslint-disable-next-line capitalized-comments
     // MESSAGE_UPDATE: true,
     PRESENCE_UPDATE: true,
     TYPING_START: true,

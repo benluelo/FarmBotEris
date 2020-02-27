@@ -9,31 +9,32 @@ const { ownersIDs } = require("../config.json")
  */
 class User {
   /**
-   * @param {import("eris").User} author - the author of the message.
-   * @param {String} region
-   * @param {import("./npc").Farmer[]} farmers
+   * @description Creates a new user for the database.
+   * @param {import("eris").User} author - The author of the message.
+   * @param {String} region - The region that the user is farming in.
+   * @param {import("./npc").Farmer[]} farmers - The farmers of the user (i.e. their "village").
    */
   constructor(author, region, farmers) {
-    /** @prop {String} - the ID of the user. */
+    /** @prop {String} - The ID of the user. */
     this.userID = author.id,
-    /** @prop {String} - the username and discriminator of the user. */
+    /** @prop {String} - The username and discriminator of the user. */
     this.userTag = author.username + "#" + author.discriminator,
-    /** @prop {Object} region - the region that the user is in. */
+    /** @prop {Object} region - The region that the user is in. */
     this.nickname = author.username,
     /** @prop {Object} */
     this.region = {
-      /** @prop {String} - the name of the region. */
+      /** @prop {String} - The name of the region. */
       name: region,
-      /** @prop {String} - the flag of the region. */
+      /** @prop {String} - The flag of the region. */
       flag: flags[region]
     },
     /** @prop {Number} */
     this.messagesUserSent = 0,
     /** @prop {Number} */
     this.botCommandsUsed = 0,
-    /** @prop {Number} - the amount of money the user has. */
+    /** @prop {Number} - The amount of money the user has. */
     this.money = 0,
-    /** @prop {Plot[]} - the user's farm. */
+    /** @prop {Plot[]} - The user's farm. */
     this.farm = [
       {
         crop: {
@@ -44,7 +45,7 @@ class User {
         watered: false
       }
     ],
-    /** @prop {Object<object, {Object<object, Seed}>} seeds - the user's seeds. */
+    /** @prop {Object<object, {Object<object, Seed}>} seeds - The user's seeds. */
     this.seeds = {
       // 🍎🍊🍋🍐🍒🍑🥭🍈🍇🍓🍌🍍
       /** @prop {Object<string, Seed>} */
@@ -111,11 +112,11 @@ class User {
         }
       }
     },
-    /** @prop {import("./npc").Request[]} - the user's current requests. */
+    /** @prop {import("./npc").Request[]} - The user's current requests. */
     this.requests = [],
-    /** @prop {import("./npc").Farmer[]} - the farmers in the user's village. */
+    /** @prop {import("./npc").Farmer[]} - The farmers in the user's village. */
     this.farmers = farmers,
-    /** @prop {import("./help-info").PermissionsLevels} - the farmers in the user's village. */
+    /** @prop {import("./help-info").PermissionsLevels} - The farmers in the user's village. */
     this.permissions = ownersIDs.includes(author.id) ? PERMISSIONS.DEVELOPMENT : PERMISSIONS.EVERYONE
     console.log(this)
   }
@@ -128,16 +129,16 @@ module.exports = {
 /**
  * @typedef {Object} Plot
  * @prop {Object} crop
- * @prop {import("./crop-data.js").CropName} crop.planted - the crop currently planted on the plot.
- * @prop {Number} crop.datePlantedAt - the time that the crop was planted at.
- * @prop {Boolean} fertilized - whether or not the plot is fertilized. **Not yet implemented!**
- * @prop {Boolean} watered - whether or not the plot is watered. **Not yet implemented!**
-
+ * @prop {import("./crop-data.js").CropName} crop.planted - The crop currently planted on the plot.
+ * @prop {Number} crop.datePlantedAt - The time that the crop was planted at.
+ * @prop {Boolean} fertilized - Whether or not the plot is fertilized. **Not yet implemented**!
+ * @prop {Boolean} watered - Whether or not the plot is watered. **Not yet implemented**!
+ */
 /**
  * @typedef {Object} Seed
- * @prop {Boolean} discovered - whether or not the crop has been discovered.
- * @prop {Number} level - the level of the seed (i.e. it's experience level).
- * @prop {Number} amount - the amount of the seed that the user has in their inventory.
+ * @prop {Boolean} discovered - Whether or not the crop has been discovered.
+ * @prop {Number} level - The level of the seed (i.e. it's experience level).
+ * @prop {Number} amount - The amount of the seed that the user has in their inventory.
  */
 
 // uncommon:{

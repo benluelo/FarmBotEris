@@ -40,14 +40,14 @@ exports.run = async (bot) => {
             if (5 > plot) {
               plotsMsgTop += emoji.numbers[plot]
             }
-            if (0 === plot % 5) {
+            if (plot % 5 === 0) {
               plotsMsg += "\n" + emoji.letters[Math.floor(plot / 5)]
             }
 
             if (process.env.DEBUG === "true") { console.log(userFarm[plot].crop.planted) }
 
             // adds the plots to the message
-            if ("dirt" == userFarm[plot].crop.planted) { // if dirt, add dirt (lol)
+            if (userFarm[plot].crop.planted == "dirt") { // if dirt, add dirt (lol)
               plotsMsg += emoji.dirt
             } else if (parseInt(Date.now() - userFarm[plot].crop.datePlantedAt) >= parseInt(bot.config.farminfo.growTimes[userFarm[plot].crop.planted])) { // if not dirt, and if the crop is grown, add the crop
               plotsMsg += cropData[userFarm[plot].crop.planted].emoji

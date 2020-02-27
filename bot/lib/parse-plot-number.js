@@ -1,8 +1,8 @@
 module.exports = {
   /**
-   * Parses the supplied plot number.
-   * @param {String} str - the plot number to get the value of, in the format `<letter><number>`.
-   * @returns {Number|Boolean} the value of the plot supplied, or `false` if the input was not in valid format.
+   * @description Parses the supplied plot number.
+   * @param {String} str - The plot number to get the value of, in the format `<letter><number>`.
+   * @returns {(Number | Boolean)} The value of the plot supplied, or `false` if the input was not in valid format.
    */
   parsePlotNumber: function (str) {
 
@@ -15,7 +15,7 @@ module.exports = {
     if (temp[2]) { return false }
 
     // check that the plot is in <letter> <number> format
-    if (funcs.isAlpha(temp[0]) && funcs.isNumeric(temp[1]) && 2 == temp.length) {
+    if (funcs.isAlpha(temp[0]) && funcs.isNumeric(temp[1]) && temp.length == 2) {
 
       // if correct format, create an object that holds the plot coordinates
       const a = {

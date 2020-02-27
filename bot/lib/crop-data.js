@@ -19,100 +19,100 @@
  * @type {Object<string, CropData>}
  */
 module.exports = {
-  "apple": {
-    "emoji": "🍎",
-    "flavour": [
+  apple: {
+    emoji: "🍎",
+    flavour: [
       "sweet",
       "sweet"
     ],
-    "color": "red"
+    color: "red"
   },
-  "orange": {
-    "emoji": "🍊",
-    "flavour": [
+  orange: {
+    emoji: "🍊",
+    flavour: [
       "sweet",
       "tart"
     ],
-    "color": "orange"
+    color: "orange"
   },
-  "lemon": {
-    "emoji": "🍋",
-    "flavour": [
+  lemon: {
+    emoji: "🍋",
+    flavour: [
       "sweet",
       "sour"
     ],
-    "color": "yellow"
+    color: "yellow"
   },
-  "pear": {
-    "emoji": "🍐",
-    "flavour": [
+  pear: {
+    emoji: "🍐",
+    flavour: [
       "sweet",
       "sweet"
     ],
-    "color": "green"
+    color: "green"
   },
-  "cherry": {
-    "emoji": "🍒",
-    "flavour": [
+  cherry: {
+    emoji: "🍒",
+    flavour: [
       "sweet",
       "sour"
     ],
-    "color": "red"
+    color: "red"
   },
-  "peach": {
-    "emoji": "🍑",
-    "flavour": [
+  peach: {
+    emoji: "🍑",
+    flavour: [
       "sweet",
       "sweet"
     ],
-    "color": "pink"
+    color: "pink"
   },
-  "mango": {
-    "emoji": "🥭",
-    "flavour": [
+  mango: {
+    emoji: "🥭",
+    flavour: [
       "sour",
       "sweet"
     ],
-    "color": "pink"
+    color: "pink"
   },
-  "melon": {
-    "emoji": "🍈",
-    "flavour": [
+  melon: {
+    emoji: "🍈",
+    flavour: [
       "sweet",
       "sweet"
     ],
-    "color": "green"
+    color: "green"
   },
-  "grapes": {
-    "emoji": "🍇",
-    "flavour": [
+  grapes: {
+    emoji: "🍇",
+    flavour: [
       "sweet",
       "tart"
     ],
-    "color": "purple"
+    color: "purple"
   },
-  "strawberry": {
-    "emoji": "🍓",
-    "flavour": [
+  strawberry: {
+    emoji: "🍓",
+    flavour: [
       "sweet",
       "tart"
     ],
-    "color": "red"
+    color: "red"
   },
-  "banana": {
-    "emoji": "🍌",
-    "flavour": [
+  banana: {
+    emoji: "🍌",
+    flavour: [
       "sweet",
       "sweet"
     ],
-    "color": "yellow"
+    color: "yellow"
   },
-  "pineapple": {
-    "emoji": "🍍",
-    "flavour": [
+  pineapple: {
+    emoji: "🍍",
+    flavour: [
       "sweet",
       "tart"
     ],
-    "color": "yellow"
+    color: "yellow"
   }
 }

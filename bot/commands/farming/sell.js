@@ -61,7 +61,7 @@ exports.run = (bot) => {
 
       if (userdata) {
 
-        message.send("Selling all!").then(async (msg) => {
+        message.send("Sellling all of your crops...").then(async (msg) => {
 
           let totalSold = 0
           let totalValue = 0
@@ -89,7 +89,10 @@ exports.run = (bot) => {
                 }
               )
             }
-            msg.edit(new bot.embed().success(`Sold **${totalSold}** crops for **${bot.formatMoney(totalValue)}**!`))
+            msg.edit({
+              content: "",
+              ...new bot.embed().success(`Sold **${totalSold}** crops for **${bot.formatMoney(totalValue)}**!`)
+            })
           }
         })
       } else {

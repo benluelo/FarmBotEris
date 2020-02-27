@@ -22,7 +22,7 @@ exports.run = (bot) => {
             count++
             embed.addField(flag.toLowerCase().split(" ").map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(" "), flags[flag], true)
 
-            if (12 === count) {
+            if (count === 12) {
               count = 0
               myEmbeds.push(embed.showContent())
               embed = new bot.embed({ title: "Send `farm start <region>` to start farming!" })

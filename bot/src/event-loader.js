@@ -1,7 +1,7 @@
 const fs = require("fs")
 const { join } = require("path")
 
-/** @param {import("../lib/FarmBotClient.js")} bot */
+/** @private @param {import("../lib/FarmBotClient.js")} bot */
 module.exports = (bot) => {
   fs.readdir(join(__dirname, "../events/"), (err, files) => {
     if (err) {

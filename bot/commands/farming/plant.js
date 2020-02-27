@@ -26,7 +26,7 @@ module.exports.run = (bot) => {
               return message.send(new bot.embed().uhoh("You don't own that plot!"))
             }
             if ("dirt" != userdata.farm[plotNumber].crop.planted) {
-              return message.send(new bot.embed().uhoh(`There's already a crop planted on plot \`${plot}\`!`))
+              return message.send(new bot.embed().uhoh(`There's already a crop planted on plot #\`${plot}\`!`))
             }
             await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
               {
@@ -49,32 +49,35 @@ module.exports.run = (bot) => {
     })
   }, bot.cooldown(5000)).registerSubcommand("all", (message, args) => {
 
+    const crop = args[0]
+
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {
 
-        if (!args[0]) { return message.send(new bot.embed().uhoh("Please specify the crop you want to plant!")) }
-        if (!cropData[args[0]] || !userdata.seeds.common[args[0]].discovered) { return message.send(new bot.embed().uhoh("Please include a valid plant type")) }
+        if (!crop) { return message.send(new bot.embed().uhoh("Please specify the crop you want to plant!")) }
+        if (!cropData[crop] || !userdata.seeds.common[crop].discovered) { return message.send(new bot.embed().uhoh(`Couldn't find **${crop}** seeds in your seedbag... maybe you mispelled it?`)) }
 
         return message.send("Planting all!").then(async (msg) => {
 
           let totalPlots = 0
 
           for (const plot in userdata.farm) {
-            if ("dirt" === userdata.farm[plot].crop.planted) {
-              await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
-                {
-                  $set: {
-                    [`farm.${plot}.crop.planted`] : args[0],
-                    [`farm.${plot}.crop.datePlantedAt`] : Date.now()
-                  }
-                }).then(() => {
-                totalPlots += 1
+            if (userdata.farm[plot].crop.planted === "dirt") {
+              await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
+                $set: {
+                  [`farm.${plot}.crop.planted`] : crop,
+                  [`farm.${plot}.crop.datePlantedAt`] : Date.now()
+                }
               })
+              totalPlots++
             }
           }
-          msg.edit(new bot.embed().success(`Successfully planted ${cropData[args[0]].emoji} on ${totalPlots} plots!`))
+          msg.edit({
+            content: "",
+            ...new bot.embed().success(`Successfully planted **${totalPlots}** ${cropData[crop].emoji}!`)
+          })
         })
       }
     })

@@ -11,8 +11,8 @@ const toFileStream = fs.createWriteStream(`${process.cwd()}/bot/logs/${outFileNa
 })
 
 /**
- * Gets the date and returns it in a readable format for logging to the console.
- * @returns {String}
+ * @description Gets the date and returns it in a readable format for logging to the console.
+ * @returns {String} A readable date.
  */
 const getDate = () => {
   const date = new Date()
@@ -21,8 +21,8 @@ const getDate = () => {
 
 class Log {
   /**
-   * The default log; logs to the console in cyan.
-   * @param {...} args - what you would like to log.
+   * @description The default log; logs to the console in cyan.
+   * @param {...} args - What you would like to log.
    */
   static default(...args) {
     console.log(
@@ -32,8 +32,8 @@ class Log {
     )
   }
   /**
-   * Log for when the bot connects; logs to the console in green.
-   * @param  {...} args - what you would like to log.
+   * @description Log for when the bot connects; logs to the console in green.
+   * @param  {...} args - What you would like to log.
    */
   static connect(...args) {
     console.log(
@@ -43,8 +43,8 @@ class Log {
     )
   }
   /**
-   * Log for when the database connects; logs to the console in lime.
-   * @param  {...} args - what you would like to log.
+   * @description Log for when the database connects; logs to the console in lime.
+   * @param  {...} args - What you would like to log.
    */
   static dbconnect(...args) {
     console.log(
@@ -54,8 +54,8 @@ class Log {
     )
   }
   /**
-   * Log the commands being loaded into the bot
-   * @param  {...} args - cmd that was loaded
+   * @description Log the commands being loaded into the bot.
+   * @param  {...} args - Command that was loaded.
    */
   static commandLoad(...args) {
     console.log(
@@ -65,8 +65,8 @@ class Log {
     )
   }
   /**
-   * Log the directory of commands being loaded into the bot
-   * @param  {...} args - directory that was loaded
+   * @description Log the directory of commands being loaded into the bot.
+   * @param  {...} args - Directory that was loaded.
    */
   static directoryLoad(...args) {
     console.log(
@@ -76,9 +76,9 @@ class Log {
     )
   }
   /**
-   * Log for when there is an error; logs both to a file with the name of the ISO timestamp
+   * @description Log for when there is an error; logs both to a file with the name of the ISO timestamp
    * that the function was called at and to the console (in red).
-   * @param {...} args - what you would like to log.
+   * @param {...} args - What you would like to log.
    */
   static error(...args) {
     const p = basename(get()[1].getFileName())
@@ -98,9 +98,8 @@ class Log {
     })
   }
   /**
-   * Logs to a file for use in long-term debugging and/or statistics. Also logs to the
-   * console, in yellow.
-   * @param  {...} args - what you would like to log.
+   * @description Logs to a file for use in long-term debugging and/or statistics. Also logs to the console, in yellow.
+   * @param  {...} args - What you would like to log.
    */
   static toFile(...args) {
     const p = basename(get()[1].getFileName())

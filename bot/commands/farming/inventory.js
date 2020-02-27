@@ -42,7 +42,7 @@ exports.run = (bot) => {
           })
           for (let i = sortable.length - 1; 0 <= i ; i--) {
             invItemString += `${sortable[i][0]}${getSmallNumbers(sortable[i][1])}${gap}`
-            if (5 === inter) { invItemString += "\n"; inter = 0 } else { inter += 1 }
+            if (inter === 5) { invItemString += "\n"; inter = 0 } else { inter += 1 }
           }
         }
 
