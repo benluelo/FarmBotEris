@@ -1,6 +1,4 @@
 const MAX_PLOTS = 25
-const { Embed } = require("../../lib/classes")
-const emoji = require("../../lib/emoji.json")
 // a Math.round(Math.pow(1.90546071796, i))
 
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
@@ -8,7 +6,30 @@ exports.run = async (bot) => {
 
   bot.registerCommand("buy", (message) => {
 
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.getUser(message.author.id, async (err, userdata) => {
+      if (err) { bot.log.error(err) }
+
+      if (userdata) {
+        if (userdata.farm.length >= MAX_PLOTS) {
+          return message.send(new bot.embed().uhoh(`${message.author.username}, you already have the maximum number of plots!`))
+        }
+
+        const numberOfCurrentPlots = userdata.farm.length
+        const priceOfNextPlot = Math.round(Math.pow(1.90546071796, numberOfCurrentPlots + 1))
+        const priceOfNextPlotEmbed = new bot.embed()
+          .setTitle("")
+          .setDescription(`The next plot costs **${bot.formatMoney(priceOfNextPlot)}!**`)
+          .setColor(bot.color.lightgreen)
+
+        return message.send(priceOfNextPlotEmbed)
+      } else {
+        bot.startMessage(message)
+      }
+    })
+  // eslint-disable-next-line no-unused-vars
+  }, bot.cooldown(5000)).registerSubcommand("confirm", (message, args) => {
+
+    bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {
@@ -19,10 +40,9 @@ exports.run = async (bot) => {
         const numberOfCurrentPlots = userdata.farm.length
         const priceOfNextPlot = Math.round(Math.pow(1.90546071796, numberOfCurrentPlots + 1))
         if (userdata.money < priceOfNextPlot) {
-          const notEnoughEmbed = new Embed()
+          const notEnoughEmbed = new bot.embed()
             .setTitle("Insufficient Funds!")
-            .setDescription(`The next plot costs **${priceOfNextPlot}** ${emoji.coin}`)
-            .setColor(bot.color.error)
+            .setDescription(`The next plot costs **${bot.formatMoney(priceOfNextPlot)}.**`)
 
           return message.send(notEnoughEmbed)
         }
@@ -51,5 +71,6 @@ exports.run = async (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(5000))
+
+  })
 }

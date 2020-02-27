@@ -1,81 +1,43 @@
-module.exports = {
-  /**
-   * @description Parses the supplied plot number.
-   * @param {String} str - The plot number to get the value of, in the format `<letter><number>`.
-   * @returns {(Number | Boolean)} The value of the plot supplied, or `false` if the input was not in valid format.
-   */
-  parsePlotNumber: function (str) {
+const plotRegex = /^[a-e]{1}[1-5]{1}$/
 
-    if (process.env.DEBUG === "true") { console.log("str:", str) }
+/**
+ * @description Parses the supplied plot number.
+ * @param {String} str - The plot number to get the value of, in the format `<letter><number>`.
+ * @returns {(Number | Boolean)} The value of the plot supplied, or `false` if the input was not in valid format.
+ */
+module.exports.parsePlotNumber = (str) => {
 
-    let plotNumber
-    const temp = str.split("")
+  if (process.env.DEBUG === "true") { console.log("str:", str) }
 
-    // if the split string has more than 2 elements (a letter and a number), return false
-    if (temp[2]) { return false }
+  // check that the plot is in <letter><number> format
+  if (!plotRegex.test(str)) { return false }
 
-    // check that the plot is in <letter> <number> format
-    if (funcs.isAlpha(temp[0]) && funcs.isNumeric(temp[1]) && temp.length == 2) {
-
-      // if correct format, create an object that holds the plot coordinates
-      const a = {
-        letter: funcs.formatNumberForPlotNumber(temp[1]),
-        number: funcs.formatLetterForPlotNumber(temp[0])
-      }
-
-      // get the plot number, base 5
-      plotNumber = parseInt((( a.number + a.letter )), 5)
-
-      return plotNumber
-
-    // if not in correct format, return false
-    } else {
-      return false
-    }
+  // if correct format, create an object that holds the plot coordinates
+  const a = {
+    letter: formatForPlotNumber(str[1]),
+    number: formatForPlotNumber(str[0])
   }
+
+  // get the plot number, base 5
+  return parseInt((( a.number + a.letter )), 5)
 }
 
-const funcs = {
-
-  isAlpha: function (str) {
-    let code, i, len
-
-    for (i = 0, len = str.length; i < len; i++) {
-      code = str.charCodeAt(i)
-      if (!(64 < code && 91 > code) && /* upper alpha (A-Z) */ !(96 < code && 123 > code)) { /* lower alpha (a-z) */
-        return false
-      }
-    }
-    return true
-  },
-
-  isNumeric: function (str) {
-    let code, i, len
-
-    for (i = 0, len = str.length; i < len; i++) {
-      code = str.charCodeAt(i)
-      if ((47 < !code && 58 > code) /* numeric (0-9) */ ) {
-        return false
-      }
-    }
-    return true
-  },
-
-  formatLetterForPlotNumber: function (str) {
-    switch (str) {
+/**
+ * @description Formats the individual `letter` and `number` portions of the plot number.
+ * @param {(("a" | "b" | "c" | "d" | "e") | ("1" | "2" | "3" | "4" | "5"))} str - The `number` or `letter` to format for the plot.
+ * @returns {("0" | "1" | "2" | "3" | "4")} The number for the plot.
+ */
+function formatForPlotNumber(str) {
+  switch (str) {
+    case ("1"):
     case ("a"): return "0"
+    case ("2"):
     case ("b"): return "1"
+    case ("3"):
     case ("c"): return "2"
+    case ("4"):
     case ("d"): return "3"
+    case ("5"):
     case ("e"): return "4"
-    }
-  },
-
-  formatNumberForPlotNumber: function (str) {
-    if (0 < parseInt(str)) {
-      return (parseInt(str) - 1).toString()
-    } else {
-      return "0"
-    }
   }
 }

@@ -29,11 +29,19 @@ exports.run = (bot) => {
           if (userdata) {
             if (process.env.DEBUG === "true") { console.log(plotNumber) }
 
-            if (plotNumber >= userdata.farm.length) {
-              message.send(new bot.embed().uhoh("You don't own that plot!"))
-              return
-            } else {
+            if (plotNumber >= userdata.farm.length) { return message.send(new bot.embed().uhoh("You don't own that plot!")) }
+            else {
               const userCrop = userdata.farm[plotNumber].crop
+
+              if (userCrop.planted == "dirt") {
+                const attachment = new Attachment(userCrop.planted)
+                const infoEmbed = new bot.embed()
+                  .setColor(bot.color.lightgreen)
+                  .setTitle(`Info for plot #\`${args[0].toUpperCase()}\``)
+                  .setDescription(`There's nothing planted here! Send \`farm plant ${args[0]} <crop>\` to plant a crop on this plot!`)
+                  .setThumbnail(attachment.link())
+                return message.send(infoEmbed, attachment)
+              }
               if (process.env.DEBUG === "true") {
                 console.log(JSON.stringify(userCrop))
 

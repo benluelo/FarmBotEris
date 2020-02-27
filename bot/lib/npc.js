@@ -20,7 +20,7 @@ class NPC {
     }
     this.level = 0
     /** @constant */
-    this.unlockLevel = Math.round(this.wealth * 5)
+    this.unlockLevel = 10
 
     if (process.env.DEBUG === "true") { console.log(this.gender) }
 

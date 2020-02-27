@@ -14,7 +14,6 @@ module.exports.run = async (bot) => {
         const farm = userdata.farm
         let totalPlots = 0
         const harvested = Object.fromEntries(Object.keys(cropData).map((key) => { return [key, 0] }))
-        console.log(harvested)
 
         // harvest all plots
         if (!plotToHarvest) {
@@ -44,8 +43,8 @@ module.exports.run = async (bot) => {
             }
           }
 
-          if (totalPlots !== 0) {
-            return message.send(new bot.embed().success(`Harvested **${totalPlots}** plots and got: \n${
+          if (totalPlots >= 0) {
+            return message.send(new bot.embed().success(`Harvested **${totalPlots}** plot${totalPlots == 1 ? "" : "s"} and got:\n${
               Object.entries(harvested).filter((key) => {
                 return key[1] != 0
               }).map((key) => {

@@ -61,6 +61,8 @@ exports.run = (bot) => {
 
       if (userdata) {
 
+        const sold = Object.fromEntries(Object.keys(cropData).map((key) => { return [key, 0] }))
+
         message.send("Sellling all of your crops...").then(async (msg) => {
 
           let totalSold = 0
@@ -78,6 +80,7 @@ exports.run = (bot) => {
               const cropValue = getPriceOfSeeds[seed] * (getLevel(2, userdata.seeds.common[seed].level).level) * userdata.seeds.common[seed].amount
               totalValue += cropValue
               totalSold += userdata.seeds.common[seed].amount
+              sold[seed] += userdata.seeds.common[seed].amount
               await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
                 {
                   $set: {
@@ -89,10 +92,25 @@ exports.run = (bot) => {
                 }
               )
             }
-            msg.edit({
-              content: "",
-              ...new bot.embed().success(`Sold **${totalSold}** crops for **${bot.formatMoney(totalValue)}**!`)
-            })
+
+            if (totalSold == 0) {
+              msg.edit({
+                content: "",
+                ...new bot.embed().uhoh("You don't have any crops to sell!")
+              })
+            } else {
+              msg.edit({
+                content: "",
+                ...new bot.embed()
+                  .setTitle("Sold!")
+                  .setDescription(`${
+                    Object.entries(sold).filter((key) => {
+                      return key[1] != 0
+                    }).map((key) => {
+                      return `${cropData[key[0]].emoji} x **${key[1]}**`
+                    }).join("\n")}\n for a total of **${bot.formatMoney(totalValue)}!**`)
+              })
+            }
           }
         })
       } else {
