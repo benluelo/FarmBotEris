@@ -44,8 +44,8 @@ exports.run = (bot) => {
           message.send(marketEmbed)
         } else {
           await messageToSend.edit({
-            ...marketEmbed,
-            ...{ content: "You have new requests!" }
+            content: "",
+            ...marketEmbed.setDescription("You have new requests!")
           })
         }
 
