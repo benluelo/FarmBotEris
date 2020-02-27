@@ -4,7 +4,7 @@ exports.run = (bot) => {
   bot.registerCommand("ping", (message, args) => {
     const startTime = Date.now()
     message.send("Pinging...").then((msg) => {
-      msg.edit(new bot.embed().success("Pong! " + (Date.now() - startTime) + "ms."))
+      msg.edit(new bot.Embed().success("Pong! " + (Date.now() - startTime) + "ms."))
     })
   }, bot.cooldown(1000))
 }

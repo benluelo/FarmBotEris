@@ -29,13 +29,13 @@ exports.run = (bot) => {
           if (userdata) {
             if (process.env.DEBUG === "true") { console.log(plotNumber) }
 
-            if (plotNumber >= userdata.farm.length) { return message.send(new bot.embed().uhoh("You don't own that plot!")) }
+            if (plotNumber >= userdata.farm.length) { return message.send(new bot.Embed().uhoh("You don't own that plot!")) }
             else {
               const userCrop = userdata.farm[plotNumber].crop
 
               if (userCrop.planted == "dirt") {
                 const attachment = new Attachment(userCrop.planted)
-                const infoEmbed = new bot.embed()
+                const infoEmbed = new bot.Embed()
                   .setColor(bot.color.lightgreen)
                   .setTitle(`Info for plot #\`${args[0].toUpperCase()}\``)
                   .setDescription(`There's nothing planted here! Send \`farm plant ${args[0]} <crop>\` to plant a crop on this plot!`)
@@ -84,7 +84,7 @@ exports.run = (bot) => {
               const growthBar = timeUntilPlantFinished + p.show() + ` ${Math.floor(growthPercentage * 100)}%`
               const attachment = new Attachment(userCrop.planted)
 
-              const infoEmbed = new bot.embed()
+              const infoEmbed = new bot.Embed()
                 .setColor(bot.color.lightgreen)
                 .setTitle(`Info for plot #\`${args[0].toUpperCase()}\``)
                 .setThumbnail(attachment.link())
@@ -100,10 +100,10 @@ exports.run = (bot) => {
             bot.startMessage(message)
           }
         } else {
-          message.send(new bot.embed().uhoh("Please enter a valid plot format! `<letter><number>`"))
+          message.send(new bot.Embed().uhoh("Please enter a valid plot format! `<letter><number>`"))
         }
       } else {
-        message.send(new bot.embed().uhoh("Please specify the plot you want info on!"))
+        message.send(new bot.Embed().uhoh("Please specify the plot you want info on!"))
       }
     })
   }, bot.cooldown(3000))

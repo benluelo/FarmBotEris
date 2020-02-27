@@ -41,7 +41,7 @@ exports.run = (bot) => {
     const uptime = ms(bot.uptime)
     const onlineUsers = bot.users.filter((user) => !user.bot).length
 
-    const statusEmbed = new bot.embed()
+    const statusEmbed = new bot.Embed()
       .setTitle(`${bot.user.username} Status`)
       .setColor(bot.color.lightgreen)
       .setThumbnail(bot.user.avatarURL)

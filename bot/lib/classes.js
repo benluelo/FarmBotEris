@@ -1,11 +1,12 @@
+/**
+ * @description Gets the image url out of the provided object.
+ * @param {(URL | Attachment | String)} obj - The {@link URL}, {@link Attachment}, or String to get the image url from.
+ * @returns {String} The url for the image.
+ */
 function getURL(obj) {
-  if (obj instanceof URL) {
-    return obj.href
-  } else if (obj instanceof Attachment) {
-    return obj.link()
-  } else {
-    return obj
-  }
+  if (obj instanceof URL) { return obj.href }
+  else if (obj instanceof Attachment) { return obj.link() }
+  else { return obj }
 }
 
 /**
@@ -14,8 +15,8 @@ function getURL(obj) {
  */
 class Embed {
   /**
-   * Creates a new Embed.
-   * @param {Object} [embed]
+   * @description Creates a new Embed.
+   * @param {Object} [embed] - The embed.
    * @param {String} [embed.title] - The title of the embed.
    * @param {String} [embed.description] - The description of the embed.
    * @param {(String | URL | Attachment)} [embed.url] - The url of the embed.
@@ -88,8 +89,9 @@ class Embed {
   // #region Embed methods
 
   /**
-   * Sets the title of the embed.
-   * @param {String} title Title of embed
+   * @description Sets the title of the embed.
+   * @param {String} title - Title of embed.
+   * @returns {Embed} The embed this was called on.
    */
   setTitle(title = null) {
     this.embed.title = title
@@ -97,8 +99,9 @@ class Embed {
   }
 
   /**
-   * Sets the description of the embed.
-   * @param {String} description Description of embed
+   * @description Sets the description of the embed.
+   * @param {String} description - Description of embed.
+   * @returns {Embed} The embed this was called on.
    */
   setDescription(description = null) {
     this.embed.description = description
@@ -106,8 +109,9 @@ class Embed {
   }
 
   /**
-   * Sets the url of the embed.
-   * @param {(String | URL | Attachment)} url URL for the embed
+   * @description Sets the url of the embed.
+   * @param {(String | URL | Attachment)} url - URL for the embed.
+   * @returns {Embed} The embed this was called on.
    */
   setUrl(url = null) {
     this.embed.url = getURL(url)
@@ -115,8 +119,9 @@ class Embed {
   }
 
   /**
-   * Sets the color of the embed.
-   * @param {Number} color Hexadecimal numeric hex color code
+   * @description Sets the color of the embed.
+   * @param {Number} color - Hexadecimal numeric hex color code.
+   * @returns {Embed} The embed this was called on.
    */
   setColor(color = null) {
     this.embed.color = color
@@ -124,7 +129,8 @@ class Embed {
   }
 
   /**
-   * Sets the timestamp of the embed to the moment at which it is called.
+   * @description Sets the timestamp of the embed to the moment at which it is called.
+   * @returns {Embed} The embed this was called on.
    */
   setTimestamp() {
     this.embed.timestamp = new Date().toISOString()
@@ -132,9 +138,10 @@ class Embed {
   }
 
   /**
-   * Sets the footer of the embed.
-   * @param {String} text Text of the footer
-   * @param {(String | URL | Attachment)} icon_url URL icon for the footer
+   * @description Sets the footer of the embed.
+   * @param {String} text - Text of the footer.
+   * @param {(String | URL | Attachment)} icon_url - URL icon for the footer.
+   * @returns {Embed} The embed this was called on.
    */
   setFooter(text = null, icon_url = null) {
     this.embed.footer.text = text
@@ -143,8 +150,9 @@ class Embed {
   }
 
   /**
-   * Sets the url of the embed.
-   * @param {(String | URL | Attachment)} url URL of the thumbnail
+   * @description Sets the url of the embed.
+   * @param {(String | URL | Attachment)} url - URL of the thumbnail.
+   * @returns {Embed} The embed this was called on.
    */
   setThumbnail(url = null) {
     this.embed.thumbnail.url = getURL(url)
@@ -152,10 +160,11 @@ class Embed {
   }
 
   /**
-   * Sets the author of the embed.
-   * @param {String} name Name of the author
-   * @param {(String | URL | Attachment)} url URL of the author title
-   * @param {(String | URL | Attachment)} icon_url URL to the author icon
+   * @description Sets the author of the embed.
+   * @param {String} name - Name of the author.
+   * @param {(String | URL | Attachment)} url - URL of the author title.
+   * @param {(String | URL | Attachment)} icon_url - URL to the author icon.
+   * @returns {Embed} The embed this was called on.
    */
   setAuthor(name = null, url = null, icon_url = null) {
     this.embed.author.name = name
@@ -165,10 +174,11 @@ class Embed {
   }
 
   /**
-   * Adds a field to the embed. `name` and `value` are required.
-   * @param {String} name Title of the field
-   * @param {String} value Value of the field
-   * @param {Boolean} inline Whether or not the field should be inline
+   * @description Adds a field to the embed. `name` and `value` are required.
+   * @param {String} name - Title of the field.
+   * @param {String} value - Value of the field.
+   * @param {Boolean} inline - Whether or not the field should be inline.
+   * @returns {Embed} The embed this was called on.
    */
   addField(name, value, inline = false) {
     this.embed.fields.push({
@@ -180,8 +190,9 @@ class Embed {
   }
 
   /**
-   * Adds a blank field to the embed.
-   * @param {Boolean} inline Whether or not the field should be inline
+   * @description Adds a blank field to the embed.
+   * @param {Boolean} inline - Whether or not the field should be inline.
+   * @returns {Embed} The embed this was called on.
    */
   addBlankField(inline = false) {
     this.embed.fields.push({
@@ -193,8 +204,9 @@ class Embed {
   }
 
   /**
-   * Sends a pre-formatted uh-oh message.
-   * @param {String} message - the uh-oh message to send to the user.
+   * @description Sends a pre-formatted uh-oh message.
+   * @param {String} message - The uh-oh message to send to the user.
+   * @returns {Embed} The embed this was called on.
    */
   uhoh(message = "") {
     this.embed.title = "Uh-oh!"
@@ -204,8 +216,9 @@ class Embed {
   }
 
   /**
-   * Send a preset success message
-   * @param {String} message Message to show user
+   * @description Send a preset success message.
+   * @param {String} message - The message to show user.
+   * @returns {Embed} The embed this was called on.
    */
   success(message = "") {
     this.embed.description = message
@@ -222,9 +235,10 @@ class Embed {
 
 class ProgressBar {
   /**
-   * @param {Number} numerator
-   * @param {Number} denominator
-   * @param {Number} length - the length of the progress bar in characters.
+   * @description Creates a new Progressbar.
+   * @param {Number} numerator - The numerator for the progress bar.
+   * @param {Number} denominator - The denominator for the progress bar.
+   * @param {Number} length - The length of the progress bar in characters.
    */
   constructor(numerator, denominator, length) {
     this.numerator = numerator
@@ -241,7 +255,7 @@ class ProgressBar {
 
 class XPProgressBar extends ProgressBar {
   /**
-   *
+   * @description An extension of the {@link ProgressBar} class, for use in showing the levels of the npcs or crops.
    * @param {Number} exp - The amount of experience points. Must be `>= 0`.
    * @param {Number} [length=10] - The length of the progress bar, in characters. Default is 10. Must be `>= 2`.
    * @param {Number} [base=2] - The base for the level calculation. Must be `>= 2`.
@@ -289,7 +303,7 @@ class Attachment {
 }
 
 module.exports = {
-  Embed,
+  Embed: Embed,
   ProgressBar,
   XPProgressBar,
   Attachment

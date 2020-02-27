@@ -1,6 +1,6 @@
 const flags = require("./flags.json")
 const { PERMISSIONS } = require("./help-info.js")
-const { ownersIDs } = require("../config.json")
+const { ownersIDs } = require("../config.js/index.js")
 
 
 /**

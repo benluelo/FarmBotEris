@@ -44,7 +44,7 @@ module.exports.run = async (bot) => {
           }
 
           if (totalPlots >= 0) {
-            return message.send(new bot.embed().success(`Harvested **${totalPlots}** plot${totalPlots == 1 ? "" : "s"} and got:\n${
+            return message.send(new bot.Embed().success(`Harvested **${totalPlots}** plot${totalPlots == 1 ? "" : "s"} and got:\n${
               Object.entries(harvested).filter((key) => {
                 return key[1] != 0
               }).map((key) => {
@@ -52,7 +52,7 @@ module.exports.run = async (bot) => {
               }).join("\n")
             }`))
           } else {
-            message.send(new bot.embed().uhoh("There's nothing in your field that can be harvested!"))
+            message.send(new bot.Embed().uhoh("There's nothing in your field that can be harvested!"))
           }
 
         } else {
@@ -62,11 +62,11 @@ module.exports.run = async (bot) => {
           if (false !== plotNumber) {
 
             if (plotNumber >= userdata.farm.length) {
-              return message.send(new bot.embed().uhoh("You don't own that plot!"))
+              return message.send(new bot.Embed().uhoh("You don't own that plot!"))
             } else {
               const userCrop = userdata.farm[plotNumber].crop
 
-              if (userCrop.planted == "dirt") { return message.send(new bot.embed().uhoh(`There's nothing on plot #\`${plotToHarvest.toUpperCase()}\` to harvest!`)) }
+              if (userCrop.planted == "dirt") { return message.send(new bot.Embed().uhoh(`There's nothing on plot #\`${plotToHarvest.toUpperCase()}\` to harvest!`)) }
 
               if (((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])) {
                 await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
@@ -83,9 +83,9 @@ module.exports.run = async (bot) => {
                 ).catch((error) => {
                   if (err) { bot.log.error(error) }
                 })
-                message.send(new bot.embed().success(`Harvested the **${cropData[userCrop.planted].emoji}** on \`${(plotToHarvest).toUpperCase()}\`!`))
+                message.send(new bot.Embed().success(`Harvested the **${cropData[userCrop.planted].emoji}** on \`${(plotToHarvest).toUpperCase()}\`!`))
               } else {
-                message.send(new bot.embed().uhoh(`The ${cropData[userdata.farm[plotNumber].crop.planted].emoji} on  plot #\`${plotToHarvest.toUpperCase()}\` hasn't finished growing yet!`))
+                message.send(new bot.Embed().uhoh(`The ${cropData[userdata.farm[plotNumber].crop.planted].emoji} on  plot #\`${plotToHarvest.toUpperCase()}\` hasn't finished growing yet!`))
               }
             }
           }

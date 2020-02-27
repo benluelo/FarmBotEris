@@ -11,12 +11,12 @@ exports.run = async (bot) => {
 
       if (userdata) {
         if (userdata.farm.length >= MAX_PLOTS) {
-          return message.send(new bot.embed().uhoh(`${message.author.username}, you already have the maximum number of plots!`))
+          return message.send(new bot.Embed().uhoh(`${message.author.username}, you already have the maximum number of plots!`))
         }
 
         const numberOfCurrentPlots = userdata.farm.length
         const priceOfNextPlot = Math.round(Math.pow(1.90546071796, numberOfCurrentPlots + 1))
-        const priceOfNextPlotEmbed = new bot.embed()
+        const priceOfNextPlotEmbed = new bot.Embed()
           .setTitle("")
           .setDescription(`The next plot costs **${bot.formatMoney(priceOfNextPlot)}!**`)
           .setColor(bot.color.lightgreen)
@@ -34,13 +34,13 @@ exports.run = async (bot) => {
 
       if (userdata) {
         if (userdata.farm.length >= MAX_PLOTS) {
-          return message.send(new bot.embed().uhoh(`${message.author.username}, you already have the maximum number of plots!`))
+          return message.send(new bot.Embed().uhoh(`${message.author.username}, you already have the maximum number of plots!`))
         }
 
         const numberOfCurrentPlots = userdata.farm.length
         const priceOfNextPlot = Math.round(Math.pow(1.90546071796, numberOfCurrentPlots + 1))
         if (userdata.money < priceOfNextPlot) {
-          const notEnoughEmbed = new bot.embed()
+          const notEnoughEmbed = new bot.Embed()
             .setTitle("Insufficient Funds!")
             .setDescription(`The next plot costs **${bot.formatMoney(priceOfNextPlot)}.**`)
 
@@ -62,7 +62,7 @@ exports.run = async (bot) => {
             money: -priceOfNextPlot
           }
         }).then((res) => {
-          const plotGotEmbed = new bot.embed()
+          const plotGotEmbed = new bot.Embed()
             .setDescription(`Plot purchased for **${bot.formatMoney(priceOfNextPlot)}**! You now own ${res.value.farm.length + 1} plots!${res.value.farm.length + 1 === MAX_PLOTS ? " This is the maximum amount of plots!" : ""}`)
             .setColor(bot.color.success)
           return message.send(plotGotEmbed)

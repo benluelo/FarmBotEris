@@ -31,11 +31,6 @@ const bot = new FarmBotClient(process.env.TOKEN, {
   ignoreSelf: true
 })
 
-// add onto bot var
-bot.ownersIDs = require("./config.json").ownersIDs
-bot.config = require("./config.json")
-bot.embed = require("./lib/classes").Embed
-
 require("./src/command-loader.js")(bot)
 require("./src/event-loader.js")(bot)
 

@@ -7,7 +7,7 @@ exports.run = (bot) => {
       if (toEval) {
         const hrStart = process.hrtime()
         const hrDiff = process.hrtime(hrStart)
-        const evalEmbed = new bot.embed()
+        const evalEmbed = new bot.Embed()
           .setTitle("Evaluation")
           .setColor(bot.color.lightgreen)
           .addField(":scroll: Script", `\`\`\`javascript\n${toEval}\n\`\`\``)

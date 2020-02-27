@@ -14,19 +14,19 @@ module.exports.run = (bot) => {
         const crop = args[1]
 
         // check specified plot
-        if (!plot) { return message.send(new bot.embed().uhoh("You have to specify a plot to plant on!")) }
+        if (!plot) { return message.send(new bot.Embed().uhoh("You have to specify a plot to plant on!")) }
         if (crop && plot) {
 
           // check if input is valid
           const plotNumber = parsePlotNumber(plot)
-          if (!cropData[crop] || !userdata.seeds.common[crop].discovered) { return message.send(new bot.embed().uhoh("Please include a valid plant type")) }
+          if (!cropData[crop] || !userdata.seeds.common[crop].discovered) { return message.send(new bot.Embed().uhoh("Please include a valid plant type")) }
           if (false !== plotNumber) {
 
             if (plotNumber >= userdata.farm.length) {
-              return message.send(new bot.embed().uhoh("You don't own that plot!"))
+              return message.send(new bot.Embed().uhoh("You don't own that plot!"))
             }
             if ("dirt" != userdata.farm[plotNumber].crop.planted) {
-              return message.send(new bot.embed().uhoh(`There's already a crop planted on plot #\`${plot}\`!`))
+              return message.send(new bot.Embed().uhoh(`There's already a crop planted on plot #\`${plot}\`!`))
             }
             await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
               {
@@ -36,12 +36,12 @@ module.exports.run = (bot) => {
                 }
               }
             )
-            return message.send(new bot.embed().success(`Planted ${cropData[crop].emoji} on \`${plot.charAt(0).toUpperCase() + plot.slice(1)}\`!`))
+            return message.send(new bot.Embed().success(`Planted ${cropData[crop].emoji} on \`${plot.charAt(0).toUpperCase() + plot.slice(1)}\`!`))
           } else {
-            return message.send(new bot.embed().uhoh("Invalid input! Please try again with the format `<letter><number> <plant>`."))
+            return message.send(new bot.Embed().uhoh("Invalid input! Please try again with the format `<letter><number> <plant>`."))
           }
         } else {
-          return message.send(new bot.embed().uhoh("You have to specify a crop to plant!"))
+          return message.send(new bot.Embed().uhoh("You have to specify a crop to plant!"))
         }
       } else {
         bot.startMessage(message)
@@ -56,8 +56,8 @@ module.exports.run = (bot) => {
 
       if (userdata) {
 
-        if (!crop) { return message.send(new bot.embed().uhoh("Please specify the crop you want to plant!")) }
-        if (!cropData[crop] || !userdata.seeds.common[crop].discovered) { return message.send(new bot.embed().uhoh(`Couldn't find **${crop}** seeds in your seedbag... maybe you mispelled it?`)) }
+        if (!crop) { return message.send(new bot.Embed().uhoh("Please specify the crop you want to plant!")) }
+        if (!cropData[crop] || !userdata.seeds.common[crop].discovered) { return message.send(new bot.Embed().uhoh(`Couldn't find **${crop}** seeds in your seedbag... maybe you mispelled it?`)) }
 
         return message.send("Planting all!").then(async (msg) => {
 
@@ -76,7 +76,7 @@ module.exports.run = (bot) => {
           }
           msg.edit({
             content: "",
-            ...new bot.embed().success(`Successfully planted **${totalPlots}** ${cropData[crop].emoji}!`)
+            ...new bot.Embed().success(`Successfully planted **${totalPlots}** ${cropData[crop].emoji}!`)
           })
         })
       }

@@ -8,7 +8,7 @@ module.exports.run = (bot) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {
-        const villageEmbed = new bot.embed().setColor(bot.color.lightgreen).setTitle(`${message.author.username}'s Village!   ${userdata.region.flag}`)
+        const villageEmbed = new bot.Embed().setColor(bot.color.lightgreen).setTitle(`${message.author.username}'s Village!   ${userdata.region.flag}`)
 
         for (const farmer in userdata.farmers) {
           const progressBar = new XPProgressBar(userdata.farmers[farmer].level, 10, userdata.farmers[farmer].wealth + 2)

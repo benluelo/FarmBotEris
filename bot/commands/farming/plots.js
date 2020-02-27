@@ -63,7 +63,7 @@ exports.run = async (bot) => {
           // edit the originally sent message
           msg.edit(
             {
-              ...new bot.embed().setAuthor(`${message.author.username}'s farm!`, null, message.author.avatarURL).setDescription(`${plotsMsgTop + plotsMsg}`).setColor(bot.color.lightgreen),
+              ...new bot.Embed().setAuthor(`${message.author.username}'s farm!`, null, message.author.avatarURL).setDescription(`${plotsMsgTop + plotsMsg}`).setColor(bot.color.lightgreen),
               ...{ content: "" }
             }
           )

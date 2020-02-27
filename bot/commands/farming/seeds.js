@@ -14,7 +14,7 @@ exports.run = (bot) => {
           seeds += `${cropData[crop].emoji} ${crop.charAt(0).toUpperCase() + crop.slice(1)} - \`$${getPriceOfSeeds[crop]}\` \n`
         }
       }
-      const seedsEmbed = new bot.embed()
+      const seedsEmbed = new bot.Embed()
         .setTitle("Seeds")
         .setDescription("Prices update every hour\n" + seeds)
         .setColor(bot.color.lightgreen)

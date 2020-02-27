@@ -25,7 +25,7 @@ module.exports.parsePlotNumber = (str) => {
 /**
  * @description Formats the individual `letter` and `number` portions of the plot number.
  * @param {(("a" | "b" | "c" | "d" | "e") | ("1" | "2" | "3" | "4" | "5"))} str - The `number` or `letter` to format for the plot.
- * @returns {("0" | "1" | "2" | "3" | "4")} The number for the plot.
+ * @returns {("0" | "1" | "2" | "3" | "4")} The index of the plot.
  */
 function formatForPlotNumber(str) {
   switch (str) {

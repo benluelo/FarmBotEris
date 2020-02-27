@@ -28,12 +28,20 @@ class FarmBotClient extends CommandClient {
     }
 
     this.log = require("../src/logger.js") // lmao i just watched that // LISTEN OK (i got nothin) // it aint working? // no but i think i know why one sec
+
+    /**
+     * @type {import("./classes.js").Embed}
+     */
+    this.Embed = require("./classes.js").Embed
+
+    this.ownersIDs = require("../config.js").ownersIDs
+
+    this.config = require("../config.js")
   }
   async onMessageCreate(msg) {
     // copied from Client.js (don't actually think this is being used as i don't know how to use em lmao)
     /**
-     * @description
-     * Create a message in a channel.
+     * @description Create a message in a channel.
      * Note: If you want to DM someone, the user ID is **not** the DM channel ID. use Client.getDMChannel() to get the DM channel for a user.
      *
      * @param {String | Array | Object} content - A string, array of strings, or object. If an object is passed:
@@ -131,11 +139,11 @@ class FarmBotClient extends CommandClient {
   }
 
   /**
-   * @description Initiates the database.
+   * @description Initializes the database.
    */
   async initDB() {
     const client = require("mongodb").MongoClient
-    const config = require("../config.json")
+    const config = require("../config.js/index.js")
 
     client.connect(config.db.connectionString, config.db.connectionOptions, async (err, db) => {
       if (err) { throw err }

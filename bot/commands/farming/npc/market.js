@@ -32,7 +32,7 @@ exports.run = (bot) => {
             }
           })
         }
-        const marketEmbed = new bot.embed().setTitle("The Market").setColor(bot.color.market)
+        const marketEmbed = new bot.Embed().setTitle("The Market").setColor(bot.color.market)
         const tempReq = userdata.requests.concat(newRequests)
         for (const request in tempReq) {
           const a = parseRequest(tempReq[request], userdata.farmers, request)
@@ -60,14 +60,14 @@ exports.run = (bot) => {
 
       if (userdata) {
         if (!args[0]) {
-          return message.send(new bot.embed().uhoh("You have to specify an order to view!"))
+          return message.send(new bot.Embed().uhoh("You have to specify an order to view!"))
         }
 
         const orderID = parseInt(args[0]) - 1
         if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) {
-          return message.send(new bot.embed().uhoh(`**${args[0]}** is not a valid order ID!`))
+          return message.send(new bot.Embed().uhoh(`**${args[0]}** is not a valid order ID!`))
         }
-        const marketViewEmbed = new bot.embed()
+        const marketViewEmbed = new bot.Embed()
 
         const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
         const p = prettifyParsedRequest(a)
@@ -90,12 +90,12 @@ exports.run = (bot) => {
 
       if (userdata) {
         if (!args[0]) {
-          return message.send(new bot.embed().uhoh("You have to specify an order to fill!"))
+          return message.send(new bot.Embed().uhoh("You have to specify an order to fill!"))
         }
 
         const orderID = parseInt(args[0]) - 1
-        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return message.send(new bot.embed().uhoh(`**${args[0]}** is not a valid order ID!`)) }
-        const marketFilledEmbed = new bot.embed()
+        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return message.send(new bot.Embed().uhoh(`**${args[0]}** is not a valid order ID!`)) }
+        const marketFilledEmbed = new bot.Embed()
 
         const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
 
@@ -112,7 +112,7 @@ exports.run = (bot) => {
         })()
 
         if (!enoughCrops) {
-          return new bot.embed().uhoh("You don't have enough crops to fill this order!")
+          return new bot.Embed().uhoh("You don't have enough crops to fill this order!")
         }
 
         const p = prettifyParsedRequest(a)

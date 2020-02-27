@@ -5,7 +5,7 @@ exports.run = (bot) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {
-        const moneyEmbed = new bot.embed()
+        const moneyEmbed = new bot.Embed()
           .setAuthor(message.author.username, null, message.author.avatarURL)
           .setColor(bot.color.lightgreen)
           .setDescription(`Balance: **${bot.formatMoney(userdata.money)}**`)

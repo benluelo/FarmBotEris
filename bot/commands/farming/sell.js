@@ -15,16 +15,16 @@ exports.run = (bot) => {
 
       if (userdata) {
 
-        if (!amount) { return message.send(new bot.embed().uhoh("You have to specify a plant to sell!")) }
+        if (!amount) { return message.send(new bot.Embed().uhoh("You have to specify a plant to sell!")) }
         else if (crop && amount) {
 
           // sell the specified amount of the specified crop
           // farm sell 2 apple
 
-          if (!cropData[crop]) { return message.send(new bot.embed().uhoh("Not a valid crop!")) }
+          if (!cropData[crop]) { return message.send(new bot.Embed().uhoh("Not a valid crop!")) }
 
           const numAmount = parseInt(amount)
-          if (numAmount.toString() !== amount) { return message.send(new bot.embed().uhoh("You have to enter a valid amount to sell!")) }
+          if (numAmount.toString() !== amount) { return message.send(new bot.Embed().uhoh("You have to enter a valid amount to sell!")) }
 
           if (userdata.seeds.common[crop].amount >= numAmount) {
 
@@ -43,12 +43,12 @@ exports.run = (bot) => {
                 }
               }
             )
-            message.send(new bot.embed().success(`Sold **${numAmount}** ${cropData[crop].emoji} for **${bot.formatMoney(cropValue)}**!`))
+            message.send(new bot.Embed().success(`Sold **${numAmount}** ${cropData[crop].emoji} for **${bot.formatMoney(cropValue)}**!`))
           } else {
-            return message.send(new bot.embed().uhoh("You have to specify a crop to sell!"))
+            return message.send(new bot.Embed().uhoh("You have to specify a crop to sell!"))
           }
         } else {
-          message.send(new bot.embed().uhoh("You need to use the format: `farm sell <amount> <crop>`"))
+          message.send(new bot.Embed().uhoh("You need to use the format: `farm sell <amount> <crop>`"))
         }
       } else {
         bot.startMessage(message)
@@ -96,12 +96,12 @@ exports.run = (bot) => {
             if (totalSold == 0) {
               msg.edit({
                 content: "",
-                ...new bot.embed().uhoh("You don't have any crops to sell!")
+                ...new bot.Embed().uhoh("You don't have any crops to sell!")
               })
             } else {
               msg.edit({
                 content: "",
-                ...new bot.embed()
+                ...new bot.Embed()
                   .setTitle("Sold!")
                   .setDescription(`${
                     Object.entries(sold).filter((key) => {

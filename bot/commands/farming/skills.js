@@ -9,7 +9,7 @@ module.exports.run = (bot) => {
 
       if (userdata) {
         if (!args[0]) {
-          const skillsEmbed = new bot.embed()
+          const skillsEmbed = new bot.Embed()
             .setAuthor(message.author.username, null, message.author.avatarURL)
             .setColor(bot.color.lightgreen)
 
@@ -27,7 +27,7 @@ module.exports.run = (bot) => {
           if (cropData[crop] && userdata.seeds.common[crop].discovered) {
             const attachment = new Attachment(crop)
             const XPBar = new XPProgressBar(userdata.seeds.common[crop].level)
-            const seedSkillEmbed = new bot.embed()
+            const seedSkillEmbed = new bot.Embed()
               .setAuthor(message.author.username, null, message.author.avatarURL)
               .setColor(bot.color.lightgreen)
               .setTitle(`${crop[0].toUpperCase() + crop.substr(1)}`)
@@ -36,7 +36,7 @@ module.exports.run = (bot) => {
 
             return message.send(seedSkillEmbed, attachment.send())
           } else {
-            return message.send(new bot.embed().uhoh(`**${crop}** isn't one of your crops!`))
+            return message.send(new bot.Embed().uhoh(`**${crop}** isn't one of your crops!`))
           }
         }
       } else {
