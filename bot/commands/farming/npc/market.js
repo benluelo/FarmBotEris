@@ -7,7 +7,7 @@ const { getLevel } = require("../../../../helpers/level-test.js")
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   const command = bot.registerCommand("market", (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {
@@ -55,7 +55,7 @@ exports.run = (bot) => {
     })
   }, bot.cooldown(30000))
   command.registerSubcommand("view", (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {
@@ -85,7 +85,7 @@ exports.run = (bot) => {
     })
   }, bot.cooldown(10000))
   command.registerSubcommand("fill", (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {

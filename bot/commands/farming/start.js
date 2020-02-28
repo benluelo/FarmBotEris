@@ -7,7 +7,9 @@ const { User } = require("../../lib/user.js")
 /** @private @param {import("../../lib/FarmBotClient")} bot */
 exports.run = (bot) => {
   bot.registerCommand("start", (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.getUser(message.author.id, async (err, userdata) => {
+
+      // const country = args.join(" ").toLowerCase()
       if (err) { bot.log.error(err) }
 
       if (!userdata) {

@@ -13,7 +13,7 @@ const getSmallNumbers = (number) => {
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   bot.registerCommand("inventory", (message) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {

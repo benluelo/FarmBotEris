@@ -7,7 +7,7 @@ exports.run = (bot) => {
   bot.registerCommand("sell", (message, args) => {
     // f!sell <plant> [amount]
 
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       const amount = args[0]
@@ -56,7 +56,7 @@ exports.run = (bot) => {
     })
   }, bot.cooldown(5000)).registerSubcommand("all", (message) => {
 
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {

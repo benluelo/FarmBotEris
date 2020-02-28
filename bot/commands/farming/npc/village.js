@@ -4,7 +4,7 @@ const { XPProgressBar } = require("../../../lib/classes")
 module.exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   bot.registerCommand("village", (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       if (userdata) {

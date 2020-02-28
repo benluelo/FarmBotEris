@@ -5,7 +5,7 @@ const getPriceOfSeeds = require("../../lib/get-price-of-seeds")
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   bot.registerCommand("seeds", (message, args) => {
-    bot.database.Userdata.findOne({ userID: message.author.id }, async (err, userdata) => {
+    bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
       let seeds = ""
