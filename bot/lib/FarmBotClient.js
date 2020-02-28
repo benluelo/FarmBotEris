@@ -5,6 +5,12 @@ const { coin } = require("../lib/emoji.json")
  * @typedef {FarmBotClient} FarmBotClient
  */
 class FarmBotClient extends CommandClient {
+  /**
+   * @description Creates an instance of `FarmBotClient`.
+   * @param {String} token - The bot token to log into discord with.
+   * @param {import("eris").ClientOptions} options - The {@link import("eris").ClientOptions} for the `FarmBotClient`.
+   * @param {import("eris").CommandClientOptions} commandOptions - The {@link import("eris").CommandClientOptions} for the `FarmBotClient`.
+   */
   constructor(token, options, commandOptions) {
     super(token, options, commandOptions)
 
@@ -29,9 +35,6 @@ class FarmBotClient extends CommandClient {
 
     this.log = require("../src/logger.js") // lmao i just watched that // LISTEN OK (i got nothin) // it aint working? // no but i think i know why one sec
 
-    /**
-     * @type {import("./classes.js").Embed}
-     */
     this.Embed = require("./classes.js").Embed
 
     this.ownersIDs = require("../config.js").ownersIDs

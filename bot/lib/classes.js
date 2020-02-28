@@ -1,4 +1,8 @@
 /**
+ * @namespace Classes
+ */
+
+/**
  * @description Gets the image url out of the provided object.
  * @param {(URL | Attachment | String)} obj - The {@link URL}, {@link Attachment}, or String to get the image url from.
  * @returns {String} The url for the image.
@@ -9,10 +13,6 @@ function getURL(obj) {
   else { return obj }
 }
 
-/**
- * @class
- * @typedef {Embed} Embed
- */
 class Embed {
   /**
    * @description Creates a new Embed.
@@ -303,7 +303,7 @@ class Attachment {
 }
 
 module.exports = {
-  Embed: Embed,
+  Embed,
   ProgressBar,
   XPProgressBar,
   Attachment

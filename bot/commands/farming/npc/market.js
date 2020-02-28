@@ -165,18 +165,15 @@ exports.run = (bot) => {
 
   /**
    * @description Prettify the request.
-   * @param {{
-      id: number,
-      want: {
-        name: import("../../../lib/crop-data.js").CropName,
-        emoji: import("../../../lib/crop-data.js").CropEmoji,
-        amount: number
-      }[],
-      rewards: {
-        money: number,
-        reputation: number
-      }
-    }} req - The request to prettify.
+   * @param {Object} req - The request to prettify.
+   * @param {Number} req.id - The ID.
+   * @param {Object[]} req.want - An array of the different wants in the request.
+   * @param {import("../../../lib/crop-data.js").CropName} req.want.name
+   * @param {import("../../../lib/crop-data.js").CropEmoji} req.want.emoji
+   * @param {Number} req.want.amount
+   * @param {Object} req.rewards - The rewards.
+   * @param {Number} req.rewards.money - How much money wil be rewarded.
+   * @param {Number} req.rewards.amount - How much reputation wil be rewarded.
    * @returns {String} The prettified request.
    */
   function prettifyParsedRequest(req) {
@@ -206,7 +203,7 @@ function parseRequest(request, userFarmers, id) {
 
   const parsed = parseWants(farmer.preferences, request)
 
-  return {
+  const toReturn = {
     id: parseInt(id) + 1,
     want: parsed.req,
     rewards: {
@@ -219,6 +216,7 @@ function parseRequest(request, userFarmers, id) {
       level: farmer.level
     }
   }
+  return toReturn
 }
 
 /**
@@ -227,10 +225,16 @@ function parseRequest(request, userFarmers, id) {
  * @param {import("../../../lib/farmer-data.js").tastes} preferences.taste - Their prefered tastes.
  * @param {import("../../../lib/farmer-data.js").colors} preferences.color - Their prefered colors.
  * @param {import("../../../lib/npc.js").Request} request - The request object from the user: {@link import("../../../user.js").User}.
- * @returns {{val: Number, rep: Number, req: {name: import("../../../lib/crop-data.js").CropName, emoji: import("../../../lib/crop-data.js").CropEmoji, amount: Number}[]}} An array of the different items in the request.
+ * @returns {ParsedWants} An array of the different items in the request.
  */
 function parseWants(preferences, request) {
-  /** @type {{val: Number, rep: Number, req: {name: import("../../../lib/crop-data.js").CropName, emoji: import("../../../lib/crop-data.js").CropEmoji, amount: Number}[]}} */
+  /**
+   * @typedef {Object} ParsedWants
+   * @prop {Number} val - The monetary value of the request.
+   * @prop {Number} rep - The reputation(ary?) value of the request.
+   * @prop {Req[]} req
+   */
+  /** @type {ParsedWants} */
   const parsed = {
     val: 0,
     rep: 0,
@@ -272,7 +276,7 @@ function parseWants(preferences, request) {
 
 /**
  * @description Makes the parsed requests readable and good for sending to the user.
- * @param {{name: String, emoji: String, amount: Number}[]} req - The request.
+ * @param {Req} req - The request.
  * @returns {String} The reqdable request.
  */
 function readableReq(req) {
@@ -280,3 +284,10 @@ function readableReq(req) {
     return `${(i == req.length - 1) ? "└" : "├"}> ${r.emoji} x **${r.amount}**`
   }).join("\n")
 }
+
+/**
+ * @typedef {Object} Req
+ * @prop {import("../../../lib/crop-data.js").CropName} name - The name.
+ * @prop {import("../../../lib/crop-data.js").CropEmoji} emoji - The emoji.
+ * @prop {Number} amount - The amount.
+ */
