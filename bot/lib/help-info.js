@@ -61,8 +61,8 @@ const commands = {
   },
   buy: {
     description: "Buy a new plot for your farm.",
-    usage: "farm buy",
-    examples: false,
+    usage: "farm buy [confirm]",
+    examples: "farm buy\n└> look at price of next plot.\nfarm buy confirm\n└> buy the next plot.\n",
     permissionLevel: PERMISSIONS.EVERYONE,
     category: CATEGORIES.FARMING
   },

@@ -19,8 +19,10 @@ function formatBytes(bytes, decimals = 2) {
 // get system info
 const systemInfo = {}
 setInterval( async () => {
+  const os = await si.osInfo()
   systemInfo.mem = `${formatBytes(await si.mem().then((data) => data.used))} : ${formatBytes(await si.mem().then((data) => data.total))}`
   systemInfo.cpu = `${Math.round(await si.currentLoad().then((data) => data.currentload))}%`
+  systemInfo.os = `${os.platform} ${os.distro} ${os.codename}#${os.release} ${os.arch}`
 }, 10000)
 
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
@@ -28,7 +30,7 @@ exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   bot.registerCommand("status", async (message, args) => {
 
-    // get debug/development info
+    // get debug/ development info
     const debugMode = (process.env.DEBUG == "true") ?
       ":white_check_mark: Enabled" :
       ":negative_squared_cross_mark: Disabled"
@@ -55,12 +57,12 @@ exports.run = (bot) => {
       .addBlankField(true)
 
       .addField("SYS Cpu", `\`${systemInfo.cpu}\``, true)
-      .addBlankField(true)
+      .addField("SYS OS", `\`${systemInfo.os}\``, true)
       .addField("SYS Mem", `\`${systemInfo.mem}\``, true)
 
       .addField("Debug Mode", debugMode, true)
-      .addBlankField(true)
       .addField("Development Mode", developmentMode, true)
+      .addBlankField(true)
 
     await message.send(statusEmbed)
   }, {

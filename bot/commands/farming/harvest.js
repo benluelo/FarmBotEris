@@ -43,7 +43,7 @@ module.exports.run = async (bot) => {
             }
           }
 
-          if (totalPlots >= 0) {
+          if (totalPlots > 0) {
             return message.send(new bot.Embed().success(`Harvested **${totalPlots}** plot${totalPlots == 1 ? "" : "s"} and got:\n${
               Object.entries(harvested).filter((key) => {
                 return key[1] != 0
