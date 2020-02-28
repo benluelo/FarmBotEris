@@ -4,7 +4,7 @@ const getPriceOfSeeds = require("../../../lib/get-price-of-seeds")
 const { getLevel } = require("../../../../helpers/level-test.js")
 
 /** @private @param {import("../../../lib/FarmBotClient.js")} bot */
-exports.run = (bot) => {
+module.exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   const command = bot.registerCommand("market", (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
@@ -191,7 +191,7 @@ exports.run = (bot) => {
  * @param {import("../../../lib/npc.js").Request} request - The request object.
  * @param {import("../../../lib/npc.js").Farmer[]} userFarmers - The user's farmers (their "village").
  * @param {(Number | String)} id - The ID of the request.
- * @returns {Object} The parsed request.
+ * @returns The parsed request.
  */
 function parseRequest(request, userFarmers, id) {
   const farmer = userFarmers.find((f) => {

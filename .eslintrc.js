@@ -163,7 +163,7 @@ module.exports = {
         "jsdoc/require-returns": 1,
         "jsdoc/require-returns-check": 1,
         "jsdoc/require-returns-description": 1,
-        "jsdoc/require-returns-type": 1,
+        "jsdoc/require-returns-type": 0,
         "jsdoc/valid-types": 1
     },
     "settings": {
