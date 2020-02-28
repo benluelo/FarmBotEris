@@ -2,6 +2,7 @@
 module.exports.run = (bot) => {
   if (process.env.DEVELOPMENT == "true") {
     bot.registerCommand("deleteuser", (message) => {
+      if (!bot.ownersIDs.includes(message.author.id)) { return }
       if (!message.mentions[0]) {
         // delete your own account
         const deleteUserEmbed = new bot.Embed().uhoh(`**${message.author.username} (${message.author.id})**, account has been deleted`)
