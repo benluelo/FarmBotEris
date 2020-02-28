@@ -69,7 +69,7 @@ class FarmBotClient extends CommandClient {
    * @returns {Promise<import("eris").Message>} - The message that was sent to the user.
    */
   startMessage(message) {
-    return message.send(new this.embed().uhoh(`You have to start farming first, **${message.author.username}**! Send \`farm start\` to start farming!`))
+    return message.send(new this.Embed().uhoh(`You have to start farming first, **${message.author.username}**! Send \`farm start\` to start farming!`))
   }
 
   /**

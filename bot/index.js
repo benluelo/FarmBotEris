@@ -37,3 +37,19 @@ require("./src/event-loader.js")(bot)
 bot.initDB()
 
 bot.connect()
+
+// const express = require("express")
+// const app = express()
+// const port = 3000
+
+// app.get("/", (req, res) => res.send("Hello World!"))
+
+// app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+
+// app.post("/", function (req, res) {
+//   res.send("Got a POST request")
+// })
+
+// app.use(express.static(require("path").join(__dirname)))
+
+// console.log(__dirname)
