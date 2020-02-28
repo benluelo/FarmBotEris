@@ -1,12 +1,7 @@
 const flags = require("./flags.json")
 const { PERMISSIONS } = require("./help-info.js")
-const { ownersIDs } = require("../config.js/index.js")
+const { ownersIDs } = require("../config.js")
 
-
-/**
- * @typedef {User} User
- * @class
- */
 class User {
   /**
    * @description Creates a new user for the database.
@@ -45,7 +40,7 @@ class User {
         watered: false
       }
     ],
-    /** @prop {Object<object, {Object<object, Seed}>} seeds - The user's seeds. */
+    /** @prop {Object} seeds - The user's seeds. */
     this.seeds = {
       // 🍎🍊🍋🍐🍒🍑🥭🍈🍇🍓🍌🍍
       /** @prop {Object<string, Seed>} */

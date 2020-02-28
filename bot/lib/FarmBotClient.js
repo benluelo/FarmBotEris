@@ -146,7 +146,7 @@ class FarmBotClient extends CommandClient {
    */
   async initDB() {
     const client = require("mongodb").MongoClient
-    const config = require("../config.js/index.js")
+    const config = require("../config.js")
 
     client.connect(config.db.connectionString, config.db.connectionOptions, async (err, db) => {
       if (err) { throw err }

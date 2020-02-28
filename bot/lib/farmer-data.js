@@ -15,10 +15,6 @@ module.exports = {
       "👩🏿‍🌾"
     ]
   },
-  /**
-   * @description Farmer preferences.
-   * @namespace
-   */
   preferences: {
     /**
      * @type {colors[]}

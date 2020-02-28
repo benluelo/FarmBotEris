@@ -167,10 +167,7 @@ exports.run = (bot) => {
    * @description Prettify the request.
    * @param {Object} req - The request to prettify.
    * @param {Number} req.id - The ID.
-   * @param {Object[]} req.want - An array of the different wants in the request.
-   * @param {import("../../../lib/crop-data.js").CropName} req.want.name
-   * @param {import("../../../lib/crop-data.js").CropEmoji} req.want.emoji
-   * @param {Number} req.want.amount
+   * @param {Req[]} req.want - An array of the different wants in the request.
    * @param {Object} req.rewards - The rewards.
    * @param {Number} req.rewards.money - How much money wil be rewarded.
    * @param {Number} req.rewards.amount - How much reputation wil be rewarded.
@@ -203,7 +200,7 @@ function parseRequest(request, userFarmers, id) {
 
   const parsed = parseWants(farmer.preferences, request)
 
-  const toReturn = {
+  return {
     id: parseInt(id) + 1,
     want: parsed.req,
     rewards: {
@@ -216,7 +213,6 @@ function parseRequest(request, userFarmers, id) {
       level: farmer.level
     }
   }
-  return toReturn
 }
 
 /**
