@@ -61,27 +61,6 @@ class Embed {
     fields: []
   }) {
     this.embed = {
-      title: null,
-      description: null,
-      url: null,
-      color: null,
-      timestamp: null,
-      footer: {
-        icon_url: null,
-        text: null
-      },
-      thumbnail: {
-        url: null
-      },
-      image: {
-        url: null
-      },
-      author: {
-        name: null,
-        url: null,
-        icon_url: null
-      },
-      fields: [],
       ...embed
     }
   }
