@@ -1,6 +1,8 @@
 const { inspect } = require("util")
+/** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   bot.registerCommand("eval", (message, args) => {
+    if (!bot.ownersIDs.includes(message.author.id)) { return }
     const toEval = args.join(" ")
     try {
       const evaluated = inspect(eval(toEval, { depth: 0 }))
