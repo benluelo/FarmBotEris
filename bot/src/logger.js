@@ -16,7 +16,7 @@ const toFileStream = fs.createWriteStream(`${process.cwd()}/bot/logs/${outFileNa
  */
 const getDate = () => {
   const date = new Date()
-  return date.toLocaleString()
+  return date.toLocaleString("en-CA", { timeZone: "Canada/Eastern" })
 }
 
 class Log {
