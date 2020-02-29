@@ -74,7 +74,13 @@ module.exports.run = (bot) => {
               totalPlots++
             }
           }
-          msg.edit({
+          if (totalPlots == 0) {
+            return msg.edit({
+              content: "",
+              ...new bot.Embed().uhoh(`There's no more room in your field to plant anything else, **${message.author.username}!**`)
+            })
+          }
+          return  msg.edit({
             content: "",
             ...new bot.Embed().success(`Successfully planted **${totalPlots}** ${cropData[crop].emoji}!`)
           })

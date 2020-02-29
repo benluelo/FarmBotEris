@@ -15,8 +15,8 @@ exports.run = (bot) => {
 
         let messageToSend
 
-        if (userdata.requests.length < userdata.farmers.length) {
-          while (userdata.requests.length + newRequests.length < userdata.farmers.length) {
+        if (userdata.requests.length < 9) {
+          while (userdata.requests.length + newRequests.length < 9) {
           // get new requests
             const randomNPC = userdata.farmers[Math.floor(Math.random() * userdata.farmers.length)]
             newRequests.push(
