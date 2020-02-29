@@ -89,13 +89,12 @@ class Log {
       chalk.red.bold(`${fileName}:`),
       args.join(" ")
     )
-    fs.writeFile(`${process.cwd()}/bot/logs/errors/${fileName}`, p + "\n" + args.join("\n"), (err) => {
-      if (err) { throw err }
-      console.log(
-        chalk.red.bold(`${fileName}:`),
-        "Saved!"
-      )
-    })
+    fs.writeFileSync(`${process.cwd()}/bot/logs/errors/${fileName}`, p + "\n" + args.join("\n"))
+    console.log(
+      chalk.white.bold(`${p}:`),
+      chalk.red.bold(`${fileName}:`),
+      "Saved!"
+    )
   }
   /**
    * @description Logs to a file for use in long-term debugging and/or statistics. Also logs to the console, in yellow.
