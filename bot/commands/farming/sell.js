@@ -10,22 +10,25 @@ exports.run = (bot) => {
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
+      /** @description The amount of the crop to sell. */
       const amount = args[0]
+      /** @description The crop to sell. */
       const crop = args[1]
 
       if (userdata) {
 
-        if (!amount) { return message.send(new bot.Embed().uhoh("You have to specify a plant to sell!")) }
+        if (!amount) { return message.send(new bot.Embed().uhoh("You have to specify both an `amount` and a `crop`  to sell!")) }
         else if (crop && amount) {
 
           // sell the specified amount of the specified crop
-          // farm sell 2 apple
+          // i.e. `farm sell 2 apple`
 
           if (!cropData[crop]) { return message.send(new bot.Embed().uhoh("Not a valid crop!")) }
 
           const numAmount = parseInt(amount)
-          if (numAmount.toString() !== amount) { return message.send(new bot.Embed().uhoh("You have to enter a valid amount to sell!")) }
+          if (numAmount.toString() !== amount) { return message.send(new bot.Embed().uhoh(`**${amount}** isn't a number!`)) }
 
+          if ((!cropData[crop] || !userdata.seeds.common[crop].discovered)) { return message.send(new bot.Embed().uhoh(`Couldn't find **${crop} in your seedbag... maybe you mispelled it?`)) }
           if (userdata.seeds.common[crop].amount >= numAmount) {
 
             if (process.env.DEBUG === "true") {
@@ -45,7 +48,7 @@ exports.run = (bot) => {
             )
             message.send(new bot.Embed().success(`Sold **${numAmount}** ${cropData[crop].emoji} for **${bot.formatMoney(cropValue)}**!`))
           } else {
-            return message.send(new bot.Embed().uhoh("You have to specify a crop to sell!"))
+            return message.send(new bot.Embed().uhoh(`You don't have that many ${cropData[crop]}!`))
           }
         } else {
           message.send(new bot.Embed().uhoh("You need to use the format: `farm sell <amount> <crop>`"))

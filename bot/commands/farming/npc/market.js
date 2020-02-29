@@ -53,7 +53,7 @@ exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(30000))
+  }, bot.cooldown(15000))
   command.registerSubcommand("view", (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
@@ -83,7 +83,7 @@ exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(10000))
+  }, bot.cooldown(5000))
   command.registerSubcommand("fill", (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
@@ -161,7 +161,7 @@ exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(10000))
+  }, bot.cooldown(5000))
 
   /**
    * @description Prettify the request.

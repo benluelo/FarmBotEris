@@ -2,6 +2,10 @@ const flags = require("./flags.json")
 const { PERMISSIONS } = require("./help-info.js")
 const { ownersIDs } = require("../config.js")
 
+
+/**
+ * @typedef {User} User
+ */
 class User {
   /**
    * @description Creates a new user for the database.
