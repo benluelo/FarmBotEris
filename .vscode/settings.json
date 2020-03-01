@@ -11,6 +11,7 @@
         "dbconnect",
         "deleteuser",
         "dirpath",
+        "distro",
         "endregion",
         "farmbot",
         "farminfo",

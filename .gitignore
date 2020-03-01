@@ -4,4 +4,5 @@ bot/logs
 out
 helpers/crop-maker.js
 .vs/
+
 .vscode/

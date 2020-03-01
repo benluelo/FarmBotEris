@@ -29,6 +29,7 @@ setInterval( async () => {
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   bot.registerCommand("status", async (message, args) => {
+    if (!bot.ownersIDs.includes(message.author.id)) { return }
 
     // get debug/ development info
     const debugMode = (process.env.DEBUG == "true") ?
@@ -69,5 +70,5 @@ exports.run = (bot) => {
     requirements: {
       userIDs: bot.ownersIDs
     }
-  }, bot.cooldown(2000))
+  })
 }
