@@ -15,8 +15,8 @@ module.exports.run = (bot) => {
 
         let messageToSend
 
-        if (userdata.requests.length < userdata.farmers.length) {
-          while (userdata.requests.length + newRequests.length < userdata.farmers.length) {
+        if (userdata.requests.length < 9) {
+          while (userdata.requests.length + newRequests.length < 9) {
           // get new requests
             const randomNPC = userdata.farmers[Math.floor(Math.random() * userdata.farmers.length)]
             newRequests.push(
@@ -53,7 +53,7 @@ module.exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(30000))
+  }, bot.cooldown(15000))
   command.registerSubcommand("view", (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
@@ -83,7 +83,7 @@ module.exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(10000))
+  }, bot.cooldown(5000))
   command.registerSubcommand("fill", (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
@@ -161,7 +161,7 @@ module.exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(10000))
+  }, bot.cooldown(5000))
 
   /**
    * @description Prettify the request.

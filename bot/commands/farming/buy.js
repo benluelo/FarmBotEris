@@ -43,6 +43,7 @@ exports.run = async (bot) => {
           const notEnoughEmbed = new bot.Embed()
             .setTitle("Insufficient Funds!")
             .setDescription(`The next plot costs **${bot.formatMoney(priceOfNextPlot)}.**`)
+            .setColor(bot.color.error)
 
           return message.send(notEnoughEmbed)
         }

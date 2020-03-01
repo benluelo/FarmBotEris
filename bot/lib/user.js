@@ -4,7 +4,10 @@ const { ownersIDs } = require("../config.js")
 
 
 /**
+<<<<<<< HEAD
  * @class
+=======
+>>>>>>> b718cdce244fdff7f69f2f0d5a39e66109b1fc4a
  * @typedef {User} User
  */
 class User {

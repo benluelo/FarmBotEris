@@ -3,8 +3,12 @@ exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
   bot.registerCommand("ping", (message, args) => {
     const startTime = Date.now()
-    message.send("Pinging...").then((msg) => {
-      msg.edit(new bot.Embed().success("Pong! " + (Date.now() - startTime) + "ms."))
-    })
+    const e = new bot.Embed().success("Pinging...")
+    message.send(e)
+      .then((msg) => {
+        msg.edit({
+          ...e.setDescription("Pong! " + (Date.now() - startTime) + "ms.")
+        })
+      })
   }, bot.cooldown(1000))
 }

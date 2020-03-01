@@ -1,5 +1,6 @@
 const cropData = require("../../lib/crop-data.js")
 const getPriceOfSeeds = require("../../lib/get-price-of-seeds")
+const { getLevel } = require("../../../helpers/level-test.js")
 
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
@@ -11,15 +12,15 @@ exports.run = (bot) => {
       let seeds = ""
       for (const crop in userdata.seeds.common) {
         if (userdata.seeds.common[crop].discovered) {
-          seeds += `${cropData[crop].emoji} ${crop.charAt(0).toUpperCase() + crop.slice(1)} - \`$${getPriceOfSeeds[crop]}\` \n`
+          seeds += `${cropData[crop].emoji} ${crop.charAt(0).toUpperCase() + crop.slice(1)}: **${bot.formatMoney(getPriceOfSeeds[crop] * getLevel(userdata.seeds.common[crop].level).level)}**\n`
         }
       }
       const seedsEmbed = new bot.Embed()
-        .setTitle("Seeds")
-        .setDescription("Prices update every hour\n" + seeds)
+        .setTitle(`**${message.author.username}'s** seedbag!`)
+        .setDescription("Prices update every hour!\n" + seeds)
         .setColor(bot.color.lightgreen)
         .setTimestamp()
-      await message.send(seedsEmbed)
+      return await message.send(seedsEmbed)
     })
   }, bot.cooldown(3000))
 }
