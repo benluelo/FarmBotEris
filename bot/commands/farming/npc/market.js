@@ -112,7 +112,7 @@ module.exports.run = (bot) => {
         })()
 
         if (!enoughCrops) {
-          return new bot.Embed().uhoh("You don't have enough crops to fill this order!")
+          return message.send(new bot.Embed().uhoh("You don't have enough crops to fill this order!"))
         }
 
         const p = prettifyParsedRequest(a)
