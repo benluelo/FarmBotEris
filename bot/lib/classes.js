@@ -1,3 +1,8 @@
+const util = require("util")
+// console.log(util.inspect.styles)
+util.inspect.styles.customclass = "yellowBright"
+// console.log(util.inspect.styles)
+
 /**
  * @namespace Classes
  */
@@ -281,11 +286,154 @@ class Attachment {
   }
 }
 
+class Cooldowns extends Map {
+  constructor() {
+    super()
+    /** @type {Object<string, number>} */
+    this.COMMAND_COOLDOWNS = {}
+    const allCommands = require("./help-info.js").commands
+    for (const command in allCommands) {
+      this.COMMAND_COOLDOWNS[command] = allCommands[command].cooldown
+    }
+  }
+
+  /**
+   * @description Checks if a user is able to use a command. If they are able to use it, reset their cooldown for that command.
+   * @param {String} userID - The `userID` who is attempting to use the command.
+   * @param {String} commandName - The name of the command to check the cooldown for.
+   * @returns {Boolean} Whether or not a user can use a command.
+   */
+  check(userID, commandName) {
+
+    // check for the user in the cooldowns
+    if (this.has(userID)) {
+
+      // if the user is in the cooldowns, check if they can use the command
+      if (this.get(userID).get(commandName)) {
+        // if they can use the command, reset their cooldown for that command and return true
+        this.get(userID).set(commandName, Date.now())
+        return true
+      } else {
+        // else return false
+        return false
+      }
+    // if the user isn't in the cooldowns, add them to it, return true
+    } else {
+      this.set(userID, commandName)
+      return true
+    }
+  }
+
+  /**
+   * @description Gets a user from the `Cooldowns`.
+   * @param {String} userID - The user's `userID` to get from the `Cooldowns`.
+   * @returns {(UserCoolDowns | undefined)} The found user, or `undefined` if they weren't found.
+   */
+  get(userID) {
+    return super.get(userID)
+  }
+
+  /**
+   * @description Adds a user to the `Cooldowns`.
+   * @param {String} userID - The user's `userID` to add to the `Cooldowns`.
+   * @param {String} cmd - The command that the user called first to set the cooldown of when adding their `UserCoolDowns` object to the `Cooldowns` Map.
+   * @returns {this} The `Cooldowns` object.
+   */
+  set(userID, cmd) {
+    return super.set(userID, new UserCoolDowns(this.COMMAND_COOLDOWNS, cmd))
+  }
+
+  /**
+   * @description Checks if a user is in the `Cooldowns`.
+   * @param {String} userID - The user's `userID` to check the `Cooldowns` for.
+   * @returns {Boolean} Whether or not the user is in the `Cooldowns`.
+   */
+  has(userID) {
+    return super.has(userID)
+  }
+
+  // eslint-disable-next-line jsdoc/require-description, jsdoc/require-returns, jsdoc/require-param-description, jsdoc/require-param-description
+  /**
+   * @param {Number} depth
+   * @param {import("util").InspectOptionsStylized} options
+   */
+  [util.inspect.custom](depth, options) {
+    let toReturn = ""
+    for (const [userID, userCoolDown] of this.entries()) {
+      // console.log(JSON.stringify(, null, 4))
+      // console.log(options.stylize)
+      toReturn += `\n  ${options.stylize(userID, "number")} => ${util.inspect(userCoolDown, true, 0, true)},`
+    }
+    return `Cooldowns(${this.size}): {${toReturn.slice(0, -1)}\n}`
+  }
+}
+
+class UserCoolDowns extends Map {
+  /**
+   * @description Creates a new `UserCoolDown` object for use in the `Cooldowns`.
+   * @param {Object<string, number>} COMMAND_NAMES - An object mapping all of the command names to their respective cooldowns.
+   * @param {String} firstCommand - The command that was called, to set the cooldown of.
+   */
+  constructor(COMMAND_NAMES, firstCommand) {
+    super()
+
+    for (const cmd in COMMAND_NAMES) {
+      this.set(cmd, 0)
+    }
+    this.set(firstCommand, Date.now())
+    this.cooldownTimes = COMMAND_NAMES
+  }
+
+  /**
+   * @description Checks if a user can use a command.
+   * @param {String} cmd - The command name.
+   * @returns {Boolean} Whether or not the cooldown time has passed.
+   */
+  get(cmd) {
+    const t = super.get(cmd)
+    const cd = this.cooldownTimes[cmd]
+    // console.log(cmd, "cd:", cd)
+    // console.log("t:", t)
+    // console.log("new:", Date.now() - cd)
+    // console.log(Date.now() - cd >= t)
+    // console.log()
+    return Date.now() - cd >= t
+  }
+
+  /* eslint-disable */
+  /**
+   * @param {Number} depth
+   * @param {import("util").InspectOptionsStylized} options
+   */
+  [util.inspect.custom](depth, options) {
+    if (depth == 0) {
+      /** commands that are on cooldown */
+      let hot = 0
+      /** commands that are cooled down */
+      let cold = 0
+      /* eslint-enable */
+      for (const [cmd] of this) {
+        const t = this.get(cmd)
+        t ? cold++ : hot++
+      }
+      return `${options.stylize(options.stylize(("UserCoolDowns"), "customclass"), "bold")}: (Cold -> ${options.stylize(cold, "special")}, Hot -> ${options.stylize(hot, "regexp")})`
+    } else {
+      let toReturn = ""
+      for (const [cmd, timer] of this.entries()) {
+        toReturn += `\n  ${options.stylize(cmd, "string")} => ${options.stylize(timer, this.get(cmd) ? "special" : "regexp")},`
+      }
+      return `UserCoolDowns(${this.size}): {${toReturn.slice(0, -1)}\n}`
+    }
+  }
+}
+
 module.exports = {
   Embed,
   ProgressBar,
   XPProgressBar,
-  Attachment
+  Attachment,
+  Cooldowns,
+  UserCoolDowns
 }
 
 // eslint-disable-next-line no-unused-vars

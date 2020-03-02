@@ -144,7 +144,7 @@ module.exports = {
         "jsdoc/implements-on-classes": 1,
         "jsdoc/match-description": 1,
         "jsdoc/newline-after-description": 1,
-        "jsdoc/no-undefined-types": 1,
+        "jsdoc/no-undefined-types": 0,
         "jsdoc/require-description": [
             2,
             { "descriptionStyle": "tag" }

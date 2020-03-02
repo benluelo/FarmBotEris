@@ -2,51 +2,39 @@
  * @typedef {Object} CommandHelpObject
  * @prop {String} description - The description for the command.
  * @prop {String} usage - How to use the command.
- * @prop {(String | Boolean)} examples - Examples of how to use the command. `false` if there are no examples.
+ * @prop {String} [examples] - Examples of how to use the command.
  * @prop {PermissionsLevels} permissionLevel
- * @prop {CategoriesSymbol} category
+ * @prop {Symbol} category - The category the command belongs in.
+ * @prop {String[]} [aliases] - An array of aliases for the command.
+ * @prop {Number} cooldown - The cooldown for the command, in `ms`.
+ * @prop {Object<string, CommandHelpObject>} [subcommands] - An object mapping any subcommands that the command may have to their respective {@link CommandHelpObject}.
  */
 
 /**
  * @typedef {(0 | 1 | 2 | 3)} PermissionsLevels
  */
-/**
- * @typedef {Symbol} CategoriesSymbol
- */
 
-/**
- * @description The different permission levels for a command.
- * @typedef {Object} PERMISSIONS
- * @prop {PermissionsLevels} EVERYONE - Commands that everyone has access to.
- * @prop {PermissionsLevels} MODERATORS - Commands that only bot moderators have access to.
- * @prop {PermissionsLevels} OWNERS - Commands that only bot admins have access to.
- * @prop {PermissionsLevels} DEVELOPMENT - Commands that are only to be used by the developers (i.e. only Ben & Tyler).
- */
-/**
- * @type {PERMISSIONS}
- */
+/** @description The different permission levels for a command. */
 const PERMISSIONS = Object.freeze({
+  /** @type {0} Commands that everyone has access to. */
   EVERYONE: 0,
+  /** @type {1} Commands that only bot moderators have access to. */
   MODERATORS: 1,
+  /** @type {2} Commands that only bot admins have access to. */
   OWNERS: 2,
+  /** @type {3} Commands that are only to be used by the developers, during development (i.e. only Ben & Tyler). */
   DEVELOPMENT: 3
 })
 
-/**
- * @description The different categories of commands.
- * @typedef {Object} CATEGORIES
- * @prop {CategoriesSymbol} FARMING - Commands related to farming.
- * @prop {CategoriesSymbol} UTILITY - Useful commands for information about the bot.
- * @prop {CategoriesSymbol} OWNER - Commands that are only to be used by the owners (i.e. only Ben & Tyler).
- * @prop {CategoriesSymbol} DEVELOPMENT - Commands used for bot development.
- */
-/**
- * @type {CATEGORIES}
- */
+/** @description The different categories of commands. */
 const CATEGORIES = Object.freeze({
+  /** @type {Symbol} Commands related to farming. */
   FARMING: Symbol("🌱 Farming"),
+  /** @type {Symbol} Useful commands for information about the bot. */
   UTILITY: Symbol("⚙️ Utility"),
+  /** @type {Symbol} Commands that are only to be used by the owners (i.e. only Ben & Tyler). */
   OWNER: Symbol("🥑 Owner"),
+  /** @type {Symbol} Commands used for bot development. */
   DEVELOPMENT: Symbol("📜 Development")
 })
 
@@ -57,146 +45,250 @@ const commands = {
     usage: "​farm botinfo",
     examples: false,
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.UTILITY
+    category: CATEGORIES.UTILITY,
+    aliases: null,
+    cooldown: 3000,
+    subcommands: null
   },
   buy: {
-    description: "Buy a new plot for your farm.",
-    usage: "farm buy [confirm]",
-    examples: "farm buy\n└> look at price of next plot.\nfarm buy confirm\n└> buy the next plot.\n",
+    description: "Show the price of the next farm plot.",
+    usage: "farm buy",
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.FARMING
+    category: CATEGORIES.FARMING,
+    aliases: null,
+    cooldown: 3000,
+    subcommands: {
+      confirm: {
+        description: "Buy a new plot for your farm.",
+        usage: "farm buy confirm",
+        permissionLevel: PERMISSIONS.EVERYONE,
+        category: CATEGORIES.FARMING,
+        aliases: null,
+        cooldown: 3000,
+        subcommands: null
+      }
+    }
   },
   deleteuser: {
     description: "Delete a user from the database.",
     usage: "farm deleteuser [@mention]",
     examples: false,
     permissionLevel: PERMISSIONS.DEVELOPMENT,
-    category: CATEGORIES.DEVELOPMENT
+    category: CATEGORIES.DEVELOPMENT,
+    aliases: null,
+    cooldown: 0,
+    subcommands: null
   },
   eval: {
     description: "no",
     usage:  "​no",
     examples: "​no",
     permissionLevel: PERMISSIONS.OWNERS,
-    category: CATEGORIES.OWNER
+    category: CATEGORIES.OWNER,
+    aliases: null,
+    cooldown: 0,
+    subcommands: null
   },
   harvest: {
     description: "Harvest your crops.",
     usage: "farm harvest [plot]​",
-    examples: "​farm harvest a1",
+    examples: "​farm harvest a1\n└> harvest a specific plot.\nfarm harvest└> harvest all of your crops.",
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.FARMING
+    category: CATEGORIES.FARMING,
+    aliases: null,
+    cooldown: 5000,
+    subcommands: null
   },
   info: {
     description: "To show utility on a plot in your farm",
     usage: "​farm info <plot>",
     examples: "​farm info a1",
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.UTILITY
+    category: CATEGORIES.UTILITY,
+    aliases: null,
+    cooldown: 3000,
+    subcommands: null
   },
   market: {
-    title: "market",
-    description: "Shows all the current requests for trading goods",
-    usage: "farm market [option]​",
-    examples: "farm market view <order id>​\nfarm market fill <order id>",
+    description: "Show all current market requests.",
+    usage: "farm market",
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.FARMING
+    category: CATEGORIES.FARMING,
+    aliases: null,
+    cooldown: 10000,
+    subcommands: {
+      view: {
+        description: "Show a specific market request.",
+        usage: "farm market view <order id>​",
+        permissionLevel: PERMISSIONS.EVERYONE,
+        category: CATEGORIES.FARMING,
+        aliases: ["info"],
+        cooldown: 5000,
+        subcommands: null
+      },
+      fill: {
+        description: "Fill a market request.",
+        usage: "farm market fill <order id>​",
+        permissionLevel: PERMISSIONS.EVERYONE,
+        category: CATEGORIES.FARMING,
+        aliases: null,
+        cooldown: 5000,
+        subcommands: null
+      }
+    }
   },
   money: {
-    title: "money",
     description: `View your current ${require("./emoji.json").coin} balance.`,
     usage: "​farm money",
     examples: false,
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.FARMING
+    category: CATEGORIES.FARMING,
+    aliases: ["cash"],
+    cooldown: 2000,
+    subcommands: null
   },
   inventory: {
-    title: "inventory",
     description: "Shows all the items in your inventory",
     usage: "​farm inventory",
     examples: false,
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.FARMING
+    category: CATEGORIES.FARMING,
+    aliases: ["inv"],
+    cooldown: 3000,
+    subcommands: null
   },
   ping: {
-    title: "ping",
     description: "To view the time response from the bot to discord",
     usage: "​farm ping",
     examples: false,
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.UTILITY
+    category: CATEGORIES.UTILITY,
+    aliases: null,
+    cooldown: 1000,
+    subcommands: null
   },
   help: {
-    title: "help",
     description: "To show utility about all the commands",
     usage: "​farm help [command]",
     examples: "farm help harvest​",
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.UTILITY
+    category: CATEGORIES.UTILITY,
+    aliases: null,
+    cooldown: 1000,
+    subcommands: null
   },
   plant: {
-    title: "plant",
-    description: "To plant a seed on a plot",
+    description: "Plants a seed on the specified plot.",
     usage: "​farm plant <plot> <seed>",
-    examples: "​farm plant a1 apple\nfarm plant all apple",
+    examples: "​farm plant a1 apple",
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.FARMING
+    category: CATEGORIES.FARMING,
+    aliases: null,
+    cooldown: 5000,
+    subcommands: {
+      all: {
+        description: "Plants a seed on all available plots.",
+        usage: "​farm plant all <seed>",
+        examples: "​farm plant all apple",
+        permissionLevel: PERMISSIONS.EVERYONE,
+        category: CATEGORIES.FARMING,
+        aliases: null,
+        cooldown: 5000,
+        subcommands: null // hello lmao
+      }
+    }
   },
   plots: {
-    title: "plots",
-    description: "Shows all your farm plots",
+    description: "Show an overview of your farm.",
     usage: "​farm plots",
     examples: false,
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.FARMING
+    category: CATEGORIES.FARMING,
+    aliases: null,
+    cooldown: 10000,
+    subcommands: null
   },
   seeds: {
-    title: "seeds",
     description: "To get all the seeds and their prices that they sell for per seed",
     usage: "​farm seeds",
     examples: false,
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.FARMING
+    category: CATEGORIES.FARMING,
+    aliases: null,
+    cooldown: 3000,
+    subcommands: null
   },
   sell: {
-    title: "sell",
     description: "Sell a crop in your inventory.",
     usage:  "​farm sell <amount> <crop>",
-    examples: "farm sell 45 apple\nfarm sell all apple", // here need edit _______________i don't know what you changed________ i hadnt done anything yet ill get it tho ------------ oh okay -- fucking ctrl-s
+    examples: "farm sell 12 apple",
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.FARMING
+    category: CATEGORIES.FARMING,
+    aliases: null,
+    cooldown: 3000,
+    subcommands: {
+      all: {
+        description: "Sell all of a crop in your inventory.",
+        usage:  "​farm sell <amount> <crop>",
+        examples: "farm sell all apple",
+        permissionLevel: PERMISSIONS.EVERYONE,
+        category: CATEGORIES.FARMING,
+        aliases: null,
+        cooldown: 5000,
+        subcommands: null
+      }
+    }
   },
   skills: {
-    title: "skills",
     description: "Shows the level of all your seeds",
     usage: "​farm skills [seed]",
     examples: "farm skills apple",
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.FARMING
+    category: CATEGORIES.FARMING,
+    aliases: null,
+    cooldown: 5000,
+    subcommands: null
   },
   status: {
-    title: "status",
-    description: "The status of the bot, (more detailed version of `farm botinfo`)",
+    description: "The status of the bot. (more detailed version of `farm botinfo`)",
     usage: "​farm status",
     examples: false,
     permissionLevel: PERMISSIONS.MODERATORS,
-    category: CATEGORIES.UTILITY
+    category: CATEGORIES.UTILITY,
+    aliases: null,
+    cooldown: 0,
+    subcommands: null
   },
   stop: {
-    title: "stop",
-    description: "stops/restarts the bot",
-    usage: "​farm stop [restart]",
-    examples: "​farm stop\nfarm stop restart",
+    description: "Stops the bot.",
+    usage: "​farm stop",
+    examples: "​farm stop",
     permissionLevel: PERMISSIONS.DEVELOPMENT,
-    category: CATEGORIES.UTILITY
+    category: CATEGORIES.UTILITY,
+    aliases: null,
+    cooldown: 0,
+    subcommands: {
+      restart: {
+        description: "Restarts the bot",
+        usage: "​farm stop restart",
+        examples: "​farm stop restart",
+        permissionLevel: PERMISSIONS.DEVELOPMENT,
+        category: CATEGORIES.UTILITY,
+        aliases: null,
+        cooldown: 0,
+        subcommands: null
+      }
+    }
   },
   village: {
-    title: "village",
     description: "Shows you the village of all the people and their levels",
     usage: "​farm village",
     examples: false,
     permissionLevel: PERMISSIONS.EVERYONE,
-    category: CATEGORIES.FARMING
+    category: CATEGORIES.FARMING,
+    aliases: null,
+    cooldown: 5000,
+    subcommands: null
   }
 }
 
@@ -208,12 +300,15 @@ if (!(process.env.DEVELOPMENT == "true")) {
     }
   }
 }
+// console.log(require("./classes"))
+const Embed = require("./classes").Embed
 
-const { Embed } = require("../lib/classes")
+// console.log(Embed)
 
-/** @type {Object<string, import("../lib/classes.js").Embed>} */
-const helpEmbeds = {}
+/** @type {Object<string, Embed>} */
+const commandHelpEmbeds = {}
 
+/** @type {Object<number, String[]>} */
 const fullHelp = {}
 
 for (const perm in PERMISSIONS) {
@@ -221,6 +316,7 @@ for (const perm in PERMISSIONS) {
 }
 
 /**
+ * @description Maps permission levels to their respective allowed commands, per category.
  * @type {Object<number, {
     CATEGORY_FARMING: String[],
     CATEGORY_UTILITY: String[],
@@ -228,32 +324,73 @@ for (const perm in PERMISSIONS) {
     CATEGORY_DEVELOPMENT: String[]
   }>}
  */
-const fullHelpEmbeds = Object.fromEntries(Object.values(PERMISSIONS).map(((val) => {
-  return [val, Object.fromEntries(Object.values(CATEGORIES).map(((cat) => {
-    return [cat, []]
-  })))]
-})))
+const fullHelpEmbeds = Object.fromEntries(Object
+  .values(PERMISSIONS)
+  .map((val) => {
+    return [
+      val,
+      Object.fromEntries(Object
+        .values(CATEGORIES)
+        .map((cat) => {
+          return [cat, []]
+        })
+      )
+    ]
+  })
+)
 
 for (const command in commands) {
   const current = commands[command]
+  // console.log(command, current.subcommands)
+  // console.log(command)
+  // // eslint-disable-next-line no-undef
+  // if ((a = commands[command].subcommands)) {
+  //   Object.keys(a).forEach((k) => {
+  //     console.log(" ", command + " " + k)
+  //   })
+  // }
+  // console.log()
   fullHelp[current.permissionLevel].push(command)
-  const e = new Embed()
-    .setTitle(`Help for \`${command}\``)
-    .setDescription(current.description)
-    .setColor(0x00b3b3)
-    .setFooter("<> - required  |  [] - optional")
-    .addField("**__Usage__:**", `\`\`\`${current.usage}\`\`\``)
-  if (current.examples) { e.addField("**__Examples__:**", `\`\`\`${current.examples}\`\`\``) }
-  helpEmbeds[command] = e
+
+  ;(/**
+     * @description Ye.
+     * @param {String} cmdName - The name of the command.
+     * @param {CommandHelpObject} cmdObject - The object of the command.
+     * @param {String} [parent] - The parent command if this is a subcommand.
+     */
+    function getCMDs(cmdName, cmdObject, parent) {
+      // console.log(cmdName)
+      const e = new Embed()
+        .setTitle(`Help for \`${cmdName}\``)
+        .setDescription(cmdObject.description)
+        .setColor(0x00b3b3)
+        .setFooter("<> - required  |  [] - optional")
+        .addField("**__Usage__:**", `\`\`\`${cmdObject.usage}\`\`\``)
+      if (cmdObject.examples) { e.addField("**__Examples__:**", `\`\`\`${cmdObject.examples}\`\`\``) }
+      if (cmdObject.aliases) { e.addField("**__Aliases__:**", `\`\`\`${cmdObject.aliases.join(", ")}\`\`\``) }
+      e.addField("**__Cooldown__:**", `\`\`\`${cmdObject.cooldown / 1000} seconds\`\`\``)
+      if (cmdObject.subcommands) {
+        const subs = Object.keys(cmdObject.subcommands)
+        e.addField("**__Subcommands__:**", `\`\`\`${subs.join(", ")}\`\`\``)
+        subs.forEach((sc) => {
+          // console.log(cmdObject.subcommands[sc])
+          getCMDs(cmdName + " " + sc, cmdObject.subcommands[sc], cmdName)
+        })
+      }
+      commandHelpEmbeds[cmdName] = e
+    }
+  )(command, current)
 }
 
-// make a different embed for each permission level. each successive level has all the permissions of the previous level.
+// console.log(JSON.stringify(Object.keys(commandHelpEmbeds), null, 4, true))
 
+// make a different embed for each permission level. each successive level has all the permissions of the previous level.
+// console.log(fullHelp)
 for (const i in fullHelp) {
-  for (const com in fullHelp[i]) {
+  for (const cmd in fullHelp[i]) {
     for (const permlvl in fullHelpEmbeds) {
       if (i <= permlvl) {
-        fullHelpEmbeds[permlvl][commands[fullHelp[i][com]].category].push(fullHelp[i][com])
+        fullHelpEmbeds[permlvl][commands[fullHelp[i][cmd]].category].push(fullHelp[i][cmd])
       }
     }
   }
@@ -281,5 +418,6 @@ module.exports = {
   PERMISSIONS,
   CATEGORIES,
   fullHelpEmbeds,
-  helpEmbeds
+  commandHelpEmbeds,
+  commands
 }

@@ -112,10 +112,12 @@ class FarmBotClient extends CommandClient {
 
   /**
    * @description Returns a cooldown object for the Eris `CommandClient.registerCommand()` method.
+   * @param {String} nameOfCommand - The name of command the cooldown is responsible for.
+   *
    * @param {Number} length - The length of the cooldown to set, in milliseconds.
    * @returns {CooldownObject} {@link CooldownObject}.
    */
-  cooldown(length) {
+  cooldown(nameOfCommand, length) {
     return {
       cooldown: length,
       cooldownMessage: () => {

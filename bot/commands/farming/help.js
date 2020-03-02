@@ -3,16 +3,17 @@ const help = require("../../lib/help-info.js")
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
   bot.registerCommand("help", (message, args) => {
+    const req = args.join(" ")
     bot.getUser(message.author.id, (err, userdata) => {
 
       if (err) { bot.log.error(err) }
 
       if (userdata) {
-        if (!args[0]) { message.send(help.fullHelpEmbeds[userdata.permissions]) }
+        if (!req) { message.send(help.fullHelpEmbeds[userdata.permissions]) }
         else {
-          const req = help.helpEmbeds[args[0]]
-          if (req) { return message.send(req) }
-          else { message.send(new bot.Embed().uhoh(`${args[0]} isn't a command!`)) }
+          const e = help.commandHelpEmbeds[req]
+          if (e) { return message.send(e) }
+          else { message.send(new bot.Embed().uhoh(`${reqs} isn't a command!`)) }
         }
       } else { bot.startMessage(message) }
 
