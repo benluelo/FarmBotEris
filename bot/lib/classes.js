@@ -299,28 +299,29 @@ class Cooldowns extends Map {
 
   /**
    * @description Checks if a user is able to use a command. If they are able to use it, reset their cooldown for that command.
-   * @param {String} userID - The `userID` who is attempting to use the command.
-   * @param {String} commandName - The name of the command to check the cooldown for.
-   * @returns {Boolean} Whether or not a user can use a command.
+   * @param {String} userID - The `userID` of the user who is attempting to use the command.
+   * @param {String} commandName - The name of the command the user is attempting to use.
+   * @returns {Number} How long the user has to wait to use the command, in milliseconds; `0` if the cooldown is up.
    */
   check(userID, commandName) {
 
     // check for the user in the cooldowns
     if (this.has(userID)) {
-
+      /** @description The **T**ime the user has **T**o **W**ait to use the command. */
+      let TTW = 0
       // if the user is in the cooldowns, check if they can use the command
-      if (this.get(userID).get(commandName)) {
-        // if they can use the command, reset their cooldown for that command and return true
+      if ((TTW = this.get(userID).get(commandName)) == 0) {
+        // if they can use the command, reset their cooldown for that command
         this.get(userID).set(commandName, Date.now())
-        return true
+        return 0
       } else {
-        // else return false
-        return false
+        // else, return how long they have to wait
+        return TTW
       }
-    // if the user isn't in the cooldowns, add them to it, return true
+    // if the user isn't in the cooldowns, add them to it
     } else {
       this.set(userID, commandName)
-      return true
+      return 0
     }
   }
 
@@ -364,7 +365,7 @@ class Cooldowns extends Map {
       // console.log(options.stylize)
       toReturn += `\n  ${options.stylize(userID, "number")} => ${util.inspect(userCoolDown, true, 0, true)},`
     }
-    return `Cooldowns(${this.size}): {${toReturn.slice(0, -1)}\n}`
+    return `Cooldowns(${this.size}): {${toReturn.slice(0, -1)}${this.size == 0 ? "" : "\n"}}`
   }
 }
 
@@ -387,17 +388,23 @@ class UserCoolDowns extends Map {
   /**
    * @description Checks if a user can use a command.
    * @param {String} cmd - The command name.
-   * @returns {Boolean} Whether or not the cooldown time has passed.
+   * @returns {Number} How long the user has to wait to use the command; `0` if the cooldown is up.
    */
   get(cmd) {
     const t = super.get(cmd)
     const cd = this.cooldownTimes[cmd]
-    // console.log(cmd, "cd:", cd)
-    // console.log("t:", t)
-    // console.log("new:", Date.now() - cd)
-    // console.log(Date.now() - cd >= t)
-    // console.log()
-    return Date.now() - cd >= t
+    return this._clamp((t + cd - Date.now()), 0, cd)
+  }
+
+  /**
+   * @description Clamps a number between two provided values.
+   * @param {Number} num - The number to clamp.
+   * @param {Number} min - The minimum value for the number.
+   * @param {Number} max - The maximum value for the number.
+   * @returns {Number} The clamped number.
+   */
+  _clamp(num, min, max) {
+    return num <= min ? min : num >= max ? max : num
   }
 
   /* eslint-disable */
@@ -414,13 +421,13 @@ class UserCoolDowns extends Map {
       /* eslint-enable */
       for (const [cmd] of this) {
         const t = this.get(cmd)
-        t ? cold++ : hot++
+        t == 0 ? cold++ : hot++
       }
       return `${options.stylize(options.stylize(("UserCoolDowns"), "customclass"), "bold")}: (Cold -> ${options.stylize(cold, "special")}, Hot -> ${options.stylize(hot, "regexp")})`
     } else {
       let toReturn = ""
       for (const [cmd, timer] of this.entries()) {
-        toReturn += `\n  ${options.stylize(cmd, "string")} => ${options.stylize(timer, this.get(cmd) ? "special" : "regexp")},`
+        toReturn += `\n  ${options.stylize(cmd, "string")} => ${options.stylize(timer, this.get(cmd) == 0 ? "special" : "regexp")},`
       }
       return `UserCoolDowns(${this.size}): {${toReturn.slice(0, -1)}\n}`
     }
@@ -432,8 +439,7 @@ module.exports = {
   ProgressBar,
   XPProgressBar,
   Attachment,
-  Cooldowns,
-  UserCoolDowns
+  Cooldowns
 }
 
 // eslint-disable-next-line no-unused-vars

@@ -6,6 +6,8 @@ exports.run = async (bot) => {
 
   bot.registerCommand("buy", (message) => {
 
+    console.log(bot.Cooldowns.check(message.author.id, "buy"))
+
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
