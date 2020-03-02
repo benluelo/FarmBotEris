@@ -300,10 +300,8 @@ if (!(process.env.DEVELOPMENT == "true")) {
     }
   }
 }
-// console.log(require("./classes"))
-const Embed = require("./classes").Embed
 
-// console.log(Embed)
+const Embed = require("./classes").Embed
 
 /** @type {Object<string, Embed>} */
 const commandHelpEmbeds = {}
@@ -332,7 +330,10 @@ const fullHelpEmbeds = Object.fromEntries(Object
       Object.fromEntries(Object
         .values(CATEGORIES)
         .map((cat) => {
-          return [cat, []]
+          return [
+            cat,
+            []
+          ]
         })
       )
     ]
@@ -341,15 +342,6 @@ const fullHelpEmbeds = Object.fromEntries(Object
 
 for (const command in commands) {
   const current = commands[command]
-  // console.log(command, current.subcommands)
-  // console.log(command)
-  // // eslint-disable-next-line no-undef
-  // if ((a = commands[command].subcommands)) {
-  //   Object.keys(a).forEach((k) => {
-  //     console.log(" ", command + " " + k)
-  //   })
-  // }
-  // console.log()
   fullHelp[current.permissionLevel].push(command)
 
   ;(/**
@@ -359,7 +351,6 @@ for (const command in commands) {
      * @param {String} [parent] - The parent command if this is a subcommand.
      */
     function getCMDs(cmdName, cmdObject, parent) {
-      // console.log(cmdName)
       const e = new Embed()
         .setTitle(`Help for \`${cmdName}\``)
         .setDescription(cmdObject.description)
@@ -385,7 +376,6 @@ for (const command in commands) {
 // console.log(JSON.stringify(Object.keys(commandHelpEmbeds), null, 4, true))
 
 // make a different embed for each permission level. each successive level has all the permissions of the previous level.
-// console.log(fullHelp)
 for (const i in fullHelp) {
   for (const cmd in fullHelp[i]) {
     for (const permlvl in fullHelpEmbeds) {

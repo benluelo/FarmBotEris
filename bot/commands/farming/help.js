@@ -13,7 +13,7 @@ module.exports.run = (bot) => {
         else {
           const e = help.commandHelpEmbeds[req]
           if (e) { return message.send(e) }
-          else { message.send(new bot.Embed().uhoh(`${reqs} isn't a command!`)) }
+          else { message.send(new bot.Embed().uhoh(`${req} isn't a command!`)) }
         }
       } else { bot.startMessage(message) }
 
