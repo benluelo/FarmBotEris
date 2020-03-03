@@ -1,0 +1,17 @@
+{
+  "name": "farmbot-web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/benluelo/FarmBotEris.git",
+  "author": "Tyler <tylersmaldonado@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "mongodb": "^3.5.4",
+    "uuid": "^7.0.1"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0"
+  }
+}
