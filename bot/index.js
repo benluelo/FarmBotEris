@@ -30,6 +30,9 @@ const bot = new FarmBotClient(process.env.TOKEN, {
 
 require("./src/command-loader.js")(bot)
 require("./src/event-loader.js")(bot)
+require("../API/index")(bot) // not ideal (bot goes down so does some user pages) but works!
+
+console.log(bot.Commands)
 
 bot.initDB()
 

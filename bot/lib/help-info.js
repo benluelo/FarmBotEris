@@ -411,3 +411,5 @@ module.exports = {
   commandHelpEmbeds,
   commands
 }
+
+console.log(Object.keys(commandHelpEmbeds))

@@ -23,6 +23,11 @@ class FarmBotClient extends CommandClient {
     this.db = undefined
     this.Cooldowns = new (require("./classes")).Cooldowns()
 
+    /**
+     * @type {Map<string, import("./Command.js")>}
+     */
+    this.Commands = new Map()
+
     console.log(this.Cooldowns)
     /**
      * @type {Object<string, number>} - The different colors for the bot.

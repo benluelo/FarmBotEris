@@ -1,6 +1,10 @@
 const util = require("util")
 // console.log(util.inspect.styles)
 util.inspect.styles.customclass = "yellowBright"
+// util.inspect.styles.userID = 
+const chalk = require("chalk")
+const customclass = chalk.keyword("orange")
+const userid = chalk.keyword("purple")
 // console.log(util.inspect.styles)
 
 /**
@@ -216,7 +220,6 @@ class Embed {
 
   // #endregion Embed methods
 }
-
 class ProgressBar {
   /**
    * @description Creates a new Progressbar.
@@ -290,11 +293,32 @@ class Cooldowns extends Map {
   constructor() {
     super()
     /** @type {Object<string, number>} */
-    this.COMMAND_COOLDOWNS = {}
+    this.COMMAND_COOLDOWNS = {} 
     const allCommands = require("./help-info.js").commands
     for (const command in allCommands) {
-      this.COMMAND_COOLDOWNS[command] = allCommands[command].cooldown
+
+      for (const command in allCommands) {
+        const current = allCommands[command]
+      
+        ;(/**
+           * @description Ye.
+           * @param {String} cmdName - The name of the command.
+           * @param {import("./help-info.js").CommandHelpObject} cmdObject - The object of the command.
+           * @param {String} [parent] - The parent command if this is a subcommand.
+           */
+          function getCooldowns(cmdName, cmdObject, parent, thisArg) {
+            if (cmdObject.subcommands) {
+              const subs = Object.keys(cmdObject.subcommands)
+              subs.forEach((sc) => {
+                getCooldowns(cmdName + " " + sc, cmdObject.subcommands[sc], cmdName, thisArg)
+              })
+            }
+            thisArg.COMMAND_COOLDOWNS[cmdName] = cmdObject.cooldown
+          }
+        )(command, current, false, this)
+      }
     }
+    console.log(this.COMMAND_COOLDOWNS)
   }
 
   /**
@@ -363,9 +387,9 @@ class Cooldowns extends Map {
     for (const [userID, userCoolDown] of this.entries()) {
       // console.log(JSON.stringify(, null, 4))
       // console.log(options.stylize)
-      toReturn += `\n  ${options.stylize(userID, "number")} => ${util.inspect(userCoolDown, true, 0, true)},`
+      toReturn += `\n  ${userid(userID)} => ${util.inspect(userCoolDown, true, 0, true)},`
     }
-    return `Cooldowns(${this.size}): {${toReturn.slice(0, -1)}${this.size == 0 ? "" : "\n"}}`
+    return `${customclass(this.constructor.name)}(${this.size}): {${toReturn.slice(0, -1)}${this.size == 0 ? "" : "\n"}}`
   }
 }
 
@@ -423,13 +447,13 @@ class UserCoolDowns extends Map {
         const t = this.get(cmd)
         t == 0 ? cold++ : hot++
       }
-      return `${options.stylize(options.stylize(("UserCoolDowns"), "customclass"), "bold")}: (Cold -> ${options.stylize(cold, "special")}, Hot -> ${options.stylize(hot, "regexp")})`
+      return `${customclass(this.constructor.name)}: (Cold -> ${chalk.blue(cold)}, Hot -> ${chalk.red(hot)})`
     } else {
       let toReturn = ""
       for (const [cmd, timer] of this.entries()) {
         toReturn += `\n  ${options.stylize(cmd, "string")} => ${options.stylize(timer, this.get(cmd) == 0 ? "special" : "regexp")},`
       }
-      return `UserCoolDowns(${this.size}): {${toReturn.slice(0, -1)}\n}`
+      return `${customclass(this.constructor.name)}(${this.size}): {${toReturn.slice(0, -1)}\n}`
     }
   }
 }

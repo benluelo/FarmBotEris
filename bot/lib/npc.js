@@ -20,7 +20,7 @@ class NPC {
     }
     this.level = 0
     /** @constant */
-    this.unlockLevel = 10
+    this.unlockLevel = Math.ceil(this.wealth * 10) // will be between 1 and 10, depending on the wealth of the farmer
 
     if (process.env.DEBUG === "true") { console.log(this.gender) }
 

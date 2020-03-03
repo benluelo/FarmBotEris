@@ -5,7 +5,7 @@ const { get } = require("stack-trace")
 
 
 const outFileName = "toFileLogs"
-const toFileStream = fs.createWriteStream(`${process.cwd()}/bot/logs/${outFileName}`, {
+const toFileStream = fs.createWriteStream(`${process.cwd()}/bot/logs/${outFileName}.txt`, {
   encoding: "utf-8",
   flags: "a+"
 })
