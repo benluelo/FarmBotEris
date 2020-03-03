@@ -71,7 +71,8 @@ class FarmBotClient extends CommandClient {
   }
 
   addCommand(name, commandFunction, parent) {
-    this.Commands.set(name, commandFunction)
+    this.Commands.set(name, new FarmBotCommand(commandFunction))
+
   }
 
   /**
