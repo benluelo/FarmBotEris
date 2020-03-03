@@ -70,6 +70,10 @@ class FarmBotClient extends CommandClient {
     super.onMessageCreate(msg)
   }
 
+  addCommand(name, commandFunction, parent) {
+    this.Commands.set(name, commandFunction)
+  }
+
   /**
    * @description Sends a message telling the user that they haven't started with the bot yet.
    * @param {import("eris").Message} message - The message that was sent to the command.
