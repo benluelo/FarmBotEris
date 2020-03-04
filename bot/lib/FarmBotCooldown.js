@@ -30,7 +30,7 @@ class Cooldowns extends Map {
         }
       )(command, current, false, this)
     }
-    console.log(this.COMMAND_COOLDOWNS)
+    // console.log(this.COMMAND_COOLDOWNS)
   }
 
   /**

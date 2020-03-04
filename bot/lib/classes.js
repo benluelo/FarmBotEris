@@ -290,8 +290,7 @@ module.exports = {
   Embed,
   ProgressBar,
   XPProgressBar,
-  Attachment,
-  Cooldowns
+  Attachment
 }
 
 // eslint-disable-next-line no-unused-vars

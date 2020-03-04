@@ -1,6 +1,8 @@
 const { Client } = require("eris")
 const { coin } = require("../lib/emoji.json")
-const FarmBotCommand = require("./FarmBotCommand.js/index.js")
+// const FarmBotCommand = require("./FarmBotCommand.js")
+const FarmBotCommandHandler = require("./FarmBotCommandHandler.js")
+const Cooldowns = require("./FarmBotCooldown.js")
 
 /**
  * @typedef {FarmBotClient} FarmBotClient
@@ -26,12 +28,12 @@ class FarmBotClient extends Client {
      */
     this.database = undefined
     this.db = undefined
-    this.Cooldowns = new (require("./classes")).Cooldowns()
+    this.Cooldowns = new Cooldowns()
 
     /**
-     * @type {Map<string, import("./FarmBotCommand.js/index.js")>}
+     * @type {FarmBotCommandHandler}
      */
-    this.Commands = new Map()
+    this.Commands = new FarmBotCommandHandler()
 
     console.log(this.Cooldowns)
     /**
@@ -63,29 +65,22 @@ class FarmBotClient extends Client {
     /**
      * @description Create a message in a channel.
      * Note: If you want to DM someone, the user ID is **not** the DM channel ID. use Client.getDMChannel() to get the DM channel for a user.
-     *
-     * @param {String | Array | Object} content - A string, array of strings, or object. If an object is passed:
-     * @param {String} content.content - A content string.
-     * @param {Object} [content.embed] - An embed object. See [the official Discord API documentation entry](https://discordapp.com/developers/docs/resources/channel#embed-object) for object structure.
-     * @param {Boolean} [content.tts] - Set the message TTS flag.
-     * @param {Boolean} [content.disableEveryone] - Whether to filter @everyone/@here or not (overrides default).
-     * @param {Object | Object[]} [file] - A file object (or an Array of them).
-     * @param {Buffer} file.file - A buffer containing file data.
-     * @param {String} file.name - What to name the file.
-     * @returns {Promise<import("eris").Message>} - The message that was sent.
      */
-    msg.send = (content, file) => {
-      return this.createMessage(msg.channel.id, content, file)
-    }
+    // msg.send = (content, file) => {
+    //   return this.createMessage(msg.channel.id, content, file)
+    // }
 
-    console.log(this._checkForPrefix(msg.content), "farps?", this._checkForFarps(msg.content))
-    let prefixUsed
-    if ((prefixUsed = this._checkForPrefix(msg.content))) {
-      const cont = msg.content.substr(prefixUsed.length).trim()
-      console.log(cont)
-      for (const [name, cmd] of this.Commands) {
-        console.log(name)
-        if (cont.startsWith(name)) { console.log("Starts with", cmd) }
+    if (msg.author.bot) { return }
+
+    // console.log(this._checkForPrefix(msg.content), "farps?", this._checkForFarps(msg.content))
+
+    const msgArgs = msg.content.split(/\s+/)
+
+    // check if a prefix was used
+    if (this._checkForPrefix(msgArgs.shift())) {
+      // if a prefix was used, check if a command was used
+      for (const [name, cmd] of this.Commands.entries()) {
+        if (msgArgs[0] == name) { console.log("Starts with:", cmd) }
       }
     }
   }
@@ -103,7 +98,7 @@ class FarmBotClient extends Client {
    * @returns {FarmBotCommand} The newly added command.
    */
   addCommand(name, commandFunction, parent) {
-    const newCmd = new FarmBotCommand(name, commandFunction, parent)
+    const newCmd = this.Commands.set(name, commandFunction, parent)
     this.Commands.set(name, newCmd)
     return newCmd
   }

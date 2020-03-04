@@ -1,5 +1,21 @@
 const FarmBotClient = require("./lib/FarmBotClient.js")
+const {Message} = require("eris")
 require("dotenv").config({ path: ".env" })
+/**
+ * @description Sends a message to the channel the message came from.
+ * @param {String | Array | Object} content - A string, array of strings, or object. If an object is passed:
+ * @param {String} content.content - A content string.
+ * @param {Object} [content.embed] - An embed object. See [the official Discord API documentation entry](https://discordapp.com/developers/docs/resources/channel#embed-object) for object structure.
+ * @param {Boolean} [content.tts] - Set the message TTS flag.
+ * @param {Boolean} [content.disableEveryone] - Whether to filter @everyone/@here or not (overrides default).
+ * @param {Object | Object[]} [file] - A file object (or an Array of them).
+ * @param {Buffer} file.file - A buffer containing file data.
+ * @param {String} file.name - What to name the file.
+ * @returns {Promise<import("eris").Message>} - The message that was sent.
+ */
+Message.prototype.send = function (content, file) {
+  return this._client.createMessage(this.channel.id, content, file)
+}
 
 /** @type {import("./lib/FarmBotClient.js")} */
 const bot = new FarmBotClient(process.env.TOKEN, {

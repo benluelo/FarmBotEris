@@ -2,13 +2,68 @@ const util = require("util")
 const chalk = require("chalk")
 const customclass = chalk.keyword("orange")
 const userid = chalk.keyword("purple")
-const FarmBotCommand = require("./FarmBotCommand.js")
+
+class FarmBotCommand {
+  /**
+   * @description Makes a command for the bot.
+   * @param {String} name - The name of the command.
+   * @param {function(import("eris").Message, String[]): void} func - The command.
+   * @param {FarmBotCommand} [parent] - The parent command, if this is a subcommand.
+   */
+  constructor(name, func, parent) {
+    this.name = name
+    this.run = func
+    this.parent = parent
+    this.subcommands = new FarmBotCommandHandler()
+  }
+
+  getFullCommandName() {
+    return (this.parent ? this.parent.getFullCommandName() + " " : "" ) + this.name
+  }
+
+  /**
+   * @description Makes a subcommand for the bot, attached to the specified command.
+   * @param {String} name - The name of the subcommand.
+   * @param {function(import("eris").Message, String[]): void} func - The subcommand.
+   * @returns {FarmBotCommand} The new subcommand object.
+   */
+  subcommand(name, func) {
+    return this.subcommands.set(name, func, this)
+  }
+
+  [util.inspect.custom](depth, options) {
+    console.log(depth)
+    switch (depth) {
+      case (0): {
+        return (this.parent ? util.inspect(this.parent, true, 0, true) : "") + this.name + "."
+      }
+      case (1): {
+        if (this.parent) {
+          return options.stylize(`[Subcommand => ${util.inspect(this.parent, true, 0, true)}${this.name}]`, "special")
+        }
+        return options.stylize(`[Command => ${this.name}]`, "special")
+      }
+      default: {
+        let toReturn = ""
+        if (this.subcommands.size > 0) {
+          for (const [name, subCmd] of this.subcommands.entries()) {
+            toReturn += `\n  ${name} => ${util.inspect(subCmd, true, 1, true)},`
+          }
+        }
+        return util.inspect(this, true, 1, true) + (this.subcommands.size > 0 ? ` Subcommands(${this.subcommands.size}) {${toReturn}}` : "")
+      }
+    }
+  }
+}
 
 class FarmBotCommandHandler extends Map {
   constructor() {
     super()
   }
 
+  run(cmdName, message, args) {
+    this.get(cmdName).run(message, args)
+  }
   /**
    * @description Gets a command from the `FarmBotCommandHandler`.
    * @param {String} cmd - The command name.
@@ -19,12 +74,16 @@ class FarmBotCommandHandler extends Map {
   }
 
   /**
-   * @description Adds a user to the `Cooldowns`.
-   * @param {FarmBotCommand} cmd - The command to add to the command handler.
-   * @returns {this} The `FarmBotCommandHandler` object.
+   * @description Adds a command to the bot.
+   * @param {String} name - The command name.
+   * @param {function(import("eris").Message, String[]): void} func - The command function.
+   * @param {FarmBotCommand} [parent] - The parent command, if this is a subcommand.
+   * @returns {FarmBotCommand} The new `FarmBotCommand` object.
    */
-  set(cmd) {
-    return super.set(cmd.name, new FarmBotCommand*)
+  set(name, func, parent) {
+    const newCmd = new FarmBotCommand(name, func, parent ? parent : null)
+    super.set(name, newCmd)
+    return newCmd
   }
 
   /**
@@ -47,6 +106,14 @@ class FarmBotCommandHandler extends Map {
       toReturn += `\n  ${userid(userID)} => ${util.inspect(userCoolDown, true, 0, true)},`
     }
     return `${customclass(this.constructor.name)}(${this.size}): {${toReturn.slice(0, -1)}${this.size == 0 ? "" : "\n"}}`
+  }
+
+  /**
+   * @description Ye.
+   * @returns {IterableIterator<[string, FarmBotCommand]>} The iterable.
+   */
+  entries() {
+    return super.entries()
   }
 }
 
