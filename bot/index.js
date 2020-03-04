@@ -19,18 +19,14 @@ const bot = new FarmBotClient(process.env.TOKEN, {
     TYPING_START: true,
     VOICE_STATE_UPDATE: true
   }
-}, {
-  description: "description of bot",
-  prefix: ["f!", "farm ", "@mention"], // most likely will be changed lol
-  ignoreBots: true,
-  owner: "ben & tyler",
-  defaultHelpCommand: false,
-  ignoreSelf: true
-})
+}, [
+  "farm",
+  "f!"
+])
 
 require("./src/command-loader.js")(bot)
 require("./src/event-loader.js")(bot)
-require("../API/index")(bot) // not ideal (bot goes down so does some user pages) but works!
+// require("../API/index")(bot) // not ideal (bot goes down so does some user pages) but works!
 
 console.log(bot.Commands)
 

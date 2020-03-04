@@ -1,7 +1,7 @@
 const util = require("util")
 // console.log(util.inspect.styles)
 util.inspect.styles.customclass = "yellowBright"
-// util.inspect.styles.userID = 
+// util.inspect.styles.userID =
 const chalk = require("chalk")
 const customclass = chalk.keyword("orange")
 const userid = chalk.keyword("purple")
@@ -293,30 +293,28 @@ class Cooldowns extends Map {
   constructor() {
     super()
     /** @type {Object<string, number>} */
-    this.COMMAND_COOLDOWNS = {} 
+    this.COMMAND_COOLDOWNS = {}
     const allCommands = require("./help-info.js").commands
     for (const command in allCommands) {
+      const current = allCommands[command]
 
-      for (const command in allCommands) {
-        const current = allCommands[command]
-      
         ;(/**
            * @description Ye.
            * @param {String} cmdName - The name of the command.
            * @param {import("./help-info.js").CommandHelpObject} cmdObject - The object of the command.
            * @param {String} [parent] - The parent command if this is a subcommand.
+           * @param {this} thisArg - The parent command if this is a subcommand.
            */
-          function getCooldowns(cmdName, cmdObject, parent, thisArg) {
-            if (cmdObject.subcommands) {
-              const subs = Object.keys(cmdObject.subcommands)
-              subs.forEach((sc) => {
-                getCooldowns(cmdName + " " + sc, cmdObject.subcommands[sc], cmdName, thisArg)
-              })
-            }
-            thisArg.COMMAND_COOLDOWNS[cmdName] = cmdObject.cooldown
+        function getCooldowns(cmdName, cmdObject, parent, thisArg) {
+          if (cmdObject.subcommands) {
+            const subs = Object.keys(cmdObject.subcommands)
+            subs.forEach((sc) => {
+              getCooldowns(cmdName + " " + sc, cmdObject.subcommands[sc], cmdName, thisArg)
+            })
           }
-        )(command, current, false, this)
-      }
+          thisArg.COMMAND_COOLDOWNS[cmdName] = cmdObject.cooldown
+        }
+      )(command, current, false, this)
     }
     console.log(this.COMMAND_COOLDOWNS)
   }

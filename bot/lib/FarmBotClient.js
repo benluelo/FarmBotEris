@@ -1,18 +1,23 @@
-const { CommandClient } = require("eris")
+const { Client } = require("eris")
 const { coin } = require("../lib/emoji.json")
+const FarmBotCommand = require("./Command.js")
 
 /**
  * @typedef {FarmBotClient} FarmBotClient
  */
-class FarmBotClient extends CommandClient {
+class FarmBotClient extends Client {
   /**
    * @description Creates an instance of `FarmBotClient`.
    * @param {String} token - The bot token to log into discord with.
    * @param {import("eris").ClientOptions} options - The {@link import("eris").ClientOptions} for the `FarmBotClient`.
-   * @param {import("eris").CommandClientOptions} commandOptions - The {@link import("eris").CommandClientOptions} for the `FarmBotClient`.
+   * @param {String[]} prefixes - An array of the prefixes for the bot.
    */
-  constructor(token, options, commandOptions) {
-    super(token, options, commandOptions)
+  constructor(token, options, prefixes) {
+    super(token, options)
+
+    this.prefixes = prefixes
+
+    this.on("messageCreate", this.onMessageCreate)
 
     /**
      * @type {Object}
@@ -48,6 +53,11 @@ class FarmBotClient extends CommandClient {
 
     this.config = require("../config.js")
   }
+
+  /**
+   * @description Ye.
+   * @param {import("eris").Message} msg - The message from the messageCreate event.
+   */
   async onMessageCreate(msg) {
     // copied from Client.js (don't actually think this is being used as i don't know how to use em lmao)
     /**
@@ -67,12 +77,35 @@ class FarmBotClient extends CommandClient {
     msg.send = (content, file) => {
       return this.createMessage(msg.channel.id, content, file)
     }
-    super.onMessageCreate(msg)
+
+    console.log(this._checkForPrefix(msg.content), "farps?", this._checkForFarps(msg.content))
+    let prefixUsed
+    if ((prefixUsed = this._checkForPrefix(msg.content))) {
+      const cont = msg.content.substr(prefixUsed.length).trim()
+      console.log(cont)
+      for (const [name, cmd] of this.Commands) {
+        console.log(name)
+        if (cont.startsWith(name)) { console.log("Starts with", cmd) }
+      }
+    }
   }
 
-  addCommand(name, commandFunction, parent) {
-    this.Commands.set(name, new FarmBotCommand(commandFunction))
+  registerCommand(...args) {
+    return new (require("eris")).Command(...args)
+  }
+  registerCommandAlias() {}
 
+  /**
+   * @description Adds a command to the bot.
+   * @param {String} name - The name of the command.
+   * @param {function(): void} commandFunction - The command.
+   * @param {FarmBotCommand} [parent] - If this is a subcommand, the command that it is a subcommand to.
+   * @returns {FarmBotCommand} The newly added command.
+   */
+  addCommand(name, commandFunction, parent) {
+    const newCmd = new FarmBotCommand(name, commandFunction, parent)
+    this.Commands.set(name, newCmd)
+    return newCmd
   }
 
   /**
@@ -153,6 +186,22 @@ class FarmBotClient extends CommandClient {
      * @prop {Object} cooldownExclusions - Any exclusions to the cooldown.
      * @prop {ChannelID[]} cooldownExclusions.channelIDs - {@link ChannelID} Exclusions to the cooldown.
      */
+  }
+
+  /**
+   * @description Checks if a message used a bot prefix.
+   * @param {String} str - The message content to check for the prefix.
+   * @returns {(String | false)} Whether or not a prefix was used; if a prefix was used, returns the prefix, else returns false.
+   */
+  _checkForPrefix(str) {
+    for (const p in this.prefixes) {
+      if (str.startsWith(this.prefixes[p])) { return this.prefixes[p] }
+    }
+    return false
+  }
+
+  _checkForFarps(str) {
+    return str.includes("farping")
   }
 
   /**
