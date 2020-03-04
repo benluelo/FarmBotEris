@@ -16,7 +16,7 @@ module.exports.run = (bot) => {
     })
   })
 
-  bot.addCommand("usertest2", (message, args) => {
+  cmd.subcommand("usertest2", (message, args) => {
     if (!bot.ownersIDs.includes(message.author.id)) { return }
     bot.getUser(message.author.id, (err, userdata) => {
       if (err) {
@@ -29,5 +29,5 @@ module.exports.run = (bot) => {
         console.log("no userdata :(")
       }
     })
-  }, cmd)
+  })
 }

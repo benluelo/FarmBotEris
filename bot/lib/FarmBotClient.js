@@ -1,6 +1,6 @@
 const { Client } = require("eris")
 const { coin } = require("../lib/emoji.json")
-const FarmBotCommand = require("./Command.js")
+const FarmBotCommand = require("./FarmBotCommand.js/index.js")
 
 /**
  * @typedef {FarmBotClient} FarmBotClient
@@ -29,7 +29,7 @@ class FarmBotClient extends Client {
     this.Cooldowns = new (require("./classes")).Cooldowns()
 
     /**
-     * @type {Map<string, import("./Command.js")>}
+     * @type {Map<string, import("./FarmBotCommand.js/index.js")>}
      */
     this.Commands = new Map()
 

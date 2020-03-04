@@ -28,7 +28,7 @@ require("./src/command-loader.js")(bot)
 require("./src/event-loader.js")(bot)
 // require("../API/index")(bot) // not ideal (bot goes down so does some user pages) but works!
 
-console.log(bot.Commands)
+console.log(require("util").inspect(bot.Commands, true, 3, true))
 
 bot.initDB()
 
