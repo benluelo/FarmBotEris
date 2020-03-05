@@ -263,7 +263,7 @@ const commands = {
     description: "Stops the bot.",
     usage: "​farm stop",
     examples: "​farm stop",
-    permissionLevel: PERMISSIONS.DEVELOPMENT,
+    permissionLevel: PERMISSIONS.OWNERS,
     category: CATEGORIES.UTILITY,
     aliases: null,
     cooldown: 0,
@@ -272,7 +272,7 @@ const commands = {
         description: "Restarts the bot",
         usage: "​farm stop restart",
         examples: "​farm stop restart",
-        permissionLevel: PERMISSIONS.DEVELOPMENT,
+        permissionLevel: PERMISSIONS.OWNERS,
         category: CATEGORIES.UTILITY,
         aliases: null,
         cooldown: 0,
@@ -373,8 +373,6 @@ for (const command in commands) {
   )(command, current)
 }
 
-// console.log(JSON.stringify(Object.keys(commandHelpEmbeds), null, 4, true))
-
 // make a different embed for each permission level. each successive level has all the permissions of the previous level.
 for (const i in fullHelp) {
   for (const cmd in fullHelp[i]) {
@@ -412,4 +410,4 @@ module.exports = {
   commands
 }
 
-console.log(Object.keys(commandHelpEmbeds))
+// console.log(Object.keys(commandHelpEmbeds))

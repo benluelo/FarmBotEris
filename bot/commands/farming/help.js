@@ -2,7 +2,7 @@ const help = require("../../lib/help-info.js")
 
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
-  bot.registerCommand("help", (message, args) => {
+  bot.addCommand("help", (message, args) => {
     const req = args.join(" ")
     bot.getUser(message.author.id, (err, userdata) => {
 
@@ -18,5 +18,5 @@ module.exports.run = (bot) => {
       } else { bot.startMessage(message) }
 
     })
-  }, bot.cooldown(1000))
+  })
 }

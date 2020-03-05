@@ -4,7 +4,7 @@ const emoji = require("../../lib/emoji.json")
 
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = async (bot) => {
-  bot.registerCommand("plots", (message) => {
+  bot.addCommand("plots", (message) => {
 
     // attempt to find the user in the system
     bot.getUser(message.author.id, (err, userdata) => {
@@ -73,5 +73,5 @@ exports.run = async (bot) => {
       }
     })
 
-  }, bot.cooldown(10000))
+  })
 }

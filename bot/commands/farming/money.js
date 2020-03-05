@@ -1,6 +1,6 @@
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
-  bot.registerCommand("money", (message) => {
+  bot.addCommand("money", (message) => {
     bot.getUser(message.author.id, (err, userdata) => {
       if (err) { bot.log.error(err) }
 
@@ -14,6 +14,6 @@ exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(2000))
-  bot.registerCommandAlias("cash", "money")
+  })
+  // bot.registerCommandAlias("cash", "money")
 }

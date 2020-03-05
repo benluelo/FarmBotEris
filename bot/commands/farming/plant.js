@@ -3,7 +3,7 @@ const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
 
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
-  bot.registerCommand("plant", (message, args) => {
+  bot.addCommand("plant", (message, args) => {
 
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
@@ -47,7 +47,7 @@ module.exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(5000)).registerSubcommand("all", (message, args) => {
+  }).subcommand("all", (message, args) => {
 
     const crop = args[0]
 
@@ -88,5 +88,5 @@ module.exports.run = (bot) => {
       }
     })
 
-  }, bot.cooldown(5000))
+  })
 }

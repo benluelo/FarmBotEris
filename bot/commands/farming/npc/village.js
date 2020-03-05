@@ -3,7 +3,7 @@ const { XPProgressBar } = require("../../../lib/classes")
 /** @private @param {import("../../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
-  bot.registerCommand("village", (message, args) => {
+  bot.addCommand("village", (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
@@ -19,5 +19,5 @@ module.exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(5000))
+  })
 }

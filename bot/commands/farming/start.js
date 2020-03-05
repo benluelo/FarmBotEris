@@ -6,7 +6,7 @@ const { User } = require("../../lib/user.js")
 
 /** @private @param {import("../../lib/FarmBotClient")} bot */
 exports.run = (bot) => {
-  bot.registerCommand("start", (message, args) => {
+  bot.addCommand("start", (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
 
       // const country = args.join(" ").toLowerCase()
@@ -51,5 +51,5 @@ exports.run = (bot) => {
         message.send(new bot.Embed().uhoh(`You've already started farming, ${message.author.username}!`))
       }
     })
-  }, bot.cooldown(5000))
+  })
 }

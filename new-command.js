@@ -25,8 +25,8 @@ const template =
 \r
 /** @param {import("../${"../".repeat(depth)}/lib/FarmBotClient.js")} bot */\r
 exports.run = async (bot) => {\r
-  bot.registerCommand("${name}", (message, args) => {\r
-  }, bot.cooldown(${parseInt(cooldown)}))\r
+  bot.addCommand("${name}", (message, args) => {\r
+  })\r
 }`
 
 fs.writeFileSync(path.join(__dirname,  "./bot/commands", dir) + "/" + name + ".js", template)

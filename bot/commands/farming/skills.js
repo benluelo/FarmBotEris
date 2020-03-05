@@ -3,7 +3,7 @@ const { XPProgressBar, Attachment } = require("../../lib/classes.js")
 
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
-  bot.registerCommand("skills", (message, args) => {
+  bot.addCommand("skills", (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
@@ -43,5 +43,5 @@ module.exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(5000))
+  })
 }

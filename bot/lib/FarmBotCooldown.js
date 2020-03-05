@@ -17,7 +17,7 @@ class Cooldowns extends Map {
              * @param {String} cmdName - The name of the command.
              * @param {import("./help-info.js").CommandHelpObject} cmdObject - The object of the command.
              * @param {String} [parent] - The parent command if this is a subcommand.
-             * @param {this} thisArg - The parent command if this is a subcommand.
+             * @param {this} thisArg - The `Cooldowns` object.
              */
         function getCooldowns(cmdName, cmdObject, parent, thisArg) {
           if (cmdObject.subcommands) {
@@ -89,11 +89,6 @@ class Cooldowns extends Map {
     return super.has(userID)
   }
 
-  // eslint-disable-next-line jsdoc/require-description, jsdoc/require-returns, jsdoc/require-param-description, jsdoc/require-param-description
-  /**
-   * @param {Number} depth
-   * @param {import("util").InspectOptionsStylized} options
-   */
   [util.inspect.custom](depth, options) {
     let toReturn = ""
     for (const [userID, userCoolDown] of this.entries()) {

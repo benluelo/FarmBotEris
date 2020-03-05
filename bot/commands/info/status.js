@@ -28,7 +28,7 @@ setInterval( async () => {
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
-  bot.registerCommand("status", async (message, args) => {
+  bot.addCommand("status", async (message, args) => {
     if (!bot.ownersIDs.includes(message.author.id)) { return }
 
     // get debug/ development info
@@ -66,9 +66,5 @@ exports.run = (bot) => {
       .addBlankField(true)
 
     await message.send(statusEmbed)
-  }, {
-    requirements: {
-      userIDs: bot.ownersIDs
-    }
   })
 }

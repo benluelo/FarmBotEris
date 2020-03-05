@@ -3,7 +3,7 @@ const cropData = require("../../lib/crop-data.js")
 
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 module.exports.run = async (bot) => {
-  bot.registerCommand("harvest", (message, args) => {
+  bot.addCommand("harvest", (message, args) => {
 
     const plotToHarvest = args[0]
 
@@ -94,5 +94,5 @@ module.exports.run = async (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(5000))
+  })
 }

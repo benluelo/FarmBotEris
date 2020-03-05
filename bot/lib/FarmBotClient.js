@@ -1,6 +1,5 @@
 const { Client } = require("eris")
 const { coin } = require("../lib/emoji.json")
-// const FarmBotCommand = require("./FarmBotCommand.js")
 const FarmBotCommandHandler = require("./FarmBotCommandHandler.js")
 const Cooldowns = require("./FarmBotCooldown.js")
 
@@ -26,13 +25,10 @@ class FarmBotClient extends Client {
      * @prop {import("mongodb").MongoClient} database.db - The database.
      * @prop {import("mongodb").Collection} database.Userdata - The userdata collection (`farmbot -> farm`).
      */
-    this.database = undefined
-    this.db = undefined
-    this.Cooldowns = new Cooldowns()
+    this.database
 
-    /**
-     * @type {FarmBotCommandHandler}
-     */
+    this._db
+    this.Cooldowns = new Cooldowns()
     this.Commands = new FarmBotCommandHandler()
 
     console.log(this.Cooldowns)
@@ -61,45 +57,33 @@ class FarmBotClient extends Client {
    * @param {import("eris").Message} msg - The message from the messageCreate event.
    */
   async onMessageCreate(msg) {
-    // copied from Client.js (don't actually think this is being used as i don't know how to use em lmao)
-    /**
-     * @description Create a message in a channel.
-     * Note: If you want to DM someone, the user ID is **not** the DM channel ID. use Client.getDMChannel() to get the DM channel for a user.
-     */
-    // msg.send = (content, file) => {
-    //   return this.createMessage(msg.channel.id, content, file)
-    // }
-
     if (msg.author.bot) { return }
 
-    // console.log(this._checkForPrefix(msg.content), "farps?", this._checkForFarps(msg.content))
+    const args = msg.content.split(/\s+/)
 
-    const msgArgs = msg.content.split(/\s+/)
-
-    // check if a prefix was used
-    if (this._checkForPrefix(msgArgs.shift())) {
-      // if a prefix was used, check if a command was used
-      for (const [name, cmd] of this.Commands.entries()) {
-        if (msgArgs[0] == name) { console.log("Starts with:", cmd) }
-      }
+    // check if a prefix was used; if a prefix was used, check if a command was used
+    if (this._checkForPrefix(args.shift()) && this.Commands.has(args[0])) {
+      // if a command was used, check if the caller can use the command
+      this.getUser(msg.author.id, (err, userdata) => {
+        if (err) { throw err }
+        if (!userdata) {
+          this.startMessage(msg)
+        } else {
+          this.Commands.run(args.shift(), msg, args, userdata)
+        }
+      })
     }
   }
-
-  registerCommand(...args) {
-    return new (require("eris")).Command(...args)
-  }
-  registerCommandAlias() {}
 
   /**
    * @description Adds a command to the bot.
    * @param {String} name - The name of the command.
-   * @param {function(): void} commandFunction - The command.
+   * @param {CommandFunction} commandFunction - The command.
    * @param {FarmBotCommand} [parent] - If this is a subcommand, the command that it is a subcommand to.
    * @returns {FarmBotCommand} The newly added command.
    */
   addCommand(name, commandFunction, parent) {
     const newCmd = this.Commands.set(name, commandFunction, parent)
-    this.Commands.set(name, newCmd)
     return newCmd
   }
 
@@ -113,14 +97,9 @@ class FarmBotClient extends Client {
   }
 
   /**
-   * @callback GetUserCallback
-   * @param {import("mongodb").MongoError} err
-   * @param {import("../lib/user.js").User} userdata - The user's data.
-   */
-  /**
    * @description Gets a user from the database.
    * @param {String} userID - The user's id.
-   * @param {GetUserCallback} cb - The callback.
+   * @param {function(import("mongodb").MongoError, import("../lib/user.js").User)} cb - The callback.
    */
   getUser(userID, cb) {
     this.database.Userdata.findOne({ userID: userID }, (e, u) => {
@@ -139,7 +118,7 @@ class FarmBotClient extends Client {
   /**
    * @description Formats money for sending to the user. Appends the coin emoji to the end.
    * @param {Number} value - The amount you want to format as money.
-   * @returns {String} - The formatted money amount.
+   * @returns {String} - The formatted amount.
    */
   formatMoney(value) {
     const formatter = new Intl.NumberFormat("en-US", {
@@ -148,39 +127,6 @@ class FarmBotClient extends Client {
       minimumFractionDigits: 2
     })
     return formatter.format(value).substr(1) + " " + coin
-  }
-
-  /**
-   * @description Returns a cooldown object for the Eris `CommandClient.registerCommand()` method.
-   * @param {String} nameOfCommand - The name of command the cooldown is responsible for.
-   *
-   * @param {Number} length - The length of the cooldown to set, in milliseconds.
-   * @returns {CooldownObject} {@link CooldownObject}.
-   */
-  cooldown(nameOfCommand, length) {
-    return {
-      cooldown: length,
-      cooldownMessage: () => {
-        return `cooldown is ${length / 1000} seconds pls slow down`
-      },
-      cooldownExclusions: {
-        channelIDs: [
-          "669353094953435183" // dev stuff > #test-test
-        ]
-      }
-    }
-    /**
-     * @description Channel ID; a string containing only numbers.
-     * @typedef {String} ChannelID
-     */
-    /**
-     * @description The cooldown object for the Eris `CommandClient.registerCommand()` method.
-     * @typedef {Object} CooldownObject
-     * @prop {Number} cooldown - The length of the cooldown.
-     * @prop {function():String} cooldownMessage - The message to send when the command is used when the cooldown is still active.
-     * @prop {Object} cooldownExclusions - Any exclusions to the cooldown.
-     * @prop {ChannelID[]} cooldownExclusions.channelIDs - {@link ChannelID} Exclusions to the cooldown.
-     */
   }
 
   /**
@@ -204,9 +150,8 @@ class FarmBotClient extends Client {
    */
   async initDB() {
     const client = require("mongodb").MongoClient
-    const config = require("../config.js")
 
-    client.connect(config.db.connectionString, config.db.connectionOptions, async (err, db) => {
+    client.connect(this.config.db.connectionString, this.config.db.connectionOptions, async (err, db) => {
       if (err) { throw err }
 
       if (this._db) {

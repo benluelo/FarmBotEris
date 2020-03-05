@@ -4,7 +4,7 @@ const MAX_PLOTS = 25
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = async (bot) => {
 
-  bot.registerCommand("buy", (message) => {
+  bot.addCommand("buy", (message) => {
 
     console.log(bot.Cooldowns.check(message.author.id, "buy"))
 
@@ -29,7 +29,7 @@ exports.run = async (bot) => {
       }
     })
   // eslint-disable-next-line no-unused-vars
-  }, bot.cooldown(5000)).registerSubcommand("confirm", (message, args) => {
+  }).subcommand("confirm", (message, args) => {
 
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }

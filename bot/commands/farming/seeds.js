@@ -5,7 +5,7 @@ const { getLevel } = require("../../../helpers/level-test.js")
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
-  bot.registerCommand("seeds", (message, args) => {
+  bot.addCommand("seeds", (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
@@ -22,5 +22,5 @@ exports.run = (bot) => {
         .setTimestamp()
       return await message.send(seedsEmbed)
     })
-  }, bot.cooldown(3000))
+  })
 }

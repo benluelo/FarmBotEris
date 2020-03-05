@@ -1,6 +1,6 @@
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
-  bot.registerCommand("stop", (message, args) => {
+  bot.addCommand("stop", (message, args, userdata) => {
     if (!bot.ownersIDs.includes(message.author.id)) { return }
     if (args.length == 0) {
       const stopEmbed = new bot.Embed()
@@ -18,10 +18,6 @@ exports.run = (bot) => {
 
       message.send(restartEmbed)
       setTimeout(() => { bot.disconnect({ reconnect: "auto" }) }, 10000)
-    }
-  }, {
-    requirements: {
-      userIDs: bot.ownersIDs
     }
   })
 }

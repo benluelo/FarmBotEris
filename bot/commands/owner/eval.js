@@ -1,7 +1,7 @@
 const { inspect } = require("util")
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
-  bot.registerCommand("eval", (message, args) => {
+  bot.addCommand("eval", (message, args) => {
     if (!bot.ownersIDs.includes(message.author.id)) { return }
     const toEval = args.join(" ")
     try {
@@ -22,10 +22,6 @@ exports.run = (bot) => {
       }
     } catch (e) {
       message.send(`Error while evaluating: \`${e.message}\``)
-    }
-  }, {
-    requirements: {
-      userIDs: bot.ownersIDs
     }
   })
 }

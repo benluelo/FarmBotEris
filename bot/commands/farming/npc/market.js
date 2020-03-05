@@ -8,7 +8,7 @@ const commandName = "market"
 /** @private @param {import("../../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
-  const command = bot.registerCommand(commandName, (message, args) => {
+  const command = bot.addCommand(commandName, (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
@@ -55,8 +55,8 @@ module.exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(15000))
-  command.registerSubcommand("view", (message, args) => {
+  })
+  command.subcommand("view", (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
@@ -85,8 +85,8 @@ module.exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(5000))
-  command.registerSubcommand("fill", (message, args) => {
+  })
+  command.subcommand("fill", (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
 
@@ -163,7 +163,7 @@ module.exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(5000))
+  })
 
   /**
    * @description Prettify the request.

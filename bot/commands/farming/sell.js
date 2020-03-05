@@ -4,7 +4,7 @@ const { getLevel } = require("../../../helpers/level-test.js")
 
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
-  bot.registerCommand("sell", (message, args) => {
+  bot.addCommand("sell", (message, args) => {
     // f!sell <plant> [amount]
 
     bot.getUser(message.author.id, async (err, userdata) => {
@@ -57,7 +57,7 @@ exports.run = (bot) => {
         bot.startMessage(message)
       }
     })
-  }, bot.cooldown(5000)).registerSubcommand("all", (message) => {
+  }).subcommand("all", (message) => {
 
     bot.getUser(message.author.id, async (err, userdata) => {
       if (err) { bot.log.error(err) }
@@ -121,5 +121,5 @@ exports.run = (bot) => {
       }
     })
 
-  }, bot.cooldown(5000))
+  })
 }

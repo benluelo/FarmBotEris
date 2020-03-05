@@ -1,7 +1,7 @@
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
   if (process.env.DEVELOPMENT == "true") {
-    bot.registerCommand("deleteuser", (message) => {
+    bot.addCommand("deleteuser", (message) => {
       if (!bot.ownersIDs.includes(message.author.id)) { return }
       if (!message.mentions[0]) {
         // delete your own account
@@ -16,10 +16,6 @@ module.exports.run = (bot) => {
 
         bot.database.Userdata.deleteOne({ userID: userToDelete.id })
         message.send(deleteUserEmbed)
-      }
-    }, {
-      requirements: {
-        userIDs: bot.ownersIDs
       }
     })
   }
