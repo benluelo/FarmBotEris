@@ -31,12 +31,13 @@ exports.run = (bot) => {
           if ((!cropData[crop] || !userdata.seeds.common[crop].discovered)) { return message.send(new bot.Embed().uhoh(`Couldn't find **${crop} in your seedbag... maybe you mispelled it?`)) }
           if (userdata.seeds.common[crop].amount >= numAmount) {
 
-            if (process.env.DEBUG === "true") {
+            if (bot.ENV.DEBUG === "true") {
               console.log("Crop:", crop)
               console.log("Seed price:", getPriceOfSeeds[crop])
               console.log("Level:", getLevel(userdata.seeds.common[crop].level).level)
             }
             // yes lmaoo // words are hard, i get it // fucking extremely // i give WORDS // Fucking leave this in for production lmao // (╯°□°）╯︵ ┻━┻ // YESS // i have a spell checker extenstion because  i never trust myself // LOL i saw that when you liveshared with me i was wondering what that was // HAHA
+            console.log(getLevel(userdata.seeds.common[crop].level))
             const cropValue = getPriceOfSeeds[crop] * getLevel(userdata.seeds.common[crop].level).level * numAmount
             await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
               {
@@ -74,7 +75,7 @@ exports.run = (bot) => {
           for (const seed in userdata.seeds.common) {
             if (0 != userdata.seeds.common[seed].amount) {
 
-              if (process.env.DEBUG === "true") {
+              if (bot.ENV.DEBUG === "true") {
                 console.log(seed)
                 console.log("Seed price:", getPriceOfSeeds[seed])
                 console.log("Level:", getLevel(2, userdata.seeds.common[seed].level).level)

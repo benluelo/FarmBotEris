@@ -1,6 +1,5 @@
 const FarmBotClient = require("./lib/FarmBotClient.js")
-const {Message} = require("eris")
-require("dotenv").config({ path: ".env" })
+const { Message } = require("eris")
 /**
  * @description Sends a message to the channel the message came from.
  * @param {String | Array | Object} content - A string, array of strings, or object. If an object is passed:
@@ -18,7 +17,7 @@ Message.prototype.send = function (content, file) {
 }
 
 /** @type {import("./lib/FarmBotClient.js")} */
-const bot = new FarmBotClient(process.env.TOKEN, {
+const bot = new FarmBotClient(require("dotenv").config().parsed, {
   disableEveryone: true,
   defaultImageFormat: "png",
   disableEvents: {
@@ -44,7 +43,7 @@ require("./src/command-loader.js")(bot)
 require("./src/event-loader.js")(bot)
 // require("../API/index")(bot) // not ideal (bot goes down so does some user pages) but works!
 
-console.log(require("util").inspect(bot.Commands, true, 3, true))
+console.log(bot.Commands)
 
 bot.initDB()
 

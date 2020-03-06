@@ -23,7 +23,7 @@ exports.run = async (bot) => {
         // send message to let the user know the farm is being built, then build the farm
         message.send("Building farm...").then((msg) => {
           for (const plot in userFarm) {
-            if (process.env.DEBUG === "true") { console.log(chalk.keyword("brown")("CHECKING PLOT #"), plot) }
+            if (bot.ENV.DEBUG === "true") { console.log(chalk.keyword("brown")("CHECKING PLOT #"), plot) }
 
             /**
              * @private
@@ -44,7 +44,7 @@ exports.run = async (bot) => {
               plotsMsg += "\n" + emoji.letters[Math.floor(plot / 5)]
             }
 
-            if (process.env.DEBUG === "true") { console.log(userFarm[plot].crop.planted) }
+            if (bot.ENV.DEBUG === "true") { console.log(userFarm[plot].crop.planted) }
 
             // adds the plots to the message
             if (userFarm[plot].crop.planted == "dirt") { // if dirt, add dirt (lol)
@@ -55,9 +55,9 @@ exports.run = async (bot) => {
               plotsMsg += emoji.seedling
             }
 
-            if (process.env.DEBUG === "true") { console.log("Now:", Date.now()) }
-            if (process.env.DEBUG === "true") { console.log("Planted at:", userFarm[plot].crop.datePlantedAt) }
-            if (process.env.DEBUG === "true") { console.log("Time Difference:", (Date.now() - userFarm[plot].crop.datePlantedAt)) }
+            if (bot.ENV.DEBUG === "true") { console.log("Now:", Date.now()) }
+            if (bot.ENV.DEBUG === "true") { console.log("Planted at:", userFarm[plot].crop.datePlantedAt) }
+            if (bot.ENV.DEBUG === "true") { console.log("Time Difference:", (Date.now() - userFarm[plot].crop.datePlantedAt)) }
           }
 
           // edit the originally sent message

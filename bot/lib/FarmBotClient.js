@@ -9,12 +9,15 @@ const Cooldowns = require("./FarmBotCooldown.js")
 class FarmBotClient extends Client {
   /**
    * @description Creates an instance of `FarmBotClient`.
-   * @param {String} token - The bot token to log into discord with.
+   * @param {import("dotenv").DotenvParseOutput} dotenv - The environment variables, containing at least the bot token.
+   * @param {String} dotenv.TOKEN - The bot token.
    * @param {import("eris").ClientOptions} options - The {@link import("eris").ClientOptions} for the `FarmBotClient`.
    * @param {String[]} prefixes - An array of the prefixes for the bot.
    */
-  constructor(token, options, prefixes) {
-    super(token, options)
+  constructor(dotenv, options, prefixes) {
+    super(dotenv.TOKEN, options)
+
+    this.ENV = Object.freeze(dotenv)
 
     this.prefixes = prefixes
 

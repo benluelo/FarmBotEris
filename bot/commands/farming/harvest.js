@@ -38,7 +38,7 @@ module.exports.run = async (bot) => {
                 totalPlots += 1
 
               }).catch((error) => {
-                if (process.env.DEBUG === "true") { console.log(error.message) }
+                if (bot.ENV.DEBUG === "true") { console.log(error.message) }
               })
             }
           }

@@ -61,9 +61,10 @@ class FarmBotCommand {
    */
   run(msg, args, userdata) {
     if (this.subcommands.size != 0 && this.subcommands.has(args[0])) {
-      if (userdata.permissions < this.permissionLevel) { return }
-      this.subcommands.get(args.shift()).run(msg, args)
+      this.subcommands.get(args.shift()).run(msg, args, userdata)
     } else {
+      // console.log(userdata.permissions, this.permissionLevel)
+      if (userdata.permissions < this.permissionLevel) { return }
       const TTW = msg._client.Cooldowns.check(msg.author.id, this.getFullCommandName())
       if (TTW > 0) {
         msg.send(`**${msg.author.username}**, you have to wait ${(TTW / 1000).toFixed(2)} seconds to use \`farm ${this.getFullCommandName()}\`!`)
@@ -100,7 +101,7 @@ class FarmBotCommand {
     }
     this.parent ? toReturn.parent = this.parent.name : null,
     this.subcommands.size > 0 ? toReturn.subcommands = this.subcommands : null
-    return util.inspect(toReturn, true, depth, true)
+    return util.inspect(toReturn, true, 1, true).replace(" [Map] ", " ")
   }
 }
 
@@ -151,13 +152,14 @@ class FarmBotCommandHandler extends Map {
     return super.has(cmd)
   }
 
-  // [util.inspect.custom](depth = 0, options) {
-  //   const SPACER = depth.toString()
-  //   let toReturn = ""
-  //   for (const [name, cmd] of this.entries()) {
-  //     toReturn += `\n${SPACER.repeat(depth - 2)}${name} => ${util.inspect(cmd, true, depth + 1, true)},`
-  //   }
-  //   return `${customclass(this.constructor.name)}(${this.size}): {${toReturn.slice(0, -1)}${this.size == 0 ? "" : "\n" + SPACER.repeat(depth - 1)}}`
+  // [util.inspect.custom]() {
+  //   return util.inspect(this).replace(" [Map] ", " ")
+  //   // const SPACER = depth.toString()
+  //   // let toReturn = ""
+  //   // for (const [name, cmd] of this.entries()) {
+  //   //   toReturn += `\n${SPACER.repeat(depth - 2)}${name} => ${util.inspect(cmd, true, depth + 1, true)},`
+  //   // }
+  //   // return `${customclass(this.constructor.name)}(${this.size}): {${toReturn.slice(0, -1)}${this.size == 0 ? "" : "\n" + SPACER.repeat(depth - 1)}}`
   // }
 
   /**

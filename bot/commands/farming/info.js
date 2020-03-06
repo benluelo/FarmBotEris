@@ -27,7 +27,7 @@ exports.run = (bot) => {
         if (plotNumber !== false) { // this is broken asf
 
           if (userdata) {
-            if (process.env.DEBUG === "true") { console.log(plotNumber) }
+            if (bot.ENV.DEBUG === "true") { console.log(plotNumber) }
 
             if (plotNumber >= userdata.farm.length) { return message.send(new bot.Embed().uhoh("You don't own that plot!")) }
             else {
@@ -42,7 +42,7 @@ exports.run = (bot) => {
                   .setThumbnail(attachment.link())
                 return message.send(infoEmbed, attachment)
               }
-              if (process.env.DEBUG === "true") {
+              if (bot.ENV.DEBUG === "true") {
                 console.log(JSON.stringify(userCrop))
 
                 // console.log(JSON.stringify(userdata, null, 4))
@@ -66,7 +66,7 @@ exports.run = (bot) => {
                 1
               )
 
-              if (process.env.DEBUG === "true") {
+              if (bot.ENV.DEBUG === "true") {
                 console.log("Time difference:", (Date.now() - userCrop.datePlantedAt))
                 console.log("growthPercentage:", growthPercentage)
               }

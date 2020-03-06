@@ -1,6 +1,6 @@
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
-  if (process.env.DEVELOPMENT == "true") {
+  if (bot.ENV.DEVELOPMENT == "true") {
     bot.addCommand("deleteuser", (message) => {
       if (!bot.ownersIDs.includes(message.author.id)) { return }
       if (!message.mentions[0]) {

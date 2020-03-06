@@ -32,10 +32,10 @@ exports.run = (bot) => {
     if (!bot.ownersIDs.includes(message.author.id)) { return }
 
     // get debug/ development info
-    const debugMode = (process.env.DEBUG == "true") ?
+    const debugMode = (bot.ENV.DEBUG == "true") ?
       ":white_check_mark: Enabled" :
       ":negative_squared_cross_mark: Disabled"
-    const developmentMode = (process.env.DEVELOPMENT == "true") ?
+    const developmentMode = (bot.ENV.DEVELOPMENT == "true") ?
       ":white_check_mark: Enabled" :
       ":negative_squared_cross_mark: Disabled"
 

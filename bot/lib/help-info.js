@@ -1,3 +1,5 @@
+console.log(require("dotenv").config())
+
 /**
  * @typedef {Object} CommandHelpObject
  * @prop {String} description - The description for the command.
@@ -293,7 +295,8 @@ const commands = {
 }
 
 // remove development commands if in production
-if (!(process.env.DEVELOPMENT == "true")) {
+if ((process.env.DEVELOPMENT != "true")) {
+  console.log("Removing development commands...")
   for (const cmd in commands) {
     if (commands[cmd].permissionLevel == PERMISSIONS.DEVELOPMENT) {
       delete commands[cmd]

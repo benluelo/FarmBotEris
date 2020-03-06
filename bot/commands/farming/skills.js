@@ -17,7 +17,7 @@ module.exports.run = (bot) => {
             if (!userdata.seeds.common[seed].discovered) { continue }
             const XPBar = new XPProgressBar(userdata.seeds.common[seed].level, 5)
 
-            if (process.env.DEBUG === "true") { console.log(XPBar.show()) }
+            if (bot.ENV.DEBUG === "true") { console.log(XPBar.show()) }
 
             skillsEmbed.addField(cropData[seed].emoji, `Level: **${XPBar.level()}**` + "\n" + XPBar.show(), true)
           }
