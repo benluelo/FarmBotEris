@@ -63,7 +63,6 @@ class FarmBotCommand {
     if (this.subcommands.size != 0 && this.subcommands.has(args[0])) {
       this.subcommands.get(args.shift()).run(msg, args, userdata)
     } else {
-      // console.log(userdata.permissions, this.permissionLevel)
       if (userdata.permissions < this.permissionLevel) { return }
       const TTW = msg._client.Cooldowns.check(msg.author.id, this.getFullCommandName())
       if (TTW > 0) {

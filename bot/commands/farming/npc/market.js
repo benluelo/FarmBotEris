@@ -186,106 +186,106 @@ module.exports.run = (bot) => {
       `**└> **${req.rewards.reputation}** rep`
     ]
   }
-}
 
-/**
- * @description Parse the provided request.
- * @param {import("../../../lib/npc.js").Request} request - The request object.
- * @param {import("../../../lib/npc.js").Farmer[]} userFarmers - The user's farmers (their "village").
- * @param {(Number | String)} id - The ID of the request.
- * @returns The parsed request.
- */
-function parseRequest(request, userFarmers, id) {
-  const farmer = userFarmers.find((f) => {
-    return f.name == request.name
-  })
+  /**
+   * @description Parse the provided request.
+   * @param {import("../../../lib/npc.js").Request} request - The request object.
+   * @param {import("../../../lib/npc.js").Farmer[]} userFarmers - The user's farmers (their "village").
+   * @param {(Number | String)} id - The ID of the request.
+   * @returns The parsed request.
+   */
+  function parseRequest(request, userFarmers, id) {
+    const farmer = userFarmers.find((f) => {
+      return f.name == request.name
+    })
 
-  const parsed = parseWants(farmer.preferences, request)
+    const parsed = parseWants(farmer.preferences, request)
 
-  return {
-    id: parseInt(id) + 1,
-    want: parsed.req,
-    rewards: {
-      money: parsed.val,
-      reputation: parsed.rep
-    },
-    farmer: {
-      name: farmer.name,
-      emoji: farmer.emoji,
-      level: farmer.level
+    return {
+      id: parseInt(id) + 1,
+      want: parsed.req,
+      rewards: {
+        money: parsed.val,
+        reputation: parsed.rep
+      },
+      farmer: {
+        name: farmer.name,
+        emoji: farmer.emoji,
+        level: farmer.level
+      }
     }
   }
-}
 
-/**
- * @description Makes sense of the requests.
- * @param {Object} preferences - The farmer's preferences object.
- * @param {import("../../../lib/farmer-data.js").tastes} preferences.taste - Their prefered tastes.
- * @param {import("../../../lib/farmer-data.js").colors} preferences.color - Their prefered colors.
- * @param {import("../../../lib/npc.js").Request} request - The request object from the user: {@link import("../../../user.js").User}.
- * @returns {ParsedWants} An array of the different items in the request.
- */
-function parseWants(preferences, request) {
   /**
-   * @typedef {Object} ParsedWants
-   * @prop {Number} val - The monetary value of the request.
-   * @prop {Number} rep - The reputation(ary?) value of the request.
-   * @prop {Req[]} req
+   * @description Makes sense of the requests.
+   * @param {Object} preferences - The farmer's preferences object.
+   * @param {import("../../../lib/farmer-data.js").tastes} preferences.taste - Their prefered tastes.
+   * @param {import("../../../lib/farmer-data.js").colors} preferences.color - Their prefered colors.
+   * @param {import("../../../lib/npc.js").Request} request - The request object from the user: {@link import("../../../user.js").User}.
+   * @returns {ParsedWants} An array of the different items in the request.
    */
-  /** @type {ParsedWants} */
-  const parsed = {
-    val: 0,
-    rep: 0,
-    req: []
+  function parseWants(preferences, request) {
+    /**
+     * @typedef {Object} ParsedWants
+     * @prop {Number} val - The monetary value of the request.
+     * @prop {Number} rep - The reputation(ary?) value of the request.
+     * @prop {Req[]} req
+     */
+    /** @type {ParsedWants} */
+    const parsed = {
+      val: 0,
+      rep: 0,
+      req: []
+    }
+
+    for (const w in request.want) {
+
+      if (bot.ENV.DEBUG === "true") { console.log(request.want[w].crop, cropData[request.want[w].crop]) }
+      /** @type {0 | 0.15 | 0.30} */
+      const flavourMulti = cropData[request.want[w].crop].flavour.filter((x) => x == preferences.taste).length * 0.15
+
+      /** @type {0 | 0.15} */
+      const colorMulti = cropData[request.want[w].crop].color == preferences.color ? 0.15 : 0
+
+      /** @type {1 | 1.15 | 1.30 | 1.45} */
+      const totalMulti = 1 + flavourMulti + colorMulti
+
+      parsed.val += (
+        (
+          getPriceOfSeeds[request.want[w].crop] * request.want[w].amount * request.value
+        ) * totalMulti
+      )
+
+      parsed.rep += Math.ceil(
+        (
+          request.want[w].amount * request.reputation
+        ) * totalMulti
+      )
+
+      parsed.req.push({
+        name: request.want[w].crop,
+        emoji: cropData[request.want[w].crop].emoji,
+        amount: request.want[w].amount
+      })
+    }
+    return parsed
   }
 
-  for (const w in request.want) {
-
-    if (bot.ENV.DEBUG === "true") { console.log(request.want[w].crop, cropData[request.want[w].crop]) }
-    /** @type {0 | 0.15 | 0.30} */
-    const flavourMulti = cropData[request.want[w].crop].flavour.filter((x) => x == preferences.taste).length * 0.15
-
-    /** @type {0 | 0.15} */
-    const colorMulti = cropData[request.want[w].crop].color == preferences.color ? 0.15 : 0
-
-    /** @type {1 | 1.15 | 1.30 | 1.45} */
-    const totalMulti = 1 + flavourMulti + colorMulti
-
-    parsed.val += (
-      (
-        getPriceOfSeeds[request.want[w].crop] * request.want[w].amount * request.value
-      ) * totalMulti
-    )
-
-    parsed.rep += Math.ceil(
-      (
-        request.want[w].amount * request.reputation
-      ) * totalMulti
-    )
-
-    parsed.req.push({
-      name: request.want[w].crop,
-      emoji: cropData[request.want[w].crop].emoji,
-      amount: request.want[w].amount
-    })
+  /**
+   * @description Makes the parsed requests readable and good for sending to the user.
+   * @param {Req} req - The request.
+   * @returns {String} The reqdable request.
+   */
+  function readableReq(req) {
+    return req.map((r, i) => {
+      return `${(i == req.length - 1) ? "└" : "├"}> ${r.emoji} x **${r.amount}**`
+    }).join("\n")
   }
-  return parsed
-}
 
-/**
- * @description Makes the parsed requests readable and good for sending to the user.
- * @param {Req} req - The request.
- * @returns {String} The reqdable request.
- */
-function readableReq(req) {
-  return req.map((r, i) => {
-    return `${(i == req.length - 1) ? "└" : "├"}> ${r.emoji} x **${r.amount}**`
-  }).join("\n")
+  /**
+   * @typedef {Object} Req
+   * @prop {import("../../../lib/crop-data.js").CropName} name - The name.
+   * @prop {import("../../../lib/crop-data.js").CropEmoji} emoji - The emoji.
+   * @prop {Number} amount - The amount.
+   */
 }
-
-/**
- * @typedef {Object} Req
- * @prop {import("../../../lib/crop-data.js").CropName} name - The name.
- * @prop {import("../../../lib/crop-data.js").CropEmoji} emoji - The emoji.
- * @prop {Number} amount - The amount.
- */
