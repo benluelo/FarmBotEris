@@ -1,9 +1,7 @@
 const util = require("util")
-const chalk = require("chalk")
-const customclass = chalk.keyword("orange")
-const userid = chalk.keyword("purple")
-const COMMAND_OBJECTS = require("./help-info.js").commands
-// const SPACER = "->"
+// const chalk = require("chalk")
+// const customclass = chalk.keyword("orange")
+// const userid = chalk.keyword("purple")
 
 /**
  * @module FarmBot
@@ -12,41 +10,57 @@ const COMMAND_OBJECTS = require("./help-info.js").commands
  * @typedef {function(import("eris").Message, String[]): void} CommandFunction
  */
 
+/**
+ * @typedef {Object} CommandInformation
+ * @prop {String} description - The description for the command.
+ * @prop {String} usage - How to use the command.
+ * @prop {String} [examples] - Examples of how to use the command.
+ * @prop {(0 | 1 | 2 | 3)} permissionLevel
+ * @prop {Symbol} category - The category the command belongs in.
+ * @prop {String[]} [aliases] - An array of aliases for the command.
+ * @prop {Number} cooldown - The cooldown for the command, in `ms`.
+ * @prop {Boolean} requiresUser - Whether or not the command requires a userdata to run.
+ * @prop {Object<string, CommandInformation>} [subcommands] - An object mapping any subcommands that the command may have to their respective {@link CommandHelpObject}.
+ */
+
 class FarmBotCommand {
   /**
    * @description Makes a command for the bot.
    * @param {String} name - The name of the command.
    * @param {CommandFunction} func - The command.
+   * @param {CommandInformation} info - The information for the command.
    * @param {FarmBotCommand} [parent] - The parent command, if this is a subcommand.
    */
-  constructor(name, func, parent) {
+  constructor(name, func, info, parent) {
     this.name = name
+    /** @type {CommandFunction} */
     this.func = Object.defineProperty(func, "name", {
       value: name,
       writable: false
     })
+    this.info = info
     this.parent = parent
     this.subcommands = new FarmBotCommandHandler()
-    const temp = (
-      /**
-       * @description Ye.
-       * @param {String[]} cmdArray - The command name(s).
-       * @param {import("./help-info.js").CommandHelpObject} cd - The help object for the command.
-       * @returns {import("./help-info.js").CommandHelpObject} The found help object, or undefined if no object is found.
-       */
-      function getCommandObject(cmdArray, cd) {
-        const cmd = cmdArray[0]
-        if (cmdArray.length > 1 ) {
-          cmdArray.shift()
-          if (!cd[cmd]) { return console.warn(`Command ${chalk.red.bold(cmd)} does not have a corresponding help object.`) }
-          return getCommandObject(cmdArray, cd[cmd].subcommands)
-        } else {
-          if (!cd[cmd]) { return console.warn(`Command ${chalk.red.bold(cmd)} does not have a corresponding help object.`) }
-          return cd[cmd]
-        }
-      })(this.getFullCommandName().split(" "), COMMAND_OBJECTS)
-    this.cooldown = temp ? temp.cooldown || 0 : null
-    this.permissionLevel = temp ? temp.permissionLevel || 0 : null
+    // const temp = (
+    //   /**
+    //    * @description Ye.
+    //    * @param {String[]} cmdArray - The command name(s).
+    //    * @param {import("./help-info.js").CommandHelpObject} cd - The help object for the command.
+    //    * @returns {import("./help-info.js").CommandHelpObject} The found help object, or undefined if no object is found.
+    //    */
+    //   function getCommandObject(cmdArray, cd) {
+    //     const cmd = cmdArray[0]
+    //     if (cmdArray.length > 1 ) {
+    //       cmdArray.shift()
+    //       if (!cd[cmd]) { return console.warn(`Command ${chalk.red.bold(cmd)} does not have a corresponding help object.`) }
+    //       return getCommandObject(cmdArray, cd[cmd].subcommands)
+    //     } else {
+    //       if (!cd[cmd]) { return console.warn(`Command ${chalk.red.bold(cmd)} does not have a corresponding help object.`) }
+    //       return cd[cmd]
+    //     }
+    //   })(this.getFullCommandName().split(" "), COMMAND_OBJECTS)
+    // this.info.cooldown = temp ? temp.cooldown || 0 : null
+    // this.info.permissionLevel = temp ? temp.permissionLevel || 0 : null
   }
 
   getFullCommandName() {
@@ -63,10 +77,10 @@ class FarmBotCommand {
     if (this.subcommands.size != 0 && this.subcommands.has(args[0])) {
       this.subcommands.get(args.shift()).run(msg, args, userdata)
     } else {
-      if (userdata.permissions < this.permissionLevel) { return }
+      if (userdata.permissions < this.info.permissionLevel) { return }
       const TTW = msg._client.Cooldowns.check(msg.author.id, this.getFullCommandName())
       if (TTW > 0) {
-        msg.send(`**${msg.author.username}**, you have to wait ${(TTW / 1000).toFixed(2)} seconds to use \`farm ${this.getFullCommandName()}\`!`)
+        msg.send(`**${msg.author.username}**, you have to wait **${(TTW / 1000).toFixed(2)}** seconds to use \`farm ${this.getFullCommandName()}\`!`)
       } else {
         this.func(msg, args, userdata)
       }
@@ -77,12 +91,14 @@ class FarmBotCommand {
    * @description Makes a subcommand for the bot, attached to the specified command.
    * @param {String} name - The name of the subcommand.
    * @param {CommandFunction} func - The subcommand.
+   * @param {CommandInformation} info - The information for the command.
    * @returns {FarmBotCommand} The new subcommand object.
    */
-  subcommand(name, func) {
-    return this.subcommands.set(name, func, this)
+  subcommand(name, func, info) {
+    return this.subcommands.set(name, func, info, this)
   }
 
+  // eslint-disable-next-line no-unused-vars
   [util.inspect.custom](depth, options) {
     // const SPACER = depth.toString()
     // switch (depth) {
@@ -90,13 +106,13 @@ class FarmBotCommand {
     //     return options.stylize(`[${this.constructor.name}: ${this.getFullCommandName()}]`, "special")
     //   }
     //   default: {
-    //     return `{\n${SPACER.repeat(depth)}name: ${this.name},\n${SPACER.repeat(depth)}cooldown: ${this.cooldown},\n${SPACER.repeat(depth)}subcommands: ${util.inspect(this.subcommands, true, depth + 1, true)}\n${SPACER.repeat(depth - 1)}}`
+    //     return `{\n${SPACER.repeat(depth)}name: ${this.name},\n${SPACER.repeat(depth)}cooldown: ${this.info.cooldown},\n${SPACER.repeat(depth)}subcommands: ${util.inspect(this.subcommands, true, depth + 1, true)}\n${SPACER.repeat(depth - 1)}}`
     //   }
     // }
     const toReturn = {
       name: this.name,
-      cooldown: this.cooldown,
-      permissionLevel: this.permissionLevel
+      cooldown: this.info.cooldown,
+      permissionLevel: this.info.permissionLevel
     }
     this.parent ? toReturn.parent = this.parent.name : null,
     this.subcommands.size > 0 ? toReturn.subcommands = this.subcommands : null

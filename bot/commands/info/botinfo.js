@@ -13,5 +13,14 @@ exports.run = (bot) => {
       .addField(":hourglass: Uptime", botUptime)
       .addField(":rosette: Version:", versionNumber)
     message.send(infoEmbed)
+  }, {
+    description: "Show general information about the bot.",
+    usage: "​farm botinfo",
+    examples: false,
+    permissionLevel: bot.PERMISSIONS.EVERYONE,
+    category: bot.CATEGORIES.UTILITY,
+    aliases: null,
+    cooldown: 3000,
+    subcommands: null
   })
 }

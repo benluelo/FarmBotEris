@@ -9,17 +9,41 @@ const Cooldowns = require("./FarmBotCooldown.js")
 class FarmBotClient extends Client {
   /**
    * @description Creates an instance of `FarmBotClient`.
-   * @param {import("dotenv").DotenvParseOutput} dotenv - The environment variables, containing at least the bot token.
-   * @param {String} dotenv.TOKEN - The bot token.
+   * @param {import("dotenv").DotenvParseOutput} dotenv - The environment variables, containing at least the bot token as `TOKEN`.
    * @param {import("eris").ClientOptions} options - The {@link import("eris").ClientOptions} for the `FarmBotClient`.
    * @param {String[]} prefixes - An array of the prefixes for the bot.
    */
   constructor(dotenv, options, prefixes) {
+    if (!dotenv.TOKEN) { throw Error("No bot token!") }
     super(dotenv.TOKEN, options)
+
+    /** @description The different permission levels for a command. */
+    this.PERMISSIONS = Object.freeze({
+      /** @type {0} Commands that everyone has access to. */
+      EVERYONE: 0,
+      /** @type {1} Commands that only bot moderators have access to. */
+      MODERATORS: 1,
+      /** @type {2} Commands that only bot admins have access to. */
+      OWNERS: 2,
+      /** @type {3} Commands that are only to be used by the developers, during development (i.e. only Ben & Tyler). */
+      DEVELOPMENT: 3
+    })
+
+    /** @description The different categories of commands. */
+    this.CATEGORIES = Object.freeze({
+      /** @type {Symbol} Commands related to farming. */
+      FARMING: Symbol("🌱 Farming"),
+      /** @type {Symbol} Useful commands for information about the bot. */
+      UTILITY: Symbol("⚙️ Utility"),
+      /** @type {Symbol} Commands that are only to be used by the owners (i.e. only Ben & Tyler). */
+      OWNER: Symbol("🥑 Owner"),
+      /** @type {Symbol} Commands used for bot development. */
+      DEVELOPMENT: Symbol("📜 Development")
+    })
 
     this.ENV = Object.freeze(dotenv)
 
-    this.prefixes = prefixes
+    this.prefixes = Object.freeze(prefixes)
 
     this.on("messageCreate", this.onMessageCreate)
 
@@ -36,15 +60,15 @@ class FarmBotClient extends Client {
 
     console.log(this.Cooldowns)
     /**
-     * @type {Object<string, number>} - The different colors for the bot.
+     * @description The different colors for the bot.
      */
-    this.color = {
+    this.color = Object.freeze({
       market: 0x964b00,
       darkgreen: 0x004C00,
       lightgreen: 0x00FF00,
       success: 0x00FF00,
       error: 0xFF0000
-    }
+    })
 
     this.log = require("../src/logger.js") // lmao i just watched that // LISTEN OK (i got nothin) // it aint working? // no but i think i know why one sec
 
@@ -52,7 +76,7 @@ class FarmBotClient extends Client {
 
     this.ownersIDs = require("../config.js").ownersIDs
 
-    this.config = require("../config.js")
+    this.config = Object.freeze(require("../config.js"))
   }
 
   /**
@@ -82,11 +106,12 @@ class FarmBotClient extends Client {
    * @description Adds a command to the bot.
    * @param {String} name - The name of the command.
    * @param {CommandFunction} commandFunction - The command.
+   * @param {import("./FarmBotCommandHandler.js").CommandInformation} help - The help information for the command.
    * @param {FarmBotCommand} [parent] - If this is a subcommand, the command that it is a subcommand to.
    * @returns {FarmBotCommand} The newly added command.
    */
-  addCommand(name, commandFunction, parent) {
-    const newCmd = this.Commands.set(name, commandFunction, parent)
+  addCommand(name, commandFunction, help, parent) {
+    const newCmd = this.Commands.set(name, commandFunction, help, parent)
     return newCmd
   }
 
