@@ -8,161 +8,157 @@ const commandName = "market"
 /** @private @param {import("../../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
-  const command = bot.addCommand(commandName, (message, args) => {
-    bot.getUser(message.author.id, async (err, userdata) => {
-      if (err) { bot.log.error(err) }
+  const command = bot.addCommand(commandName, async (message, args, userdata) => {
+    const newRequests = []
 
-      if (userdata) {
-        const newRequests = []
+    let messageToSend
 
-        let messageToSend
+    if (userdata.requests.length < 9) {
+      while (userdata.requests.length + newRequests.length < 9) {
+        // get new requests
+        const randomNPC = userdata.farmers[Math.floor(Math.random() * userdata.farmers.length)]
+        newRequests.push(
+          new NPC(randomNPC.name, randomNPC.gender, randomNPC.unlockableCrop, randomNPC.wealth, randomNPC.preferences)
+            .newRequest(userdata.seeds.common)
+        )
+      }
+      messageToSend = await message.send("You have new requests!")
 
-        if (userdata.requests.length < 9) {
-          while (userdata.requests.length + newRequests.length < 9) {
-          // get new requests
-            const randomNPC = userdata.farmers[Math.floor(Math.random() * userdata.farmers.length)]
-            newRequests.push(
-              new NPC(randomNPC.name, randomNPC.gender, randomNPC.unlockableCrop, randomNPC.wealth, randomNPC.preferences)
-                .newRequest(userdata.seeds.common)
-            )
-          }
-          messageToSend = await message.send("You have new requests!")
-
-          await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
-            $push: {
-              requests: { $each: newRequests }
-            }
-          })
+      await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
+        $push: {
+          requests: { $each: newRequests }
         }
-        const marketEmbed = new bot.Embed().setTitle("The Market").setColor(bot.color.market)
-        const tempReq = userdata.requests.concat(newRequests)
-        for (const request in tempReq) {
-          const a = parseRequest(tempReq[request], userdata.farmers, request)
-          marketEmbed.addField(a.farmer.emoji + " **" + a.farmer.name.match(/(\w+ [a-zA-Z])/)[0] + "." + "**", prettifyParsedRequest(a).join("\n"), true)
-        }
-        marketEmbed.addBlankField(true)
+      })
+    }
+    const marketEmbed = new bot.Embed().setTitle("The Market").setColor(bot.color.market)
+    const tempReq = userdata.requests.concat(newRequests)
+    for (const request in tempReq) {
+      const a = parseRequest(tempReq[request], userdata.farmers, request)
+      marketEmbed.addField(a.farmer.emoji + " **" + a.farmer.name.match(/(\w+ [a-zA-Z])/)[0] + "." + "**", prettifyParsedRequest(a).join("\n"), true)
+    }
+    marketEmbed.addBlankField(true)
 
-        if (!messageToSend) {
-          message.send(marketEmbed)
+    if (!messageToSend) {
+      message.send(marketEmbed)
+    } else {
+      await messageToSend.edit({
+        content: "",
+        ...marketEmbed.setDescription("You have new requests!")
+      })
+    }
+  }, {
+    description: "Show all current market requests.",
+    usage: "farm market",
+    permissionLevel: bot.PERMISSIONS.EVERYONE,
+    category: bot.CATEGORIES.FARMING,
+    aliases: null,
+    cooldown: 10000
+  })
+  command.subcommand("view", (message, args, userdata) => {
+    if (!args[0]) {
+      return message.send(new bot.Embed().uhoh("You have to specify an order to view!"))
+    }
+
+    const orderID = parseInt(args[0]) - 1
+    if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) {
+      return message.send(new bot.Embed().uhoh(`**${args[0]}** is not a valid order ID!`))
+    }
+    const marketViewEmbed = new bot.Embed()
+
+    const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
+    const p = prettifyParsedRequest(a)
+
+    marketViewEmbed
+      .setTitle(a.farmer.emoji + " **" + a.farmer.name + "**")
+      .setDescription(p.shift())
+      .setColor(bot.color.market)
+      .addField(p.shift(), p.shift())
+      .addField(p.shift(), p.join("\n"))
+    message.send(marketViewEmbed)
+  }, {
+    description: "Show a specific market request.",
+    usage: "farm market view <order id>​",
+    permissionLevel: bot.PERMISSIONS.EVERYONE,
+    category: bot.CATEGORIES.FARMING,
+    aliases: ["info"],
+    cooldown: 5000
+  })
+  command.subcommand("fill", async (message, args, userdata) => {
+    if (!args[0]) {
+      return message.send(new bot.Embed().uhoh("You have to specify an order to fill!"))
+    }
+
+    const orderID = parseInt(args[0]) - 1
+    if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return message.send(new bot.Embed().uhoh(`**${args[0]}** is not a valid order ID!`)) }
+    const marketFilledEmbed = new bot.Embed()
+
+    const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
+
+    const enoughCrops = (() => {
+      const temp = {}
+      for (const req in a.want) {
+        if (userdata.seeds.common[a.want[req].name].amount < a.want[req].amount) {
+          return false
         } else {
-          await messageToSend.edit({
-            content: "",
-            ...marketEmbed.setDescription("You have new requests!")
-          })
+          temp[`seeds.common.${a.want[req].name}.amount`] = -(a.want[req].amount)
         }
-
-      } else {
-        bot.startMessage(message)
       }
-    })
-  })
-  command.subcommand("view", (message, args) => {
-    bot.getUser(message.author.id, async (err, userdata) => {
-      if (err) { bot.log.error(err) }
+      return temp
+    })()
 
-      if (userdata) {
-        if (!args[0]) {
-          return message.send(new bot.Embed().uhoh("You have to specify an order to view!"))
-        }
+    if (!enoughCrops) {
+      return message.send(new bot.Embed().uhoh("You don't have enough crops to fill this order!"))
+    }
 
-        const orderID = parseInt(args[0]) - 1
-        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) {
-          return message.send(new bot.Embed().uhoh(`**${args[0]}** is not a valid order ID!`))
-        }
-        const marketViewEmbed = new bot.Embed()
+    const p = prettifyParsedRequest(a)
 
-        const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
-        const p = prettifyParsedRequest(a)
+    marketFilledEmbed
+      .setTitle(a.farmer.emoji + " **" + a.farmer.name + "**")
+      .setColor(bot.color.market)
+      .setDescription("**Order Filled!**\n" + p.shift())
+      .addField(p.shift(), p.shift())
+      .addField(p.shift(), p.join("\n"))
 
-        marketViewEmbed
-          .setTitle(a.farmer.emoji + " **" + a.farmer.name + "**")
-          .setDescription(p.shift())
-          .setColor(bot.color.market)
-          .addField(p.shift(), p.shift())
-          .addField(p.shift(), p.join("\n"))
-        message.send(marketViewEmbed)
-      } else {
-        bot.startMessage(message)
+    const farmerIndex = userdata.farmers.findIndex((f) => f.name === userdata.requests[orderID].name)
+
+    const { value } = await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
+      $pull: { ["requests"]: userdata.requests[orderID] },
+      $inc: {
+        money: a.rewards.money,
+        [`farmers.${farmerIndex}.level`]: a.rewards.reputation,
+        ...enoughCrops
       }
-    })
-  })
-  command.subcommand("fill", (message, args) => {
-    bot.getUser(message.author.id, async (err, userdata) => {
-      if (err) { bot.log.error(err) }
+    }, { returnOriginal: false })
 
-      if (userdata) {
-        if (!args[0]) {
-          return message.send(new bot.Embed().uhoh("You have to specify an order to fill!"))
-        }
+    /** @type {import("../../../lib/user.js").User} */
+    const user2 = value
 
-        const orderID = parseInt(args[0]) - 1
-        if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return message.send(new bot.Embed().uhoh(`**${args[0]}** is not a valid order ID!`)) }
-        const marketFilledEmbed = new bot.Embed()
+    const levelBefore = getLevel(2 + user2.farmers[farmerIndex].wealth, a.farmer.level).level
+    const levelAfter = getLevel(2 + user2.farmers[farmerIndex].wealth, user2.farmers[farmerIndex].level).level
 
-        const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
+    if (bot.ENV.DEBUG === "true") {
+      console.log("before:", levelBefore)
+      console.log("after:", levelAfter)
+    }
 
-        const enoughCrops = (() => {
-          const temp = {}
-          for (const req in a.want) {
-            if (userdata.seeds.common[a.want[req].name].amount < a.want[req].amount) {
-              return false
-            } else {
-              temp[`seeds.common.${a.want[req].name}.amount`] = -(a.want[req].amount)
-            }
-          }
-          return temp
-        })()
-
-        if (!enoughCrops) {
-          return message.send(new bot.Embed().uhoh("You don't have enough crops to fill this order!"))
-        }
-
-        const p = prettifyParsedRequest(a)
-
-        marketFilledEmbed
-          .setTitle(a.farmer.emoji + " **" + a.farmer.name + "**")
-          .setColor(bot.color.market)
-          .setDescription("**Order Filled!**\n" + p.shift())
-          .addField(p.shift(), p.shift())
-          .addField(p.shift(), p.join("\n"))
-
-        const farmerIndex = userdata.farmers.findIndex((f) => f.name === userdata.requests[orderID].name)
-
-        const { value } = await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
-          $pull: { ["requests"]: userdata.requests[orderID] },
-          $inc: {
-            money: a.rewards.money,
-            [`farmers.${farmerIndex}.level`]: a.rewards.reputation,
-            ...enoughCrops
-          }
-        }, { returnOriginal: false })
-
-        /** @type {import("../../../lib/user.js").User} */
-        const user2 = value
-
-        const levelBefore = getLevel(2 + user2.farmers[farmerIndex].wealth, a.farmer.level).level
-        const levelAfter = getLevel(2 + user2.farmers[farmerIndex].wealth, user2.farmers[farmerIndex].level).level
-
-        if (bot.ENV.DEBUG === "true") {
-          console.log("before:", levelBefore)
-          console.log("after:", levelAfter)
-        }
-
-        if (levelBefore < levelAfter) {
-          marketFilledEmbed.addField("**__Friendship Increase!__**", `You've become closer friends with **${a.farmer.name}**!\n**Friendship Level** increased from **${levelBefore}** to **${levelAfter}**!`)
-        }
-        if (levelAfter >= userdata.farmers[farmerIndex].unlockLevel && levelBefore < userdata.farmers[farmerIndex].unlockLevel) {
-          if (bot.ENV.DEBUG === "true") { console.log(bot.database.Userdata) }
-          marketFilledEmbed.addField("**__New Crop!__**", `You've become really good friends with **${a.farmer.name}**! They've decided to give you a new seed for your farm as a token of your friendship!\n**Unlocked:** ${cropData[user2.farmers[farmerIndex].unlockableCrop].emoji}`)
-          await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
-            $set: { [`seeds.common.${user2.farmers[farmerIndex].unlockableCrop}.discovered`]: true }
-          })
-        }
-        message.send(marketFilledEmbed)
-      } else {
-        bot.startMessage(message)
-      }
-    })
+    if (levelBefore < levelAfter) {
+      marketFilledEmbed.addField("**__Friendship Increase!__**", `You've become closer friends with **${a.farmer.name}**!\n**Friendship Level** increased from **${levelBefore}** to **${levelAfter}**!`)
+    }
+    if (levelAfter >= userdata.farmers[farmerIndex].unlockLevel && levelBefore < userdata.farmers[farmerIndex].unlockLevel) {
+      if (bot.ENV.DEBUG === "true") { console.log(bot.database.Userdata) }
+      marketFilledEmbed.addField("**__New Crop!__**", `You've become really good friends with **${a.farmer.name}**! They've decided to give you a new seed for your farm as a token of your friendship!\n**Unlocked:** ${cropData[user2.farmers[farmerIndex].unlockableCrop].emoji}`)
+      await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
+        $set: { [`seeds.common.${user2.farmers[farmerIndex].unlockableCrop}.discovered`]: true }
+      })
+    }
+    message.send(marketFilledEmbed)
+  }, {
+    description: "Fill a market request.",
+    usage: "farm market fill <order id>​",
+    permissionLevel: bot.PERMISSIONS.EVERYONE,
+    category: bot.CATEGORIES.FARMING,
+    aliases: null,
+    cooldown: 5000
   })
 
   /**

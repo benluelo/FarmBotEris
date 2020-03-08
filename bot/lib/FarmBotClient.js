@@ -1,11 +1,8 @@
 const { Client } = require("eris")
 const { coin } = require("../lib/emoji.json")
-const FarmBotCommandHandler = require("./FarmBotCommandHandler.js")
+const { FarmBotCommandHandler, CommandInformation } = require("./FarmBotCommandHandler.js")
 const Cooldowns = require("./FarmBotCooldown.js")
 
-/**
- * @typedef {FarmBotClient} FarmBotClient
- */
 class FarmBotClient extends Client {
   /**
    * @description Creates an instance of `FarmBotClient`.
@@ -18,28 +15,10 @@ class FarmBotClient extends Client {
     super(dotenv.TOKEN, options)
 
     /** @description The different permission levels for a command. */
-    this.PERMISSIONS = Object.freeze({
-      /** @type {0} Commands that everyone has access to. */
-      EVERYONE: 0,
-      /** @type {1} Commands that only bot moderators have access to. */
-      MODERATORS: 1,
-      /** @type {2} Commands that only bot admins have access to. */
-      OWNERS: 2,
-      /** @type {3} Commands that are only to be used by the developers, during development (i.e. only Ben & Tyler). */
-      DEVELOPMENT: 3
-    })
+    this.PERMISSIONS = require("./CONSTANTS.js").PERMISSIONS
 
     /** @description The different categories of commands. */
-    this.CATEGORIES = Object.freeze({
-      /** @type {Symbol} Commands related to farming. */
-      FARMING: Symbol("🌱 Farming"),
-      /** @type {Symbol} Useful commands for information about the bot. */
-      UTILITY: Symbol("⚙️ Utility"),
-      /** @type {Symbol} Commands that are only to be used by the owners (i.e. only Ben & Tyler). */
-      OWNER: Symbol("🥑 Owner"),
-      /** @type {Symbol} Commands used for bot development. */
-      DEVELOPMENT: Symbol("📜 Development")
-    })
+    this.CATEGORIES = require("./CONSTANTS.js").CATEGORIES
 
     this.ENV = Object.freeze(dotenv)
 
@@ -70,8 +49,9 @@ class FarmBotClient extends Client {
       error: 0xFF0000
     })
 
-    this.log = require("../src/logger.js") // lmao i just watched that // LISTEN OK (i got nothin) // it aint working? // no but i think i know why one sec
+    this.log = require("../src/logger.js")
 
+    /** @description The Embed class, used for making new embeds. */
     this.Embed = require("./classes.js").Embed
 
     this.ownersIDs = require("../config.js").ownersIDs
@@ -105,13 +85,22 @@ class FarmBotClient extends Client {
   /**
    * @description Adds a command to the bot.
    * @param {String} name - The name of the command.
-   * @param {CommandFunction} commandFunction - The command.
-   * @param {import("./FarmBotCommandHandler.js").CommandInformation} help - The help information for the command.
-   * @param {FarmBotCommand} [parent] - If this is a subcommand, the command that it is a subcommand to.
-   * @returns {FarmBotCommand} The newly added command.
+   * @param {import("./FarmBotCommandHandler.js").CommandFunction} commandFunction - The command.
+   * @param {{
+        description?: string,
+        usage?: string,
+        examples?: string,
+        permissionLevel?: (0 | 1 | 2 | 3),
+        category?: Symbol,
+        aliases?: string[],
+        cooldown?: number,
+        requiresUser?: boolean,
+      }} help - The help information for the command.
+   * @param {import("./FarmBotCommandHandler.js").FarmBotCommand} [parent] - If this is a subcommand, the command that it is a subcommand to.
+   * @returns {import("./FarmBotCommandHandler.js").FarmBotCommand} The newly added command.
    */
   addCommand(name, commandFunction, help, parent) {
-    const newCmd = this.Commands.set(name, commandFunction, help, parent)
+    const newCmd = this.Commands.set(name, commandFunction, new CommandInformation(help), parent)
     return newCmd
   }
 

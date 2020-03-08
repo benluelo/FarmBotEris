@@ -28,8 +28,7 @@ setInterval( async () => {
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 exports.run = (bot) => {
   // eslint-disable-next-line no-unused-vars
-  bot.addCommand("status", async (message, args) => {
-    if (!bot.ownersIDs.includes(message.author.id)) { return }
+  bot.addCommand("status", async (message, args, userdata) => {
 
     // get debug/ development info
     const debugMode = (bot.ENV.DEBUG == "true") ?
@@ -65,6 +64,14 @@ exports.run = (bot) => {
       .addField("Development Mode", developmentMode, true)
       .addBlankField(true)
 
-    await message.send(statusEmbed)
+    return message.send(statusEmbed)
+  }, {
+    description: "The status of the bot. (more detailed version of `farm botinfo`)",
+    usage: "​farm status",
+    examples: false,
+    permissionLevel: bot.PERMISSIONS.MODERATORS,
+    category: bot.CATEGORIES.UTILITY,
+    aliases: null,
+    cooldown: 0
   })
 }

@@ -1,4 +1,5 @@
 const util = require("util")
+const CONSTANTS = require("./CONSTANTS.js")
 // const chalk = require("chalk")
 // const customclass = chalk.keyword("orange")
 // const userid = chalk.keyword("purple")
@@ -7,22 +8,54 @@ const util = require("util")
  * @module FarmBot
  */
 /**
- * @typedef {function(import("eris").Message, String[]): void} CommandFunction
+ * @typedef {function(import("eris").Message, String[], import("./user.js").User): void} CommandFunction
  */
 
 /**
- * @typedef {Object} CommandInformation
- * @prop {String} description - The description for the command.
- * @prop {String} usage - How to use the command.
- * @prop {String} [examples] - Examples of how to use the command.
- * @prop {(0 | 1 | 2 | 3)} permissionLevel
- * @prop {Symbol} category - The category the command belongs in.
- * @prop {String[]} [aliases] - An array of aliases for the command.
- * @prop {Number} cooldown - The cooldown for the command, in `ms`.
- * @prop {Boolean} requiresUser - Whether or not the command requires a userdata to run.
- * @prop {Object<string, CommandInformation>} [subcommands] - An object mapping any subcommands that the command may have to their respective {@link CommandHelpObject}.
  */
+class CommandInformation {
+  /**
+   * @description The general information about a command.
+   * @param {Object} [info]
+   * @param {String} [info.description="No description provided."] - The description for the command.
+   * @param {String} [info.usage="No usage provided."] - How to use the command.
+   * @param {String} [info.examples] - Examples of how to use the command.
+   * @param {(0 | 1 | 2 | 3)} [info.permissionLevel=CONSTANTS.PERMISSIONS.DEVELOPMENT] - The minimum required permission level for the command.
+   * @param {Symbol} [info.category=CONSTANTS.CATEGORIES.DEVELOPMENT] - The category the command belongs in.
+   * @param {String[]} [info.aliases] - An array of aliases for the command.
+   * @param {Number} [info.cooldown=0] - The cooldown for the command, in `ms`.
+   * @param {Boolean} [info.requiresUser=false] - Whether or not the command requires a userdata to run.
+   */
+  constructor(info = {
+    description: "No description provided.",
+    usage: "No usage provided.",
+    examples: null,
+    permissionLevel: 0 | 1 | 2 | 3,
+    category: CONSTANTS.CATEGORIES.DEVELOPMENT,
+    aliases: null,
+    cooldown: 0,
+    requiresUser: false,
+}) {
+    /** @type {String} The description for the command. */
+    this.description = info.description || 
+    /** @type {String} How to use the command. */
+    this.usage = info.usage || 
+    /** @type {String} Examples of how to use the command. */
+    this.examples = info.examples
+    /** @type {(0 | 1 | 2 | 3)} */
+    this.permissionLevel = info.permissionLevel != undefined ? info.permissionLevel : CONSTANTS.PERMISSIONS.DEVELOPMENT
+    /** @type {Symbol} The category the command belongs in. */
+    this.category = info.category || 
+    /** @type {String[]} An array of aliases for the command. */
+    this.aliases = info.aliases
+    /** @type {Number} The cooldown for the command, in `ms`. */
+    this.cooldown = info.cooldown || 0
+    /** @type {Boolean} Whether or not the command requires a userdata to run. */
+    this.requiresUser = info.requiresUser != undefined ? info.requiresUser : false
+  }
+}
 
+/** @typedef {FarmBotCommand} FarmBotCommand */
 class FarmBotCommand {
   /**
    * @description Makes a command for the bot.
@@ -41,26 +74,6 @@ class FarmBotCommand {
     this.info = info
     this.parent = parent
     this.subcommands = new FarmBotCommandHandler()
-    // const temp = (
-    //   /**
-    //    * @description Ye.
-    //    * @param {String[]} cmdArray - The command name(s).
-    //    * @param {import("./help-info.js").CommandHelpObject} cd - The help object for the command.
-    //    * @returns {import("./help-info.js").CommandHelpObject} The found help object, or undefined if no object is found.
-    //    */
-    //   function getCommandObject(cmdArray, cd) {
-    //     const cmd = cmdArray[0]
-    //     if (cmdArray.length > 1 ) {
-    //       cmdArray.shift()
-    //       if (!cd[cmd]) { return console.warn(`Command ${chalk.red.bold(cmd)} does not have a corresponding help object.`) }
-    //       return getCommandObject(cmdArray, cd[cmd].subcommands)
-    //     } else {
-    //       if (!cd[cmd]) { return console.warn(`Command ${chalk.red.bold(cmd)} does not have a corresponding help object.`) }
-    //       return cd[cmd]
-    //     }
-    //   })(this.getFullCommandName().split(" "), COMMAND_OBJECTS)
-    // this.info.cooldown = temp ? temp.cooldown || 0 : null
-    // this.info.permissionLevel = temp ? temp.permissionLevel || 0 : null
   }
 
   getFullCommandName() {
@@ -98,6 +111,22 @@ class FarmBotCommand {
     return this.subcommands.set(name, func, info, this)
   }
 
+  /**
+   * @description Sets the help embed for the command.
+   * @param {import("./classes.js").Embed} embed - The help embed for this command.
+   */
+  setEmbed(embed) {
+    this.embed = embed
+  }
+
+  /**
+   * @description Gets the help embed for the command.
+   * @returns {import("./classes.js").Embed} The help embed for this command.
+   */
+  getEmbed() {
+    return this.embed
+  }
+
   // eslint-disable-next-line no-unused-vars
   [util.inspect.custom](depth, options) {
     // const SPACER = depth.toString()
@@ -111,8 +140,7 @@ class FarmBotCommand {
     // }
     const toReturn = {
       name: this.name,
-      cooldown: this.info.cooldown,
-      permissionLevel: this.info.permissionLevel
+      info: this.info
     }
     this.parent ? toReturn.parent = this.parent.name : null,
     this.subcommands.size > 0 ? toReturn.subcommands = this.subcommands : null
@@ -123,6 +151,8 @@ class FarmBotCommand {
 class FarmBotCommandHandler extends Map {
   constructor() {
     super()
+    /** @type {Map<string, string>} A map of command aliases to their respective commands. */
+    this.aliases = new Map()
   }
 
   /**
@@ -133,7 +163,6 @@ class FarmBotCommandHandler extends Map {
    * @param {import("./user.js").User} userdata - The user's DB information.
    */
   run(cmdName, message, args, userdata) {
-    // console.log(cmdName, this.get(cmdName))
     this.get(cmdName).run(message, args, userdata)
   }
   /**
@@ -142,18 +171,24 @@ class FarmBotCommandHandler extends Map {
    * @returns {(FarmBotCommand | undefined)} The found command, or undefined if no command is found.
    */
   get(cmd) {
-    return super.get(cmd)
+    return super.get(cmd) || super.get(this.aliases.get(cmd))
   }
 
   /**
    * @description Adds a command to the bot.
    * @param {String} name - The command name.
-   * @param {function(import("eris").Message, String[]): void} func - The command function.
+   * @param {CommandFunction} func - The command function.
+   * @param {CommandInformation} info - The information for the command.
    * @param {FarmBotCommand} [parent] - The parent command, if this is a subcommand.
    * @returns {FarmBotCommand} The new `FarmBotCommand` object.
    */
-  set(name, func, parent) {
-    const newCmd = new FarmBotCommand(name, func, parent ? parent : null)
+  set(name, func, info, parent) {
+    const newCmd = new FarmBotCommand(name, func, info, parent ? parent : null)
+    if (info && info.aliases) {
+      info.aliases.forEach((alias) => {
+        this.aliases.set(alias, name)
+      })
+    }
     super.set(name, newCmd)
     return newCmd
   }
@@ -164,7 +199,7 @@ class FarmBotCommandHandler extends Map {
    * @returns {Boolean} Whether or not the command is in the `FarmBotCommandHandler`.
    */
   has(cmd) {
-    return super.has(cmd)
+    return super.has(cmd) || this.aliases.has(cmd)
   }
 
   // [util.inspect.custom]() {
@@ -186,4 +221,7 @@ class FarmBotCommandHandler extends Map {
   }
 }
 
-module.exports = FarmBotCommandHandler
+module.exports = {
+  FarmBotCommandHandler,
+  CommandInformation
+}

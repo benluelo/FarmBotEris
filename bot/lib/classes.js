@@ -1,8 +1,7 @@
-const util = require("util")
-const chalk = require("chalk")
-const customclass = chalk.keyword("orange")
-const userid = chalk.keyword("purple")
-// console.log(util.inspect.styles)
+// const util = require("util")
+// const chalk = require("chalk")
+// const customclass = chalk.keyword("orange")
+// const userid = chalk.keyword("purple")
 
 /**
  * @namespace Classes
@@ -19,6 +18,9 @@ function getURL(obj) {
   else { return obj }
 }
 
+/**
+ * @typedef {Embed} Embed
+ */
 class Embed {
   /**
    * @description Creates a new Embed.
