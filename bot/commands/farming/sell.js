@@ -54,7 +54,6 @@ exports.run = (bot) => {
     examples: "farm sell 12 apple",
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.FARMING,
-    aliases: null,
     cooldown: 3000
   }).subcommand("all", (message, args, userdata) => {
 
@@ -119,7 +118,6 @@ exports.run = (bot) => {
     examples: "farm sell all apple",
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.FARMING,
-    aliases: null,
     cooldown: 5000
   })
 }

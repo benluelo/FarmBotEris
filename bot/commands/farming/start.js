@@ -51,5 +51,9 @@ exports.run = (bot) => {
         message.send(new bot.Embed().uhoh(`You've already started farming, ${message.author.username}!`))
       }
     })
+  }, {
+    permissionLevel: bot.PERMISSIONS.EVERYONE,
+    category: bot.CATEGORIES.FARMING,
+    requiresUser: false
   })
 }

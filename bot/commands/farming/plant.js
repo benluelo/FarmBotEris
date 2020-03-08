@@ -44,7 +44,6 @@ module.exports.run = (bot) => {
     examples: "​farm plant a1 apple",
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.FARMING,
-    aliases: null,
     cooldown: 5000
   }).subcommand("all", (message, args, userdata) => {
 
@@ -85,7 +84,6 @@ module.exports.run = (bot) => {
     examples: "​farm plant all apple",
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.FARMING,
-    aliases: null,
     cooldown: 5000
   })
 }

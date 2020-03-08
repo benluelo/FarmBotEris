@@ -105,7 +105,6 @@ exports.run = (bot) => {
     examples: "​farm info a1",
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.UTILITY,
-    aliases: null,
     cooldown: 3000
   })
 }

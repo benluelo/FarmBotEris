@@ -17,7 +17,6 @@ module.exports.run = (bot) => {
     examples: "farm help harvest​",
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.UTILITY,
-    aliases: null,
     cooldown: 1000
   })
 }

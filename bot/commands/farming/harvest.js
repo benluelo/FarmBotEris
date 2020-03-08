@@ -93,7 +93,6 @@ module.exports.run = async (bot) => {
     examples: "​farm harvest a1\n└> harvest a specific plot.\nfarm harvest\n└> harvest all of your crops.",
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.FARMING,
-    aliases: null,
     cooldown: 5000
   })
 }

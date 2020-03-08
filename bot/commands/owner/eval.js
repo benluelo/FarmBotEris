@@ -28,7 +28,6 @@ exports.run = (bot) => {
     examples: "​no",
     permissionLevel: bot.PERMISSIONS.OWNERS,
     category: bot.CATEGORIES.OWNER,
-    aliases: null,
     cooldown: 0
   })
 }

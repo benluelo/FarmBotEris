@@ -21,8 +21,6 @@ module.exports.run = (bot) => {
     examples: false,
     permissionLevel: bot.PERMISSIONS.DEVELOPMENT,
     category: bot.CATEGORIES.DEVELOPMENT,
-    aliases: null,
-    cooldown: 0,
-    subcommands: null
+    cooldown: 0
   })
 }

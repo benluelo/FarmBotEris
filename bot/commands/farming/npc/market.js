@@ -51,7 +51,6 @@ module.exports.run = (bot) => {
     usage: "farm market",
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.FARMING,
-    aliases: null,
     cooldown: 10000
   })
   command.subcommand("view", (message, args, userdata) => {
@@ -157,7 +156,6 @@ module.exports.run = (bot) => {
     usage: "farm market fill <order id>​",
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.FARMING,
-    aliases: null,
     cooldown: 5000
   })
 

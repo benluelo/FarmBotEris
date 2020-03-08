@@ -67,7 +67,6 @@ exports.run = async (bot) => {
     examples: false,
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.FARMING,
-    aliases: null,
     cooldown: 10000
   })
 }

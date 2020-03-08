@@ -25,34 +25,35 @@ class CommandInformation {
    * @param {Symbol} [info.category=CONSTANTS.CATEGORIES.DEVELOPMENT] - The category the command belongs in.
    * @param {String[]} [info.aliases] - An array of aliases for the command.
    * @param {Number} [info.cooldown=0] - The cooldown for the command, in `ms`.
-   * @param {Boolean} [info.requiresUser=false] - Whether or not the command requires a userdata to run.
+   * @param {Boolean} [info.requiresUser=true] - Whether or not the command requires a userdata to run. WARNING: If set to `true`, no permissions checks will be made.
    */
-  constructor(info = {
-    description: "No description provided.",
-    usage: "No usage provided.",
-    examples: null,
-    permissionLevel: CONSTANTS.PERMISSIONS.DEVELOPMENT,
-    category: CONSTANTS.CATEGORIES.DEVELOPMENT,
-    aliases: null,
-    cooldown: 0,
-    requiresUser: false,
-  }) {
+  constructor(info = {}) {
+    const {
+      description = "No description provided.",
+      usage = "No usage provided.",
+      examples = null,
+      permissionLevel = CONSTANTS.PERMISSIONS.DEVELOPMENT,
+      category = CONSTANTS.CATEGORIES.DEVELOPMENT,
+      aliases = null,
+      cooldown = 0,
+      requiresUser = true
+    } = info
     /** @type {String} The description for the command. */
-    this.description = info.description
+    this.description = description
     /** @type {String} How to use the command. */
-    this.usage = info.usage
+    this.usage = usage
     /** @type {String} Examples of how to use the command. */
-    this.examples = info.examples
+    this.examples = examples
     /** @type {(0 | 1 | 2 | 3)} */
-    this.permissionLevel = info.permissionLevel
+    this.permissionLevel = permissionLevel
     /** @type {Symbol} The category the command belongs in. */
-    this.category = info.category
+    this.category = category
     /** @type {String[]} An array of aliases for the command. */
-    this.aliases = info.aliases
+    this.aliases = aliases
     /** @type {Number} The cooldown for the command, in `ms`. */
-    this.cooldown = info.cooldown
-    /** @type {Boolean} Whether or not the command requires a userdata to run. */
-    this.requiresUser = info.requiresUser != undefined ? info.requiresUser : false
+    this.cooldown = cooldown
+    /** @type {Boolean} Whether or not the command requires a userdata to run. WARNING: If set to `true`, no permissions checks will be made. */
+    this.requiresUser = requiresUser
   }
 }
 
@@ -75,6 +76,8 @@ class FarmBotCommand {
     this.info = info
     this.parent = parent
     this.subcommands = new FarmBotCommandHandler()
+    this.Cooldowns = new Cooldowns(this.getFullCommandName(), this.info.cooldown)
+    console.log(this)
   }
 
   getFullCommandName() {
@@ -88,15 +91,23 @@ class FarmBotCommand {
    * @param {import("./user.js").User} userdata - The caller's DB information.
    */
   run(msg, args, userdata) {
+    console.log(this.Cooldowns)
     if (this.subcommands.size != 0 && this.subcommands.has(args[0])) {
       this.subcommands.get(args.shift()).run(msg, args, userdata)
     } else {
-      if (userdata.permissions < this.info.permissionLevel) { return }
-      const TTW = msg._client.Cooldowns.check(msg.author.id, this.getFullCommandName())
-      if (TTW > 0) {
-        msg.send(`**${msg.author.username}**, you have to wait **${(TTW / 1000).toFixed(2)}** seconds to use \`farm ${this.getFullCommandName()}\`!`)
+      if (this.info.requiresUser && userdata.permissions < this.info.permissionLevel) { return }
+      console.log(this.name, this.info.requiresUser)
+      if (!this.info.requiresUser) {
+        this.func(msg, args, msg.author)
       } else {
-        this.func(msg, args, userdata)
+        const TTW = this.Cooldowns.check(msg.author.id, this.name)
+        if (TTW > 0) {
+          const m = msg.send(`**${msg.author.username}**, you have to wait **${(TTW / 1000).toFixed(2)}** seconds to use \`farm ${this.getFullCommandName()}\`!`)
+          msg.delete()
+          setTimeout(async () => { (await m).delete() }, TTW)
+        } else {
+          this.func(msg, args, userdata)
+        }
       }
     }
   }
@@ -183,6 +194,7 @@ class FarmBotCommandHandler extends Map {
   run(cmdName, message, args, userdata) {
     this.get(cmdName).run(message, args, userdata)
   }
+
   /**
    * @description Gets a command from the `FarmBotCommandHandler`.
    * @param {String} cmd - The command name.
@@ -247,6 +259,101 @@ class FarmBotCommandHandler extends Map {
    */
   entries() {
     return super.entries()
+  }
+}
+
+const chalk = require("chalk")
+const customclass = chalk.keyword("orange")
+const userid = chalk.keyword("purple")
+
+class Cooldowns extends Map {
+  constructor(cmdName, cooldown) {
+    super()
+    this.name = cmdName
+    this.cooldown = cooldown
+  }
+
+  /**
+   * @description Checks if a user is able to use a command. If they are able to use it, reset their cooldown for that command.
+   * @param {String} userID - The `userID` of the user who is attempting to use the command.
+   * @returns {Number} How long the user has to wait to use the command, in milliseconds; `0` if the cooldown is up.
+   */
+  check(userID) {
+
+    // check for the user in the cooldowns
+    if (this.has(userID)) {
+      /** @description The **T**ime the user has **T**o **W**ait to use the command. */
+      let TTW = 0
+      // if the user is in the cooldowns, check if they can use the command
+      if ((TTW = this.get(userID)) == 0) {
+        // if they can use the command, reset their cooldown for that command
+        this.set(userID)
+        return 0
+      } else {
+        // else, return how long they have to wait
+        return TTW
+      }
+    // if the user isn't in the cooldowns, add them to it
+    } else {
+      this.set(userID)
+      return 0
+    }
+  }
+
+  /**
+   * @description Checks if a user can use a command.
+   * @param {String} userID - The user's `userID` to get from the `Cooldowns`.
+   * @returns {Number} How long the user has to wait to use the command; `0` if the cooldown is up.
+   */
+  get(userID) {
+    const t = super.get(userID)
+    const cd = this.cooldown
+    return this._clamp((t + cd - Date.now()), 0, cd)
+  }
+
+  /**
+   * @description Adds a user to the `Cooldowns`.
+   * @param {String} userID - The user's `userID` to add to the `Cooldowns`.
+   * @returns {this} The `Cooldowns` object.
+   */
+  set(userID) {
+    return super.set(userID, Date.now())
+  }
+
+  /**
+   * @description Checks if a user is in the `Cooldowns`.
+   * @param {String} userID - The user's `userID` to check the `Cooldowns` for.
+   * @returns {Boolean} Whether or not the user is in the `Cooldowns`.
+   */
+  has(userID) {
+    return super.has(userID)
+  }
+
+  /**
+   * @description Clamps a number between two provided values.
+   * @param {Number} num - The number to clamp.
+   * @param {Number} min - The minimum value for the number.
+   * @param {Number} max - The maximum value for the number.
+   * @returns {Number} The clamped number.
+   */
+  _clamp(num, min, max) {
+    return num <= min ? min : num >= max ? max : num
+  }
+
+  // [util.inspect.custom](depth, options) {
+  //   let toReturn = ""
+  //   for (const [userID, userCoolDown] of this.entries()) {
+  //     toReturn += `\n  ${userid(userID)} => ${util.inspect(userCoolDown, true, 0, true)},`
+  //   }
+  //   return `${customclass(this.constructor.name)}(${this.size}): {${toReturn.slice(0, -1)}${this.size == 0 ? "" : "\n"}}`
+  // }
+
+  [util.inspect.custom](depth, options) {
+    if (depth == 0) {
+      return options.stylize(`[${this.constructor.name}]`, "special")
+    } else {
+      return this
+    }
   }
 }
 

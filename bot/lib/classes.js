@@ -1,4 +1,4 @@
-// const util = require("util")
+const util = require("util")
 // const chalk = require("chalk")
 // const customclass = chalk.keyword("orange")
 // const userid = chalk.keyword("purple")
@@ -45,31 +45,34 @@ class Embed {
    * @param {String} [embed.fields.name] - The name of the field.
    * @param {String} [embed.fields.value] - The content of the field.
    */
-  constructor(embed = {
-    title: null,
-    description: null,
-    url: null,
-    color: null,
-    timestamp: null,
-    footer: {
-      icon_url: null,
-      text: null
-    },
-    thumbnail: {
-      url: null
-    },
-    image: {
-      url: null
-    },
-    author: {
-      name: null,
-      url: null,
-      icon_url: null
-    },
-    fields: []
-  }) {
+  constructor(embed = {}) {
     this.embed = {
-      ...embed
+      title: null,
+      description: null,
+      url: null,
+      color: null,
+      timestamp: null,
+      footer: {
+        icon_url: null,
+        text: null
+      },
+      thumbnail: {
+        url: null
+      },
+      image: {
+        url: null
+      },
+      author: {
+        name: null,
+        url: null,
+        icon_url: null
+      },
+      fields: []
+    }
+
+    this.embed = {
+      embed,
+      ...this.embed
     }
   }
 
@@ -217,6 +220,14 @@ class Embed {
     return this.embed
   }
 
+  [util.inspect.custom](depth, options) {
+    if (depth == 0) {
+      return options.stylize(`[${this.constructor.name}]`, "special")
+    } else {
+      return this
+    }
+  }
+
   // #endregion Embed methods
 }
 class ProgressBar {
@@ -236,6 +247,14 @@ class ProgressBar {
     const full = Math.floor((this.numerator / this.denominator) * this.length)
     const empty = Math.ceil(this.length - ((this.numerator / this.denominator) * this.length))
     return "█".repeat(full) + "░".repeat(empty)
+  }
+
+  [util.inspect.custom](depth, options) {
+    if (depth == 0) {
+      return options.stylize(`[${this.constructor.name}]`, "special")
+    } else {
+      return this
+    }
   }
 }
 
@@ -265,6 +284,14 @@ class XPProgressBar extends ProgressBar {
   level() {
     return this._level
   }
+
+  [util.inspect.custom](depth, options) {
+    if (depth == 0) {
+      return options.stylize(`[${this.constructor.name}]`, "special")
+    } else {
+      return this
+    }
+  }
 }
 
 const { readFileSync } = require("fs")
@@ -285,6 +312,14 @@ class Attachment {
 
   link() {
     return `attachment://${this.name}`
+  }
+
+  [util.inspect.custom](depth, options) {
+    if (depth == 0) {
+      return options.stylize(`[${this.constructor.name}]`, "special")
+    } else {
+      return this
+    }
   }
 }
 

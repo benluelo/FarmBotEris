@@ -71,7 +71,6 @@ exports.run = (bot) => {
     examples: false,
     permissionLevel: bot.PERMISSIONS.MODERATORS,
     category: bot.CATEGORIES.UTILITY,
-    aliases: null,
     cooldown: 0
   })
 }

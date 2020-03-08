@@ -1,7 +1,7 @@
 const { Client } = require("eris")
 const { coin } = require("../lib/emoji.json")
 const { FarmBotCommandHandler, CommandInformation } = require("./FarmBotCommandHandler.js")
-const Cooldowns = require("./FarmBotCooldown.js")
+// const Cooldowns = require("./FarmBotCooldown.js")
 
 class FarmBotClient extends Client {
   /**
@@ -34,7 +34,7 @@ class FarmBotClient extends Client {
     this.database
 
     this._db
-    this.Cooldowns = new Cooldowns()
+    // this.Cooldowns = new Cooldowns()
     this.Commands = new FarmBotCommandHandler()
 
     console.log(this.Cooldowns)
@@ -70,15 +70,19 @@ class FarmBotClient extends Client {
 
     // check if a prefix was used; if a prefix was used, check if a command was used
     if (this._checkForPrefix(args.shift()) && this.Commands.has(args[0])) {
+      if (this.Commands.get(args[0]).info.requiresUser) {
       // if a command was used, check if the caller can use the command
-      this.getUser(msg.author.id, (err, userdata) => {
-        if (err) { throw err }
-        if (!userdata) {
-          this.startMessage(msg)
-        } else {
-          this.Commands.run(args.shift(), msg, args, userdata)
-        }
-      })
+        this.getUser(msg.author.id, (err, userdata) => {
+          if (err) { throw err }
+          if (!userdata) {
+            this.startMessage(msg)
+          } else {
+            this.Commands.run(args.shift(), msg, args, userdata)
+          }
+        })
+      } else {
+        this.Commands.run(args.shift(), msg, args)
+      }
     }
   }
 

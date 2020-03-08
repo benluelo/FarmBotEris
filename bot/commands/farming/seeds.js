@@ -24,7 +24,6 @@ exports.run = (bot) => {
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.FARMING,
     aliases: ["seedbag"],
-    cooldown: 3000,
-    subcommands: null
+    cooldown: 3000
   })
 }

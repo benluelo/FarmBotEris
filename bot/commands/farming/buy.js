@@ -22,7 +22,6 @@ exports.run = async (bot) => {
     usage: "farm buy",
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.FARMING,
-    aliases: null,
     cooldown: 3000
   }).subcommand("confirm", async (message, args, userdata) => {
     if (userdata.farm.length >= MAX_PLOTS) {
@@ -65,7 +64,6 @@ exports.run = async (bot) => {
     usage: "farm buy confirm",
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.FARMING,
-    aliases: null,
     cooldown: 3000
   })
 }

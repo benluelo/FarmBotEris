@@ -1,14 +1,9 @@
 const flags = require("./flags.json")
-const { PERMISSIONS } = require("./help-info.js")
+const { PERMISSIONS } = require("./CONSTANTS.js")
 const { ownersIDs } = require("../config.js")
 
 
 /**
-<<<<<<< HEAD.
- *
- * @class
-=======
->>>>>>> b718cdce244fdff7f69f2f0d5a39e66109b1fc4a
  * @typedef {User} User
  */
 class User {
