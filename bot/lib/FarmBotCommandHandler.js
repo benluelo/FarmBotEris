@@ -1,5 +1,6 @@
 const util = require("util")
 const CONSTANTS = require("./CONSTANTS.js")
+console.log(CONSTANTS)
 // const chalk = require("chalk")
 // const customclass = chalk.keyword("orange")
 // const userid = chalk.keyword("purple")
@@ -30,26 +31,26 @@ class CommandInformation {
     description: "No description provided.",
     usage: "No usage provided.",
     examples: null,
-    permissionLevel: 0 | 1 | 2 | 3,
+    permissionLevel: CONSTANTS.PERMISSIONS.DEVELOPMENT,
     category: CONSTANTS.CATEGORIES.DEVELOPMENT,
     aliases: null,
     cooldown: 0,
     requiresUser: false,
-}) {
+  }) {
     /** @type {String} The description for the command. */
-    this.description = info.description || 
+    this.description = info.description
     /** @type {String} How to use the command. */
-    this.usage = info.usage || 
+    this.usage = info.usage
     /** @type {String} Examples of how to use the command. */
     this.examples = info.examples
     /** @type {(0 | 1 | 2 | 3)} */
-    this.permissionLevel = info.permissionLevel != undefined ? info.permissionLevel : CONSTANTS.PERMISSIONS.DEVELOPMENT
+    this.permissionLevel = info.permissionLevel
     /** @type {Symbol} The category the command belongs in. */
-    this.category = info.category || 
+    this.category = info.category
     /** @type {String[]} An array of aliases for the command. */
     this.aliases = info.aliases
     /** @type {Number} The cooldown for the command, in `ms`. */
-    this.cooldown = info.cooldown || 0
+    this.cooldown = info.cooldown
     /** @type {Boolean} Whether or not the command requires a userdata to run. */
     this.requiresUser = info.requiresUser != undefined ? info.requiresUser : false
   }
@@ -104,11 +105,20 @@ class FarmBotCommand {
    * @description Makes a subcommand for the bot, attached to the specified command.
    * @param {String} name - The name of the subcommand.
    * @param {CommandFunction} func - The subcommand.
-   * @param {CommandInformation} info - The information for the command.
+   * @param {{
+        description?: string,
+        usage?: string,
+        examples?: string,
+        permissionLevel?: (0 | 1 | 2 | 3),
+        category?: Symbol,
+        aliases?: string[],
+        cooldown?: number,
+        requiresUser?: boolean,
+      }} info - The information for the command.
    * @returns {FarmBotCommand} The new subcommand object.
    */
   subcommand(name, func, info) {
-    return this.subcommands.set(name, func, info, this)
+    return this.subcommands.set(name, func, new CommandInformation(info), this)
   }
 
   /**
@@ -121,14 +131,22 @@ class FarmBotCommand {
 
   /**
    * @description Gets the help embed for the command.
-   * @returns {import("./classes.js").Embed} The help embed for this command.
+   * @param {String[]} args - The name of the command to get the help embed for.
+   * @param {import("./user.js").User} userdata - The user's DB information.
+   * @returns {(import("./classes.js").Embed | undefined)} The help embed for this command, or `false` if their permmissions aren't high enough.
    */
-  getEmbed() {
-    return this.embed
+  getEmbed(args, userdata) {
+    console.log(this.name, args)
+    if (args[0] && this.subcommands.size != 0 && this.subcommands.has(args[0])) {
+      return this.subcommands.get(args.shift()).getEmbed(args, userdata)
+    } else {
+      if (userdata.permissions < this.info.permissionLevel) { return undefined }
+      else { return this.embed }
+    }
   }
 
   // eslint-disable-next-line no-unused-vars
-  [util.inspect.custom](depth, options) {
+  [util.inspect.custom](_depth, _options) {
     // const SPACER = depth.toString()
     // switch (depth) {
     //   case (0): {
@@ -200,6 +218,17 @@ class FarmBotCommandHandler extends Map {
    */
   has(cmd) {
     return super.has(cmd) || this.aliases.has(cmd)
+  }
+
+  /**
+   * @description Gets the help embed for the command.
+   * @param {String[]} args - The name of the command to get the help embed for.
+   * @param {import("./user.js").User} userdata - The user's DB information.
+   * @returns {(import("./classes.js").Embed | undefined)} The help embed for this command, or `undefined` if their permmissions aren't high enough or there is no command with that name.
+   */
+  getEmbed(args, userdata) {
+    console.log(args)
+    return this.has(args[0]) ? this.get(args.shift()).getEmbed(args, userdata) : undefined
   }
 
   // [util.inspect.custom]() {

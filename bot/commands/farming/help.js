@@ -6,12 +6,11 @@ let fullHelpEmbeds, commandHelpEmbeds
 module.exports.run = (bot) => {
 
   bot.addCommand("help", (message, args, userdata) => {
-    const req = args.join(" ")
-    if (!req) { message.send(fullHelpEmbeds[userdata.permissions]) }
+    if (!args[0]) { message.send(fullHelpEmbeds[userdata.permissions]) }
     else {
-      const e = commandHelpEmbeds[req]
+      const e = bot.Commands.getEmbed(args, userdata)
       if (e) { return message.send(e) }
-      else { message.send(new bot.Embed().uhoh(`${req} isn't a command!`)) }
+      else { message.send(new bot.Embed().uhoh(`${args} isn't a command!`)) }
     }
   }, {
     description: "Show what commands the bot has and how to use them.",
@@ -75,6 +74,7 @@ module.exports.getHelp = (bot) => {
 
   for (const [commandName, commandObject] of bot.Commands.entries()) {
     const current = commandObject
+    console.log(current)
     fullHelp[current.info.permissionLevel].push(commandName)
 
     ;(/**
@@ -83,6 +83,7 @@ module.exports.getHelp = (bot) => {
        * @param {import("../../lib/FarmBotCommandHandler.js").FarmBotCommand} cmdObject - The command object.
        */
       function getCMDs(cmdName, cmdObject) {
+        console.log(cmdObject.info)
         const e = new bot.Embed()
           .setTitle(`Help for \`${cmdName}\``)
           .setDescription(cmdObject.info.description)
