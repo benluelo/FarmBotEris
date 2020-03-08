@@ -1,7 +1,6 @@
 // const { embeds: help } = require("../../lib/help-info.js")
 
-let fullHelpEmbeds, commandHelpEmbeds
-
+let fullHelpEmbeds
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
 
@@ -35,8 +34,6 @@ module.exports.getHelp = (bot) => {
     }
   }
 
-  /** @type {Object<string, import("./classes.js").Embed>} */
-  commandHelpEmbeds = {}
 
   /** @type {Object<number, String[]>} */
   const fullHelp = {}
@@ -74,7 +71,6 @@ module.exports.getHelp = (bot) => {
 
   for (const [commandName, commandObject] of bot.Commands.entries()) {
     const current = commandObject
-    console.log(current)
     fullHelp[current.info.permissionLevel].push(commandName)
 
     ;(/**
@@ -83,7 +79,6 @@ module.exports.getHelp = (bot) => {
        * @param {import("../../lib/FarmBotCommandHandler.js").FarmBotCommand} cmdObject - The command object.
        */
       function getCMDs(cmdName, cmdObject) {
-        console.log(cmdObject.info)
         const e = new bot.Embed()
           .setTitle(`Help for \`${cmdName}\``)
           .setDescription(cmdObject.info.description)
@@ -124,7 +119,7 @@ module.exports.getHelp = (bot) => {
     })
     const tempEmbed = new bot.Embed()
       .setTitle("FarmBot Help")
-      .setDescription("This is the full list of commands for FarmBot. Send `farm help <command>` for detailed information about a specific command.")
+      .setDescription("This is the full list of commands for FarmBot. Send `farm help <command> [subcommands...]` for detailed information about a specific command.")
       .setColor(0x00b3b3)
       .setFooter(bot.ENV.DEVELOPMENT ? PERM_LEVEL : null)
     Object.getOwnPropertySymbols(fullHelpEmbeds[i]).forEach((cat) => {
