@@ -39,7 +39,11 @@ exports.run = (bot) => {
           const region = args.join(" ").toLowerCase()
           if (!flags[region]) { return message.send(new bot.Embed().uhoh(`Couldn't find **"${region}"** anywhere on a map... maybe try somewhere else?`)) }
           const farmers = await require("../../lib/get-farmers.js").run(region)
-          bot.database.Userdata.insertOne(new User(message.author, region, farmers))
+          const newUser = new User(message.author, region, farmers)
+          for (let i = 0; i < 9; ++i) {
+            newUser.newRequest()
+          }
+          bot.database.Userdata.insertOne(newUser)
           message.send(new bot.Embed()
             .setTitle(`Welcome to ${bot.user.username}, ${message.author.username}!  ${flags[region]}`)
             .setDescription("Do `farm help` to display the full list of commands the bot has!")

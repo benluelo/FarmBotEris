@@ -2,6 +2,8 @@ const flags = require("./flags.json")
 const { PERMISSIONS } = require("./CONSTANTS.js")
 const { ownersIDs } = require("../config.js")
 
+const { NPC } = require("./npc.js")
+
 
 /**
  * @typedef {User} User
@@ -111,18 +113,45 @@ class User {
         }
       }
     },
-    /** @prop {import("./npc").Request[]} - The user's current requests. */
-    this.requests = [],
+    /** @prop {Object<string, Request>} - The user's current requests. */
+    this.requests = {},
     /** @prop {import("./npc").Farmer[]} - The farmers in the user's village. */
     this.farmers = farmers,
-    /** @prop {import("./help-info").PermissionsLevels} - The farmers in the user's village. */
+    /** @prop {(0 | 1 | 2 | 3)} - The farmers in the user's village. */
     this.permissions = ownersIDs.includes(author.id) ? PERMISSIONS.DEVELOPMENT : PERMISSIONS.EVERYONE
-    console.log(this)
+    /** @prop {Number} - When the user's last market refresh was. */
+    this.requestTimeOut = 0
+    /** @prop {(0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9)} - How many new requests the user has left for the hour. */
+    this.requestAmount = 9
+  }
+
+  newRequest(returnRequest = false) {
+    const randomFarmer = this.farmers[Math.floor(Math.random() * this.farmers.length)]
+    const randomReq = new NPC(randomFarmer.name, randomFarmer.gender, randomFarmer.unlockableCrop, randomFarmer.wealth, randomFarmer.preferences)
+      .newRequest(this.seeds.common)
+    if (returnRequest) {
+      return randomReq
+    }
+    this.requests[randomReq.id] = randomReq.req
+  }
+}
+
+class UserData extends User {
+  /**
+   * @description Essentially the same as `User`, except it allows for the creation of a `User` object with an existing userdata.
+   * @todo Merge `User` and `UserData`.
+   * @param {import("eris").User} author - The author of the message.
+   * @param {User} userdata - The userdata object from the database.
+   */
+  constructor(author, userdata) {
+    super(author, userdata.region.name, userdata.farmers)
+    this.seeds = userdata.seeds
   }
 }
 
 module.exports = {
-  User
+  User,
+  UserData
 }
 
 /**

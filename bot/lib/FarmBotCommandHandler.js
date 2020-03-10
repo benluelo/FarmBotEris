@@ -1,19 +1,10 @@
 const util = require("util")
 const CONSTANTS = require("./CONSTANTS.js")
-console.log(CONSTANTS)
-// const chalk = require("chalk")
-// const customclass = chalk.keyword("orange")
-// const userid = chalk.keyword("purple")
 
-/**
- * @module FarmBot
- */
 /**
  * @typedef {function(import("eris").Message, String[], import("./user.js").User): void} CommandFunction
  */
 
-/**
- */
 class CommandInformation {
   /**
    * @description The general information about a command.
@@ -69,15 +60,14 @@ class FarmBotCommand {
   constructor(name, func, info, parent) {
     this.name = name
     /** @type {CommandFunction} */
-    this.func = Object.defineProperty(func, "name", {
+    this.func = Object.freeze(Object.defineProperty(func, "name", {
       value: name,
       writable: false
-    })
+    }))
     this.info = info
     this.parent = parent
     this.subcommands = new FarmBotCommandHandler()
     this.Cooldowns = new Cooldowns(this.getFullCommandName(), this.info.cooldown)
-    console.log(this)
   }
 
   getFullCommandName() {
@@ -91,14 +81,12 @@ class FarmBotCommand {
    * @param {import("./user.js").User} userdata - The caller's DB information.
    */
   run(msg, args, userdata) {
-    console.log(this.Cooldowns)
     if (this.subcommands.size != 0 && this.subcommands.has(args[0])) {
       this.subcommands.get(args.shift()).run(msg, args, userdata)
     } else {
       if (this.info.requiresUser && userdata.permissions < this.info.permissionLevel) { return }
-      console.log(this.name, this.info.requiresUser)
       if (!this.info.requiresUser) {
-        this.func(msg, args, msg.author)
+        this.func(msg, args)
       } else {
         const TTW = this.Cooldowns.check(msg.author.id, this.name)
         if (TTW > 0) {
@@ -144,7 +132,7 @@ class FarmBotCommand {
    * @description Gets the help embed for the command.
    * @param {String[]} args - The name of the command to get the help embed for.
    * @param {import("./user.js").User} userdata - The user's DB information.
-   * @returns {(import("./classes.js").Embed | undefined)} The help embed for this command, or `false` if their permmissions aren't high enough.
+   * @returns {(import("./classes.js").Embed | undefined)} The help embed for this command, or `false` if the `user`'s permmissions aren't high enough.
    */
   getEmbed(args, userdata) {
     console.log(this.name, args)
@@ -261,10 +249,6 @@ class FarmBotCommandHandler extends Map {
     return super.entries()
   }
 }
-
-const chalk = require("chalk")
-const customclass = chalk.keyword("orange")
-const userid = chalk.keyword("purple")
 
 class Cooldowns extends Map {
   constructor(cmdName, cooldown) {

@@ -1,51 +1,25 @@
-const { NPC } = require("../../../lib/npc.js")
+const { UserData } = require("../../../lib/user.js")
 const cropData = require("../../../lib/crop-data.js")
 const getPriceOfSeeds = require("../../../lib/get-price-of-seeds")
 const { getLevel } = require("../../../../helpers/level-test.js")
+const ms = require("parse-ms")
 
 const commandName = "market"
 
 /** @private @param {import("../../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
-  // eslint-disable-next-line no-unused-vars
-  const command = bot.addCommand(commandName, async (message, args, userdata) => {
-    const newRequests = []
-
-    let messageToSend
-
-    if (userdata.requests.length < 9) {
-      while (userdata.requests.length + newRequests.length < 9) {
-        // get new requests
-        const randomNPC = userdata.farmers[Math.floor(Math.random() * userdata.farmers.length)]
-        newRequests.push(
-          new NPC(randomNPC.name, randomNPC.gender, randomNPC.unlockableCrop, randomNPC.wealth, randomNPC.preferences)
-            .newRequest(userdata.seeds.common)
-        )
-      }
-      messageToSend = await message.send("You have new requests!")
-
-      await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
-        $push: {
-          requests: { $each: newRequests }
-        }
-      })
-    }
-    const marketEmbed = new bot.Embed().setTitle("The Market").setColor(bot.color.market)
-    const tempReq = userdata.requests.concat(newRequests)
+  const command = bot.addCommand(commandName, async (message, _args, userdata) => {
+    const marketEmbed = new bot.Embed()
+      .setTitle("The Market")
+      .setDescription(`Requests left this hour: **${userdata.requestAmount}**\nTime until new requests become available: \`${ms(userdata.requestTimeOut).hours}:${ms(userdata.requestTimeOut).minutes}.${ms(userdata.requestTimeOut).seconds}\``)
+      .setColor(bot.color.market)
+    const tempReq = userdata.requests
     for (const request in tempReq) {
+      console.log(request)
       const a = parseRequest(tempReq[request], userdata.farmers, request)
       marketEmbed.addField(a.farmer.emoji + " **" + a.farmer.name.match(/(\w+ [a-zA-Z])/)[0] + "." + "**", prettifyParsedRequest(a).join("\n"), true)
     }
-    marketEmbed.addBlankField(true)
-
-    if (!messageToSend) {
-      message.send(marketEmbed)
-    } else {
-      await messageToSend.edit({
-        content: "",
-        ...marketEmbed.setDescription("You have new requests!")
-      })
-    }
+    message.send(marketEmbed)
   }, {
     description: "Show all current market requests.",
     usage: "farm market",
@@ -58,9 +32,9 @@ module.exports.run = (bot) => {
       return message.send(new bot.Embed().uhoh("You have to specify an order to view!"))
     }
 
-    const orderID = parseInt(args[0]) - 1
-    if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) {
-      return message.send(new bot.Embed().uhoh(`**${args[0]}** is not a valid order ID!`))
+    const orderID = args[0].toUpperCase()
+    if (!userdata.requests[orderID]) {
+      return message.send(new bot.Embed().uhoh(`**${orderID}** is not a valid order ID!`))
     }
     const marketViewEmbed = new bot.Embed()
 
@@ -87,8 +61,8 @@ module.exports.run = (bot) => {
       return message.send(new bot.Embed().uhoh("You have to specify an order to fill!"))
     }
 
-    const orderID = parseInt(args[0]) - 1
-    if (((orderID + 1).toString() != args[0]) || !userdata.requests[orderID]) { return message.send(new bot.Embed().uhoh(`**${args[0]}** is not a valid order ID!`)) }
+    const orderID = args[0].toUpperCase()
+    if (!userdata.requests[orderID]) { return message.send(new bot.Embed().uhoh(`**${orderID}** is not a valid order ID!`)) }
     const marketFilledEmbed = new bot.Embed()
 
     const a = parseRequest(userdata.requests[orderID], userdata.farmers, orderID)
@@ -121,7 +95,7 @@ module.exports.run = (bot) => {
     const farmerIndex = userdata.farmers.findIndex((f) => f.name === userdata.requests[orderID].name)
 
     const { value } = await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
-      $pull: { ["requests"]: userdata.requests[orderID] },
+      $unset: { [`requests.${orderID}`]: "" },
       $inc: {
         money: a.rewards.money,
         [`farmers.${farmerIndex}.level`]: a.rewards.reputation,
@@ -158,11 +132,119 @@ module.exports.run = (bot) => {
     category: bot.CATEGORIES.FARMING,
     cooldown: 5000
   })
+  command.subcommand("refresh", async (message, _args, userdata) => {
+    const currentRequests = Object.keys(userdata.requests)
+    console.log(userdata.requestTimeOut, userdata.requestAmount, currentRequests)
+    if (currentRequests.length == 9) {
+      return message.send(new bot.Embed().setDescription(`**${message.author.username}**, the market board is already full!`).setColor(bot.color.market))
+    } else {
+      let amountOfRequestsToGet
+      if (userdata.requestAmount == 0) {
+        if ((Date.now() - userdata.requestTimeOut) >= 3600000 /* 1 hour */) {
+          // reset requestTimeOut, get new requests
+          const user = new UserData(message.author, userdata)
+          amountOfRequestsToGet = 9 - currentRequests.length
+          const newRequests = {}
+
+          for (let i = 0; i < amountOfRequestsToGet; ++i) {
+            const { id, req } = user.newRequest(true)
+            newRequests[`requests.${id}`] = req
+          }
+
+          console.log(newRequests)
+
+          await bot.database.Userdata.findOneAndUpdate({ userID: userdata.userID }, {
+            $set: {
+              requestTimeOut: Date.now(),
+              requestAmount: 9,
+              ...newRequests
+            }
+          })
+
+        } else {
+          return message.send(new bot.Embed().setDescription(`**${message.author.username}**, you have no more requests this hour!`).setColor(bot.colors.market))
+        }
+      } else {
+        amountOfRequestsToGet = userdata.requestAmount < 9 - currentRequests.length ? userdata.requestAmount : 9 - currentRequests.length
+        const user = new UserData(message.author, userdata)
+        const newRequests = {}
+
+        for (let i = 0; i < amountOfRequestsToGet; ++i) {
+          const { id, req } = user.newRequest(true)
+          newRequests[`requests.${id}`] = req
+        }
+
+        console.log(newRequests)
+
+        await bot.database.Userdata.findOneAndUpdate({ userID: userdata.userID }, {
+          $set: {
+            ...newRequests
+          },
+          $inc: {
+            requestAmount: -amountOfRequestsToGet,
+          }
+        })
+      }
+
+      return message.send(`**${message.author.id}**, the market board has been updated with **${amountOfRequestsToGet}** new postings!`)
+    }
+    // const newRequests = {}
+
+    // let messageToSend
+
+    // if (userdata.requests.length < 9) {
+    //   while (userdata.requests.length + newRequests.length < 9) {
+    //     // get new requests
+    //     const randomNPC = userdata.farmers[Math.floor(Math.random() * userdata.farmers.length)]
+    //     newRequests.push(
+    //       new NPC(randomNPC.name, randomNPC.gender, randomNPC.unlockableCrop, randomNPC.wealth, randomNPC.preferences)
+    //         .newRequest(userdata.seeds.common)
+    //     )
+    //   }
+    //   messageToSend = await message.send("You have new requests!")
+
+    //   await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
+    //     $push: {
+    //       requests: { $each: newRequests }
+    //     }
+    //   })
+    // }
+  }, {
+    description: "Refresh the market board. Every hour, you are able to refresh up to **9** orders in total.",
+    usage: "farm market refresh",
+    permissionLevel: bot.PERMISSIONS.EVERYONE,
+    category: bot.CATEGORIES.FARMING,
+    cooldown: 5000
+  })
+  command.subcommand("remove", async (message, args, userdata) => {
+    const orderID = args[0].toUpperCase()
+    if (!orderID) {
+      return message.send(new bot.Embed().uhoh("You have to specify which order you want to remove!"))
+    }
+    if (!userdata.requests[orderID]) {
+      return message.send(new bot.Embed().uhoh(`**${orderID}** is not a valid order ID!`))
+    }
+
+    await bot.database.Userdata.findOneAndUpdate({ userID: userdata.userID }, {
+      $unset: {
+        [`requests.${orderID}`]: ""
+      }
+    })
+
+    return message.send(new bot.Embed().setDescription(`**${message.author.username}**, succesfully deleted order \`${orderID}\`.`).setColor(bot.colors.market))
+  }, {
+    description: "Remove a market request.",
+    usage: "farm market remove <order id>​",
+    permissionLevel: bot.PERMISSIONS.EVERYONE,
+    category: bot.CATEGORIES.FARMING,
+    aliases: ["delete"],
+    cooldown: 5000
+  })
 
   /**
    * @description Prettify the request.
    * @param {Object} req - The request to prettify.
-   * @param {Number} req.id - The ID.
+   * @param {String} req.id - The ID.
    * @param {Req[]} req.want - An array of the different wants in the request.
    * @param {Object} req.rewards - The rewards.
    * @param {Number} req.rewards.money - How much money wil be rewarded.
@@ -172,7 +254,7 @@ module.exports.run = (bot) => {
   function prettifyParsedRequest(req) {
     return [
       "**__ID__: **" +
-      `\`${parseInt(req.id)}\``,
+      `\`${req.id}\``,
       "**__Want__:**",
       readableReq(req.want),
       "**__Rewards__:**",
@@ -196,7 +278,7 @@ module.exports.run = (bot) => {
     const parsed = parseWants(farmer.preferences, request)
 
     return {
-      id: parseInt(id) + 1,
+      id:id,
       want: parsed.req,
       rewards: {
         money: parsed.val,

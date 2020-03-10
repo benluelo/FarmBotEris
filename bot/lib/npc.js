@@ -1,4 +1,5 @@
 const farmerData = require("./farmer-data.js")
+const { getLevel } = require("../../helpers/level-test.js")
 
 class NPC {
   /**
@@ -19,10 +20,9 @@ class NPC {
       taste: farmerData.preferences.taste[Math.floor(Math.random() * farmerData.preferences.taste.length)]
     }
     this.level = 0
-    /** @constant */
     this.unlockLevel = Math.ceil(this.wealth * 10) // will be between 1 and 10, depending on the wealth of the farmer
 
-    if (process.env.DEBUG === "true") { console.log(this.gender) }
+    // if (process.env.DEBUG === "true") { console.log(this.gender) }
 
     this.emoji = farmerData.emoji[this.gender][Math.floor(Math.random() * farmerData.emoji[this.gender].length)]
   }
@@ -30,7 +30,7 @@ class NPC {
   /**
    * @description Creates a new request for the market.
    * @param {Object<string, {discovered: Boolean, level: Number, amount: Number}>} crops - The crops that the user has unlocked.
-   * @returns {Request} A new request.
+   * @returns {{id: string, req: Request}} A new request.
    */
   newRequest(crops) {
 
@@ -44,7 +44,7 @@ class NPC {
       }
     }
 
-    if (process.env.DEBUG === "true") { console.log("original:", discoveredCrops) }
+    // if (process.env.DEBUG === "true") { console.log("original:", discoveredCrops) }
 
     // add one random crop from the list of discovered crops to the requests
     // if there is only one crop discovered, add a random amount of those to want
@@ -71,7 +71,7 @@ class NPC {
           })
         }
       }
-      if (process.env.DEBUG === "true") { console.log(want) }
+      // if (process.env.DEBUG === "true") { console.log(want) }
     }
 
     /**
@@ -80,10 +80,13 @@ class NPC {
     const r = {
       name: this.name,
       want: want,
-      value: (this.wealth * rand) * 10,
-      reputation: (1 - (this.wealth * rand)) * 10
+      value: (this.wealth * rand) * 10 * 10 * getLevel(this.level).level,
+      reputation: (1 - (this.wealth * rand)) * 10 * 10 * getLevel(this.level).level
     }
-    return r
+    return {
+      id: getRandomID(),
+      req: r
+    }
   }
 }
 
@@ -93,7 +96,7 @@ module.exports = {
 
 /**
  * @typedef {Object} Request
- * @prop {String} Request.name - The name of the farmer who's request this is.
+ * @prop {String} name - The name of the farmer who's request this is.
  * @prop {Object[]} want - What the farmer wants.
  * @prop {import("./crop-data.js").CropName} want[].crop - The crop they want.
  * @prop {Number} want[].amount - The amount of the crop they want.
@@ -112,3 +115,31 @@ module.exports = {
  * @prop {Number} unlockLevel - The level that the farmer will unlock their crop at  (between `5` and `10`).
  * @prop {String} emoji - The emoji of the Farmer.
  */
+
+/**
+ * @description Generates a random 3 character long ID, to be used in the database. Will match the regex `/[A-Z]{3}/`.
+ * @returns {String} The randomly generated ID.
+ */
+function getRandomID() {
+  const letterValues = {}
+  // "0123456789".split("").forEach((v) => {
+  //   letterValues[parseInt(v)] = v
+  // })
+  // "abcdefghijklmnopqrstuvwxyz".split("").forEach((v) => {
+  //   letterValues[v.charCodeAt(0) - 87] = v
+  // })
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach((v) => {
+    letterValues[v.charCodeAt(0) - 65] = v
+  })
+
+  return (function toSecretCode(num) {
+    let toReturn = ""
+    while (num != 0) {
+      const quotient = Math.floor(num / Object.keys(letterValues).length)
+      const remainder = num % Object.keys(letterValues).length
+      num = quotient
+      toReturn += letterValues[remainder]
+    }
+    return toReturn
+  })(Math.floor(Math.random() * Math.pow(Object.keys(letterValues).length, 3)))
+}
