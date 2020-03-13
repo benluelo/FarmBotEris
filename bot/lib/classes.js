@@ -3,9 +3,7 @@ const util = require("util")
 // const customclass = chalk.keyword("orange")
 // const userid = chalk.keyword("purple")
 
-/**
- * @namespace Classes
- */
+// const G = require("../../global.ts")
 
 /**
  * @description Gets the image url out of the provided object.
@@ -18,9 +16,7 @@ function getURL(obj) {
   else { return obj }
 }
 
-/**
- * @typedef {Embed} Embed
- */
+/** @type {Embed} */
 class Embed {
   /**
    * @description Creates a new Embed.
