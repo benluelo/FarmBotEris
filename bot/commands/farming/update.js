@@ -39,6 +39,8 @@ exports.run = (bot) => {
       const farmers = await require("../../lib/get-farmers.js").run(region)
       const newUser = new UserData(message.author, userdata)
       newUser.updated = true
+      newUser.requestAmount = 9
+      newUser.requestTimeOut = 0
       newUser.region = {
         name: region,
         flag: flags[region]
