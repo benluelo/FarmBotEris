@@ -186,7 +186,7 @@ module.exports.run = (bot) => {
         })
       }
 
-      return message.send(`**${message.author.id}**, the market board has been updated with **${amountOfRequestsToGet}** new postings!`)
+      return message.send(`**${message.author.username}**, the market board has been updated with **${amountOfRequestsToGet}** new postings!`)
     }
     // const newRequests = {}
 
