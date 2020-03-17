@@ -146,6 +146,15 @@ class UserData extends User {
   constructor(author, userdata) {
     super(author, userdata.region.name, userdata.farmers)
     this.seeds = userdata.seeds
+    this.botCommandsUsed = userdata.botCommandsUsed
+    this.farm = userdata.farm
+    this.messagesUserSent = userdata.messagesUserSent
+    this.money = userdata.money
+    this.nickname = userdata.nickname
+    this.permissions = userdata.permissions
+    this.requestAmount = userdata.requestAmount
+    this.requestTimeOut = userdata.requestTimeOut
+    this.seeds = userdata.seeds
   }
 }
 

@@ -1,6 +1,8 @@
 const util = require("util")
 const CONSTANTS = require("./CONSTANTS.js")
 
+// require("../../global.d.ts")
+
 /**
  * @typedef {function(import("eris").Message, String[], import("./user.js").User): void} CommandFunction
  */
@@ -146,15 +148,6 @@ class FarmBotCommand {
 
   // eslint-disable-next-line no-unused-vars
   [util.inspect.custom](_depth, _options) {
-    // const SPACER = depth.toString()
-    // switch (depth) {
-    //   case (0): {
-    //     return options.stylize(`[${this.constructor.name}: ${this.getFullCommandName()}]`, "special")
-    //   }
-    //   default: {
-    //     return `{\n${SPACER.repeat(depth)}name: ${this.name},\n${SPACER.repeat(depth)}cooldown: ${this.info.cooldown},\n${SPACER.repeat(depth)}subcommands: ${util.inspect(this.subcommands, true, depth + 1, true)}\n${SPACER.repeat(depth - 1)}}`
-    //   }
-    // }
     const toReturn = {
       name: this.name,
       info: this.info
@@ -230,16 +223,6 @@ class FarmBotCommandHandler extends Map {
     console.log(args)
     return this.has(args[0]) ? this.get(args.shift()).getEmbed(args, userdata) : undefined
   }
-
-  // [util.inspect.custom]() {
-  //   return util.inspect(this).replace(" [Map] ", " ")
-  //   // const SPACER = depth.toString()
-  //   // let toReturn = ""
-  //   // for (const [name, cmd] of this.entries()) {
-  //   //   toReturn += `\n${SPACER.repeat(depth - 2)}${name} => ${util.inspect(cmd, true, depth + 1, true)},`
-  //   // }
-  //   // return `${customclass(this.constructor.name)}(${this.size}): {${toReturn.slice(0, -1)}${this.size == 0 ? "" : "\n" + SPACER.repeat(depth - 1)}}`
-  // }
 
   /**
    * @description Ye.
@@ -323,14 +306,6 @@ class Cooldowns extends Map {
   _clamp(num, min, max) {
     return num <= min ? min : num >= max ? max : num
   }
-
-  // [util.inspect.custom](depth, options) {
-  //   let toReturn = ""
-  //   for (const [userID, userCoolDown] of this.entries()) {
-  //     toReturn += `\n  ${userid(userID)} => ${util.inspect(userCoolDown, true, 0, true)},`
-  //   }
-  //   return `${customclass(this.constructor.name)}(${this.size}): {${toReturn.slice(0, -1)}${this.size == 0 ? "" : "\n"}}`
-  // }
 
   [util.inspect.custom](depth, options) {
     if (depth == 0) {
