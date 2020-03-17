@@ -47,9 +47,7 @@ exports.run = (bot) => {
       for (let i = 0; i < 9; ++i) {
         newUser.newRequest()
       }
-      // console.log(newUser)
-      const res = await bot.database.Userdata.findOneAndDelete({ userID: userdata.userID })
-      console.log(res)
+      await bot.database.Userdata.findOneAndDelete({ userID: userdata.userID })
       await bot.database.Userdata.insertOne(newUser)
       message.send(new bot.Embed()
         .setTitle(`Welcome back to ${bot.user.username}, ${message.author.username}!  ${flags[region]}`)
