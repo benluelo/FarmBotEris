@@ -26,9 +26,12 @@ module.exports.getHelp = (bot) => {
 // remove development commands if in production
   if ((bot.ENV.DEVELOPMENT != "true")) {
     console.log("Removing development commands...")
-    for (const cmd in bot.Commands) {
-      if (bot.Commands.get(cmd).info.permissionLevel == bot.PERMISSIONS.DEVELOPMENT) {
-        bot.Commands.delete(cmd)
+    // console.log(bot.Commands)
+    for (const [name, cmd] of bot.Commands) {
+      // console.log(name)
+      if (bot.Commands.get(name).info.permissionLevel == bot.PERMISSIONS.DEVELOPMENT) {
+        console.log(name)
+        bot.Commands.delete(name)
       }
     }
   }
