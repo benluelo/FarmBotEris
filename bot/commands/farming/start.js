@@ -19,7 +19,7 @@ exports.run = (bot) => {
           const myEmbeds = []
 
           let count = 0
-          let embed = new bot.Embed({ title: "Send `farm start <region>` to start farming!" })
+          let embed = new bot.Embed().setTitle("Send `farm start <region>` to start farming!")
           for (const flag in flags) {
             count++
             embed.addField(flag.toLowerCase().split(" ").map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(" "), flags[flag], true)
@@ -27,7 +27,7 @@ exports.run = (bot) => {
             if (count === 12) {
               count = 0
               myEmbeds.push(embed.showContent())
-              embed = new bot.Embed({ title: "Send `farm start <region>` to start farming!" })
+              embed = new bot.Embed().setTitle("Send `farm start <region>` to start farming!")
             }
           }
           if (0 !== count) {
