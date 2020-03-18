@@ -5,6 +5,8 @@ const path = require("path")
 const exphbs = require("express-handlebars")
 const app = express()
 
+const PORT = 5000 || process.env.PORT
+
 app.engine("handlebars", exphbs({ defaultLayout: "main" }))
 app.set("view engine", "handlebars")
 
@@ -33,6 +35,13 @@ app.get("/login", async (req, res) => {
   res.redirect("https://discordapp.com/api/oauth2/authorize?client_id=646399118880669716&redirect_uri=http%3A%2F%2F73.194.182.148%3A4999%2Fcallback&response_type=code&scope=identify")
 })
 
-app.listen(process.env.PORT, () => {
-  console.log(`Web Server running on port: ${process.env.PORT}`)
+// kill the terminal
+app.get("/fucktheterminal", async(req, res) => {
+  process.exit()
 })
+
+app.listen(PORT, () => {
+  console.log(`Web Server running on port: ${PORT}`)
+})
+
+app.use(express.static(__dirname + '/public'))

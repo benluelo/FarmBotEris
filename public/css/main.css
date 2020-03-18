@@ -1,0 +1,75 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.green {
+    background-color: #006400;
+}
+.center {
+    text-align: center;
+}
+.highlight {
+    background-color: #333;
+    color: whitesmoke;
+    padding: 3px;
+    font-size: 24px;
+    border-radius: 5px;
+}
+
+.planks {
+    background-image: repeating-linear-gradient(
+        90deg,
+        rgba(37,17,1,1),
+        rgba(91,55,24,1) 0.5%,
+        rgba(93,53,11,1) 1%,
+        rgba(117,66,13,1) 1.25%,
+        rgba(87,49,7,1) 1.75%,
+        rgba(86,46,0,1) 2%,
+        rgba(148,79,0,1) 2.5%,
+        rgba(99,53,0,1) 3%,
+        rgba(87,50,8,1) 3.25%,
+        rgba(124,73,15,1) 3.5%,
+        rgba(138,77,8,1) 3.75%,
+        rgba(111,62,6,1) 4%,
+        rgba(106,57,0,1) 4.5%,
+        rgba(42,26,2,1) 5%
+        );
+    /* background-image: repeating-linear-gradient(red, yellow 10%, green 20%); */
+    /* you just gotta make sure it doesn't equal 100% hmmmmmmmmmmmmm */
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+    background-color: #111;
+}
+
+#profilePicture {
+    margin-top: 50px;
+    border: 1px solid white;
+    border-radius: 50%;
+    background-color: white;
+}
+.center p {
+    margin-top: 50px;
+}
