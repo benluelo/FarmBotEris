@@ -1,2 +1,15 @@
+<<<<<<< HEAD
 node_modules/
 .env
+=======
+node_modules
+.env
+bot/logs
+out
+helpers/crop-maker.js
+.vs/
+
+.vscode
+
+index.d.ts
+>>>>>>> beta
