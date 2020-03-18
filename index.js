@@ -40,6 +40,12 @@ app.get("/fucktheterminal", async(req, res) => {
   process.exit()
 })
 
+app.get("/help", async(req, res) => {
+  res.render("help", {
+    title: "FarmBot Help"
+  })
+})
+
 app.listen(PORT, () => {
   console.log(`Web Server running on port: ${PORT}`)
 })
