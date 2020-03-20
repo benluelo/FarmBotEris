@@ -1,4 +1,45 @@
 <div class="center">
-  <img id="profilePicture" src="/images/farmbot.svg" alt="FarmBot Profile Picture">
-  <p><span class="brown box">Help</span></p>
+  <div class="red box brownborder header-container">
+    <div class="brown box header">Information about all of the commands for FarmBot!</div>
+  </div>
+  <div class="masonry">
+    {{#each commands}}
+    <div class="red box brownborder item">
+      <div class="brown box itemtitle">
+        <code class="green-text">{{{@key}}}</code>
+      </div>
+      <div class="brown box itemcontent">
+        {{{this.description}}}
+      </div>
+      <div class="nested-masonry">
+        <div class="brown box nested-item">
+          <h3>Usage</h3>
+          <code class="green-text">{{{this.usage}}}</code>
+        </div>
+        <div class="brown box nested-item">
+          <h3>Examples</h3>
+          {{#if this.examples}}
+          <code class="green-text">{{{this.examples}}}</code>
+          {{else}}
+          <code class="green-text">{{{this.usage}}}</code>
+          {{/if}}
+        </div>
+        <div class="brown box nested-item">
+          <h3>Subcommands</h3>
+          {{#if this.subcommands}}
+          <code class="green-text">{{#each this.subcommands as | subcmd |}}{{{@key}}}{{#unless @last}}, {{/unless}}{{/each}}</code>
+          {{else}}None.
+          {{/if}}
+        </div>
+        <div class="brown box nested-item">
+          <h3>Aliases</h3>
+          {{#if this.aliases}}
+          <code class="green-text">{{#each this.aliases as | alias |}}{{{alias}}}{{#unless @last}}, {{/unless}}{{/each}}</code>
+          {{else}}None.
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
 </div>

@@ -5,7 +5,7 @@ const path = require("path")
 const exphbs = require("express-handlebars")
 const app = express()
 
-const PORT = 5000 || process.env.PORT
+const PORT = 4000 || process.env.PORT
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }))
 app.set("view engine", "handlebars")
@@ -40,9 +40,23 @@ app.get("/fucktheterminal", async(req, res) => {
   process.exit()
 })
 
-app.get("/help", async(req, res) => {
+app.get("/help", async (req, res) => {
+  const data = await fetch("http://localhost:5000/command-info")
+  const commandInfo = await data.json()
+  console.log(commandInfo)
+  ;(function parseCoin(commands) {
+    for (cmd in commands) {
+      // console.log(commands[cmd])
+      commands[cmd].description = commands[cmd].description.replace("<:farmbot_coin:648032810682023956>", "<img class=\"emoji\", src=\"images/farmbot_coin.svg\", alt=\"money\">")
+      console.log(commands[cmd].description)
+      if (commands[cmd].subcommands) {
+        parseCoin(commands[cmd].subcommands)
+      }
+    }
+  })(commandInfo)
   res.render("help", {
-    title: "FarmBot Help"
+    title: "FarmBot Help",
+    commands: commandInfo
   })
 })
 
