@@ -262,4 +262,15 @@ code {
 #profile-picture {
     margin: 1rem;
     width: 30vw;
+    border-radius: 50%;
+    border: 1vw solid  white;
+    background-color: white;
+    transition: 0.3s cubic-bezier(1, 0, 0, 1);
+}
+
+#profile-picture:hover {
+    border-radius: 35%;
+    border: 1vw solid white;
+    background-color: white;
+    transition: 0.3s cubic-bezier(1, 0, 0, 1);
 }
