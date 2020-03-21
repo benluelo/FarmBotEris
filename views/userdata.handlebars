@@ -1,1 +1,31 @@
-<p>userID {{{userdata.userID}}} | money {{{userdata.money}}}</p>
+<div class="center">
+    <div class="red box brownborder header-container">
+        <div class="brown box header">
+            {{userdata.nickname}}
+        </div>
+    </div>
+    <div class="red box brownborder farm-container">
+        <div class="farm-cell">
+            <div class="brown box farm-plots">
+                {{#each userdata.farmWEB}}
+                <div class="box plot"
+                {{#if this.isPlot}}
+                onclick="displayInfo(this)"
+                data-growth-time={{this.growthTime}}
+                data-growth-progress={{this.growthProgress}}
+                {{/if}}>
+                    {{{this.url}}}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        <div class="farm-cell">
+            <div class="brown box" id="farm-info">
+                <div class="red box" id="progress-bar-container">
+                    <div class="green brownborder" id="progress-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/javascript/functions.js" type="application/javascript"></script>

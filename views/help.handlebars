@@ -25,16 +25,16 @@
           {{/if}}
         </div>
         <div class="brown box nested-item">
-          <h3>Subcommands</h3>
-          {{#if this.subcommands}}
-          <code class="green-text">{{#each this.subcommands as | subcmd |}}{{{@key}}}{{#unless @last}}, {{/unless}}{{/each}}</code>
+          <h3>Aliases</h3>
+          {{#if this.aliases}}
+          <code class="green-text">{{#each this.aliases as | alias |}}{{{alias}}}{{#unless @last}}, {{/unless}}{{/each}}</code>
           {{else}}None.
           {{/if}}
         </div>
         <div class="brown box nested-item">
-          <h3>Aliases</h3>
-          {{#if this.aliases}}
-          <code class="green-text">{{#each this.aliases as | alias |}}{{{alias}}}{{#unless @last}}, {{/unless}}{{/each}}</code>
+          <h3>Subcommands</h3>
+          {{#if this.subcommands}}
+          <code class="green-text">{{#each this.subcommands as | subcmd |}}{{{@key}}}{{#unless @last}}, {{/unless}}{{/each}}</code>
           {{else}}None.
           {{/if}}
         </div>
