@@ -126,6 +126,7 @@ class User {
     this.requestAmount = 9
     /** @prop {string} - The user's UUID, for logging into the farmbot website. */
     this.uuid = uuid()
+    this.updated = true
   }
 
   newRequest(returnRequest = false) {
