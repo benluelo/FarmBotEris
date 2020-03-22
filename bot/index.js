@@ -42,6 +42,7 @@ const bot = new FarmBotClient(require("dotenv").config().parsed, {
 require("./src/command-loader.js")(bot)
 require("./src/event-loader.js")(bot)
 require("../API/index")(bot) // not ideal (bot goes down so does some user pages) but works!
+require("../helpers/add-uuids.js").run(bot)
 
 bot.initDB()
 
