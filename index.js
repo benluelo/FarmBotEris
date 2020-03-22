@@ -182,7 +182,7 @@ app.get("/profile", async (req, res) => {
 app.get("/login/:uuid([0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}).:userID(\\d{18})", async (req, res) => {
   res.cookie("userID", req.params.userID, { expires: new Date(Date.now() + (24 * 3600000 * 365)) })
   console.log(req.params)
-  res.redirect("www.farmbot-discord.com/profile")
+  res.redirect("/profile")
 })
 
 // kill the terminal
