@@ -1,7 +1,7 @@
 /** @private @param {import("../..//lib/FarmBotClient.js")} bot */
 exports.run = async (bot) => {
   bot.addCommand("login", async (message, args, userdata) => {
-    (await message.author.getDMChannel()).createMessage(`http://localhost:4000/login/${userdata.uuid}.${userdata.userID}`)
+    (await message.author.getDMChannel()).createMessage(`http://www.farmbot-discord.com/login/${userdata.uuid}.${userdata.userID}`)
   }, {
     description: "Log in to the FarmBot website.",
     usage: "​farm login",
