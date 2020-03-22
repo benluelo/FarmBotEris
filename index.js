@@ -12,7 +12,7 @@ const PORT = 4000 || process.env.PORT
 
 let cropData
 ;(async () => {
-  const data = await fetch("http://localhost:5000/crop-data")
+  const data = await fetch("http://54.218.80.236:5000/crop-data")
   cropData = await data.json()
 })()
 
@@ -47,7 +47,7 @@ app.get("/profile", async (req, res) => {
     const givenUserID = req.cookies.userID
 
     let userdataget
-    await fetch(`http://localhost:5000/getUserData/${givenUserID}/1a40715b-8963-4eb2-bde9-b8d2c0b16cbf`).then(res => res.json()).then(json => userdataget = json)
+    await fetch(`http://54.218.80.236:5000/getUserData/${givenUserID}/1a40715b-8963-4eb2-bde9-b8d2c0b16cbf`).then(res => res.json()).then(json => userdataget = json)
 
     const emoji = {
       numbers: [
@@ -191,7 +191,7 @@ app.get("/fucktheterminal", async(req, res) => {
 })
 
 app.get("/help", async (req, res) => {
-  const data = await fetch("http://localhost:5000/command-info")
+  const data = await fetch("http://54.218.80.236:5000/command-info")
   const commandInfo = await data.json()
   console.log(commandInfo)
   ;(function parseCoin(commands) {
