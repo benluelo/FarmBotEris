@@ -17,8 +17,22 @@ let cropData
 })()
 
 app.use(cookieParser())
-app.engine("handlebars", exphbs({ defaultLayout: "main" }))
+app.engine("handlebars", exphbs({
+  defaultLayout: "main",
+  helpers: {
+    test: function () {
+      return this.loggedIn
+    }
+  }
+}))
 app.set("view engine", "handlebars")
+
+app.use(function(req, res, next){
+  console.log("cookies", req.cookies)
+  const loggedIn = req.cookies.userID ? true : false
+  res.locals.loggedIn = loggedIn
+  next();
+})
 
 // homepage route
 app.get("/", async (req, res) => {
@@ -28,157 +42,147 @@ app.get("/", async (req, res) => {
 })
 
 // userdata page
-app.get("/userdata/:userID", async (req, res) => {
-  const givenUserID = req.params.userID
+app.get("/profile", async (req, res) => {
+  if (req.cookies.userID) {
+    const givenUserID = req.cookies.userID
 
-  let userdataget
-  await fetch(`http://localhost:5000/getUserData/${givenUserID}/1a40715b-8963-4eb2-bde9-b8d2c0b16cbf`).then(res => res.json()).then(json => userdataget = json)
+    let userdataget
+    await fetch(`http://localhost:5000/getUserData/${givenUserID}/1a40715b-8963-4eb2-bde9-b8d2c0b16cbf`).then(res => res.json()).then(json => userdataget = json)
 
-  // console.log(userdataget)
-
-  if (!req.cookies) {
-    res.cookie("userID", userdataget.userID)
-  } else {
-    console.log(req.cookies)
-  }
-
-  const emoji = {
-    numbers: [
-      "1⃣",
-      "2⃣",
-      "3⃣",
-      "4⃣",
-      "5⃣"
-    ],
-    letters: [
-      "🇦",
-      "🇧",
-      "🇨",
-      "🇩",
-      "🇪"
-    ],
-    dirt: "🟫",
-    seedling: "🌱"
-  }
-
-  userdataget.farmWEB = ((userFarm) => {
-    console.log(userFarm)
-    const growTimes = {
-      apple: 30000,
-      orange: 300000,
-      lemon: 900000,
-      pear: 1800000,
-      cherry: 3600000,
-      peach: 5400000,
-      mango: 10800000,
-      melon: 16200000,
-      grapes: 25200000,
-      strawberry: 34200000,
-      banana: 37800000,
-      pineapple: 43200000
+    const emoji = {
+      numbers: [
+        "1⃣",
+        "2⃣",
+        "3⃣",
+        "4⃣",
+        "5⃣"
+      ],
+      letters: [
+        "🇦",
+        "🇧",
+        "🇨",
+        "🇩",
+        "🇪"
+      ],
+      dirt: "🟫",
+      seedling: "🌱"
     }
-    const plots = []
-    const plotNumbers = [
-      {
-        url: "",
-        isPlot: false
-      },
-      {
-        url: "",
-        isPlot: false
-      },
-      {
-        url: "",
-        isPlot: false
-      },
-      {
-        url: "",
-        isPlot: false
-      },
-      {
-        url: "",
-        isPlot: false
-      },
-      {
-        url: "",
-        isPlot: false
+
+    userdataget.farmWEB = ((userFarm) => {
+      console.log(userFarm)
+      const growTimes = {
+        apple: 30000,
+        orange: 300000,
+        lemon: 900000,
+        pear: 1800000,
+        cherry: 3600000,
+        peach: 5400000,
+        mango: 10800000,
+        melon: 16200000,
+        grapes: 25200000,
+        strawberry: 34200000,
+        banana: 37800000,
+        pineapple: 43200000
       }
-    ]
-    /**
-     * @private
-     * Farm format:
-     *   1 2 3 4 5
-     * A * * * * *
-     * B * * * * *
-     * C * * * * *
-     * D * * * * *
-     * E * * * * *
-     */
-    for (const plot in userFarm) {
-      // adds the letters and numbers as they are needed
-      if (plot < 5) {
-        plotNumbers[parseInt(plot) + 1].url = twemoji.parse(emoji.numbers[plot], {
-          folder: "svg"
-        })
-      }
-      if (plot % 5 === 0) {
-        plots.push({
-          url: twemoji.parse(emoji.letters[Math.floor(plot / 5)], {
+      let plots = []
+      const plotNumbers = [
+        {
+          url: "",
+          isPlot: false
+        },
+        {
+          url: "",
+          isPlot: false
+        },
+        {
+          url: "",
+          isPlot: false
+        },
+        {
+          url: "",
+          isPlot: false
+        },
+        {
+          url: "",
+          isPlot: false
+        },
+        {
+          url: "",
+          isPlot: false
+        }
+      ]
+      /**
+      * @private
+      * Farm format:
+      *   1 2 3 4 5
+      * A * * * * *
+      * B * * * * *
+      * C * * * * *
+      * D * * * * *
+      * E * * * * *
+      */
+      for (const plot in userFarm) {
+        // adds the letters and numbers as they are needed
+        if (plot < 5) {
+          plotNumbers[parseInt(plot) + 1].url = twemoji.parse(emoji.numbers[plot], {
             folder: "svg"
+          }).replace("\u20e3", "")
+        }
+        if (plot % 5 === 0) {
+          plots.push({
+            url: twemoji.parse(emoji.letters[Math.floor(plot / 5)], {
+              folder: "svg"
+            }),
+            isPlot: false
           })
-        })
+        }
+
+        // adds the plots to the message
+        if (userFarm[plot].crop.planted == "dirt") { // if dirt, add dirt (lol)
+          plots.push({
+            url: twemoji.parse(emoji.dirt, {
+              folder: "svg"
+            }),
+            isPlot: true,
+            growthTime: 1,
+            growthProgress: 1
+          })
+        } else if (parseInt(Date.now() - userFarm[plot].crop.datePlantedAt) >= parseInt(growTimes[userFarm[plot].crop.planted])) { // if not dirt, and if the crop is grown, add the crop
+          plots.push({
+            url: twemoji.parse(cropData[userFarm[plot].crop.planted].emoji, {
+              folder: "svg"
+            }),
+            isPlot: true,
+            growthTime: 1,
+            growthProgress: 1
+          })
+        } else { // if the crop in the plot isn't grown, add a seedling
+          plots.push({
+            url: twemoji.parse(emoji.seedling, {
+              folder: "svg"
+            }),
+            isPlot: true,
+            growthTime: parseInt(growTimes[userFarm[plot].crop.planted]),
+            growthProgress: parseInt(userFarm[plot].crop.datePlantedAt)
+          })
+        }
       }
+      return plotNumbers.concat(plots)
+    })(userdataget.farm)
 
-      // adds the plots to the message
-      if (userFarm[plot].crop.planted == "dirt") { // if dirt, add dirt (lol)
-        plots.push({
-          url: twemoji.parse(emoji.dirt, {
-            folder: "svg"
-          }),
-          isPlot: true,
-          growthTime: 1,
-          growthProgress: 1
-        })
-      } else if (parseInt(Date.now() - userFarm[plot].crop.datePlantedAt) >= parseInt(growTimes[userFarm[plot].crop.planted])) { // if not dirt, and if the crop is grown, add the crop
-        plots.push({
-          url: twemoji.parse(cropData[userFarm[plot].crop.planted].emoji, {
-            folder: "svg"
-          }),
-          isPlot: true,
-          growthTime: 1,
-          growthProgress: 1
-        })
-      } else { // if the crop in the plot isn't grown, add a seedling
-        plots.push({
-          url: twemoji.parse(emoji.seedling, {
-            folder: "svg"
-          }),
-          isPlot: true,
-          growthTime: parseInt(growTimes[userFarm[plot].crop.planted]),
-          growthProgress: parseInt(userFarm[plot].crop.datePlantedAt)
-        })
-      }
-    }
-    return plotNumbers.concat(plots)
-  })(userdataget.farm)
-
-  console.log(userdataget.farmWEB)
-
-  // for (plot in userdataget.farm) {
-  //   console.log(userdataget.farm[plot].crop.planted)
-  //   userdataget.farm[plot].url = twemoji.parse(cropData[userdataget.farm[plot].crop.planted].emoji)
-  //   console.log(userdataget.farm[plot])
-  // }
-
-  res.render("userdata", {
-    title: "Userdata",
-    userdata: userdataget
-  })
+    res.render("userdata", {
+      title: "Userdata",
+      userdata: userdataget
+    })
+  } else {
+    res.render("login", {})
+  }
 })
 
-// login to discord route
-app.get("/login", async (req, res) => {
-  res.redirect("https://discordapp.com/api/oauth2/authorize?client_id=646399118880669716&redirect_uri=http%3A%2F%2F73.194.182.148%3A4999%2Fcallback&response_type=code&scope=identify")
+app.get("/login/:uuid([0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}).:userID(\\d{18})", async (req, res) => {
+  res.cookie("userID", req.params.userID, { expires: new Date(Date.now() + (24 * 3600000 * 365)) })
+  console.log(req.params)
+  res.redirect("/profile")
 })
 
 // kill the terminal
