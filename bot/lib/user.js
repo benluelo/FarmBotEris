@@ -1,6 +1,7 @@
 const flags = require("./flags.json")
 const { PERMISSIONS } = require("./CONSTANTS.js")
 const { ownersIDs } = require("../config.js")
+const uuid = require("uuid").v4
 
 const { NPC } = require("./npc.js")
 
@@ -123,6 +124,8 @@ class User {
     this.requestTimeOut = 0
     /** @prop {(0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9)} - How many new requests the user has left for the hour. */
     this.requestAmount = 9
+    /** @prop {string} - The user's UUID, for logging into the farmbot website. */
+    this.uuid = uuid()
   }
 
   newRequest(returnRequest = false) {

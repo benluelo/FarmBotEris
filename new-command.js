@@ -18,15 +18,15 @@ for (;;) {
   depth++
 }
 
-console.log(path.join(__dirname,  "./bot/commands",dir))
+console.log("Writing to:", path.join(__dirname,  "./bot/commands",dir))
 
 const template =
-`const { Embed } = require("../${"../".repeat(depth)}lib/classes")\r
-\r
-/** @param {import("../${"../".repeat(depth)}/lib/FarmBotClient.js")} bot */\r
-exports.run = async (bot) => {\r
-  bot.addCommand("${name}", (message, args) => {\r
-  })\r
+`/** @private @param {import("..${"/..".repeat(depth)}/lib/FarmBotClient.js")} bot */
+exports.run = async (bot) => {
+  bot.addCommand("${name}", (message, args) => {
+  }, {
+    cooldown: ${cooldown}
+  })
 }`
 
 fs.writeFileSync(path.join(__dirname,  "./bot/commands", dir) + "/" + name + ".js", template)

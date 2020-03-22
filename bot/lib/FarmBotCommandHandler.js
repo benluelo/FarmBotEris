@@ -48,6 +48,18 @@ class CommandInformation {
     /** @type {Boolean} Whether or not the command requires a userdata to run. WARNING: If set to `true`, no permissions checks will be made. */
     this.requiresUser = requiresUser
   }
+
+  toJSON() {
+    return {
+      description: this.description,
+      usage: this.usage,
+      examples: this.examples,
+      permissionLevel: this.permissionLevel,
+      category: this.category.description,
+      aliases: this.aliases,
+      cooldown: this.cooldown
+    }
+  }
 }
 
 /** @typedef {FarmBotCommand} FarmBotCommand */
@@ -146,6 +158,18 @@ class FarmBotCommand {
     }
   }
 
+  toJSON() {
+    const toReturn = {
+      ...this.info.toJSON()
+    }
+
+    if (this.subcommands.size > 0) {
+      toReturn.subcommands = this.subcommands.toJSON()
+    }
+
+    return toReturn
+  }
+
   // eslint-disable-next-line no-unused-vars
   [util.inspect.custom](_depth, _options) {
     const toReturn = {
@@ -230,6 +254,20 @@ class FarmBotCommandHandler extends Map {
    */
   entries() {
     return super.entries()
+  }
+
+  toJSON() {
+    return Object
+      .fromEntries(
+        Array.from(
+          this.entries()
+        ).filter(([name, cmd]) => {
+          console.log(cmd.info.permissionLevel === CONSTANTS.PERMISSIONS.EVERYONE)
+          return cmd.info.permissionLevel === CONSTANTS.PERMISSIONS.EVERYONE
+        }).map(([name, cmd]) => {
+          return [name, cmd.toJSON()]
+        })
+      )
   }
 }
 
