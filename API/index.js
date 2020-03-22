@@ -1,4 +1,5 @@
 const regex = /^[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}/
+const cropData = require("../bot/lib/crop-data.js")
 module.exports = (bot) => {
   require("dotenv").config({ path: ".env" })
   const express = require("express")
@@ -27,6 +28,14 @@ module.exports = (bot) => {
     } else {
       res.status(400).json({ msg: "Invalid token provided" })
     }
+  })
+
+  app.get("/command-info", async (req, res) => {
+    res.json(bot.Commands.toJSON())
+  })
+
+  app.get("/crop-data", async (req, res) => {
+    res.json(cropData)
   })
 
   app.listen(parseInt(process.env.PORT), () => {
