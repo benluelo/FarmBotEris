@@ -65,12 +65,24 @@
 .menu {
     width: 100%;
     list-style-type: none;
-    /* background-color: var(--farmbot-brown); */
     display: flex;
-    margin: 0;
-    padding: 0;
     overflow: hidden;
     border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.menu li {
+    display: inline-block;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.menu a {
+    display: flex;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 2rem;
+    padding: 1rem
 }
 
 #profile-photo-navbaritem {
@@ -80,27 +92,6 @@
     border: 0.1em solid white;
     border-radius: 50%;
     background-color: white;
-    padding: 0em;
-}
-
-.menu li {
-    display: inline-block;
-    text-align: center;
-    padding: 0;
-    transition: 0.3s;
-    margin: 0;
-    /* vertical-align: middle; */
-}
-
-.menu a {
-    display: flex;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    font-size: 2rem;
-    padding: 1rem;
-    margin: 0rem;
-    /* vertical-align: middle; */
 }
 
 #toggle {

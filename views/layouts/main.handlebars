@@ -16,7 +16,7 @@
       <input type="checkbox" id="toggle"/>
       <ul class="menu">
         <li class="brown"><a href="/"><img id="profile-photo-navbaritem" src="/images/farmbot.svg" alt="Home"></a></li>
-        <li class="brown"><a href="/profile">{{#if test}}Profile{{else}}Log In{{/if}}</a></li>
+        <li class="brown"><a href="/profile">{{#if (loggedIn)}}Profile{{else}}Log In{{/if}}</a></li>
         <li class="brown"><a href="/help">Help</a></li>
         {{!-- <li class="brown"><a href="fucktheterminal" target="_blank">process.exit()</a></li> --}}
         {{!-- <li style="float:right" class="navbaritem brown"><a href="invite">Invite FarmBot to your server</a> --}}

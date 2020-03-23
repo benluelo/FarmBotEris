@@ -2,7 +2,8 @@ module.exports = {
     "env": {
         "commonjs": true,
         "es6": true,
-        "node": true
+        "node": true,
+        "browser": true
     },
     "extends": "eslint:recommended",
     "globals": {
@@ -13,7 +14,8 @@ module.exports = {
         "ecmaVersion": 2018
     },
     "plugins": [
-        "jsdoc"
+        "jsdoc",
+        "sort-requires"
     ],
     "rules": {
         "indent": [
@@ -99,6 +101,9 @@ module.exports = {
         "space-infix-ops": [
             "error"
         ],
+        "sort-imports": [
+            "error"
+        ],
         "no-mixed-operators": [
             "error",
             {
@@ -164,7 +169,8 @@ module.exports = {
         "jsdoc/require-returns-check": 1,
         "jsdoc/require-returns-description": 1,
         "jsdoc/require-returns-type": 0,
-        "jsdoc/valid-types": 1
+        "jsdoc/valid-types": 1,
+        "sort-requires/sort-requires": 2
     },
     "settings": {
         "jsdoc": {

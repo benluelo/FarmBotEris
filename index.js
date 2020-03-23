@@ -1,14 +1,24 @@
-require("dotenv").config({ path: ".env" })
-const express = require("express")
-const fetch = require("node-fetch")
-const path = require("path")
-const exphbs = require("express-handlebars")
+const compression  = require("compression")
 const cookieParser = require("cookie-parser")
-const twemoji = require("twemoji")
-twemoji.ext = ".svg"
+const exphbs       = require("express-handlebars")
+const express      = require("express")
+const fetch        = require("node-fetch")
+const minify       = require("express-minify")
+const twemoji      = require("twemoji")
+const uglifyEs     = require("uglify-es")
+
 const app = express()
 
+twemoji.ext = ".svg"
+
+require("dotenv").config({ path: ".env" })
 const PORT = 4000 || process.env.PORT
+
+app.use(compression())
+app.use(minify({
+  uglifyJsModule: uglifyEs,
+}))
+app.use(cookieParser())
 
 let cropData
 ;(async () => {
@@ -16,38 +26,38 @@ let cropData
   cropData = await data.json()
 })()
 
-app.use(cookieParser())
 app.engine("handlebars", exphbs({
   defaultLayout: "main",
   helpers: {
-    test: function () {
+    loggedIn: function () {
+      console.log("this:", this.loggedIn)
       return this.loggedIn
     }
   }
 }))
 app.set("view engine", "handlebars")
 
-app.use(function(req, res, next){
+app.use(function(req, res, next) {
   console.log("cookies", req.cookies)
   const loggedIn = req.cookies.userID ? true : false
   res.locals.loggedIn = loggedIn
-  next();
+  next()
 })
 
 // homepage route
-app.get("/", async (req, res) => {
+app.get("/", async (_req, res) => {
   res.render("index", {
     title: "FarmBot Home"
   })
 })
 
-// userdata page
+// profile page
 app.get("/profile", async (req, res) => {
   if (req.cookies.userID) {
     const givenUserID = req.cookies.userID
 
     let userdataget
-    await fetch(`http://54.218.80.236:5000/getUserData/${givenUserID}/1a40715b-8963-4eb2-bde9-b8d2c0b16cbf`).then(res => res.json()).then(json => userdataget = json)
+    await fetch(`http://54.218.80.236:5000/getUserData/${givenUserID}/1a40715b-8963-4eb2-bde9-b8d2c0b16cbf`).then((data) => data.json()).then((json) => userdataget = json)
 
     const emoji = {
       numbers: [
@@ -84,7 +94,7 @@ app.get("/profile", async (req, res) => {
         banana: 37800000,
         pineapple: 43200000
       }
-      let plots = []
+      const plots = []
       const plotNumbers = [
         {
           url: "",
@@ -186,17 +196,17 @@ app.get("/login/:uuid([0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[
 })
 
 // kill the terminal
-app.get("/fucktheterminal", async(req, res) => {
+// eslint-disable-next-line no-unused-vars
+app.get("/fucktheterminal", async(_req, _res) => {
   process.exit()
 })
 
-app.get("/help", async (req, res) => {
+app.get("/help", async (_req, res) => {
   const data = await fetch("http://54.218.80.236:5000/command-info")
   const commandInfo = await data.json()
   console.log(commandInfo)
   ;(function parseCoin(commands) {
-    for (cmd in commands) {
-      // console.log(commands[cmd])
+    for (const cmd in commands) {
       commands[cmd].description = commands[cmd].description.replace("<:farmbot_coin:648032810682023956>", "<img class=\"emoji\", src=\"images/farmbot_coin.svg\", alt=\"money\">")
       console.log(commands[cmd].description)
       if (commands[cmd].subcommands) {
@@ -214,4 +224,4 @@ app.listen(PORT, () => {
   console.log(`Web Server running on port: ${PORT}`)
 })
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + "/public"))
