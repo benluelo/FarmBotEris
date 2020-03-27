@@ -1,24 +1,25 @@
-/* eslint-disable linebreak-style */
+export namespace CropInfo {
+  export type CropEmoji = "🍎" | "🍊" | "🍋" | "🍐" | "🍒" | "🍑" | "🥭" | "🍈" | "🍇" | "🍓" | "🍌" | "🍍"
+  export type CropName = "apple" | "orange" | "lemon" | "pear" | "cherry" | "peach" | "mango" | "melon" | "grapes" | "strawberry" | "banana" | "pineapple"
+  export type CropColors = "red" | "orange" | "yellow" | "green" | "pink" | "purple"
+  export type CropFlavours = "sweet" | "sour" | "tart"
+  export interface CropData {
+    /** The emoji of the crop. */
+    emoji: CropEmoji;
+    /** The color of the crop. */
+    color: CropColors;
+    /** The flavors of the crop. */
+    flavour: [
+      CropFlavours,
+      CropFlavours
+    ]
+  }
+  export type CropDatas = {
+    [name in CropName]: CropData
+  }
+}
 
-/**
- * @typedef {Object} CropData
- * @prop {CropEmoji} crop.emoji
- * @prop {import("../lib/farmer-data.js").colors} crop.color
- * @prop {import("../lib/farmer-data.js").tastes[]} crop.flavour
- */
-
-/**
- * @typedef {("🍎" | "🍊" | "🍋" | "🍐" | "🍒" | "🍑" | "🥭" | "🍈" | "🍇" | "🍓" | "🍌" | "🍍")} CropEmoji
- */
-
-/**
- * @typedef {("apple" | "orange" | "lemon" | "pear" | "cherry" | "peach" | "mango" | "melon" | "grapes" | "strawberry" | "banana" | "pineapple")} CropName
- */
-
-/**
- * @type {Object<string, CropData>}
- */
-module.exports = {
+export const CropDatas: CropInfo.CropDatas = {
   apple: {
     emoji: "🍎",
     flavour: [

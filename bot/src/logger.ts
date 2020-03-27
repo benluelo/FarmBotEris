@@ -1,7 +1,7 @@
-const chalk = require("chalk")
-const fs = require("fs")
-const { basename } = require("path")
-const { get } = require("stack-trace")
+import * as chalk from "chalk"
+import * as fs from "fs"
+import { basename } from "path"
+import { get } from "stack-trace"
 
 
 const outFileName = "toFileLogs"
@@ -12,19 +12,19 @@ const toFileStream = fs.createWriteStream(`${process.cwd()}/bot/logs/${outFileNa
 
 /**
  * @description Gets the date and returns it in a readable format for logging to the console.
- * @returns {String} A readable date.
+ * @returns A readable date.
  */
-const getDate = () => {
+const getDate = (): string => {
   const date = new Date()
   return date.toLocaleString("en-CA", { timeZone: "Canada/Eastern" })
 }
 
-class Log {
+export class Log {
   /**
    * @description The default log; logs to the console in cyan.
-   * @param {...} args - What you would like to log.
+   * @param args - What you would like to log.
    */
-  static default(...args) {
+  static default(...args: any) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
       chalk.cyan(`[LOG][DEFAULT][${getDate()}]`),
@@ -33,9 +33,9 @@ class Log {
   }
   /**
    * @description Log for when the bot connects; logs to the console in green.
-   * @param  {...} args - What you would like to log.
+   * @param args - What you would like to log.
    */
-  static connect(...args) {
+  static connect(...args: any) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
       chalk.green(`[LOG][CONNECT][${getDate()}]`),
@@ -44,9 +44,9 @@ class Log {
   }
   /**
    * @description Log for when the database connects; logs to the console in lime.
-   * @param  {...} args - What you would like to log.
+   * @param args - What you would like to log.
    */
-  static dbconnect(...args) {
+  static dbconnect(...args: any) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
       chalk.keyword("lime")(`[LOG][DBCONNECT][${getDate()}]`),
@@ -55,9 +55,9 @@ class Log {
   }
   /**
    * @description Log the commands being loaded into the bot.
-   * @param  {...} args - Command that was loaded.
+   * @param args - Command that was loaded.
    */
-  static commandLoad(...args) {
+  static commandLoad(...args: any) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
       chalk.keyword("cyan")(`[LOG][CMD LOAD][${getDate()}]`),
@@ -66,9 +66,9 @@ class Log {
   }
   /**
    * @description Log the directory of commands being loaded into the bot.
-   * @param  {...} args - Directory that was loaded.
+   * @param args - Directory that was loaded.
    */
-  static directoryLoad(...args) {
+  static directoryLoad(...args: any) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
       chalk.blue(`[LOG][DIR LOAD][${getDate()}]`),
@@ -78,9 +78,9 @@ class Log {
   /**
    * @description Log for when there is an error; logs both to a file with the name of the ISO timestamp
    * that the function was called at and to the console (in red).
-   * @param {...} args - What you would like to log.
+   * @param args - What you would like to log.
    */
-  static error(...args) {
+  static error(...args: any) {
     const p = basename(get()[1].getFileName())
     const fileName = `${new Date().toISOString().replace(/:/g, "-").replace(/\./g, "-")}.txt`
     console.log(
@@ -98,9 +98,9 @@ class Log {
   }
   /**
    * @description Logs to a file for use in long-term debugging and/or statistics. Also logs to the console, in yellow.
-   * @param  {...} args - What you would like to log.
+   * @param args - What you would like to log.
    */
-  static toFile(...args) {
+  static toFile(...args: any) {
     const p = basename(get()[1].getFileName())
     console.log(
       chalk.white.bold(`${p}:`),
@@ -110,5 +110,3 @@ class Log {
     toFileStream.write(p + " | " + args.join("\n") + "\n")
   }
 }
-
-module.exports = Log

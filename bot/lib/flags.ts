@@ -1,4 +1,6 @@
-{
+export const flags: {
+    [name: string]: string
+} = {
     "albania": "🇦🇱",
     "armenia": "🇦🇲",
     "argentina": "🇦🇷",

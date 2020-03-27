@@ -1,0 +1,22 @@
+export namespace CONSTANTS {
+  export const PERMISSIONS = {
+    /** Commands that everyone has access to. */
+    EVERYONE: 0,
+    /** Commands that only bot moderators have access to. */
+    MODERATORS: 1,
+    /** Commands that only bot admins have access to. */
+    OWNERS: 2,
+    /** Commands that are only to be used by the developers, during development (i.e. only Ben & Tyler). */
+    DEVELOPMENT: 3
+  }
+  export const CATEGORIES = {
+    /** Commands related to farming. */
+    FARMING: Symbol("🌱 Farming"),
+    /** Useful commands for information about the bot. */
+    UTILITY: Symbol("⚙️ Utility"),
+    /** Commands that are only to be used by the owners (i.e. only Ben & Tyler). */
+    OWNER: Symbol("🥑 Owner"),
+    /** Commands used for bot development. */
+    DEVELOPMENT: Symbol("📜 Development")
+  }
+}

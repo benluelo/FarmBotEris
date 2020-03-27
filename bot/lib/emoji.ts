@@ -1,4 +1,4 @@
-{
+export default {
     "dirt": "🟫",
     "seedling": "🌱",
     "coin": "<:farmbot_coin:648032810682023956>",

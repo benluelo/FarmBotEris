@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "target": "ES2019",
+    "typeRoots": ["./node_modules/@types"],
+    "resolveJsonModule": true
+  },
+  "exclude": ["node_modules"]
+}

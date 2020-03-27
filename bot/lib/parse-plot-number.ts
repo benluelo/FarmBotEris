@@ -5,7 +5,7 @@ const plotRegex = /^[a-e]{1}[1-5]{1}$/
  * @param {String} str - The plot number to get the value of, in the format `<letter><number>`.
  * @returns {(Number | Boolean)} The value of the plot supplied, or `false` if the input was not in valid format.
  */
-module.exports.parsePlotNumber = (str) => {
+export const parsePlotNumber = (str) => {
 
   if (process.env.DEBUG === "true") { console.log("str:", str) }
 

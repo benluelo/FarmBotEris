@@ -1,4 +1,4 @@
-module.exports = {
+export = {
   emoji: {
     male: [
       "👨🏻‍🌾",
@@ -16,9 +16,6 @@ module.exports = {
     ]
   },
   preferences: {
-    /**
-     * @type {colors[]}
-     */
     color: [
       "red",
       "orange",
@@ -27,9 +24,6 @@ module.exports = {
       "pink",
       "purple"
     ],
-    /**
-     * @type {tastes[]}
-     */
     taste: [
       "sweet",
       "sour",
@@ -37,11 +31,3 @@ module.exports = {
     ]
   }
 }
-
-/**
- * @typedef {("red" | "orange" | "yellow" | "green" | "pink" | "purple")} colors
- */
-
-/**
- * @typedef {("sweet" | "sour" | "tart")} tastes
- */

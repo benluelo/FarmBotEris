@@ -1,24 +1,56 @@
-const { Client } = require("eris")
-const { coin } = require("../lib/emoji.json")
-const { FarmBotCommandHandler, CommandInformation } = require("./FarmBotCommandHandler.js")
-// const Cooldowns = require("./FarmBotCooldown.js")
+import type { DotenvParseOutput } from "dotenv"
+import type * as Eris from "eris"
+import type * as MongoDB from "mongodb"
+import type { Message } from "eris"
+import type { CommandInformationConstructor, FarmBotCommand, CommandFunction } from "./FarmBotCommandHandler"
+import { FarmBotCommandHandler, Cooldowns, CommandInformation } from "./FarmBotCommandHandler"
+import { CONSTANTS } from "./CONSTANTS"
+import coin from "./emoji"
+import { Client } from "eris"
+import { Embed } from "./classes"
+import { User } from "./user"
+import { MongoClient } from "mongodb"
+import * as config from "../config"
+import { Log } from "../src/logger"
 
-class FarmBotClient extends Client {
+export class FarmBotClient extends Client {
+  PERMISSIONS: any
+  CATEGORIES: any
+  ENV: any
+  prefixes: readonly string[]
+  database: {
+    db: MongoDB.MongoClient,
+    Userdata: MongoDB.Collection<User>
+  }
+  private _db: MongoDB.MongoClient
+  Commands: FarmBotCommandHandler
+  Cooldowns: Cooldowns
+  log: typeof Log
+  /** @description The Embed class, used for making new embeds. */
+  Embed: typeof Embed
+  ownersIDs: [string, string]
+  config: any
+  /** @description The different colors for the bot. */
+  color: Readonly<{ market: number; darkgreen: number; lightgreen: number; success: number; error: number }>
+
   /**
    * @description Creates an instance of `FarmBotClient`.
-   * @param {import("dotenv").DotenvParseOutput} dotenv - The environment variables, containing at least the bot token as `TOKEN`.
-   * @param {import("eris").ClientOptions} options - The {@link import("eris").ClientOptions} for the `FarmBotClient`.
-   * @param {String[]} prefixes - An array of the prefixes for the bot.
+   * @param dotenv - The environment variables, containing at least the bot token as `TOKEN`.
+   * @param options - The {@link import("eris").ClientOptions} for the `FarmBotClient`.
+   * @param prefixes - An array of the prefixes for the bot.
    */
-  constructor(dotenv, options, prefixes) {
-    if (!dotenv.TOKEN) { throw Error("No bot token!") }
-    super(dotenv.TOKEN, options)
+  constructor(dotenv: DotenvParseOutput, options: Eris.ClientOptions, prefixes: string[]) {
+    if (dotenv.TOKEN) {
+      super(dotenv.TOKEN, options)
+    } else {
+      throw Error("No bot token!")
+    }
 
     /** @description The different permission levels for a command. */
-    this.PERMISSIONS = require("./CONSTANTS.js").PERMISSIONS
+    this.PERMISSIONS = CONSTANTS.PERMISSIONS
 
     /** @description The different categories of commands. */
-    this.CATEGORIES = require("./CONSTANTS.js").CATEGORIES
+    this.CATEGORIES = CONSTANTS.CATEGORIES
 
     this.ENV = Object.freeze(dotenv)
 
@@ -26,21 +58,13 @@ class FarmBotClient extends Client {
 
     this.on("messageCreate", this.onMessageCreate)
 
-    /**
-     * @type {Object}
-     * @prop {import("mongodb").MongoClient} database.db - The database.
-     * @prop {import("mongodb").Collection} database.Userdata - The userdata collection (`farmbot -> farm`).
-     */
-    this.database
-
     this._db
-    // this.Cooldowns = new Cooldowns()
     this.Commands = new FarmBotCommandHandler()
 
-    console.log(this.Cooldowns)
-    /**
-     * @description The different colors for the bot.
-     */
+    this.log = require("../src/logger.js")
+    this.Embed = Embed
+    this.ownersIDs = <[string, string]>config.default.ownersIDs
+    this.config = config.default
     this.color = Object.freeze({
       market: 0x964b00,
       darkgreen: 0x004C00,
@@ -48,22 +72,13 @@ class FarmBotClient extends Client {
       success: 0x00FF00,
       error: 0xFF0000
     })
-
-    this.log = require("../src/logger.js")
-
-    /** @description The Embed class, used for making new embeds. */
-    this.Embed = require("./classes.js").Embed
-
-    this.ownersIDs = require("../config.js").ownersIDs
-
-    this.config = Object.freeze(require("../config.js"))
   }
 
   /**
    * @description Ye.
    * @param {import("eris").Message} msg - The message from the messageCreate event.
    */
-  async onMessageCreate(msg) {
+  async onMessageCreate(msg: Message) {
     if (msg.author.bot) { return }
 
     const args = msg.content.split(/\s+/)
@@ -88,22 +103,17 @@ class FarmBotClient extends Client {
 
   /**
    * @description Adds a command to the bot.
-   * @param {String} name - The name of the command.
-   * @param {import("./FarmBotCommandHandler.js").CommandFunction} commandFunction - The command.
-   * @param {{
-        description?: string,
-        usage?: string,
-        examples?: string,
-        permissionLevel?: (0 | 1 | 2 | 3),
-        category?: Symbol,
-        aliases?: string[],
-        cooldown?: number,
-        requiresUser?: boolean,
-      }} help - The help information for the command.
-   * @param {import("./FarmBotCommandHandler.js").FarmBotCommand} [parent] - If this is a subcommand, the command that it is a subcommand to.
-   * @returns {import("./FarmBotCommandHandler.js").FarmBotCommand} The newly added command.
+   * @param name - The name of the command.
+   * @param commandFunction - The command.
+   * @param help - The help information for the command.
+   * @param parent - If this is a subcommand, the command that it is a subcommand to.
+   * @returns The newly added command.
    */
-  addCommand(name, commandFunction, help, parent) {
+  addCommand(
+    name: string,
+    commandFunction: CommandFunction,
+    help: CommandInformationConstructor,
+    parent: FarmBotCommand): FarmBotCommand {
     const newCmd = this.Commands.set(name, commandFunction, new CommandInformation(help), parent)
     return newCmd
   }
@@ -113,19 +123,19 @@ class FarmBotClient extends Client {
    * @param {import("eris").Message} message - The message that was sent to the command.
    * @returns {Promise<import("eris").Message>} - The message that was sent to the user.
    */
-  startMessage(message) {
+  startMessage(message: import("eris").Message): Promise<import("eris").Message> {
     return message.send(new this.Embed().uhoh(`You have to start farming first, **${message.author.username}**! Send \`farm start\` to start farming!`))
   }
 
   /**
    * @description Gets a user from the database.
-   * @param {String} userID - The user's id.
-   * @param {function(import("mongodb").MongoError, import("../lib/user.js").User)} cb - The callback.
+   * @param userID - The user's id.
+   * @param cb - The callback.
    */
-  getUser(userID, cb) {
+  getUser(userID: string, cb: (e: MongoDB.MongoError, u: User) => void): void {
     this.database.Userdata.findOne({ userID: userID }, (e, u) => {
       if (e) {
-        return cb(e)
+        return cb(e, null)
       }
 
       if (u) {
@@ -141,7 +151,7 @@ class FarmBotClient extends Client {
    * @param {Number} value - The amount you want to format as money.
    * @returns {String} - The formatted amount.
    */
-  formatMoney(value) {
+  formatMoney(value: number): string {
     const formatter = new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
@@ -155,14 +165,14 @@ class FarmBotClient extends Client {
    * @param {String} str - The message content to check for the prefix.
    * @returns {(String | false)} Whether or not a prefix was used; if a prefix was used, returns the prefix, else returns false.
    */
-  _checkForPrefix(str) {
+  _checkForPrefix(str: string): (string | false) {
     for (const p in this.prefixes) {
       if (str.startsWith(this.prefixes[p])) { return this.prefixes[p] }
     }
     return false
   }
 
-  _checkForFarps(str) {
+  _checkForFarps(str: string | string[]) {
     return str.includes("farping")
   }
 
@@ -170,9 +180,7 @@ class FarmBotClient extends Client {
    * @description Initializes the database.
    */
   async initDB() {
-    const client = require("mongodb").MongoClient
-
-    client.connect(this.config.db.connectionString, this.config.db.connectionOptions, async (err, db) => {
+    MongoClient.connect(this.config.db.connectionString, this.config.db.connectionOptions, async (err, db) => {
       if (err) { throw err }
 
       if (this._db) {
@@ -190,5 +198,3 @@ class FarmBotClient extends Client {
     })
   }
 }
-
-module.exports = FarmBotClient
