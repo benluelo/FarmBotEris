@@ -159,6 +159,7 @@ class UserData extends User {
     this.requestAmount = userdata.requestAmount
     this.requestTimeOut = userdata.requestTimeOut
     this.seeds = userdata.seeds
+    this.updated = true
   }
 }
 

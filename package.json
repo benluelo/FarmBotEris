@@ -40,6 +40,7 @@
     "systeminformation": "^4.21.1",
     "transliteration": "^2.1.8",
     "twemoji": "^12.1.5",
+    "uuid": "^7.0.2",
     "yargs": "^15.1.0"
   },
   "devDependencies": {

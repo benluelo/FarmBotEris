@@ -1,5 +1,5 @@
 const { NPC } = require("./npc.js")
-const fetch = require("node-fetch")
+const getNames = require("./get-names.js")
 const  tr  = require("transliteration").transliterate
 // const argv = require("yargs").argv
 
@@ -15,8 +15,7 @@ module.exports.run = async (region) => {
    * @type {import("./npc.js").Farmer[]}
    */
   const farmers = []
-  const data = await fetch(new URL(`https://uinames.com/api/?amount=${11}&region=${region}`))
-  const json = await data.json()
+  const json = getNames(region)
   json.forEach((element) => {
     farmers.push(new NPC(tr(element.name + " " + element.surname), element.gender, fruitsArray.shift(), randArray.shift()))
   })
