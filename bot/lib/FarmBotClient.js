@@ -66,10 +66,16 @@ class FarmBotClient extends Client {
   async onMessageCreate(msg) {
     if (msg.author.bot) { return }
 
-    const args = msg.content.split(/\s+/)
+    const content = msg.content.toLowerCase()
+
+    const prefixUsed = this._checkForPrefix(content)
+
+    if (!prefixUsed) { return }
+
+    const args = this._removePrefix(content, prefixUsed).split(/\s+/)
 
     // check if a prefix was used; if a prefix was used, check if a command was used
-    if (this._checkForPrefix(args.shift()) && this.Commands.has(args[0])) {
+    if (this.Commands.has(args[0])) {
       if (this.Commands.get(args[0]).info.requiresUser) {
       // if a command was used, check if the caller can use the command
         this.getUser(msg.author.id, (err, userdata) => {
@@ -157,9 +163,16 @@ class FarmBotClient extends Client {
    */
   _checkForPrefix(str) {
     for (const p in this.prefixes) {
-      if (str.startsWith(this.prefixes[p])) { return this.prefixes[p] }
+      if (str.startsWith(this.prefixes[p])) {
+        return this.prefixes[p]
+      }
     }
     return false
+  }
+
+
+  _removePrefix(str, prefix) {
+    return str.substr(prefix.length).trim()
   }
 
   _checkForFarps(str) {
