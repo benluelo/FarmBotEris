@@ -18,14 +18,17 @@ function loadCommands(bot, dirpath, depth = 0) {
   const p = dirpath
   fs.readdirSync(p).forEach((file, key, arr) => {
     if (!fs.lstatSync(`${p}/${file}`).isDirectory()) {
-      if (file.split(".")[0] == "help") {
-        if (helpLocation != "") {
-          throw new Error(`Two commands/ subcommands share the name "help":\n  ${helpLocation}\n  ${`${p}/${file}`}`)
+      const [name, ext] = file.split(".")
+      if (ext == "js") {
+        if (name == "help") {
+          if (helpLocation != "") {
+            throw new Error(`Two commands/ subcommands share the name "help":\n  ${helpLocation}\n  ${`${p}/${file}`}`)
+          }
+          helpLocation = `${p}/${file}`
         }
-        helpLocation = `${p}/${file}`
+        require(`${p}/${file}`).run(bot)
+        bot.log.commandLoad(Object.is(arr.length - 1, key) ? `${"│  ".repeat(depth)}└──>` : `${"│  ".repeat(depth)}├──>`, file)
       }
-      require(`${p}/${file}`).run(bot)
-      bot.log.commandLoad(Object.is(arr.length - 1, key) ? `${"│  ".repeat(depth)}└──>` : `${"│  ".repeat(depth)}├──>`, file)
     } else {
       bot.log.directoryLoad(`├──${"┼──".repeat(depth)}┬ Loading ${file} commands...`)
       loadCommands(bot, `${p}/${file}`, depth + 1)

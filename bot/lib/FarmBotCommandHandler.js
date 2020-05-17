@@ -85,7 +85,7 @@ class FarmBotCommand {
   }
 
   getFullCommandName() {
-    return (this.parent ? this.parent.getFullCommandName() + " " : "" ) + this.name
+    return (this.parent ? this.parent.getFullCommandName() + " " : "") + this.name
   }
 
   /**
@@ -298,7 +298,7 @@ class Cooldowns extends Map {
         // else, return how long they have to wait
         return TTW
       }
-    // if the user isn't in the cooldowns, add them to it
+      // if the user isn't in the cooldowns, add them to it
     } else {
       this.set(userID)
       return 0

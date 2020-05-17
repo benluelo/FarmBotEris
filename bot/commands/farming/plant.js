@@ -3,7 +3,7 @@ const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
 
 /** @private @param {import("../../lib/FarmBotClient.js")} bot */
 module.exports.run = (bot) => {
-  bot.addCommand("plant", async (message, args, userdata) => {
+  const cmd = bot.addCommand("plant", async (message, args, userdata) => {
 
     const plot = args[0]
     const crop = args[1]
@@ -45,7 +45,9 @@ module.exports.run = (bot) => {
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.FARMING,
     cooldown: 5000
-  }).subcommand("all", (message, args, userdata) => {
+  })
+
+  cmd.subcommand("all", (message, args, userdata) => {
 
     const crop = args[0]
 
@@ -82,6 +84,53 @@ module.exports.run = (bot) => {
     description: "Plants a seed on all available plots.",
     usage: "​farm plant all <seed>",
     examples: "​farm plant all apple",
+    permissionLevel: bot.PERMISSIONS.EVERYONE,
+    category: bot.CATEGORIES.FARMING,
+    cooldown: 5000
+  })
+
+  cmd.subcommand("row", async (message, args, userdata) => {
+    if (!args[1]) { return message.send(new bot.Embed().uhoh("Uh-oh! See `farm help plant row` for help on how to use this command.")) }
+    const row = args.shift().toLowerCase()
+    const crop = args.shift().toLowerCase()
+
+    console.log(row, crop)
+
+    const rows = {
+      a: 0,
+      b: 5,
+      c: 10,
+      d: 15,
+      e: 20
+    }
+
+    if (rows[row] === undefined) { return message.send(new bot.Embed().uhoh(`**${row.toUpperCase()}** isn't a valid row!`)) }
+
+    if (!cropData[crop] || !userdata.seeds.common[crop].discovered) { return message.send(new bot.Embed().uhoh(`**${crop}** isn't a valid crop!`)) }
+
+    if (userdata.farm.length < rows[row]) { return message.send(new bot.Embed().uhoh(`You don't own any plots on row **${row.toUpperCase()}**`)) }
+
+    let totalPlots = 0
+    for (let plot = rows[row]; (plot < rows[row] + 5) && (plot < userdata.farm.length); ++plot) {
+      console.log(plot, userdata.farm[plot].crop)
+      if (userdata.farm[plot].crop.planted === "dirt") {
+        await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
+          $set: {
+            [`farm.${plot}.crop.planted`] : crop,
+            [`farm.${plot}.crop.datePlantedAt`] : Date.now()
+          }
+        })
+        totalPlots++
+      }
+    }
+    if (totalPlots == 0) {
+      return message.send(new bot.Embed().uhoh(`There's no more room on row **${row.toUpperCase()}** to plant anything else, **${message.author.username}!**`))
+    }
+    return message.send(new bot.Embed().success(`Successfully planted **${totalPlots}** ${cropData[crop].emoji} on row **${row.toUpperCase()}**!`))
+  }, {
+    description: "Plants a seed on all available plots in the specified row.",
+    usage: "​farm plant row <row> <seed>",
+    examples: "​farm plant row a apple",
     permissionLevel: bot.PERMISSIONS.EVERYONE,
     category: bot.CATEGORIES.FARMING,
     cooldown: 5000
