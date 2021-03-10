@@ -170,7 +170,6 @@ class FarmBotClient extends Client {
     return false
   }
 
-
   _removePrefix(str, prefix) {
     return str.substr(prefix.length).trim()
   }
@@ -193,10 +192,9 @@ class FarmBotClient extends Client {
       }
       this._db = db
       if (db) {
-        const c = db
         this.database = {
-          db: c,
-          Userdata: c.db("farmbot").collection("farm"),
+          db,
+          Userdata: db.db("farmbot").collection("farm"),
         }
         this.log.dbconnect("Successfully connected to database!")
       }
