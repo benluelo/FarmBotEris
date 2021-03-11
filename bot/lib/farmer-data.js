@@ -1,47 +1,35 @@
-module.exports = {
-  emoji: {
-    male: [
-      "👨🏻‍🌾",
-      "👨🏼‍🌾",
-      "👨🏽‍🌾",
-      "👨🏾‍🌾",
-      "👨🏿‍🌾"
-    ],
-    female: [
-      "👩🏻‍🌾",
-      "👩🏼‍🌾",
-      "👩🏽‍🌾",
-      "👩🏾‍🌾",
-      "👩🏿‍🌾"
-    ]
-  },
-  preferences: {
-    /**
-     * @type {colors[]}
-     */
-    color: [
-      "red",
-      "orange",
-      "yellow",
-      "green",
-      "pink",
-      "purple"
-    ],
-    /**
-     * @type {tastes[]}
-     */
-    taste: [
-      "sweet",
-      "sour",
-      "tart"
-    ]
-  }
-}
-
-/**
- * @typedef {("red" | "orange" | "yellow" | "green" | "pink" | "purple")} colors
- */
-
-/**
- * @typedef {("sweet" | "sour" | "tart")} tastes
- */
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
+    emoji: {
+        male: [
+            "👨🏻‍🌾",
+            "👨🏼‍🌾",
+            "👨🏽‍🌾",
+            "👨🏾‍🌾",
+            "👨🏿‍🌾"
+        ],
+        female: [
+            "👩🏻‍🌾",
+            "👩🏼‍🌾",
+            "👩🏽‍🌾",
+            "👩🏾‍🌾",
+            "👩🏿‍🌾"
+        ]
+    },
+    preferences: {
+        color: [
+            "red",
+            "orange",
+            "yellow",
+            "green",
+            "pink",
+            "purple"
+        ],
+        taste: [
+            "sweet",
+            "sour",
+            "tart"
+        ],
+    }
+};

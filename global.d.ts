@@ -100,7 +100,7 @@ declare class Embed {
       /** The footer icon. */
       icon_url?: string
       /** The footer text. */
-      text?: string
+      text: string
     }
     /** The embed thumbnail. */
     thumbnail?: {
@@ -116,7 +116,7 @@ declare class Embed {
     /** The author of the embed. */
     author?: {
       /** The author's name. */
-      name?: string
+      name: string
       /** The url of the author's image. */
       url?: string
       /** The url of the author's icon. */
@@ -362,7 +362,7 @@ declare class User {
   farm: Plot[]
   /** The user's seeds. */
   // 🍎🍊🍋🍐🍒🍑🥭🍈🍇🍓🍌🍍
-  seeds: { [s: string]: { [s: string]: Seed } }
+  seeds: { [s: string]: { [s in CropName]: Seed } }
   /** The user's current requests. */
   requests: { [s: string]: MarketRequest }
   /** The farmers in the user's village. */

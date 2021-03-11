@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const eris_1 = require("eris");
 const mongodb_1 = require("mongodb");
-const { coin } = require("../lib/emoji.json");
-const { FarmBotCommandHandler, CommandInformation } = require("./FarmBotCommandHandler.js");
+const emoji_json_1 = require("./emoji.json");
+const FarmBotCommandHandler_1 = require("./FarmBotCommandHandler");
 // const Cooldowns = require("./FarmBotCooldown.js")
 class FarmBotClient extends eris_1.Client {
     /**
@@ -26,7 +26,7 @@ class FarmBotClient extends eris_1.Client {
         this.on("messageCreate", this.onMessageCreate);
         this._db;
         // this.Cooldowns = new Cooldowns()
-        this.Commands = new FarmBotCommandHandler();
+        this.Commands = new FarmBotCommandHandler_1.FarmBotCommandHandler();
         /**
          * @description The different colors for the bot.
          */
@@ -87,7 +87,7 @@ class FarmBotClient extends eris_1.Client {
      * @returns The newly added command.
      */
     addCommand(name, commandFunction, help, parent) {
-        const newCmd = this.Commands.set(name, commandFunction, new CommandInformation(help), parent);
+        const newCmd = this.Commands.set(name, commandFunction, new FarmBotCommandHandler_1.CommandInformation(help), parent);
         return newCmd;
     }
     /**
@@ -127,7 +127,7 @@ class FarmBotClient extends eris_1.Client {
             currency: "USD",
             minimumFractionDigits: 2
         });
-        return formatter.format(value).substr(1) + " " + coin;
+        return formatter.format(value).substr(1) + " " + emoji_json_1.coin;
     }
     /**
      * @description Checks if a message used a bot prefix.

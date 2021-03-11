@@ -1,6 +1,6 @@
 import type { CropInformationMap } from "../../global"
 
-module.exports = {
+export default {
   apple: {
     emoji: "🍎",
     flavour: [

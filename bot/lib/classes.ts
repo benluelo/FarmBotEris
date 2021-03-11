@@ -25,9 +25,9 @@ class Embed {
     url: string | URL | Attachment | undefined,
     color: number | undefined,
     timestamp: string | undefined,
-    footer: {
+    footer?: {
       icon_url: string | URL | Attachment | undefined,
-      text: string | undefined
+      text: string
     },
     thumbnail: {
       url: string | URL | Attachment | undefined
@@ -53,10 +53,6 @@ class Embed {
     url: undefined,
     color: undefined,
     timestamp: undefined,
-    footer: {
-      icon_url: undefined,
-      text: undefined
-    },
     thumbnail: {
       url: undefined
     },
@@ -135,9 +131,11 @@ class Embed {
    * @param {(String | URL | Attachment)} icon_url - URL icon for the footer.
    * @returns {Embed} The embed this was called on.
    */
-  setFooter(text?: string, icon_url?: (string | URL | Attachment)): Embed {
-    this.embed.footer.text = text
-    this.embed.footer.icon_url = getURL(icon_url ?? "")
+  setFooter(text: string, icon_url?: (string | URL | Attachment)): Embed {
+    this.embed.footer = {
+      text,
+      icon_url: getURL(icon_url ?? "")
+    }
     return this
   }
 

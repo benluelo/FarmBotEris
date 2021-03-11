@@ -25,13 +25,13 @@
         "unlockable"
     ],
     "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
         "**/.DS_Store": true,
-        "**/*.js": {
+        "**/.git": true,
+        "**/.hg": true,
+        "**/.svn": true,
+        "**/*.j": {
             "when": "$(basename).ts"
         },
+        "**/CVS": true
     }
 }

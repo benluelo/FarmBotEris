@@ -2,6 +2,7 @@ import { type } from "os"
 import { CONSTANTS, Embed, User } from "../../global"
 import { Message } from "eris"
 import { InspectOptionsStylized } from "util"
+import { CommandHelp } from "./FarmBotClient"
 
 const util = require("util")
 const CONSTANTS = require("./CONSTANTS.js")
@@ -33,7 +34,7 @@ export type CmdInfo = {
   requiresUser: boolean
 }
 
-class CommandInformation {
+export class CommandInformation {
   /** The description for the command. */
   description: string
   /** How to use the command. */
@@ -53,16 +54,7 @@ class CommandInformation {
   /**
    * @description The general information about a command.
    */
-  constructor(info: CmdInfo = {
-    description: "No description provided.",
-    usage: "No usage provided.",
-    examples: "",
-    permissionLevel: CONSTANTS.PERMISSIONS.DEVELOPMENT,
-    category: CONSTANTS.CATEGORIES.DEVELOPMENT,
-    aliases: [],
-    cooldown: 0,
-    requiresUser: true
-  }) {
+  constructor(info?: CommandHelp) {
     const {
       description,
       usage,
@@ -72,15 +64,16 @@ class CommandInformation {
       aliases,
       cooldown,
       requiresUser,
-    } = info
-    this.description = description
-    this.usage = usage
-    this.examples = examples
-    this.permissionLevel = permissionLevel
-    this.category = category
-    this.aliases = aliases
-    this.cooldown = cooldown
-    this.requiresUser = requiresUser
+    } = info ?? {}
+    
+      this.description =  description ?? "No description provided.",
+      this.usage =  usage ?? "No usage provided.",
+      this.examples =  examples ?? "",
+      this.permissionLevel =  permissionLevel ?? CONSTANTS.PERMISSIONS.DEVELOPMENT,
+      this.category =  category ?? CONSTANTS.CATEGORIES.DEVELOPMENT,
+      this.aliases =  aliases ?? [],
+      this.cooldown =  cooldown ?? 0,
+      this.requiresUser =  requiresUser ?? true
   }
 
   toJSON() {
@@ -96,7 +89,7 @@ class CommandInformation {
   }
 }
 
-class FarmBotCommand {
+export class FarmBotCommand {
   name: string
   func: CommandFunction
   info: CommandInformation
@@ -160,7 +153,7 @@ class FarmBotCommand {
    * @param info - The information for the command.
    * @returns {FarmBotCommand The new subcommand object.
    */
-  subcommand(name: string, func: CommandFunction, info?: CommandInformation): FarmBotCommand {
+  subcommand(name: string, func: CommandFunction, info?: CommandHelp): FarmBotCommand {
     return this.subcommands.set(name, func, new CommandInformation(info), this)
   }
 
@@ -211,7 +204,7 @@ class FarmBotCommand {
   }
 }
 
-class FarmBotCommandHandler {
+export class FarmBotCommandHandler {
   aliases: Map<string, string>
   #internal: Map<string, FarmBotCommand>
   constructor() {
@@ -302,7 +295,7 @@ class FarmBotCommandHandler {
   }
 }
 
-class Cooldown extends Map<string, number> {
+export class Cooldown extends Map<string, number> {
   commandName: any
   cooldownTimeMs: any
   constructor(commandName: string, cooldownTimeMs: number) {
@@ -384,9 +377,4 @@ class Cooldown extends Map<string, number> {
       return this
     }
   }
-}
-
-module.exports = {
-  FarmBotCommandHandler,
-  CommandInformation
 }

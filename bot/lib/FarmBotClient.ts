@@ -3,9 +3,9 @@ import { Client, ClientOptions, Message } from "eris"
 import { CommandFunction, CONSTANTS, FarmBotCommand, User } from "../../global"
 import { Collection, MongoClient, MongoError } from "mongodb"
 
-const { coin } = require("../lib/emoji.json")
-const { FarmBotCommandHandler, CommandInformation } = require("./FarmBotCommandHandler.js")
-type CommandHelp = {
+import { coin } from "./emoji.json"
+import { FarmBotCommandHandler, CommandInformation } from "./FarmBotCommandHandler"
+export type CommandHelp = {
   description?: string
   usage?: string
   examples?: string
