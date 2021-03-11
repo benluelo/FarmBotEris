@@ -1,23 +1,5 @@
-/* eslint-disable linebreak-style */
+import type { CropInformationMap } from "../../global"
 
-/**
- * @typedef {Object} CropData
- * @prop {CropEmoji} crop.emoji
- * @prop {import("../lib/farmer-data.js").colors} crop.color
- * @prop {import("../lib/farmer-data.js").tastes[]} crop.flavour
- */
-
-/**
- * @typedef {("🍎" | "🍊" | "🍋" | "🍐" | "🍒" | "🍑" | "🥭" | "🍈" | "🍇" | "🍓" | "🍌" | "🍍")} CropEmoji
- */
-
-/**
- * @typedef {("apple" | "orange" | "lemon" | "pear" | "cherry" | "peach" | "mango" | "melon" | "grapes" | "strawberry" | "banana" | "pineapple")} CropName
- */
-
-/**
- * @type {Object<string, CropData>}
- */
 module.exports = {
   apple: {
     emoji: "🍎",
@@ -115,4 +97,4 @@ module.exports = {
     ],
     color: "yellow"
   }
-}
+} as CropInformationMap

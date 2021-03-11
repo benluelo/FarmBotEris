@@ -6,30 +6,28 @@ declare module "eris" {
   }
 }
 
-declare namespace Crops {
-  type CropEmoji = "🍎" | "🍊" | "🍋" | "🍐" | "🍒" | "🍑" | "🥭" | "🍈" | "🍇" | "🍓" | "🍌" | "🍍"
-  type CropName = "apple" | "orange" | "lemon" | "pear" | "cherry" | "peach" | "mango" | "melon" | "grapes" | "strawberry" | "banana" | "pineapple"
-  type CropColors = "red" | "orange" | "yellow" | "green" | "pink" | "purple"
-  type CropFlavours = "sweet" | "sour" | "tart"
-  type CropData = {
-      /** The emoji of the crop. */
-      emoji: CropEmoji;
-      /** The color of the crop. */
-      color: CropColors;
-      /** The flavors of the crop. */
-      flavour: CropFlavours[];
-    }
-    
-  // {\n *emoji: ".*",\n *flavour: \[\n *".*",\n *".*"\n *\],\n *color: ".*"\n *}
-  type CropDatas = {
-    [K in CropName]: CropData
-  }
+export type CropEmoji = "🍎" | "🍊" | "🍋" | "🍐" | "🍒" | "🍑" | "🥭" | "🍈" | "🍇" | "🍓" | "🍌" | "🍍"
+export type CropName = "apple" | "orange" | "lemon" | "pear" | "cherry" | "peach" | "mango" | "melon" | "grapes" | "strawberry" | "banana" | "pineapple"
+export type CropColors = "red" | "orange" | "yellow" | "green" | "pink" | "purple"
+export type CropFlavours = "sweet" | "sour" | "tart"
+export type CropInformation = {
+  /** The emoji of the crop. */
+  emoji: CropEmoji;
+  /** The color of the crop. */
+  color: CropColors;
+  /** The flavors of the crop. */
+  flavour: CropFlavours[];
+}
+
+// {\n *emoji: ".*",\n *flavour: \[\n *".*",\n *".*"\n *\],\n *color: ".*"\n *}
+export type CropInformationMap = {
+  [K in CropName]: CropInformation
 }
 
 declare type Plot = {
   crop: {
     /** The crop currently planted on the plot. */
-    planted: Crops.CropName | "dirt"
+    planted: CropName | "dirt"
     /** The time that the crop was planted at. */
     datePlantedAt: number
   }
@@ -55,7 +53,7 @@ declare type MarketRequest = {
   /** What the farmer wants. */
   want: {
     /** The crop they want. */
-    crop: Crops.CropName;
+    crop: CropName;
     /** The amount of the crop they want. */
     amount: number;
   }[]
@@ -71,11 +69,11 @@ declare type Farmer = {
   /** The gender of the Farmer. */
   gender: "male" | "female"
   /** The crop that this user will unlock when they hit their unlock level. */
-  unlockableCrop: Crops.CropName
+  unlockableCrop: CropName
   /** The wealth of the Farmer. */
   wealth: number
   /** The preferences of the Farmer. */
-  preferences: { color: Crops.CropColors, taste: Crops.CropFlavours[] }
+  preferences: { color: CropColors, taste: CropFlavours[] }
   /** The level of the Farmer (i.e. their experience points). */
   level: number
   /** The level that the farmer will unlock their crop at  (between `5` and `10`). */
@@ -137,17 +135,17 @@ declare class Embed {
 
   /** Creates a new Embed. */
   constructor(embed?: {
-      title?: string,
-      description?: string,
-      url?: string,
-      color?: string,
-      timestamp?: string,
-      footer?: { icon_url?: string, text?: string },
-      thumbnail?: { url?: string },
-      image?: { url?: string },
-      author?: { name: string, url?: string, icon_url?: string },
-      fields?: { name: string, value: string, inline?: boolean }[]
-    })
+    title?: string,
+    description?: string,
+    url?: string,
+    color?: string,
+    timestamp?: string,
+    footer?: { icon_url?: string, text?: string },
+    thumbnail?: { url?: string },
+    image?: { url?: string },
+    author?: { name: string, url?: string, icon_url?: string },
+    fields?: { name: string, value: string, inline?: boolean }[]
+  })
   setTitle(title?: string): this
   setDescription(description?: string): this
   setUrl(url?: (string | URL | Attachment)): this
@@ -165,7 +163,7 @@ declare class Embed {
     /** The message to show user. */
     message: string
   ): this
-  
+
   /** Send a pre-formatted success message */
   success(
     /** The message to show user. */
@@ -207,11 +205,11 @@ declare class XPProgressBar extends ProgressBar {
 }
 
 declare class Attachment {
-  crop: Crops.CropName
+  crop: CropName
   size: number
   file: Buffer
   name: string
-  constructor(crop: string, size?: number)
+  constructor(crop: CropName, size?: number)
 
   send(): {
     /** The buffer that contains the attachment. */
@@ -229,11 +227,11 @@ declare class NPC {
   /** The gender of the NPC. Either "male" or "female". */
   gender: "male" | "female"
   /** The crop that this user will unlock when they hit their unlock level (between `5` and `10`). */
-  unlockableCrop: Crops.CropName
+  unlockableCrop: CropName
   /** The wealth of the NPC. Must be `0 <= x <= 1`. */
   wealth: number
   /** The preferences of the NPC. */
-  preferences: { color: Crops.CropColors; taste: Readonly<[Crops.CropFlavours, Crops.CropFlavours]> }
+  preferences: { color: CropColors; taste: Readonly<[CropFlavours, CropFlavours]> }
   /** The user's friendship level with the NPC. */
   level: number
   /** The level that the NPC unlocks their crop at. */
@@ -244,22 +242,16 @@ declare class NPC {
   constructor(
     name: string,
     gender?: ("male" | "female"),
-    unlockableCrop?: Crops.CropName,
+    unlockableCrop?: CropName,
     wealth?: number,
     preferences?: {
-      color: Crops.CropColors
-      taste: Crops.CropFlavours[]
+      color: CropColors
+      taste: CropFlavours[]
     }
   )
 
   /** Creates a new request for the market. */
-  newRequest(crops: {
-      [CropName in Crops.CropName]: {
-        discovered: boolean
-        level: number
-        amount: number
-      }
-    }): { id: string; req: MarketRequest }
+  newRequest(crops: CropInformationMap): { id: string; req: MarketRequest }
 
   private getRandomID(): string
 }
@@ -372,7 +364,7 @@ declare class User {
   // 🍎🍊🍋🍐🍒🍑🥭🍈🍇🍓🍌🍍
   seeds: { [s: string]: { [s: string]: Seed } }
   /** The user's current requests. */
-  requests: { [s: string]: MarketRequest}
+  requests: { [s: string]: MarketRequest }
   /** The farmers in the user's village. */
   farmers: Farmer[]
   /** The farmers in the user's village. */
