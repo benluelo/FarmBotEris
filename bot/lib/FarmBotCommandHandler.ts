@@ -1,11 +1,11 @@
 import { type } from "os"
-import { CONSTANTS, Embed, User } from "../../global"
+import { Embed, User } from "../../global"
 import { Message } from "eris"
 import { InspectOptionsStylized } from "util"
 import { CommandHelp } from "./FarmBotClient"
 
 const util = require("util")
-const CONSTANTS = require("./CONSTANTS.js")
+import CONSTANTS from "./CONSTANTS.js"
 
 // require("../../global.d.ts")
 
@@ -23,9 +23,9 @@ export type CmdInfo = {
   /** Examples of how to use the command. */
   examples: string
   /** | 1 | 2 | 3)} */
-  permissionLevel: CONSTANTS["PERMISSIONS"][keyof CONSTANTS["PERMISSIONS"]]
+  permissionLevel: typeof CONSTANTS["PERMISSIONS"][keyof typeof CONSTANTS["PERMISSIONS"]]
   /** The category the command belongs in. */
-  category: CONSTANTS["CATEGORIES"][keyof CONSTANTS["CATEGORIES"]]
+  category: typeof CONSTANTS["CATEGORIES"][keyof typeof CONSTANTS["CATEGORIES"]]
   /** An array of aliases for the command. */
   aliases: string[]
   /** The cooldown for the command, in `ms`. */
@@ -42,9 +42,9 @@ export class CommandInformation {
   /** Examples of how to use the command. */
   examples: string
   /** | 1 | 2 | 3)} */
-  permissionLevel: CONSTANTS["PERMISSIONS"][keyof CONSTANTS["PERMISSIONS"]]
+  permissionLevel: typeof CONSTANTS["PERMISSIONS"][keyof typeof CONSTANTS["PERMISSIONS"]]
   /** The category the command belongs in. */
-  category: CONSTANTS["CATEGORIES"][keyof CONSTANTS["CATEGORIES"]]
+  category: typeof CONSTANTS["CATEGORIES"][keyof typeof CONSTANTS["CATEGORIES"]]
   /** An array of aliases for the command. */
   aliases: string[]
   /** The cooldown for the command, in `ms`. */
@@ -65,15 +65,15 @@ export class CommandInformation {
       cooldown,
       requiresUser,
     } = info ?? {}
-    
-      this.description =  description ?? "No description provided.",
-      this.usage =  usage ?? "No usage provided.",
-      this.examples =  examples ?? "",
-      this.permissionLevel =  permissionLevel ?? CONSTANTS.PERMISSIONS.DEVELOPMENT,
-      this.category =  category ?? CONSTANTS.CATEGORIES.DEVELOPMENT,
-      this.aliases =  aliases ?? [],
-      this.cooldown =  cooldown ?? 0,
-      this.requiresUser =  requiresUser ?? true
+
+    this.description = description ?? "No description provided.",
+      this.usage = usage ?? "No usage provided.",
+      this.examples = examples ?? "",
+      this.permissionLevel = permissionLevel ?? CONSTANTS.PERMISSIONS.DEVELOPMENT,
+      this.category = category ?? CONSTANTS.CATEGORIES.DEVELOPMENT,
+      this.aliases = aliases ?? [],
+      this.cooldown = cooldown ?? 0,
+      this.requiresUser = requiresUser ?? true
   }
 
   toJSON() {
@@ -199,7 +199,7 @@ export class FarmBotCommand {
       parent: this.parent ? this.parent.name : null,
       subcommands: this.subcommands.size() > 0 ? this.subcommands : null
     }
-      
+
     return util.inspect(toReturn, true, 1, true).replace(" [Map] ", " ")
   }
 }

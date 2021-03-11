@@ -8,10 +8,10 @@ type Taste = typeof farmerData.preferences.taste[number]
 
 type Preferences = {
   color: Color
-  taste: Taste
+  taste: Taste[]
 }
 
-class NPC {
+export class NPC {
   name: string
   gender: ("male" | "female")
   unlockableCrop: CropName
@@ -90,10 +90,6 @@ class NPC {
       req: r
     }
   }
-}
-
-module.exports = {
-  NPC
 }
 
 // ...why did we do it like that

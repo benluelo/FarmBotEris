@@ -25,10 +25,6 @@ class Embed {
         url: undefined,
         color: undefined,
         timestamp: undefined,
-        footer: {
-            icon_url: undefined,
-            text: undefined
-        },
         thumbnail: {
             url: undefined
         },
@@ -101,8 +97,10 @@ class Embed {
      * @returns {Embed} The embed this was called on.
      */
     setFooter(text, icon_url) {
-        this.embed.footer.text = text;
-        this.embed.footer.icon_url = getURL(icon_url ?? "");
+        this.embed.footer = {
+            text,
+            icon_url: getURL(icon_url ?? "")
+        };
         return this;
     }
     /**

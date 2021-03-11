@@ -10,13 +10,11 @@ export type CommandHelp = {
   usage?: string
   examples?: string
   permissionLevel?: (0 | 1 | 2 | 3)
-  category?: Symbol
+  category?: symbol
   aliases?: string[]
   cooldown?: number
   requiresUser?: boolean
 }
-
-// const Cooldowns = require("./FarmBotCooldown.js")
 
 class FarmBotClient extends Client {
   PERMISSIONS: CONSTANTS["PERMISSIONS"]

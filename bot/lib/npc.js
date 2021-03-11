@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.NPC = void 0;
 const farmer_data_1 = __importDefault(require("./farmer-data"));
 const { getLevel } = require("../../helpers/level-test.js");
 class NPC {
@@ -71,9 +72,7 @@ class NPC {
         };
     }
 }
-module.exports = {
-    NPC
-};
+exports.NPC = NPC;
 // ...why did we do it like that
 /**
  * @description Generates a random 3 character long ID, to be used in the database. Will match the regex `/[A-Z]{3}/`.

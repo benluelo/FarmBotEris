@@ -12,11 +12,14 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var _internal;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cooldown = exports.FarmBotCommandHandler = exports.FarmBotCommand = exports.CommandInformation = void 0;
 const util = require("util");
-const CONSTANTS = require("./CONSTANTS.js");
+const CONSTANTS_js_1 = __importDefault(require("./CONSTANTS.js"));
 class CommandInformation {
     /**
      * @description The general information about a command.
@@ -26,8 +29,8 @@ class CommandInformation {
         this.description = description ?? "No description provided.",
             this.usage = usage ?? "No usage provided.",
             this.examples = examples ?? "",
-            this.permissionLevel = permissionLevel ?? CONSTANTS.PERMISSIONS.DEVELOPMENT,
-            this.category = category ?? CONSTANTS.CATEGORIES.DEVELOPMENT,
+            this.permissionLevel = permissionLevel ?? CONSTANTS_js_1.default.PERMISSIONS.DEVELOPMENT,
+            this.category = category ?? CONSTANTS_js_1.default.CATEGORIES.DEVELOPMENT,
             this.aliases = aliases ?? [],
             this.cooldown = cooldown ?? 0,
             this.requiresUser = requiresUser ?? true;
@@ -221,8 +224,8 @@ class FarmBotCommandHandler {
     toJSON() {
         return Object
             .fromEntries(Array.from(this.entries()).filter(([name, cmd]) => {
-            console.log(cmd.info.permissionLevel === CONSTANTS.PERMISSIONS.EVERYONE);
-            return cmd.info.permissionLevel === CONSTANTS.PERMISSIONS.EVERYONE;
+            console.log(cmd.info.permissionLevel === CONSTANTS_js_1.default.PERMISSIONS.EVERYONE);
+            return cmd.info.permissionLevel === CONSTANTS_js_1.default.PERMISSIONS.EVERYONE;
         }).map(([name, cmd]) => {
             return [name, cmd.toJSON()];
         }));

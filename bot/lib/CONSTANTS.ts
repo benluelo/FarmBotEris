@@ -1,4 +1,4 @@
-module.exports = {
+const CONSTANTS = {
   PERMISSIONS: Object.freeze({
     /** Commands that everyone has access to. */
     EVERYONE: 0 as const,
@@ -19,4 +19,6 @@ module.exports = {
     /** Commands used for bot development. */
     DEVELOPMENT: Symbol("📜 Development")
   })
-}
+} as const
+
+export default CONSTANTS
