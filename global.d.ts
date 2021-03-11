@@ -1,7 +1,7 @@
-import * as Eris from "eris"
+import { Message } from "eris"
 
 declare module "eris" {
-  class Message {
+  export interface Message {
     send(content: MessageContent, file?: MessageFile): Promise<Message>;
   }
 }
