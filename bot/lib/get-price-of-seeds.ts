@@ -38,4 +38,4 @@ setInterval(() => {
   randomPrice()
 }, hour)
 
-module.exports = seedsPrice
+export default seedsPrice

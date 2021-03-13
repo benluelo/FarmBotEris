@@ -2,13 +2,13 @@ import { FarmBotClient } from "../lib/FarmBotClient"
 
 import fs from "fs"
 import { join } from "path"
-import { Log } from "../../global"
+import Log from "./logger"
 
 /** @private @param {import("../lib/FarmBotClient.js")} bot */
 export default (bot: FarmBotClient) => {
   fs.readdir(join(__dirname, "../events/"), (err, files) => {
     if (err) {
-      Log.error(err)
+      return Log.error(err)
     }
     files.forEach(async (file) => {
       const eventFunction = await import(join(__dirname, `../events/${file}`))

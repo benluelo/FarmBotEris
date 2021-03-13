@@ -8,6 +8,7 @@ import CONSTANTS from "./CONSTANTS"
 
 import { coin } from "./emoji.json"
 import { FarmBotCommandHandler, CommandInformation, CommandFunction, FarmBotCommand } from "./FarmBotCommandHandler"
+import User from "./User"
 export type CommandHelp = {
   description?: string
   usage?: string

@@ -1,7 +1,6 @@
-import { CropName } from "../../global.js"
-import { MarketRequest as Request } from "../../global";
 import farmerData from "./farmer-data"
-const { getLevel } = require("../../helpers/level-test.js")
+import getLevel from "../../helpers/level-test"
+import { CropName, MarketRequest } from "../dtos/user"
 
 type Color = typeof farmerData.preferences.color[number]
 type Taste = typeof farmerData.preferences.taste[number]
@@ -48,7 +47,7 @@ export class NPC {
    * @param crops - The crops that the user has unlocked.
    * @returns A new request.
    */
-  newRequest(crops: { [s in CropName]: { discovered: boolean; level: number; amount: number } }): { id: string; req: Request } {
+  newRequest(crops: { [s in CropName]: { discovered: boolean; level: number; amount: number } }): { id: string; req: MarketRequest } {
 
     const rand = Math.random()
     const want = []
@@ -79,15 +78,15 @@ export class NPC {
       }
     }
 
-    const r: Request = {
+    const marketRequest: MarketRequest = {
       name: this.name,
       want: want,
-      value: (this.wealth * rand) * 10 * 10 * getLevel(this.level).level,
-      reputation: (1 - (this.wealth * rand)) * 10 * 10 * getLevel(this.level).level
+      value: (this.wealth * rand) * 10 * 10 * getLevel(2, this.level).level,
+      reputation: (1 - (this.wealth * rand)) * 10 * 10 * getLevel(2, this.level).level
     }
     return {
       id: getRandomID(),
-      req: r
+      req: marketRequest
     }
   }
 }

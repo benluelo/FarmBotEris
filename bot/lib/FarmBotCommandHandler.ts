@@ -1,17 +1,11 @@
-import { type } from "os"
-import { Embed, User } from "../../global"
 import { Message } from "eris"
 import { InspectOptionsStylized } from "util"
 import { CommandHelp } from "./FarmBotClient"
 
-const util = require("util")
+import util from "util"
 import CONSTANTS from "./CONSTANTS.js"
-
-// require("../../global.d.ts")
-
-/**
- * @typedef {function(import("eris").Message, String[], import("./user.js").User): void} CommandFunction
- */
+import { Embed } from "./Embed"
+import User from "./User"
 
 export type CommandFunction = (msg: Message, args: String[], user?: User) => void;
 

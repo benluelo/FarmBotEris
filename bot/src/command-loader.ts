@@ -2,7 +2,7 @@ import { FarmBotClient } from "../lib/FarmBotClient"
 
 import fs from "fs"
 import path from "path"
-import { Log } from "../../global"
+import Log from "./logger"
 
 let helpLocation = ""
 

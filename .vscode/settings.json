@@ -29,7 +29,7 @@
         "**/.git": true,
         "**/.hg": true,
         "**/.svn": true,
-        "**/*.j": {
+        "**/*.js": {
             "when": "$(basename).ts"
         },
         "**/CVS": true
