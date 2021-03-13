@@ -1,10 +1,10 @@
-const chalk = require("chalk")
-const fs = require("fs")
-const { basename } = require("path")
-const { get } = require("stack-trace")
-
+import chalk from "chalk"
+import fs, { mkdirSync } from "fs"
+import { basename, join } from "path"
+import { get } from "stack-trace"
 
 const outFileName = "toFileLogs"
+mkdirSync(join(process.cwd(), "../logs/"))
 const toFileStream = fs.createWriteStream(`${process.cwd()}/bot/logs/${outFileName}.txt`, {
   encoding: "utf-8",
   flags: "a+"
@@ -12,103 +12,101 @@ const toFileStream = fs.createWriteStream(`${process.cwd()}/bot/logs/${outFileNa
 
 /**
  * @description Gets the date and returns it in a readable format for logging to the console.
- * @returns {String} A readable date.
+ * @returns A readable date.
  */
-const getDate = () => {
+function currentTimestamp(): string {
   const date = new Date()
   return date.toLocaleString("en-CA", { timeZone: "Canada/Eastern" })
 }
 
-class Log {
+export default class Log {
   /**
    * @description The default log; logs to the console in cyan.
-   * @param {...} args - What you would like to log.
+   * @param args - What you would like to log.
    */
-  static default(...args) {
+  static default(...args: any[]) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
-      chalk.cyan(`[LOG][DEFAULT][${getDate()}]`),
+      chalk.cyan(`[LOG][DEFAULT][${currentTimestamp()}]`),
       args.join(" ")
     )
   }
   /**
    * @description Log for when the bot connects; logs to the console in green.
-   * @param  {...} args - What you would like to log.
+   * @param args - What you would like to log.
    */
-  static connect(...args) {
+  static connect(...args: any[]) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
-      chalk.green(`[LOG][CONNECT][${getDate()}]`),
+      chalk.green(`[LOG][CONNECT][${currentTimestamp()}]`),
       args.join(" ")
     )
   }
   /**
    * @description Log for when the database connects; logs to the console in lime.
-   * @param  {...} args - What you would like to log.
+   * @param args - What you would like to log.
    */
-  static dbconnect(...args) {
+  static dbconnect(...args: any[]) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
-      chalk.keyword("lime")(`[LOG][DBCONNECT][${getDate()}]`),
+      chalk.keyword("lime")(`[LOG][DBCONNECT][${currentTimestamp()}]`),
       args.join(" ")
     )
   }
   /**
    * @description Log the commands being loaded into the bot.
-   * @param  {...} args - Command that was loaded.
+   * @param args - Command that was loaded.
    */
-  static commandLoad(...args) {
+  static commandLoad(...args: any[]) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
-      chalk.keyword("cyan")(`[LOG][CMD LOAD][${getDate()}]`),
+      chalk.keyword("cyan")(`[LOG][CMD LOAD][${currentTimestamp()}]`),
       args.join(" ")
     )
   }
   /**
    * @description Log the directory of commands being loaded into the bot.
-   * @param  {...} args - Directory that was loaded.
+   * @param args - Directory that was loaded.
    */
-  static directoryLoad(...args) {
+  static directoryLoad(...args: any[]) {
     console.log(
       chalk.white.bold(`${basename(get()[1].getFileName())}:`),
-      chalk.blue(`[LOG][DIR LOAD][${getDate()}]`),
+      chalk.blue(`[LOG][DIR LOAD][${currentTimestamp()}]`),
       args.join(" ")
     )
   }
   /**
    * @description Log for when there is an error; logs both to a file with the name of the ISO timestamp
    * that the function was called at and to the console (in red).
-   * @param {...} args - What you would like to log.
+   * @param args - What you would like to log.
    */
-  static error(...args) {
-    const p = basename(get()[1].getFileName())
+  static error(...args: any[]) {
+    const errorFile = basename(get()[1].getFileName())
     const fileName = `${new Date().toISOString().replace(/:/g, "-").replace(/\./g, "-")}.txt`
     console.log(
-      chalk.white.bold(`${p}:`),
-      chalk.red(`[LOG][ERROR][${getDate()}]`),
+      chalk.white.bold(`${errorFile}:`),
+      chalk.red(`[LOG][ERROR][${currentTimestamp()}]`),
       chalk.red.bold(`${fileName}:`),
       args.join(" ")
     )
-    fs.writeFileSync(`${process.cwd()}/bot/logs/errors/${fileName}`, p + "\n" + args.join("\n"))
+    fs.writeFileSync(join(process.cwd(), "/bot/logs/errors/", fileName), `${errorFile}\n${args.join("\n")}`)
     console.log(
-      chalk.white.bold(`${p}:`),
+      chalk.white.bold(`${errorFile}:`),
       chalk.red.bold(`${fileName}:`),
       "Saved!"
     )
   }
   /**
    * @description Logs to a file for use in long-term debugging and/or statistics. Also logs to the console, in yellow.
-   * @param  {...} args - What you would like to log.
+   * @param args - What you would like to log.
    */
-  static toFile(...args) {
-    const p = basename(get()[1].getFileName())
+  static toFile(...args: any[]) {
+    const errorFile = basename(get()[1].getFileName())
     console.log(
-      chalk.white.bold(`${p}:`),
-      chalk.yellow(`[LOG][TO FILE][${getDate()}]`),
+      chalk.white.bold(`${errorFile}:`),
+      chalk.yellow(`[LOG][TO FILE][${currentTimestamp()}]`),
       args.join(" ")
     )
-    toFileStream.write(p + " | " + args.join("\n") + "\n")
+    toFileStream.write(`${errorFile} | ${args.join("\n")}\n`)
   }
 }
-
-module.exports = Log

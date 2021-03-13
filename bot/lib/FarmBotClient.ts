@@ -1,10 +1,13 @@
 import type { DotenvParseOutput } from "dotenv/types"
 import { Client, ClientOptions, Message } from "eris"
-import { CommandFunction, CONSTANTS, FarmBotCommand, User } from "../../global"
 import { Collection, MongoClient, MongoError } from "mongodb"
+import config from "../config"
+import Log from "../src/logger"
+import { Embed } from "./Embed"
+import CONSTANTS from "./CONSTANTS"
 
 import { coin } from "./emoji.json"
-import { FarmBotCommandHandler, CommandInformation } from "./FarmBotCommandHandler"
+import { FarmBotCommandHandler, CommandInformation, CommandFunction, FarmBotCommand } from "./FarmBotCommandHandler"
 export type CommandHelp = {
   description?: string
   usage?: string
@@ -16,37 +19,35 @@ export type CommandHelp = {
   requiresUser?: boolean
 }
 
-class FarmBotClient extends Client {
-  PERMISSIONS: CONSTANTS["PERMISSIONS"]
-  CATEGORIES: CONSTANTS["CATEGORIES"]
+export class FarmBotClient extends Client {
   ENV: Readonly<DotenvParseOutput>
   prefixes: readonly string[]
   database?: {
     db: MongoClient,
     Userdata: Collection,
   }
-  color: Readonly<{ market: number; darkgreen: number; lightgreen: number; success: number; error: number }>
-  Embed: any
-  ownersIDs: any
-  config: any
-  log: any
-  Commands: any
+  color: Readonly<{
+    market: number;
+    darkgreen: number;
+    lightgreen: number;
+    success: number;
+    error: number
+  }>
+  ownersIDs: [string, string]
+  config: typeof config
+  Commands: FarmBotCommandHandler
   private _db: any
+  private readonly oneOrMoreSpaces = /\s+/
+
   /**
    * @description Creates an instance of `FarmBotClient`.
-   * @param {import("dotenv").DotenvParseOutput} dotenv - The environment variables, containing at least the bot token as `TOKEN`.
-   * @param {import("eris").ClientOptions} options - The {@link import("eris").ClientOptions} for the `FarmBotClient`.
-   * @param {String[]} prefixes - An array of the prefixes for the bot.
+   * @param dotenv - The environment variables, containing at least the bot token as `TOKEN`.
+   * @param options - The {@link ClientOptions} for the Eris {@link Client}.
+   * @param prefixes - An array of the prefixes for the bot.
    */
   constructor(dotenv: DotenvParseOutput, options: ClientOptions, prefixes: string[]) {
-    if (!dotenv.TOKEN) { throw Error("No bot token!") }
     super(dotenv.TOKEN, options)
-
-    /** @description The different permission levels for a command. */
-    this.PERMISSIONS = require("./CONSTANTS.js").PERMISSIONS
-
-    /** @description The different categories of commands. */
-    this.CATEGORIES = require("./CONSTANTS.js").CATEGORIES
+    if (!dotenv.TOKEN) { throw Error("No bot token!") }
 
     this.ENV = Object.freeze(dotenv)
 
@@ -69,14 +70,9 @@ class FarmBotClient extends Client {
       error: 0xFF0000
     })
 
-    this.log = require("../src/logger.js")
-
-    /** @description The Embed class, used for making new embeds. */
-    this.Embed = require("./classes.js").Embed
-
     this.ownersIDs = require("../config.js").ownersIDs
 
-    this.config = Object.freeze(require("../config.js"))
+    this.config = Object.freeze(config)
   }
 
   /**
@@ -92,22 +88,23 @@ class FarmBotClient extends Client {
 
     if (!prefixUsed) { return }
 
-    const args = this._removePrefix(content, prefixUsed).split(/\s+/)
+    const [commandToRun, ...args] = this._removePrefix(content, prefixUsed).split(this.oneOrMoreSpaces)
 
     // check if a prefix was used; if a prefix was used, check if a command was used
-    if (this.Commands.has(args[0])) {
-      if (this.Commands.get(args[0]).info.requiresUser) {
+      const command = this.Commands.get(args[0])
+    if (command !== undefined) {
+      if (command.info.requiresUser) {
         // if a command was used, check if the caller can use the command
         this.getUser(msg.author.id, (err, userdata) => {
           if (err) { throw err }
           if (!userdata) {
             this.startMessage(msg)
           } else {
-            this.Commands.run(args.shift(), msg, args, userdata)
+            this.Commands.run(commandToRun, msg, args, userdata)
           }
         })
       } else {
-        this.Commands.run(args.shift(), msg, args)
+        this.Commands.run(commandToRun, msg, args, undefined)
       }
     }
   }
@@ -131,7 +128,7 @@ class FarmBotClient extends Client {
    * @returns - The message that was sent to the user.
    */
   startMessage(message: Message): Promise<Message> {
-    return message.send(new this.Embed().uhoh(`You have to start farming first, **${message.author.username}**! Send \`farm start\` to start farming!`))
+    return message.send(new Embed().uhoh(`You have to start farming first, **${message.author.username}**! Send \`farm start\` to start farming!`))
   }
 
   /**
@@ -205,10 +202,8 @@ class FarmBotClient extends Client {
           db,
           Userdata: db.db("farmbot").collection("farm"),
         }
-        this.log.dbconnect("Successfully connected to database!")
+        Log.dbconnect("Successfully connected to database!")
       }
     })
   }
 }
-
-module.exports = FarmBotClient

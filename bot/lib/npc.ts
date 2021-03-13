@@ -28,14 +28,14 @@ export class NPC {
    * @param wealth - The wealth of the NPC. Must be `0 <= x <= 1`.
    * @param preferences - The preferences of the NPC.
    */
-  constructor(name: string, gender: ("male" | "female"), unlockableCrop: CropName, wealth: number, preferences: Preferences) {
+  constructor(name: string, gender: ("male" | "female"), unlockableCrop: CropName, wealth: number, preferences?: Preferences) {
     this.name = name
     this.gender = gender
     this.unlockableCrop = unlockableCrop
     this.wealth = wealth || Math.random()
-    this.preferences = preferences || {
-      color: farmerData.preferences.color[Math.floor(Math.random() * farmerData.preferences.color.length)],
-      taste: farmerData.preferences.taste[Math.floor(Math.random() * farmerData.preferences.taste.length)]
+    this.preferences = preferences ?? {
+      color: farmerData.preferences.color[Math.floor(Math.random() * farmerData.preferences.color.length)] as typeof farmerData.preferences.color[number],
+      taste: [farmerData.preferences.taste[Math.floor(Math.random() * farmerData.preferences.taste.length)]as typeof farmerData.preferences.taste[number]]
     }
     this.level = 0
     this.unlockLevel = Math.ceil(this.wealth * 10) // will be between 1 and 10, depending on the wealth of the farmer
@@ -45,8 +45,8 @@ export class NPC {
 
   /**
    * @description Creates a new request for the market.
-   * @param {Object<string, {discovered: Boolean, level: Number, amount: Number}>} crops - The crops that the user has unlocked.
-   * @returns {{id: string, req: Request}} A new request.
+   * @param crops - The crops that the user has unlocked.
+   * @returns A new request.
    */
   newRequest(crops: { [s in CropName]: { discovered: boolean; level: number; amount: number } }): { id: string; req: Request } {
 

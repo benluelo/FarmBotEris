@@ -313,32 +313,32 @@ declare class Log {
   /**
    * @description The default log; logs to the console in cyan.
    */
-  static default(...args: []): void
+  static default(...args: any[]): void
   /**
    * @description Log for when the bot connects; logs to the console in green.
    */
-  static connect(...args: []): void
+  static connect(...args: any[]): void
   /**
    * @description Log for when the database connects; logs to the console in lime.
    */
-  static dbconnect(...args: []): void
+  static dbconnect(...args: any[]): void
   /**
    * @description Log the commands being loaded into the bot.
    */
-  static commandLoad(...args: []): void
+  static commandLoad(...args: any[]): void
   /**
    * @description Log the directory of commands being loaded into the bot.
    */
-  static directoryLoad(...args: []): void
+  static directoryLoad(...args: any[]): void
   /**
    * @description Log for when there is an error; logs both to a file with the name of the ISO timestamp
    * that the function was called at and to the console (in red).
    */
-  static error(...args: []): void
+  static error(...args: any[]): void
   /**
    * @description Logs to a file for use in long-term debugging and/or statistics. Also logs to the console, in yellow.
    */
-  static toFile(...args: []): void
+  static toFile(...args: any[]): void
 }
 
 declare class User {

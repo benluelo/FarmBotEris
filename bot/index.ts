@@ -1,22 +1,12 @@
-const FarmBotClient = require("./lib/FarmBotClient.js")
-const { Message } = require("eris")
-type MessageFile = {
-  file: Buffer
-  name: string
-}
+import { FarmBotClient } from "./lib/FarmBotClient"
+import { Message, MessageContent, MessageFile } from "eris"
 
-type MessageContent = string | string[] | {
-  content: string
-  embed: {}
-  tts: boolean
-  disableEveryone: boolean
-}
-
-Message.prototype.send = function (content: MessageContent, file: MessageFile): Promise<import("eris").Message> {
+Message.prototype.send = function (content: MessageContent, file: MessageFile): Promise<Message> {
+  // @ts-ignore the fact that this still works proves otherwise
   return this._client.createMessage(this.channel.id, content, file)
 }
 
-const bot: import("./lib/FarmBotClient.js") = new FarmBotClient(require("dotenv").config().parsed, {
+const bot = new FarmBotClient(require("dotenv").config().parsed, {
   disableEveryone: true,
   defaultImageFormat: "png",
   disableEvents: {

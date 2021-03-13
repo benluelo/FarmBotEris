@@ -126,19 +126,18 @@ export class FarmBotCommand {
    * @param args - The command arguments.
    * @param userdata - The caller's DB information.
    */
-  run(msg: Message, args: string[], userdata: User) {
-    if (this.subcommands.size() != 0 && this.subcommands.has(args[0])) {
-      this.subcommands.get(args.shift() ?? "")?.run(msg, args, userdata)
+  run(msg: Message, args: string[], userdata?: User) {
+    if (this.subcommands.size() !== 0 && this.subcommands.has(args[0])) {
+      this.subcommands.get(args.shift()!)?.run(msg, args, userdata)
     } else {
-      if (this.info.requiresUser && userdata.permissions < this.info.permissionLevel) { return }
-      if (!this.info.requiresUser) {
+      const timeToWait = this.Cooldowns.check(msg.author.id)
+      // FIXME: Better error handling than this big if statement
+      if ((this.info.requiresUser && userdata !== undefined && userdata.permissions >= this.info.permissionLevel) || !this.info.requiresUser) {
         this.func(msg, args, undefined)
-      } else {
-        const timeToWait = this.Cooldowns.check(msg.author.id)
         if (timeToWait > 0) {
-          const m = msg.send(`**${msg.author.username}**, you have to wait **${(timeToWait / 1000).toFixed(2)}** seconds to use \`farm ${this.getFullCommandName()}\`!`)
+          const sentMessage = msg.send(`**${msg.author.username}**, you have to wait **${(timeToWait / 1000).toFixed(2)}** seconds to use \`farm ${this.getFullCommandName()}\`!`)
           msg.delete()
-          setTimeout(async () => { (await m).delete() }, timeToWait)
+          setTimeout(async () => { (await sentMessage).delete() }, timeToWait)
         } else {
           this.func(msg, args, userdata)
         }
@@ -151,7 +150,7 @@ export class FarmBotCommand {
    * @param name - The name of the subcommand.
    * @param func - The subcommand.
    * @param info - The information for the command.
-   * @returns {FarmBotCommand The new subcommand object.
+   * @returns The new subcommand object.
    */
   subcommand(name: string, func: CommandFunction, info?: CommandHelp): FarmBotCommand {
     return this.subcommands.set(name, func, new CommandInformation(info), this)
@@ -221,7 +220,7 @@ export class FarmBotCommandHandler {
    * @param args - The command arguments.
    * @param userdata - The user's DB information.
    */
-  run(cmdName: string, message: Message, args: string[], userdata: User) {
+  run(cmdName: string, message: Message, args: string[], userdata?: User) {
     this.get(cmdName)?.run(message, args, userdata)
   }
 

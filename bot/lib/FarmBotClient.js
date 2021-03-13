@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.FarmBotClient = void 0;
 const eris_1 = require("eris");
 const mongodb_1 = require("mongodb");
 const emoji_json_1 = require("./emoji.json");
 const FarmBotCommandHandler_1 = require("./FarmBotCommandHandler");
-// const Cooldowns = require("./FarmBotCooldown.js")
 class FarmBotClient extends eris_1.Client {
     /**
      * @description Creates an instance of `FarmBotClient`.
@@ -172,4 +172,4 @@ class FarmBotClient extends eris_1.Client {
         });
     }
 }
-module.exports = FarmBotClient;
+exports.FarmBotClient = FarmBotClient;

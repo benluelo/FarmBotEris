@@ -1,10 +1,12 @@
 "use strict";
-const FarmBotClient = require("./lib/FarmBotClient.js");
-const { Message } = require("eris");
-Message.prototype.send = function (content, file) {
+Object.defineProperty(exports, "__esModule", { value: true });
+const FarmBotClient_1 = require("./lib/FarmBotClient");
+const eris_1 = require("eris");
+eris_1.Message.prototype.send = function (content, file) {
+    // @ts-ignore the fact that this still works proves otherwise
     return this._client.createMessage(this.channel.id, content, file);
 };
-const bot = new FarmBotClient(require("dotenv").config().parsed, {
+const bot = new FarmBotClient_1.FarmBotClient(require("dotenv").config().parsed, {
     disableEveryone: true,
     defaultImageFormat: "png",
     disableEvents: {
