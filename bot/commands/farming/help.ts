@@ -12,7 +12,7 @@ let fullHelpEmbeds: {
   }
 }
 
-export default (bot: FarmBotClient) => {
+export function run(bot: FarmBotClient) {
   bot.addCommand("help", (message, args, userdata) => {
     if (userdata === undefined) {
       throw new Error("command `farm sell` requires a user data.")
@@ -22,12 +22,12 @@ export default (bot: FarmBotClient) => {
     }
 
     // @ts-ignore
-    if (!args[0]) { message.send(fullHelpEmbeds[userdata.permissions]) }
+    if (!args[0]) { message.send(fullHelpEmbeds[userdata.permissions])} 
     else {
       // @ts-ignore
       const embed = bot.commands.getEmbed(args, userdata)
-      if (embed) { return message.send(embed) }
-      else { message.send(new Embed().uhoh(`${args} isn't a command!`)) }
+      if (embed) { return message.send(embed)} 
+      else { message.send(new Embed().uhoh(`${args} isn't a command!`))} 
     }
   }, {
     description: "Show what commands the bot has and how to use them.",

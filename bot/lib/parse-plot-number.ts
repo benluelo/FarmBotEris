@@ -7,9 +7,9 @@ const plotRegex = /^[a-e]{1}[1-5]{1}$/
  * @param str - The plot number to get the value of, in the format `<letter><number>`.
  * @returns The numeric value of the plot supplied, or `undefined` if the input was not in valid format.
  */
-export default (str: string): (number | undefined) => {
+export function parsePlotNumber(str: string): (number | undefined) {
   // check that the plot is in <letter><number> format
-  if (!plotRegex.test(str)) { return undefined }
+  if (!plotRegex.test(str)) { return undefined} 
 
   // if correct format, create an object that holds the plot coordinates
   // cast is safe since we know the regex matched
@@ -19,7 +19,7 @@ export default (str: string): (number | undefined) => {
   }
 
   // get the plot number, base 5
-  return parseInt((( letterAndNumber.number + letterAndNumber.letter )), 5)
+  return parseInt(((letterAndNumber.number + letterAndNumber.letter)), 5)
 }
 
 type ABCDE = ("a" | "b" | "c" | "d" | "e")

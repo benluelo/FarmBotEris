@@ -2,7 +2,7 @@ const hour = 3600000;
 // ideas for the prices
 // - random (low) chance for any seed price to be decreased by 50%
 // - if too many of a seed is sold in a certain amount of time is decreases
-const seedsPrice = {
+export const seedsPrice = {
     apple: 1,
     orange: 1,
     lemon: 1,
@@ -32,4 +32,3 @@ randomPrice();
 setInterval(() => {
     randomPrice();
 }, hour);
-export default seedsPrice;

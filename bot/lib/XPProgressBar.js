@@ -1,6 +1,6 @@
 import util from "util";
 import { ProgressBar } from "./ProgressBar.js";
-import getLevel from "../../helpers/level-test.js";
+import { getLevel } from "../../helpers/level-test.js";
 export class XPProgressBar extends ProgressBar {
     /**
      * @description An extension of the {@link ProgressBar} class, for use in showing the levels of the npcs or crops.

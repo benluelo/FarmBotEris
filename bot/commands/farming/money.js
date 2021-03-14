@@ -1,7 +1,7 @@
 import CONSTANTS from "../../lib/CONSTANTS.js";
 import { Embed } from "../../lib/Embed.js";
 import emoji from "../../lib/emoji.json";
-export default (bot) => {
+export function run(bot) {
     bot.addCommand("money", (message, _args, userdata) => {
         if (userdata === undefined) {
             throw new Error("command `farm money` requires a user data.");
@@ -22,4 +22,4 @@ export default (bot) => {
         aliases: ["cash"],
         cooldown: 2000
     });
-};
+}

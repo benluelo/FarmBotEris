@@ -1,15 +1,14 @@
 import EmbedPaginator from "eris-pagination"
 import { isValidCountry } from "../../../helpers/isValidCountry.js"
-import { isValidCropName } from "../../../helpers/isValidCropName.js"
 import CONSTANTS from "../../lib/CONSTANTS.js"
 import { Embed } from "../../lib/Embed.js"
 import { FarmBotClient } from "../../lib/FarmBotClient.js"
 import flags from "../../lib/flags.json"
 import User from "../../lib/User.js"
 import Log from "../../src/logger.js"
+import {getFarmers} from "../../lib/get-farmers.js"
 
-import getFarmers from "../../lib/get-farmers.js"
-export default (bot: FarmBotClient) => {
+export function run(bot: FarmBotClient) {
   bot.addCommand("start", (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
       if (userdata === null) {
@@ -20,7 +19,7 @@ export default (bot: FarmBotClient) => {
       }
 
       // const country = args.join(" ").toLowerCase()
-      if (err) { Log.error(err) }
+      if (err) { Log.error(err)} 
 
       if (!userdata) {
 

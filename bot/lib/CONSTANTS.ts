@@ -1,4 +1,4 @@
-const CONSTANTS = {
+export default {
   PERMISSIONS: Object.freeze({
     /** Commands that everyone has access to. */
     EVERYONE: 0 as const,
@@ -20,5 +20,3 @@ const CONSTANTS = {
     DEVELOPMENT: Symbol("📜 Development")
   })
 } as const
-
-export default CONSTANTS

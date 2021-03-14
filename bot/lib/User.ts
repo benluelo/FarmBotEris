@@ -1,6 +1,6 @@
 import { User as ErisUser } from "eris";
 import CONSTANTS from "./CONSTANTS.js";
-import config from "../config.js";
+import { config } from "../config.js";
 import regions from "./names.json";
 import flags from "./flags.json";
 import { NPC } from "./npc.js";

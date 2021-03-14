@@ -3,7 +3,7 @@ import CONSTANTS from "../../lib/CONSTANTS.js";
 import cropData from "../../lib/crop-data.js";
 import { Embed } from "../../lib/Embed.js";
 import emoji from "../../lib/emoji.json";
-export default async (bot) => {
+export function run(bot) {
     bot.addCommand("plots", (message, _args, userdata) => {
         if (userdata === undefined) {
             throw new Error("command `farm sell` requires a user data.");
@@ -72,4 +72,4 @@ export default async (bot) => {
         category: CONSTANTS.CATEGORIES.FARMING,
         cooldown: 10000
     });
-};
+}

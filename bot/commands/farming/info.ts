@@ -1,7 +1,7 @@
 import { FarmBotClient } from "../../lib/FarmBotClient"
 
 import ms from "parse-ms"
-import parsePlotNumber from "../../lib/parse-plot-number.js"
+import { parsePlotNumber } from "../../lib/parse-plot-number.js"
 import { Attachment } from "../../lib/Attachment"
 import { Embed } from "../../lib/Embed"
 import { ProgressBar } from "../../lib/ProgressBar"
@@ -19,7 +19,7 @@ function clamp(num: number, min: number, max: number): number {
   return num <= min ? min : num >= max ? max : num
 }
 
-export default (bot: FarmBotClient) => {
+export function run(bot: FarmBotClient) {
   bot.addCommand("info", async (message, args, userdata) => {
     if (args[0]) {
       const plotNumber = parsePlotNumber(args[0]) // plotNumber returns false and NaN depending on the input // doesn't act how you think it will
@@ -47,7 +47,7 @@ export default (bot: FarmBotClient) => {
 
               console.log((
                 Date.now() -
-                  userCrop.datePlantedAt
+                userCrop.datePlantedAt
               ) /
                 bot.config.farminfo.growTimes[userCrop.planted])
             }
@@ -56,9 +56,9 @@ export default (bot: FarmBotClient) => {
               (
                 (
                   Date.now() -
-                    userCrop.datePlantedAt
+                  userCrop.datePlantedAt
                 ) /
-                  bot.config.farminfo.growTimes[userCrop.planted]
+                bot.config.farminfo.growTimes[userCrop.planted]
               ),
               0,
               1

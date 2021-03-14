@@ -5,8 +5,8 @@ import { Embed } from "../../lib/Embed.js";
 import flags from "../../lib/flags.json";
 import User from "../../lib/User.js";
 import Log from "../../src/logger.js";
-import getFarmers from "../../lib/get-farmers.js";
-export default (bot) => {
+import { getFarmers } from "../../lib/get-farmers.js";
+export function run(bot) {
     bot.addCommand("start", (message, args) => {
         bot.getUser(message.author.id, async (err, userdata) => {
             if (userdata === null) {
@@ -69,4 +69,4 @@ export default (bot) => {
         category: CONSTANTS.CATEGORIES.FARMING,
         requiresUser: false
     });
-};
+}

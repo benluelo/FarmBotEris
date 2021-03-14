@@ -30,11 +30,11 @@ const bot = new FarmBotClient(dotenvParsed.parsed, {
     "farm",
     "f!"
 ]);
-import commandLoader from "./src/command-loader.js";
-import eventLoader from "./src/event-loader.js";
+import { loadCommands } from "./src/command-loader.js";
+import { loadEvents } from "./src/event-loader.js";
 // gonna turn that off for now
 // require("../API/index")(bot) // not ideal (bot goes down so does some user pages) but works!
-commandLoader(bot);
-eventLoader(bot);
+loadCommands(bot);
+loadEvents(bot);
 bot.initDB();
 bot.connect();

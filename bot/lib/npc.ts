@@ -1,5 +1,5 @@
 import farmerData from "./farmer-data.js"
-import getLevel from "../../helpers/level-test.js"
+import { getLevel } from "../../helpers/level-test.js"
 import { CropName } from "../dtos/Crop.js"
 import { MarketRequest } from "../dtos/MarketRequest.js"
 
@@ -35,7 +35,7 @@ export class NPC {
     this.wealth = wealth || Math.random()
     this.preferences = preferences ?? {
       color: farmerData.preferences.color[Math.floor(Math.random() * farmerData.preferences.color.length)] as typeof farmerData.preferences.color[number],
-      taste: [farmerData.preferences.taste[Math.floor(Math.random() * farmerData.preferences.taste.length)]as typeof farmerData.preferences.taste[number]]
+      taste: [farmerData.preferences.taste[Math.floor(Math.random() * farmerData.preferences.taste.length)] as typeof farmerData.preferences.taste[number]]
     }
     this.level = 0
     this.unlockLevel = Math.ceil(this.wealth * 10) // will be between 1 and 10, depending on the wealth of the farmer

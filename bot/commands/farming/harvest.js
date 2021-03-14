@@ -1,9 +1,9 @@
 import cropData from "../../lib/crop-data.js";
 import { Embed } from "../../lib/Embed.js";
-import parsePlotNumber from "../../lib/parse-plot-number.js";
+import { parsePlotNumber } from "../../lib/parse-plot-number.js";
 import Log from "../../src/logger.js";
 import CONSTANTS from "../../lib/CONSTANTS.js";
-export default async (bot) => {
+export function run(bot) {
     bot.addCommand("harvest", async (message, args, userdata) => {
         if (userdata === undefined) {
             throw new Error("command `farm sell` requires a user data.");
@@ -95,4 +95,4 @@ export default async (bot) => {
         category: CONSTANTS.CATEGORIES.FARMING,
         cooldown: 5000
     });
-};
+}

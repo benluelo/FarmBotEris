@@ -2,7 +2,7 @@ import CONSTANTS from "../../lib/CONSTANTS.js";
 import { Embed } from "../../lib/Embed.js";
 const MAX_PLOTS = 25;
 // a Math.round(Math.pow(1.90546071796, i))
-export default async (bot) => {
+export function run(bot) {
     bot.addCommand("buy", (message, _args, userdata) => {
         if (userdata === undefined) {
             throw new Error("command `farm sell` requires a user data.");
@@ -73,4 +73,4 @@ export default async (bot) => {
         category: CONSTANTS.CATEGORIES.FARMING,
         cooldown: 3000
     });
-};
+}

@@ -4,7 +4,7 @@ import { Embed } from "../../lib/Embed.js";
 import { XPProgressBar } from "../../lib/XPProgressBar.js";
 import { isValidCropName } from "../../../helpers/isValidCropName.js";
 import CONSTANTS from "../../lib/CONSTANTS.js";
-export default (bot) => {
+export function run(bot) {
     bot.addCommand("skills", (message, [cropArg, ..._args], userdata) => {
         if (userdata === undefined) {
             throw new Error("command `farm sell` requires a user data.");
@@ -59,4 +59,4 @@ export default (bot) => {
         category: CONSTANTS.CATEGORIES.FARMING,
         cooldown: 5000
     });
-};
+}

@@ -10,7 +10,7 @@ const getSmallNumbers = (number) => {
     }
     return numberString;
 };
-export default (bot) => {
+export function run(bot) {
     bot.addCommand("inventory", (message, _args, userdata) => {
         if (userdata === undefined) {
             throw new Error("command `farm inventory` requires a user data.");
@@ -52,4 +52,4 @@ export default (bot) => {
         aliases: ["inv"],
         cooldown: 3000
     });
-};
+}

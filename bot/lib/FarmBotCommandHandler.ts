@@ -126,7 +126,6 @@ export class FarmBotCommand {
       const timeToWait = this.Cooldowns.check(msg.author.id)
       // FIXME: Better error handling than this big if statement
       if ((this.info.requiresUser && userdata !== undefined && userdata.permissions >= this.info.permissionLevel) || !this.info.requiresUser) {
-        this.func(msg, args, undefined)
         if (timeToWait > 0) {
           const sentMessage = msg.send(`**${msg.author.username}**, you have to wait **${(timeToWait / 1000).toFixed(2)}** seconds to use \`farm ${this.getFullCommandName()}\`!`)
           msg.delete()

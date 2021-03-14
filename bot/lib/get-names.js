@@ -1,6 +1,6 @@
 import names from "./names.json";
 const genders = ["male", "female"];
-export default function (region) {
+export function getNames(region) {
     if (names.hasOwnProperty(region)) {
         let regionCleaned = region;
         return [...new Array(12)].map(() => {

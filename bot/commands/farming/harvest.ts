@@ -2,12 +2,12 @@ import { FarmBotClient } from "../../lib/FarmBotClient.js"
 
 import cropData from "../../lib/crop-data.js"
 import { Embed } from "../../lib/Embed.js"
-import parsePlotNumber from "../../lib/parse-plot-number.js"
+import {parsePlotNumber} from "../../lib/parse-plot-number.js"
 import Log from "../../src/logger.js"
 import CONSTANTS from "../../lib/CONSTANTS.js"
 import { CropName } from "../../dtos/Crop.js"
 
-export default async (bot: FarmBotClient) => {
+export function run(bot: FarmBotClient) {
   bot.addCommand("harvest", async (message, args, userdata) => {
     if (userdata === undefined) {
       throw new Error("command `farm sell` requires a user data.")
@@ -45,7 +45,7 @@ export default async (bot: FarmBotClient) => {
             totalPlots += 1
 
           }).catch((error) => {
-            if (bot.ENV.DEBUG === "true") { console.log(error.message) }
+            if (bot.ENV.DEBUG === "true") { console.log(error.message)} 
           })
         }
       }
@@ -57,8 +57,7 @@ export default async (bot: FarmBotClient) => {
             return amount != 0
           }).map(([crop, amount]) => {
             return `${cropData[crop as CropName].emoji} x **${amount}**`
-          }).join("\n")
-          }`))
+          }).join("\n")}`))
       } else {
         message.send(new Embed().uhoh("There's nothing in your field that can be harvested!"))
       }
@@ -73,7 +72,7 @@ export default async (bot: FarmBotClient) => {
         } else {
           const userCrop = userdata.farm[plotNumber].crop
 
-          if (userCrop.planted === "dirt") { return message.send(new Embed().uhoh(`There's nothing on plot #\`${plotToHarvest.toUpperCase()}\` to harvest!`)) }
+          if (userCrop.planted === "dirt") { return message.send(new Embed().uhoh(`There's nothing on plot #\`${plotToHarvest.toUpperCase()}\` to harvest!`))} 
 
           if (((Date.now() - userCrop.datePlantedAt) >= bot.config.farminfo.growTimes[userCrop.planted])) {
             await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id },
@@ -88,7 +87,7 @@ export default async (bot: FarmBotClient) => {
                 }
               }
             ).catch((error) => {
-              if (error) { Log.error(error) }
+              if (error) { Log.error(error)} 
             })
             message.send(new Embed().success(`Harvested the **${cropData[userCrop.planted].emoji}** on \`${(plotToHarvest).toUpperCase()}\`!`))
           } else {

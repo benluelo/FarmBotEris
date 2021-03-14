@@ -5,7 +5,7 @@ const plotRegex = /^[a-e]{1}[1-5]{1}$/;
  * @param str - The plot number to get the value of, in the format `<letter><number>`.
  * @returns The numeric value of the plot supplied, or `undefined` if the input was not in valid format.
  */
-export default (str) => {
+export function parsePlotNumber(str) {
     // check that the plot is in <letter><number> format
     if (!plotRegex.test(str)) {
         return undefined;
@@ -18,7 +18,7 @@ export default (str) => {
     };
     // get the plot number, base 5
     return parseInt(((letterAndNumber.number + letterAndNumber.letter)), 5);
-};
+}
 /**
  * @description Formats the individual `letter` and `number` portions of the plot number.
  * @param str - The `number` or `letter` to format for the plot.

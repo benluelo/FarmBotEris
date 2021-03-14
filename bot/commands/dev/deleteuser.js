@@ -1,6 +1,6 @@
 import { Embed } from "../../lib/Embed";
 import CONSTANTS from "../../lib/CONSTANTS";
-export default (bot) => {
+export function run(bot) {
     bot.addCommand("deleteuser", (message) => {
         if (!message.mentions[0]) {
             // delete your own account
@@ -23,4 +23,4 @@ export default (bot) => {
         category: CONSTANTS.CATEGORIES.DEVELOPMENT,
         cooldown: 0
     });
-};
+}

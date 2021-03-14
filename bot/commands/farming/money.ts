@@ -3,7 +3,7 @@ import { Embed } from "../../lib/Embed.js"
 import { FarmBotClient } from "../../lib/FarmBotClient.js"
 import emoji from "../../lib/emoji.json"
 
-export default (bot: FarmBotClient) => {
+export function run(bot: FarmBotClient) {
   bot.addCommand("money", (message, _args, userdata) => {
     if (userdata === undefined) {
       throw new Error("command `farm money` requires a user data.")

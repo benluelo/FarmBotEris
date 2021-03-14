@@ -5,9 +5,9 @@ import { Embed } from "../../lib/Embed.js"
 import { FarmBotClient } from "../../lib/FarmBotClient.js"
 import flags from "../../lib/flags.json"
 import User from "../../lib/User.js"
-import getFarmers from "../../lib/get-farmers.js"
+import { getFarmers } from "../../lib/get-farmers.js"
 
-export default (bot: FarmBotClient) => {
+export function run(bot: FarmBotClient) {
   bot.addCommand("update", async (message, args, userdata) => {
     if (userdata === undefined) {
       throw new Error("command `farm start` requires a user data.")

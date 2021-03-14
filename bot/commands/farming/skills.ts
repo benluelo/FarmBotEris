@@ -7,7 +7,7 @@ import { XPProgressBar } from "../../lib/XPProgressBar.js"
 import { isValidCropName } from "../../../helpers/isValidCropName.js"
 import CONSTANTS from "../../lib/CONSTANTS.js"
 
-export default (bot: FarmBotClient) => {
+export function run(bot: FarmBotClient) {
   bot.addCommand("skills", (message, [cropArg, ..._args], userdata) => {
     if (userdata === undefined) {
       throw new Error("command `farm sell` requires a user data.")
@@ -27,11 +27,11 @@ export default (bot: FarmBotClient) => {
 
       for (const seed in userdata.seeds.common) {
         // TODO: log this
-        if (!isValidCropName(seed)) { continue }
-        if (!userdata.seeds.common[seed].discovered) { continue }
+        if (!isValidCropName(seed)) { continue} 
+        if (!userdata.seeds.common[seed].discovered) { continue} 
         const XPBar = new XPProgressBar(userdata.seeds.common[seed].level, 5)
 
-        if (bot.ENV.DEBUG === "true") { console.log(XPBar.show()) }
+        if (bot.ENV.DEBUG === "true") { console.log(XPBar.show())} 
 
         skillsEmbed.addField(cropData[seed].emoji, `Level: **${XPBar.level()}**` + "\n" + XPBar.show(), true)
       }

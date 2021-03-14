@@ -3,7 +3,7 @@ import CONSTANTS from "../../lib/CONSTANTS.js";
 import { Embed } from "../../lib/Embed.js";
 import Log from "../../src/logger.js";
 let fullHelpEmbeds;
-export default (bot) => {
+export function run(bot) {
     bot.addCommand("help", (message, args, userdata) => {
         if (userdata === undefined) {
             throw new Error("command `farm sell` requires a user data.");
@@ -33,7 +33,7 @@ export default (bot) => {
         category: CONSTANTS.CATEGORIES.UTILITY,
         cooldown: 1000
     });
-};
+}
 // TODO: wtf is going on here lol
 export function getHelp(bot) {
     // remove development commands if in production

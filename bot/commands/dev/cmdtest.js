@@ -1,4 +1,4 @@
-export default (bot) => {
+export function run(bot) {
     const main = bot.addCommand("cmdtest", (message, args) => {
         console.log("message: ", typeof message);
         console.log("args: ", args);
@@ -11,4 +11,4 @@ export default (bot) => {
         console.log("message: ", typeof message);
         console.log("args: ", args);
     });
-};
+}

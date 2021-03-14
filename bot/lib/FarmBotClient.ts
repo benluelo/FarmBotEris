@@ -3,7 +3,7 @@ import { Client, ClientOptions, Message } from "eris"
 import mongodb from "mongodb"
 import type { Collection, MongoError, MongoClient } from "mongodb"
 // const { MongoClient } = mongodb
-import config from "../config.js"
+import { config } from "../config.js"
 import Log from "../src/logger.js"
 import { Embed } from "./Embed.js"
 import CONSTANTS from "./CONSTANTS.js"
@@ -84,6 +84,7 @@ export class FarmBotClient extends Client {
    * @param msg - The message from the messageCreate event.
    */
   async onMessageCreate(msg: Message) {
+    console.log(msg)
     if (msg.author.bot) { return }
 
     const content = msg.content.toLowerCase()
@@ -95,7 +96,7 @@ export class FarmBotClient extends Client {
     const [commandToRun, ...args] = this._removePrefix(content, prefixUsed).split(this.oneOrMoreSpaces)
 
     // check if a prefix was used; if a prefix was used, check if a command was used
-      const command = this.commands.get(args[0])
+    const command = this.commands.get(commandToRun)
     if (command !== undefined) {
       if (command.info.requiresUser) {
         // if a command was used, check if the caller can use the command

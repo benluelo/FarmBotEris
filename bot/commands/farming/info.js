@@ -1,5 +1,5 @@
 import ms from "parse-ms";
-import parsePlotNumber from "../../lib/parse-plot-number.js";
+import { parsePlotNumber } from "../../lib/parse-plot-number.js";
 import { Attachment } from "../../lib/Attachment";
 import { Embed } from "../../lib/Embed";
 import { ProgressBar } from "../../lib/ProgressBar";
@@ -14,7 +14,7 @@ import CONSTANTS from "../../lib/CONSTANTS";
 function clamp(num, min, max) {
     return num <= min ? min : num >= max ? max : num;
 }
-export default (bot) => {
+export function run(bot) {
     bot.addCommand("info", async (message, args, userdata) => {
         if (args[0]) {
             const plotNumber = parsePlotNumber(args[0]); // plotNumber returns false and NaN depending on the input // doesn't act how you think it will
@@ -91,4 +91,4 @@ export default (bot) => {
         category: CONSTANTS.CATEGORIES.UTILITY,
         cooldown: 3000
     });
-};
+}

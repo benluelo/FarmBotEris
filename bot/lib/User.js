@@ -1,5 +1,5 @@
 import CONSTANTS from "./CONSTANTS.js";
-import config from "../config.js";
+import { config } from "../config.js";
 import flags from "./flags.json";
 import { NPC } from "./npc.js";
 import { v4 as uuid } from "uuid";

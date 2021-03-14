@@ -5,7 +5,7 @@ import { FarmBotClient } from "../../lib/FarmBotClient.js"
 const MAX_PLOTS = 25
 // a Math.round(Math.pow(1.90546071796, i))
 
-export default async (bot: FarmBotClient) => {
+export function run(bot: FarmBotClient) {
   bot.addCommand("buy", (message, _args, userdata) => {
     if (userdata === undefined) {
       throw new Error("command `farm sell` requires a user data.")

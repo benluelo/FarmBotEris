@@ -1,5 +1,5 @@
 import { NPC } from "./npc.js"
-import getNames from "./get-names.js"
+import { getNames } from "./get-names.js"
 import { transliterate as tr } from "transliteration"
 
 import cropData from "./crop-data.js"
@@ -8,7 +8,7 @@ import { CropName } from "../dtos/Crop.js"
 /**
  * Creates 12 random farmers for the given region. If the region name is invalid, returns `undefined`.
  */
-export default function run(region: string): Farmer[] | undefined {
+export function getFarmers(region: string): Farmer[] | undefined {
   const nameSurnameAndGenderArray = getNames(region)
   if (nameSurnameAndGenderArray === undefined) {
     return undefined

@@ -5,7 +5,7 @@
  * @param level - Used for finding the level recursively. *Do not supply this paramater unless you know what you are doing!*
  * @returns The level, numerator and denominator.
  */
-export default function getLevel(base, exp, level = 1) {
+export function getLevel(base, exp, level = 1) {
     const tempSum = 10 * Math.floor(((1 - Math.pow(base, level)) / (1 - base)));
     const previous = 10 * Math.floor((1 - Math.pow(base, level - 1)) / (1 - base));
     if (tempSum <= exp) {

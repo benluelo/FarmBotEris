@@ -1,13 +1,14 @@
 import cropData from "../../lib/crop-data.js"
-import getPriceOfSeeds from "../../lib/get-price-of-seeds.js"
-import getLevel from "../../../helpers/level-test.js"
+import { seedsPrice } from "../../lib/get-price-of-seeds.js"
+import { getLevel } from "../../../helpers/level-test.js"
 import CONSTANTS from "../../lib/CONSTANTS.js"
 import { FarmBotClient } from "../../lib/FarmBotClient.js"
 import { Embed } from "../../lib/Embed.js"
 import { CropName } from "../../dtos/Crop.js"
 
-export default (bot: FarmBotClient) => {
+export function run(bot: FarmBotClient) {
   bot.addCommand("seeds", (message, _args, userdata) => {
+    console.log("seeds")
     if (userdata === undefined) {
       // TODO: Better error handling than throwing a generic error
       throw new Error("Command `farm seeds` requires user data.")
@@ -17,7 +18,7 @@ export default (bot: FarmBotClient) => {
       if (userdata.seeds.common[crop as CropName].discovered) {
         const capitalizedCropName = crop.charAt(0).toUpperCase() + crop.slice(1)
         const cropEmoji = cropData[crop as CropName].emoji
-        const cropPrice = getPriceOfSeeds[crop as CropName] * getLevel(2, userdata.seeds.common[crop as CropName].level).level
+        const cropPrice = seedsPrice[crop as CropName] * getLevel(2, userdata.seeds.common[crop as CropName].level).level
         // i hate this long line lol
         seeds += `${cropEmoji} ${capitalizedCropName}: **${bot.formatMoney(cropPrice)}**\n`
       }

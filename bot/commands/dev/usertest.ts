@@ -1,9 +1,9 @@
 import { FarmBotClient } from "../../lib/FarmBotClient.js"
 
-export default (bot: FarmBotClient) => {
+export function run(bot: FarmBotClient) {
   // eslint-disable-next-line no-unused-vars
   const cmd = bot.addCommand("usertest", (message, _args) => {
-    if (!bot.ownersIDs.includes(message.author.id)) { return }
+    if (!bot.ownersIDs.includes(message.author.id)) { return} 
     bot.getUser(message.author.id, (err, userdata) => {
       if (err) {
         throw err
@@ -18,7 +18,7 @@ export default (bot: FarmBotClient) => {
   }, {})
 
   cmd.subcommand("usertest2", (message, _args) => {
-    if (!bot.ownersIDs.includes(message.author.id)) { return }
+    if (!bot.ownersIDs.includes(message.author.id)) { return} 
     bot.getUser(message.author.id, (err, userdata) => {
       if (err) {
         throw err

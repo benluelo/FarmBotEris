@@ -1,4 +1,4 @@
-export default (bot) => {
+export function run(bot) {
     // eslint-disable-next-line no-unused-vars
     const cmd = bot.addCommand("usertest", (message, _args) => {
         if (!bot.ownersIDs.includes(message.author.id)) {
@@ -32,4 +32,4 @@ export default (bot) => {
             }
         });
     });
-};
+}

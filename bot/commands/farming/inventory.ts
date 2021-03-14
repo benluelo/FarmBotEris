@@ -14,7 +14,7 @@ const getSmallNumbers = (number: number) => {
   return numberString
 }
 
-export default (bot: FarmBotClient) => {
+export function run(bot: FarmBotClient) {
   bot.addCommand("inventory", (message, _args, userdata) => {
     if (userdata === undefined) {
       throw new Error("command `farm inventory` requires a user data.")

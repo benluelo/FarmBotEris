@@ -1,10 +1,10 @@
 import cropData from "../../lib/crop-data.js";
-import getPriceOfSeeds from "../../lib/get-price-of-seeds.js";
-import getLevel from "../../../helpers/level-test.js";
+import { seedsPrice } from "../../lib/get-price-of-seeds.js";
+import { getLevel } from "../../../helpers/level-test.js";
 import { Embed } from "../../lib/Embed.js";
 import CONSTANTS from "../../lib/CONSTANTS.js";
 import { isValidCropName } from "../../../helpers/isValidCropName.js";
-export default async (bot) => {
+export function run(bot) {
     bot.addCommand("sell", async (message, [amount, crop, ..._args], userdata) => {
         if (userdata === undefined) {
             throw new Error("command `farm sell` requires a user data.");
@@ -32,12 +32,12 @@ export default async (bot) => {
             if (userdata.seeds.common[crop].amount >= numAmount) {
                 if (bot.ENV.DEBUG === "true") {
                     console.log("Crop:", crop);
-                    console.log("Seed price:", getPriceOfSeeds[crop]);
+                    console.log("Seed price:", seedsPrice[crop]);
                     console.log("Level:", getLevel(2, userdata.seeds.common[crop].level).level);
                 }
                 // yes lmaoo // words are hard, i get it // fucking extremely // i give WORDS // Fucking leave this in for production lmao // (╯°□°）╯︵ ┻━┻ // YESS // i have a spell checker extenstion because  i never trust myself // LOL i saw that when you liveshared with me i was wondering what that was // HAHA
                 console.log(getLevel(2, 2, userdata.seeds.common[crop].level));
-                const cropValue = getPriceOfSeeds[crop] * getLevel(2, userdata.seeds.common[crop].level).level * numAmount;
+                const cropValue = seedsPrice[crop] * getLevel(2, userdata.seeds.common[crop].level).level * numAmount;
                 await bot.database.Userdata.findOneAndUpdate({ userID: message.author.id }, {
                     $inc: {
                         [`seeds.common.${crop}.amount`]: -numAmount,
@@ -76,10 +76,10 @@ export default async (bot) => {
                 if (userdata.seeds.common[seed].amount !== 0) {
                     if (bot.ENV.DEBUG === "true") {
                         console.log(seed);
-                        console.log("Seed price:", getPriceOfSeeds[seed]);
+                        console.log("Seed price:", seedsPrice[seed]);
                         console.log("Level:", getLevel(2, userdata.seeds.common[seed].level).level);
                     }
-                    const cropValue = getPriceOfSeeds[seed] * (getLevel(2, userdata.seeds.common[seed].level).level) * userdata.seeds.common[seed].amount;
+                    const cropValue = seedsPrice[seed] * (getLevel(2, userdata.seeds.common[seed].level).level) * userdata.seeds.common[seed].amount;
                     totalValue += cropValue;
                     totalSold += userdata.seeds.common[seed].amount;
                     sold[seed] += userdata.seeds.common[seed].amount;
@@ -119,4 +119,4 @@ export default async (bot) => {
         category: CONSTANTS.CATEGORIES.FARMING,
         cooldown: 5000
     });
-};
+}
