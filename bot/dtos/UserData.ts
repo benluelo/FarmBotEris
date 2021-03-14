@@ -40,4 +40,5 @@ export interface UserData {
      * @deprecated This will be removed very soon, all users should be updated by now.
      */
     updated: boolean
+    uuid: string
 }

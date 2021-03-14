@@ -1,6 +1,6 @@
-import { Embed } from "../../lib/Embed"
-import CONSTANTS from "../../lib/CONSTANTS"
-import { FarmBotClient } from "../../lib/FarmBotClient"
+import { Embed } from "../../lib/Embed.js"
+import CONSTANTS from "../../lib/CONSTANTS.js"
+import { FarmBotClient } from "../../lib/FarmBotClient.js"
 
 export function run(bot: FarmBotClient) {
   bot.addCommand("deleteuser", (message) => {

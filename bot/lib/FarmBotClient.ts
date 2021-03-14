@@ -84,7 +84,6 @@ export class FarmBotClient extends Client {
    * @param msg - The message from the messageCreate event.
    */
   async onMessageCreate(msg: Message) {
-    console.log(msg)
     if (msg.author.bot) { return }
 
     const content = msg.content.toLowerCase()

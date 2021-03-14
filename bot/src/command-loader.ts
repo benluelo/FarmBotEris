@@ -23,12 +23,12 @@ function loadCommandsInner(bot: FarmBotClient, dirpath: string, depth = 0) {
       const [name, ext] = file.split(".")
       if (ext == "js") {
         if (name == "help") {
-          if (helpLocation != "") {
+          if (helpLocation !== "") {
             throw new Error(`Two commands/ subcommands share the name "help":\n  ${helpLocation}\n  ${`${p}/${file}`}`)
           }
           helpLocation = `${p}/${file}`
         }
-        const command = await import(`${p}/${file}`)/* .run(bot) */
+        const command = await import(`${p}/${file}`)
         if ("run" in command) {
           command.run(bot)
         }

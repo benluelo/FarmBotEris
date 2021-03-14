@@ -44,7 +44,6 @@ export class FarmBotClient extends Client {
      * @param msg - The message from the messageCreate event.
      */
     async onMessageCreate(msg) {
-        console.log(msg);
         if (msg.author.bot) {
             return;
         }

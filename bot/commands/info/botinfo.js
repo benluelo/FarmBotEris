@@ -1,24 +1,24 @@
-const versionNumber = require("../../../package").version
-const ms = require("parse-ms")
-
-/** @private @param {import("../../lib/FarmBotClient.js")} bot */
-exports.run = (bot) => {
-  bot.addCommand("botinfo", (message) => {
-    const botCreation = new Date(bot.user.createdAt).toUTCString()
-    const botUptime =`${ms(bot.uptime).days}d ${ms(bot.uptime).hours}h ${ms(bot.uptime).minutes}m ${ms(bot.uptime).seconds}s`
-    const infoEmbed = new bot.Embed()
-      .setColor(bot.color.darkgreen)
-      .setThumbnail(bot.user.avatarURL)
-      .addField(":date: Created On:", botCreation)
-      .addField(":hourglass: Uptime", botUptime)
-      .addField(":rosette: Version:", versionNumber)
-    message.send(infoEmbed)
-  }, {
-    description: "Show general information about the bot.",
-    usage: "​farm botinfo",
-    examples: false,
-    permissionLevel: bot.PERMISSIONS.EVERYONE,
-    category: bot.CATEGORIES.UTILITY,
-    cooldown: 3000
-  })
+import packageJson from "../../../package.json";
+import ms from "parse-ms";
+import { Embed } from "../../lib/Embed.js";
+import CONSTANTS from "../../lib/CONSTANTS.js";
+export function run(bot) {
+    bot.addCommand("botinfo", (message) => {
+        const botCreation = new Date(bot.user.createdAt).toUTCString();
+        const botUptime = `${ms(bot.uptime).days}d ${ms(bot.uptime).hours}h ${ms(bot.uptime).minutes}m ${ms(bot.uptime).seconds}s`;
+        const infoEmbed = new Embed()
+            .setColor(bot.color.darkgreen)
+            .setThumbnail(bot.user.avatarURL)
+            .addField(":date: Created On:", botCreation)
+            .addField(":hourglass: Uptime", botUptime)
+            .addField(":rosette: Version:", packageJson.version);
+        message.send(infoEmbed);
+    }, {
+        description: "Show general information about the bot.",
+        usage: "​farm botinfo",
+        // examples: false,
+        permissionLevel: CONSTANTS.PERMISSIONS.EVERYONE,
+        category: CONSTANTS.CATEGORIES.UTILITY,
+        cooldown: 3000
+    });
 }

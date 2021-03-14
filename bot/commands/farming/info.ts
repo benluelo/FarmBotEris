@@ -1,12 +1,12 @@
-import { FarmBotClient } from "../../lib/FarmBotClient"
+import { FarmBotClient } from "../../lib/FarmBotClient.js"
 
 import ms from "parse-ms"
 import { parsePlotNumber } from "../../lib/parse-plot-number.js"
-import { Attachment } from "../../lib/Attachment"
-import { Embed } from "../../lib/Embed"
-import { ProgressBar } from "../../lib/ProgressBar"
-import CONSTANTS from "../../lib/CONSTANTS"
-import { CropName } from "../../dtos/Crop"
+import { Attachment } from "../../lib/Attachment.js"
+import { Embed } from "../../lib/Embed.js"
+import { ProgressBar } from "../../lib/ProgressBar.js"
+import CONSTANTS from "../../lib/CONSTANTS.js"
+import { CropName } from "../../dtos/Crop.js"
 
 /**
  * @description Clamps a number between two provided values.
