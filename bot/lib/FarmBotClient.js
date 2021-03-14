@@ -1,11 +1,12 @@
 import { Client } from "eris";
-import { MongoClient } from "mongodb";
-import config from "../config";
-import Log from "../src/logger";
-import { Embed } from "./Embed";
-import { coin } from "./emoji.json";
-import { FarmBotCommandHandler, CommandInformation } from "./FarmBotCommandHandler";
-import User from "./User";
+import mongodb from "mongodb";
+// const { MongoClient } = mongodb
+import config from "../config.js";
+import Log from "../src/logger.js";
+import { Embed } from "./Embed.js";
+import emoji from "./emoji.json";
+import { FarmBotCommandHandler, CommandInformation } from "./FarmBotCommandHandler.js";
+import User from "./User.js";
 export class FarmBotClient extends Client {
     /**
      * @description Creates an instance of `FarmBotClient`.
@@ -35,7 +36,7 @@ export class FarmBotClient extends Client {
             success: 0x00FF00,
             error: 0xFF0000
         });
-        this.ownersIDs = require("../config.js").ownersIDs;
+        this.ownersIDs = config.ownersIDs;
         this.config = Object.freeze(config);
     }
     /**
@@ -123,7 +124,7 @@ export class FarmBotClient extends Client {
             currency: "USD",
             minimumFractionDigits: 2
         });
-        return formatter.format(value).substr(1) + " " + coin;
+        return formatter.format(value).substr(1) + " " + emoji.coin;
     }
     /**
      * @description Checks if a message used a bot prefix.
@@ -148,7 +149,7 @@ export class FarmBotClient extends Client {
      * @description Initializes the database.
      */
     async initDB() {
-        MongoClient.connect(this.config.db.connectionString, this.config.db.connectionOptions, async (err, db) => {
+        mongodb.MongoClient.connect(this.config.db.connectionString, this.config.db.connectionOptions, async (err, db) => {
             if (err) {
                 throw err;
             }

@@ -8,7 +8,7 @@ import { CropName } from "../dtos/Crop.js"
 /**
  * Creates 12 random farmers for the given region. If the region name is invalid, returns `undefined`.
  */
-export function run(region: string): Farmer[] | undefined {
+export default function run(region: string): Farmer[] | undefined {
   const nameSurnameAndGenderArray = getNames(region)
   if (nameSurnameAndGenderArray === undefined) {
     return undefined

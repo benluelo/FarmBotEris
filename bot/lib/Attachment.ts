@@ -5,12 +5,12 @@ import { CropName } from "../dtos/Crop.js";
 
 
 export class Attachment {
-  private crop: CropName;
+  private crop: CropName | "dirt";
   private size: number;
-  private file: any;
-  private name: string;
+  file: any;
+  name: string;
 
-  constructor(crop: CropName, size = 150) {
+  constructor(crop: CropName | "dirt", size = 150) {
     this.crop = crop;
     this.size = size;
     this.file = readFileSync(resolve(`./bot/images/png/${this.crop}.png`));

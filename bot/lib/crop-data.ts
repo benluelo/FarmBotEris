@@ -1,4 +1,4 @@
-import { CropInformationMap } from "../dtos/Crop";
+import { CropInformationMap } from "../dtos/Crop.js";
 
 export default {
   apple: {

@@ -1,9 +1,9 @@
-import cropData from "../../lib/crop-data";
-import getPriceOfSeeds from "../../lib/get-price-of-seeds";
-import getLevel from "../../../helpers/level-test";
-import { Embed } from "../../lib/Embed";
-import CONSTANTS from "../../lib/CONSTANTS";
-import { isValidCropName } from "../../../helpers/isValidCropName";
+import cropData from "../../lib/crop-data.js";
+import getPriceOfSeeds from "../../lib/get-price-of-seeds.js";
+import getLevel from "../../../helpers/level-test.js";
+import { Embed } from "../../lib/Embed.js";
+import CONSTANTS from "../../lib/CONSTANTS.js";
+import { isValidCropName } from "../../../helpers/isValidCropName.js";
 export default async (bot) => {
     bot.addCommand("sell", async (message, [amount, crop, ..._args], userdata) => {
         if (userdata === undefined) {

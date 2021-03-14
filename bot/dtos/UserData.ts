@@ -1,11 +1,11 @@
-import CONSTANTS from "../lib/CONSTANTS"
+import CONSTANTS from "../lib/CONSTANTS.js"
 import regions from "../lib/names.json"
 import flags from "../lib/flags.json"
-import { Plot } from "./Plot"
-import { Seed } from "./Seed"
-import { MarketRequest } from "./MarketRequest"
-import { Farmer } from "./Farmer"
-import { CropName } from "./Crop"
+import { Plot } from "./Plot.js"
+import { Seed } from "./Seed.js"
+import { MarketRequest } from "./MarketRequest.js"
+import { Farmer } from "./Farmer.js"
+import { CropName } from "./Crop.js"
 
 export interface UserData {
     /** The ID of the user. */

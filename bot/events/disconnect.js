@@ -1,4 +1,4 @@
-import Log from "../src/logger";
-export default (bot) => {
+import Log from "../src/logger.js";
+export function run(bot) {
     Log.default("Bot Disconnected");
-};
+}

@@ -1,4 +1,4 @@
-import Log from "../src/logger";
-export default (bot, message, id) => {
+import Log from "../src/logger.js";
+export function run(bot, message, id) {
     Log.default("Debug message:", message);
-};
+}

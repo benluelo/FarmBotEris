@@ -1,8 +1,8 @@
 import cropData from "../../lib/crop-data.js";
-import { Embed } from "../../lib/Embed";
-import parsePlotNumber from "../../lib/parse-plot-number";
-import Log from "../../src/logger";
-import CONSTANTS from "../../lib/CONSTANTS";
+import { Embed } from "../../lib/Embed.js";
+import parsePlotNumber from "../../lib/parse-plot-number.js";
+import Log from "../../src/logger.js";
+import CONSTANTS from "../../lib/CONSTANTS.js";
 export default async (bot) => {
     bot.addCommand("harvest", async (message, args, userdata) => {
         if (userdata === undefined) {

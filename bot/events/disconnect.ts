@@ -1,6 +1,6 @@
-import { FarmBotClient } from "../lib/FarmBotClient"
-import Log from "../src/logger"
+import { FarmBotClient } from "../lib/FarmBotClient.js"
+import Log from "../src/logger.js"
 
-export default (bot: FarmBotClient) => {
+export function run(bot: FarmBotClient) {
   Log.default("Bot Disconnected")
 }

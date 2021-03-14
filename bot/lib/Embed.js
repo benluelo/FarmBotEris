@@ -1,6 +1,6 @@
 import { URL } from "url";
 import util from "util";
-import { Attachment } from "./Attachment";
+import { Attachment } from "./Attachment.js";
 /**
  * @description Gets the image url out of the provided object.
  * @param obj - The {@link URL}, {@link Attachment}, or string to get the image url from.

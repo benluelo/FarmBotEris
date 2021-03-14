@@ -1,5 +1,5 @@
-import farmerData from "./farmer-data";
-import getLevel from "../../helpers/level-test";
+import farmerData from "./farmer-data.js";
+import getLevel from "../../helpers/level-test.js";
 export class NPC {
     /**
      * @description Creates a new NPC.

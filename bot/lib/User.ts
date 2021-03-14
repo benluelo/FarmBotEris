@@ -1,15 +1,15 @@
 import { User as ErisUser } from "eris";
-import CONSTANTS from "./CONSTANTS";
-import config from "../config";
+import CONSTANTS from "./CONSTANTS.js";
+import config from "../config.js";
 import regions from "./names.json";
 import flags from "./flags.json";
-import { NPC } from "./npc";
-import { UserData } from "../dtos/UserData";
-import { CropName } from "../dtos/Crop";
-import { Farmer } from "../dtos/Farmer";
-import { MarketRequest } from "../dtos/MarketRequest";
-import { Seed } from "../dtos/Seed";
-import { Plot } from "../dtos/Plot";
+import { NPC } from "./npc.js";
+import { UserData } from "../dtos/UserData.js";
+import { CropName } from "../dtos/Crop.js";
+import { Farmer } from "../dtos/Farmer.js";
+import { MarketRequest } from "../dtos/MarketRequest.js";
+import { Seed } from "../dtos/Seed.js";
+import { Plot } from "../dtos/Plot.js";
 
 import { v4 as uuid } from "uuid"
 
@@ -125,13 +125,13 @@ export default class User implements UserData {
         };
         this.requests = {};
         this.farmers = farmers;
-        this.permissions = config.ownersIDs.includes(this.userID) ? CONSTANTS.PERMISSIONS.DEVELOPMENT : CONSTANTS.PERMISSIONS.EVERYONE;
+        this.permissions = (config.ownersIDs as readonly string[]).includes(this.userID) ? CONSTANTS.PERMISSIONS.DEVELOPMENT : CONSTANTS.PERMISSIONS.EVERYONE;
         this.requestTimeOut = 0;
         this.requestAmount = 9;
         this.uuid = uuid();
         this.updated = true;
     }
-    
+
     newRequest(returnRequest = false) {
         const randomFarmer = this.farmers[Math.floor(Math.random() * this.farmers.length)];
         const randomReq = new NPC(randomFarmer.name, randomFarmer.gender, randomFarmer.unlockableCrop, randomFarmer.wealth, randomFarmer.preferences)

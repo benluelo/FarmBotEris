@@ -1,6 +1,6 @@
-import { FarmBotClient } from "../lib/FarmBotClient"
-import Log from "../src/logger"
+import { FarmBotClient } from "../lib/FarmBotClient.js"
+import Log from "../src/logger.js"
 
-export default async (bot: FarmBotClient, err: Error, id: number) => {
+export function run(bot: FarmBotClient, err: Error, id: number) {
   Log.error(err.stack + "\nShard ID: " + id)
 }

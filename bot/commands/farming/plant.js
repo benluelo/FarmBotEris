@@ -1,8 +1,8 @@
-import { isValidCropName } from "../../../helpers/isValidCropName";
-import CONSTANTS from "../../lib/CONSTANTS";
-import cropData from "../../lib/crop-data";
-import { Embed } from "../../lib/Embed";
-import parsePlotNumber from "../../lib/parse-plot-number";
+import { isValidCropName } from "../../../helpers/isValidCropName.js";
+import CONSTANTS from "../../lib/CONSTANTS.js";
+import cropData from "../../lib/crop-data.js";
+import { Embed } from "../../lib/Embed.js";
+import parsePlotNumber from "../../lib/parse-plot-number.js";
 /** @private @param {import("../../lib/.js")} bot */
 export default (bot) => {
     const cmd = bot.addCommand("plant", async (message, [plot, crop, ...args], userdata) => {

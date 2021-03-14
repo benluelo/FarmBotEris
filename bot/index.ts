@@ -6,7 +6,13 @@ Message.prototype.send = function (content: MessageContent, file: MessageFile): 
   return this._client.createMessage(this.channel.id, content, file)
 }
 
-const bot = new FarmBotClient(require("dotenv").config().parsed, {
+import dotenv from "dotenv"
+const dotenvParsed = dotenv.config()
+if (dotenvParsed.parsed === undefined && dotenvParsed.error !== undefined) {
+  throw dotenvParsed.error
+}
+
+const bot = new FarmBotClient(dotenvParsed.parsed!, {
   disableEveryone: true,
   defaultImageFormat: "png",
   disableEvents: {

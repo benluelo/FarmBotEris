@@ -1,7 +1,7 @@
-import farmerData from "./farmer-data"
-import getLevel from "../../helpers/level-test"
-import { CropName } from "../dtos/Crop"
-import { MarketRequest } from "../dtos/MarketRequest"
+import farmerData from "./farmer-data.js"
+import getLevel from "../../helpers/level-test.js"
+import { CropName } from "../dtos/Crop.js"
+import { MarketRequest } from "../dtos/MarketRequest.js"
 
 type Color = typeof farmerData.preferences.color[number]
 type Taste = typeof farmerData.preferences.taste[number]

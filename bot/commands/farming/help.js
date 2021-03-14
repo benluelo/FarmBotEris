@@ -1,7 +1,7 @@
 // const { embeds: help } = require("../../lib/help-info.js")
-import CONSTANTS from "../../lib/CONSTANTS";
-import { Embed } from "../../lib/Embed";
-import Log from "../../src/logger";
+import CONSTANTS from "../../lib/CONSTANTS.js";
+import { Embed } from "../../lib/Embed.js";
+import Log from "../../src/logger.js";
 let fullHelpEmbeds;
 export default (bot) => {
     bot.addCommand("help", (message, args, userdata) => {

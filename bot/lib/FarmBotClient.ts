@@ -1,12 +1,14 @@
 import type { DotenvParseOutput } from "dotenv/types"
 import { Client, ClientOptions, Message } from "eris"
-import { Collection, MongoClient, MongoError } from "mongodb"
+import mongodb from "mongodb"
+import type { Collection, MongoError, MongoClient } from "mongodb"
+// const { MongoClient } = mongodb
 import config from "../config.js"
 import Log from "../src/logger.js"
 import { Embed } from "./Embed.js"
 import CONSTANTS from "./CONSTANTS.js"
-import { coin } from "./emoji.json"
-import { FarmBotCommandHandler, CommandInformation, CommandFunction, FarmBotCommand } from "./FarmBotCommandHandler"
+import emoji from "./emoji.json"
+import { FarmBotCommandHandler, CommandInformation, CommandFunction, FarmBotCommand } from "./FarmBotCommandHandler.js"
 import User from "./User.js"
 import { UserData } from "../dtos/UserData.js"
 
@@ -35,7 +37,7 @@ export class FarmBotClient extends Client {
     success: number;
     error: number
   }>
-  ownersIDs: [string, string]
+  readonly ownersIDs: readonly [string, string]
   config: typeof config
   commands: FarmBotCommandHandler
   private _db: any
@@ -72,7 +74,7 @@ export class FarmBotClient extends Client {
       error: 0xFF0000
     })
 
-    this.ownersIDs = require("../config.js").ownersIDs
+    this.ownersIDs = config.ownersIDs
 
     this.config = Object.freeze(config)
   }
@@ -163,7 +165,7 @@ export class FarmBotClient extends Client {
       currency: "USD",
       minimumFractionDigits: 2
     })
-    return formatter.format(value).substr(1) + " " + coin
+    return formatter.format(value).substr(1) + " " + emoji.coin
   }
 
   /**
@@ -192,7 +194,7 @@ export class FarmBotClient extends Client {
    * @description Initializes the database.
    */
   async initDB() {
-    MongoClient.connect(this.config.db.connectionString, this.config.db.connectionOptions, async (err, db) => {
+    mongodb.MongoClient.connect(this.config.db.connectionString, this.config.db.connectionOptions, async (err, db) => {
       if (err) { throw err }
 
       if (this._db) {

@@ -1,5 +1,5 @@
-import Log from "../src/logger";
-export default async (bot) => {
+import Log from "../src/logger.js";
+export function run(bot) {
     bot.editStatus("online", {
         name: `farming in ${bot.guilds.size} servers!`,
         type: 0
@@ -7,4 +7,4 @@ export default async (bot) => {
     setImmediate(() => {
         Log.connect("Bot Online!");
     });
-};
+}

@@ -1,9 +1,9 @@
-import cropData from "../../lib/crop-data";
-import { Attachment } from "../../lib/Attachment";
-import { Embed } from "../../lib/Embed";
-import { XPProgressBar } from "../../lib/XPProgressBar";
-import { isValidCropName } from "../../../helpers/isValidCropName";
-import CONSTANTS from "../../lib/CONSTANTS";
+import cropData from "../../lib/crop-data.js";
+import { Attachment } from "../../lib/Attachment.js";
+import { Embed } from "../../lib/Embed.js";
+import { XPProgressBar } from "../../lib/XPProgressBar.js";
+import { isValidCropName } from "../../../helpers/isValidCropName.js";
+import CONSTANTS from "../../lib/CONSTANTS.js";
 export default (bot) => {
     bot.addCommand("skills", (message, [cropArg, ..._args], userdata) => {
         if (userdata === undefined) {

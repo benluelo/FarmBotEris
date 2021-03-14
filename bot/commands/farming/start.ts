@@ -8,6 +8,7 @@ import flags from "../../lib/flags.json"
 import User from "../../lib/User.js"
 import Log from "../../src/logger.js"
 
+import getFarmers from "../../lib/get-farmers.js"
 export default (bot: FarmBotClient) => {
   bot.addCommand("start", (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
@@ -48,7 +49,10 @@ export default (bot: FarmBotClient) => {
         } else {
           const region = args.join(" ").toLowerCase()
           if (isValidCountry(region)) {
-            const farmers = await require("../../lib/get-farmers.js").run(region)
+            const farmers = getFarmers(region)
+            if (farmers === undefined) {
+              return message.send("Something went wrong. please report this in the official Farmbot server.")
+            }
             const newUser = new User(message.author, region, farmers)
             for (let i = 0; i < 9; ++i) {
               newUser.newRequest()

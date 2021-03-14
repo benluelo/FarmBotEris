@@ -1,6 +1,6 @@
-import CONSTANTS from "../../lib/CONSTANTS"
-import { Embed } from "../../lib/Embed"
-import { FarmBotClient } from "../../lib/FarmBotClient"
+import CONSTANTS from "../../lib/CONSTANTS.js"
+import { Embed } from "../../lib/Embed.js"
+import { FarmBotClient } from "../../lib/FarmBotClient.js"
 
 const MAX_PLOTS = 25
 // a Math.round(Math.pow(1.90546071796, i))

@@ -1,7 +1,7 @@
 import CONSTANTS from "../../lib/CONSTANTS.js"
 import { Embed } from "../../lib/Embed.js"
 import { FarmBotClient } from "../../lib/FarmBotClient.js"
-import { coin } from "../../lib/emoji.json"
+import emoji from "../../lib/emoji.json"
 
 export default (bot: FarmBotClient) => {
   bot.addCommand("money", (message, _args, userdata) => {
@@ -17,7 +17,7 @@ export default (bot: FarmBotClient) => {
       .setColor(bot.color.lightgreen)
       .setDescription(`Balance: **${bot.formatMoney(userdata.money)}**`))
   }, {
-    description: `View your current ${coin} balance.`,
+    description: `View your current ${emoji.coin} balance.`,
     usage: "​farm money",
     // examples: false,
     permissionLevel: CONSTANTS.PERMISSIONS.EVERYONE,

@@ -1,9 +1,10 @@
 import EmbedPaginator from "eris-pagination";
-import { isValidCountry } from "../../../helpers/isValidCountry";
-import CONSTANTS from "../../lib/CONSTANTS";
-import { Embed } from "../../lib/Embed";
+import { isValidCountry } from "../../../helpers/isValidCountry.js";
+import CONSTANTS from "../../lib/CONSTANTS.js";
+import { Embed } from "../../lib/Embed.js";
 import flags from "../../lib/flags.json";
-import User from "../../lib/User";
+import User from "../../lib/User.js";
+import getFarmers from "../../lib/get-farmers.js";
 export default (bot) => {
     bot.addCommand("update", async (message, args, userdata) => {
         if (userdata === undefined) {
@@ -38,7 +39,7 @@ export default (bot) => {
             if (!isValidCountry(region)) {
                 return message.send(new Embed().uhoh(`Couldn't find **"${region}"** anywhere on a map... maybe try somewhere else?`));
             }
-            const farmers = (await import("../../lib/get-farmers")).run(region);
+            const farmers = getFarmers(region);
             const newUser = User.fromUserData(userdata, message.author);
             newUser.updated = true;
             newUser.requestAmount = 9;

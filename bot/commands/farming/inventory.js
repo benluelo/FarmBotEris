@@ -1,7 +1,7 @@
 import smallNumbers from "../../lib/small-numbers.json";
 import cropData from "../../lib/crop-data.js";
-import { Embed } from "../../lib/Embed";
-import CONSTANTS from "../../lib/CONSTANTS";
+import { Embed } from "../../lib/Embed.js";
+import CONSTANTS from "../../lib/CONSTANTS.js";
 const getSmallNumbers = (number) => {
     const numberString = number.toString();
     let smallNumberString = "";

@@ -1,6 +1,6 @@
-import CONSTANTS from "../../lib/CONSTANTS";
-import { Embed } from "../../lib/Embed";
-import { coin } from "../../lib/emoji.json";
+import CONSTANTS from "../../lib/CONSTANTS.js";
+import { Embed } from "../../lib/Embed.js";
+import emoji from "../../lib/emoji.json";
 export default (bot) => {
     bot.addCommand("money", (message, _args, userdata) => {
         if (userdata === undefined) {
@@ -14,7 +14,7 @@ export default (bot) => {
             .setColor(bot.color.lightgreen)
             .setDescription(`Balance: **${bot.formatMoney(userdata.money)}**`));
     }, {
-        description: `View your current ${coin} balance.`,
+        description: `View your current ${emoji.coin} balance.`,
         usage: "​farm money",
         // examples: false,
         permissionLevel: CONSTANTS.PERMISSIONS.EVERYONE,

@@ -1,7 +1,7 @@
-import { FarmBotClient } from "../lib/FarmBotClient"
-import Log from "../src/logger"
+import { FarmBotClient } from "../lib/FarmBotClient.js"
+import Log from "../src/logger.js"
 
-export default async (bot: FarmBotClient) => {
+export function run(bot: FarmBotClient) {
   bot.editStatus("online", {
     name: `farming in ${bot.guilds.size} servers!`,
     type: 0
