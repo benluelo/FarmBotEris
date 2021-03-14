@@ -1,24 +1,18 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const names_json_1 = __importDefault(require("./names.json"));
+import names from "./names.json";
 const genders = ["male", "female"];
-exports.default = (region) => {
-    const capitalized = capitalize(region);
-    if (names_json_1.default.hasOwnProperty(capitalized)) {
-        let regionCleaned = capitalized;
+export default function (region) {
+    if (names.hasOwnProperty(region)) {
+        let regionCleaned = region;
         return [...new Array(12)].map(() => {
             const randomGender = genders[randomIndex(genders)];
             return {
-                name: names_json_1.default[regionCleaned][randomGender][randomIndex(names_json_1.default[regionCleaned][randomGender])],
-                surname: names_json_1.default[regionCleaned].surnames[randomIndex(names_json_1.default[regionCleaned].surnames)],
+                name: names[regionCleaned][randomGender][randomIndex(names[regionCleaned][randomGender])],
+                surname: names[regionCleaned].surnames[randomIndex(names[regionCleaned].surnames)],
                 gender: randomGender
             };
         });
     }
-};
+}
 function randomIndex(array) {
     return Math.floor(Math.random() * array.length);
 }

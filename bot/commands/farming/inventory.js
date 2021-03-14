@@ -1,58 +1,55 @@
-const smallNumbers = require("../../lib/small-numbers.json")
-const cropData = require("../../lib/crop-data.js")
-
+import smallNumbers from "../../lib/small-numbers.json";
+import cropData from "../../lib/crop-data.js";
+import { Embed } from "../../lib/Embed";
+import CONSTANTS from "../../lib/CONSTANTS";
 const getSmallNumbers = (number) => {
-  number = number.toString()
-  let numberString = ""
-  for (let i = 0; i < number.length; i++) {
-    numberString += smallNumbers[number[i]]
-  }
-  return numberString
-}
-
-/** @private @param {import("../../lib/FarmBotClient.js")} bot */
-exports.run = (bot) => {
-  bot.addCommand("inventory", (message, _args, userdata) => {
-    // gather inv
-    const invItemList = {}
-    let invItemString = ""
-    let inter = 0
-    const gap = "  "
-    for (const plant in userdata.seeds.common) {
-      if (0 !== userdata.seeds.common[plant].amount) {
-        invItemList[cropData[plant].emoji] = userdata.seeds.common[plant].amount
-      }
+    const numberString = number.toString();
+    let smallNumberString = "";
+    for (let i = 0; i < smallNumberString.length; i++) {
+        smallNumberString += smallNumbers[parseInt(numberString[i])];
     }
-
-    // check if user has anything in their inventory
-    if (Object.keys(invItemList) == 0) {
-      invItemString = "When you harvest your crops, they'll show up here!"
-    } else {
-      // sort the numbers to order them highest to lowest
-      const sortable = []
-      for (const item in invItemList) {
-        sortable.push([item, invItemList[item]])
-      }
-      sortable.sort(function(a, b) {
-        return a[1] - b[1]
-      })
-      for (let i = sortable.length - 1; 0 <= i ; i--) {
-        invItemString += `${sortable[i][0]}${getSmallNumbers(sortable[i][1])}${gap}`
-        if (inter === 5) { invItemString += "\n"; inter = 0 } else { inter += 1 }
-      }
-    }
-
-    message.send(new bot.Embed()
-      .setAuthor(`${message.author.username}'s Inventory`, null,  message.author.avatarURL)
-      .setColor(bot.color.lightgreen)
-      .setDescription(invItemString))
-  }, {
-    description: "Shows all the items in your inventory",
-    usage: "​farm inventory",
-    examples: false,
-    permissionLevel: bot.PERMISSIONS.EVERYONE,
-    category: bot.CATEGORIES.FARMING,
-    aliases: ["inv"],
-    cooldown: 3000
-  })
-}
+    return numberString;
+};
+export default (bot) => {
+    bot.addCommand("inventory", (message, _args, userdata) => {
+        if (userdata === undefined) {
+            throw new Error("command `farm inventory` requires a user data.");
+        }
+        if (bot.database === undefined) {
+            return message.send("Database not yet initialized. Please try again in a moment.");
+        }
+        // gather inv
+        const invItemList = {};
+        let invItemString = "";
+        let inter = 0;
+        const gap = "  ";
+        for (const plant in userdata.seeds.common) {
+            if (0 !== userdata.seeds.common[plant].amount) {
+                const temp = cropData[plant];
+                invItemList[temp.emoji] = userdata.seeds.common[plant].amount;
+            }
+        }
+        // check if user has anything in their inventory
+        if (Object.keys(invItemList).length === 0) {
+            invItemString = "When you harvest your crops, they'll show up here!";
+        }
+        else {
+            Object.entries(invItemList)
+                .sort(([, a], [, b]) => a - b)
+                .map(([crop, amount]) => `${crop}${getSmallNumbers(amount)}`)
+                .join(gap);
+        }
+        message.send(new Embed()
+            .setAuthor(`${message.author.username}'s Inventory`, undefined, message.author.avatarURL)
+            .setColor(bot.color.lightgreen)
+            .setDescription(invItemString));
+    }, {
+        description: "Shows all the items in your inventory",
+        usage: "​farm inventory",
+        // examples: false,
+        permissionLevel: CONSTANTS.PERMISSIONS.EVERYONE,
+        category: CONSTANTS.CATEGORIES.FARMING,
+        aliases: ["inv"],
+        cooldown: 3000
+    });
+};

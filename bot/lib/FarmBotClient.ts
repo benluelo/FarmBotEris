@@ -1,14 +1,15 @@
 import type { DotenvParseOutput } from "dotenv/types"
 import { Client, ClientOptions, Message } from "eris"
 import { Collection, MongoClient, MongoError } from "mongodb"
-import config from "../config"
-import Log from "../src/logger"
-import { Embed } from "./Embed"
-import CONSTANTS from "./CONSTANTS"
-
+import config from "../config.js"
+import Log from "../src/logger.js"
+import { Embed } from "./Embed.js"
+import CONSTANTS from "./CONSTANTS.js"
 import { coin } from "./emoji.json"
 import { FarmBotCommandHandler, CommandInformation, CommandFunction, FarmBotCommand } from "./FarmBotCommandHandler"
-import User from "./User"
+import User from "./User.js"
+import { UserData } from "../dtos/UserData.js"
+
 export type CommandHelp = {
   description?: string
   usage?: string
@@ -25,7 +26,7 @@ export class FarmBotClient extends Client {
   prefixes: readonly string[]
   database?: {
     db: MongoClient,
-    Userdata: Collection,
+    Userdata: Collection<UserData>,
   }
   color: Readonly<{
     market: number;
@@ -36,7 +37,7 @@ export class FarmBotClient extends Client {
   }>
   ownersIDs: [string, string]
   config: typeof config
-  Commands: FarmBotCommandHandler
+  commands: FarmBotCommandHandler
   private _db: any
   private readonly oneOrMoreSpaces = /\s+/
 
@@ -58,7 +59,7 @@ export class FarmBotClient extends Client {
 
     this._db
     // this.Cooldowns = new Cooldowns()
-    this.Commands = new FarmBotCommandHandler()
+    this.commands = new FarmBotCommandHandler()
 
     /**
      * @description The different colors for the bot.
@@ -92,7 +93,7 @@ export class FarmBotClient extends Client {
     const [commandToRun, ...args] = this._removePrefix(content, prefixUsed).split(this.oneOrMoreSpaces)
 
     // check if a prefix was used; if a prefix was used, check if a command was used
-      const command = this.Commands.get(args[0])
+      const command = this.commands.get(args[0])
     if (command !== undefined) {
       if (command.info.requiresUser) {
         // if a command was used, check if the caller can use the command
@@ -101,11 +102,11 @@ export class FarmBotClient extends Client {
           if (!userdata) {
             this.startMessage(msg)
           } else {
-            this.Commands.run(commandToRun, msg, args, userdata)
+            this.commands.run(commandToRun, msg, args, userdata)
           }
         })
       } else {
-        this.Commands.run(commandToRun, msg, args, undefined)
+        this.commands.run(commandToRun, msg, args, undefined)
       }
     }
   }
@@ -119,7 +120,7 @@ export class FarmBotClient extends Client {
    * @returns The newly added command.
    */
   addCommand(name: string, commandFunction: CommandFunction, help: CommandHelp, parent?: FarmBotCommand): FarmBotCommand {
-    const newCmd = this.Commands.set(name, commandFunction, new CommandInformation(help), parent)
+    const newCmd = this.commands.set(name, commandFunction, new CommandInformation(help), parent)
     return newCmd
   }
 
@@ -138,13 +139,13 @@ export class FarmBotClient extends Client {
    * @param callback - The callback.
    */
   getUser(userID: string, callback: (err: MongoError | null, user: User | null) => void) {
-    this.database?.Userdata.findOne({ userID: userID }, (err, user) => {
+    this.database?.Userdata.findOne({ userID: userID }, (err, userdata) => {
       if (err) {
         return callback(err, null)
       }
 
-      if (user) {
-        return callback(null, user)
+      if (userdata) {
+        return callback(null, User.fromUserData(userdata, userdata.userID))
       } else {
         return callback(null, null)
       }

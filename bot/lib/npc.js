@@ -1,12 +1,6 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.NPC = void 0;
-const farmer_data_1 = __importDefault(require("./farmer-data"));
-const { getLevel } = require("../../helpers/level-test.js");
-class NPC {
+import farmerData from "./farmer-data";
+import getLevel from "../../helpers/level-test";
+export class NPC {
     /**
      * @description Creates a new NPC.
      * @param name - The name of the NPC.
@@ -20,18 +14,18 @@ class NPC {
         this.gender = gender;
         this.unlockableCrop = unlockableCrop;
         this.wealth = wealth || Math.random();
-        this.preferences = preferences || {
-            color: farmer_data_1.default.preferences.color[Math.floor(Math.random() * farmer_data_1.default.preferences.color.length)],
-            taste: farmer_data_1.default.preferences.taste[Math.floor(Math.random() * farmer_data_1.default.preferences.taste.length)]
+        this.preferences = preferences ?? {
+            color: farmerData.preferences.color[Math.floor(Math.random() * farmerData.preferences.color.length)],
+            taste: [farmerData.preferences.taste[Math.floor(Math.random() * farmerData.preferences.taste.length)]]
         };
         this.level = 0;
         this.unlockLevel = Math.ceil(this.wealth * 10); // will be between 1 and 10, depending on the wealth of the farmer
-        this.emoji = farmer_data_1.default.emoji[this.gender][Math.floor(Math.random() * farmer_data_1.default.emoji[this.gender].length)];
+        this.emoji = farmerData.emoji[this.gender][Math.floor(Math.random() * farmerData.emoji[this.gender].length)];
     }
     /**
      * @description Creates a new request for the market.
-     * @param {Object<string, {discovered: Boolean, level: Number, amount: Number}>} crops - The crops that the user has unlocked.
-     * @returns {{id: string, req: Request}} A new request.
+     * @param crops - The crops that the user has unlocked.
+     * @returns A new request.
      */
     newRequest(crops) {
         const rand = Math.random();
@@ -60,19 +54,18 @@ class NPC {
                 });
             }
         }
-        const r = {
+        const marketRequest = {
             name: this.name,
             want: want,
-            value: (this.wealth * rand) * 10 * 10 * getLevel(this.level).level,
-            reputation: (1 - (this.wealth * rand)) * 10 * 10 * getLevel(this.level).level
+            value: (this.wealth * rand) * 10 * 10 * getLevel(2, this.level).level,
+            reputation: (1 - (this.wealth * rand)) * 10 * 10 * getLevel(2, this.level).level
         };
         return {
             id: getRandomID(),
-            req: r
+            req: marketRequest
         };
     }
 }
-exports.NPC = NPC;
 // ...why did we do it like that
 /**
  * @description Generates a random 3 character long ID, to be used in the database. Will match the regex `/[A-Z]{3}/`.

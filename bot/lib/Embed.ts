@@ -54,7 +54,7 @@ type EmbedStructure = {
   thumbnail?: EmbedThumbnail;
   image?: EmbedImage;
   author?: EmbedAuthor;
-  fields: EmbedFields[];
+  fields?: EmbedFields[];
 };
 
 export class Embed {
@@ -168,11 +168,11 @@ export class Embed {
    * @returns The embed this was called on.
    */
   addField(name: string, value: string, inline: boolean = false): Embed {
-    this.embed.fields.push({
+    this.embed.fields = [...this.embed.fields ?? [], {
       name: name,
       value: value,
       inline: inline
-    });
+    }]
     return this;
   }
 
@@ -182,17 +182,17 @@ export class Embed {
    * @returns {Embed} The embed this was called on.
    */
   addBlankField(inline: boolean = false): Embed {
-    this.embed.fields.push({
+    this.embed.fields = [...this.embed.fields ?? [], {
       name: "\u200B",
       value: "\u200B",
       inline: inline
-    });
+    }]
     return this;
   }
 
   /**
    * @description Sends a pre-formatted uh-oh message.
-   * @param {String} message - The uh-oh message to send to the user.
+   * @param {string} message - The uh-oh message to send to the user.
    * @returns {Embed} The embed this was called on.
    */
   uhoh(message: string = ""): Embed {
@@ -204,7 +204,7 @@ export class Embed {
 
   /**
    * @description Send a preset success message.
-   * @param {String} message - The message to show user.
+   * @param {string} message - The message to show user.
    * @returns {Embed} The embed this was called on.
    */
   success(message: string = ""): Embed {

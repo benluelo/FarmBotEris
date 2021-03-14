@@ -1,10 +1,10 @@
-import cropData from "../../lib/crop-data"
-import getPriceOfSeeds from "../../lib/get-price-of-seeds"
-import getLevel from "../../../helpers/level-test"
-import CONSTANTS from "../../lib/CONSTANTS"
-import { FarmBotClient } from "../../lib/FarmBotClient"
-import { Embed } from "../../lib/Embed"
-import { CropName } from "../../dtos/user"
+import cropData from "../../lib/crop-data.js"
+import getPriceOfSeeds from "../../lib/get-price-of-seeds.js"
+import getLevel from "../../../helpers/level-test.js"
+import CONSTANTS from "../../lib/CONSTANTS.js"
+import { FarmBotClient } from "../../lib/FarmBotClient.js"
+import { Embed } from "../../lib/Embed.js"
+import { CropName } from "../../dtos/Crop.js"
 
 export default (bot: FarmBotClient) => {
   bot.addCommand("seeds", (message, _args, userdata) => {

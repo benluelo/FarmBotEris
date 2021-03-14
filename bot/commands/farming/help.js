@@ -1,138 +1,136 @@
 // const { embeds: help } = require("../../lib/help-info.js")
-
-let fullHelpEmbeds
-/** @private @param {import("../../lib/FarmBotClient.js")} bot */
-module.exports.run = (bot) => {
-
-  bot.addCommand("help", (message, args, userdata) => {
-    if (!args[0]) { message.send(fullHelpEmbeds[userdata.permissions]) }
-    else {
-      const e = bot.Commands.getEmbed(args, userdata)
-      if (e) { return message.send(e) }
-      else { message.send(new bot.Embed().uhoh(`${args} isn't a command!`)) }
-    }
-  }, {
-    description: "Show what commands the bot has and how to use them.",
-    usage: "​farm help [command]",
-    examples: "farm help harvest​",
-    permissionLevel: bot.PERMISSIONS.EVERYONE,
-    category: bot.CATEGORIES.UTILITY,
-    cooldown: 1000
-  })
-}
-
-/** @private @param {import("../../lib/FarmBotClient.js")} bot */
-module.exports.getHelp = (bot) => {
-// remove development commands if in production
-  if ((bot.ENV.DEVELOPMENT != "true")) {
-    console.log("Removing development commands...")
-    // console.log(bot.Commands)
-    for (const [name, cmd] of bot.Commands) {
-      // console.log(name)
-      if (bot.Commands.get(name).info.permissionLevel == bot.PERMISSIONS.DEVELOPMENT) {
-        console.log(name)
-        bot.Commands.delete(name)
-      }
-    }
-  }
-
-
-  /** @type {Object<number, String[]>} */
-  const fullHelp = {}
-
-  for (const perm in bot.PERMISSIONS) {
-    fullHelp[bot.PERMISSIONS[perm]] = []
-  }
-
-  /**
-   * @description Maps permission levels to their respective allowed commands, per category.
-   * @type {Object<number, {
-      CATEGORY_FARMING: String[],
-      CATEGORY_UTILITY: String[],
-      CATEGORY_OWNER: String[],
-      CATEGORY_DEVELOPMENT: String[]
-    }>}
-  */
-  fullHelpEmbeds = Object.fromEntries(Object
-    .values(bot.PERMISSIONS)
-    .map((val) => {
-      return [
-        val,
-        Object.fromEntries(Object
-          .values(bot.CATEGORIES)
-          .map((cat) => {
-            return [
-              cat,
-              []
-            ]
-          })
-        )
-      ]
-    })
-  )
-
-  for (const [commandName, commandObject] of bot.Commands.entries()) {
-    const current = commandObject
-    fullHelp[current.info.permissionLevel].push(commandName)
-
-    ;(/**
-       * @description Ye.
-       * @param {String} cmdName - The name of the command.
-       * @param {import("../../lib/FarmBotCommandHandler.js").FarmBotCommand} cmdObject - The command object.
-       */
-      function getCMDs(cmdName, cmdObject) {
-        const e = new bot.Embed()
-          .setTitle(`Help for \`${cmdName}\``)
-          .setDescription(cmdObject.info.description)
-          .setColor(0x00b3b3)
-          .setFooter("<> - required  |  [] - optional")
-          .addField("**__Usage__:**", `\`\`\`${cmdObject.info.usage}\`\`\``)
-        if (cmdObject.info.examples) { e.addField("**__Examples__:**", `\`\`\`${cmdObject.info.examples}\`\`\``) }
-        if (cmdObject.info.aliases) { e.addField("**__Aliases__:**", `\`\`\`${cmdObject.info.aliases.join(", ")}\`\`\``) }
-        e.addField("**__Cooldown__:**", `\`\`\`${cmdObject.info.cooldown / 1000} seconds\`\`\``)
-        if (cmdObject.subcommands.size > 0) {
-        /** @type {String[]} */
-          const subs = Array.from(cmdObject.subcommands.keys())
-          e.addField("**__Subcommands__:**", `\`\`\`${subs.join(", ")}\`\`\``)
-          subs.forEach((sc) => {
-            getCMDs(cmdName + " " + sc, cmdObject.subcommands.get(sc))
-          })
+import CONSTANTS from "../../lib/CONSTANTS";
+import { Embed } from "../../lib/Embed";
+import Log from "../../src/logger";
+let fullHelpEmbeds;
+export default (bot) => {
+    bot.addCommand("help", (message, args, userdata) => {
+        if (userdata === undefined) {
+            throw new Error("command `farm sell` requires a user data.");
         }
-        cmdObject.setEmbed(e)
-      }
-    )(commandName, current)
-  }
-
-  // make a different embed for each permission level. each successive level has all the permissions of the previous level.
-  for (const i in fullHelp) {
-    for (const cmd in fullHelp[i]) {
-      for (const permlvl in fullHelpEmbeds) {
-        if (i <= permlvl) {
-          fullHelpEmbeds[permlvl][bot.Commands.get(fullHelp[i][cmd]).info.category].push(fullHelp[i][cmd])
+        if (bot.database === undefined) {
+            return message.send("Database not yet initialized. Please try again in a moment.");
         }
-      }
+        // @ts-ignore
+        if (!args[0]) {
+            message.send(fullHelpEmbeds[userdata.permissions]);
+        }
+        else {
+            // @ts-ignore
+            const embed = bot.commands.getEmbed(args, userdata);
+            if (embed) {
+                return message.send(embed);
+            }
+            else {
+                message.send(new Embed().uhoh(`${args} isn't a command!`));
+            }
+        }
+    }, {
+        description: "Show what commands the bot has and how to use them.",
+        usage: "​farm help [command]",
+        examples: "farm help harvest​",
+        permissionLevel: CONSTANTS.PERMISSIONS.EVERYONE,
+        category: CONSTANTS.CATEGORIES.UTILITY,
+        cooldown: 1000
+    });
+};
+// TODO: wtf is going on here lol
+export function getHelp(bot) {
+    // remove development commands if in production
+    if ((bot.ENV.DEVELOPMENT !== "true")) {
+        Log.commandLoad("Removing development commands...");
+        // console.log(bot.Commands)
+        for (const [name, cmd] of bot.commands.entries()) {
+            // console.log(name)
+            if (cmd.info.permissionLevel === CONSTANTS.PERMISSIONS.DEVELOPMENT) {
+                console.log(name);
+                bot.commands.delete(name);
+            }
+        }
     }
-  }
-
-  // create the actual embeds now lol
-  for (const i in fullHelpEmbeds) {
-    const PERM_LEVEL = Object.keys(bot.PERMISSIONS).find((key) => {
-      return bot.PERMISSIONS[key] == i
-    })
-    const tempEmbed = new bot.Embed()
-      .setTitle("FarmBot Help")
-      .setDescription("This is the full list of commands for FarmBot. Send `farm help <command> [subcommands...]` for detailed information about a specific command.")
-      .setColor(0x00b3b3)
-      .setFooter(bot.ENV.DEVELOPMENT ? PERM_LEVEL : null)
-    Object.getOwnPropertySymbols(fullHelpEmbeds[i]).forEach((cat) => {
-      if (fullHelpEmbeds[i][cat].length != 0) {
-        tempEmbed.addField(`**${cat.description}**`, fullHelpEmbeds[i][cat].map((e) => { return `\`${e}\`` }).join(", "))
-      }
-    })
-    fullHelpEmbeds[i] = tempEmbed
-  }
-
-  console.log({
-    fullHelpEmbeds
-  })
+    const fullHelp = {};
+    for (const [_perm, level] of Object.entries(CONSTANTS.PERMISSIONS)) {
+        fullHelp[level] = [];
+    }
+    /**
+     * @description Maps permission levels to their respective allowed commands, per category.
+     */
+    // @ts-ignore
+    fullHelpEmbeds = Object.fromEntries(Object.values(CONSTANTS.PERMISSIONS)
+        .map((val) => {
+        return [
+            val,
+            Object.fromEntries(Object.entries(CONSTANTS.CATEGORIES)
+                .map(([categoryName, _categorySymbol]) => {
+                return [
+                    categoryName,
+                    []
+                ];
+            }))
+        ];
+    }));
+    /**
+     * @description Ye.
+     * @param commandName - The name of the command.
+     * @param commandObject - The command object.
+     */
+    function getCMDs(commandName, commandObject) {
+        const embed = new Embed()
+            .setTitle(`Help for \`${commandName}\``)
+            .setDescription(commandObject.info.description)
+            .setColor(0x00b3b3)
+            .setFooter("<> - required  |  [] - optional")
+            .addField("**__Usage__:**", `\`\`\`${commandObject.info.usage}\`\`\``);
+        if (commandObject.info.examples) {
+            embed.addField("**__Examples__:**", `\`\`\`${commandObject.info.examples}\`\`\``);
+        }
+        if (commandObject.info.aliases) {
+            embed.addField("**__Aliases__:**", `\`\`\`${commandObject.info.aliases.join(", ")}\`\`\``);
+        }
+        embed.addField("**__Cooldown__:**", `\`\`\`${commandObject.info.cooldown / 1000} seconds\`\`\``);
+        if (commandObject.subcommands.size() > 0) {
+            embed.addField("**__Subcommands__:**", `\`\`\`${[...commandObject.subcommands.entries()].map(([subcommandName, _subcommandObject]) => subcommandName).join(", ")}\`\`\``);
+            for (const [name, subcommand] of commandObject.subcommands.entries())
+                getCMDs(commandName + " " + name, subcommand);
+        }
+        commandObject.setEmbed(embed);
+    }
+    for (const [commandName, commandObject] of bot.commands.entries()) {
+        const current = commandObject;
+        fullHelp[current.info.permissionLevel].push(commandName);
+        getCMDs(commandName, current);
+    }
+    // make a different embed for each permission level. each successive level has all the permissions of the previous level.
+    for (const i in fullHelp) {
+        for (const cmd in fullHelp[i]) {
+            for (const permlvl in fullHelpEmbeds) {
+                if (parseInt(i) <= parseInt(permlvl)) {
+                    // @ts-ignore
+                    fullHelpEmbeds[parseInt(permlvl)][bot.commands.get(fullHelp[parseInt(i)][cmd]).info.category].push(fullHelp[i][cmd]);
+                }
+            }
+        }
+    }
+    // create the actual embeds now lol
+    for (const i in fullHelpEmbeds) {
+        const PERM_LEVEL = Object.keys(CONSTANTS.PERMISSIONS).find((key) => {
+            return CONSTANTS.PERMISSIONS[key] === i;
+        });
+        const tempEmbed = new Embed()
+            .setTitle("FarmBot Help")
+            .setDescription("This is the full list of commands for FarmBot. Send `farm help <command> [subcommands...]` for detailed information about a specific command.")
+            .setColor(0x00b3b3)
+            .setFooter(bot.ENV.DEVELOPMENT ? PERM_LEVEL : "");
+        Object.entries(fullHelpEmbeds[i]).forEach(([categoryName, categorySymbol]) => {
+            if (fullHelpEmbeds[i][categoryName].length !== 0) {
+                // @ts-ignore
+                tempEmbed.addField(`**${categorySymbol.description}**`, fullHelpEmbeds[i][categoryName].map((e) => { return `\`${e}\``; }).join(", "));
+            }
+        });
+        // @ts-ignore
+        fullHelpEmbeds[i] = tempEmbed;
+    }
+    console.log({
+        fullHelpEmbeds
+    });
 }

@@ -1,4 +1,3 @@
-"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
     if (!privateMap.has(receiver)) {
         throw new TypeError("attempted to set private field on non-instance");
@@ -12,15 +11,10 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 var _internal;
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Cooldown = exports.FarmBotCommandHandler = exports.FarmBotCommand = exports.CommandInformation = void 0;
-const util = require("util");
-const CONSTANTS_js_1 = __importDefault(require("./CONSTANTS.js"));
-class CommandInformation {
+import util from "util";
+import CONSTANTS from "./CONSTANTS.js";
+export class CommandInformation {
     /**
      * @description The general information about a command.
      */
@@ -29,8 +23,8 @@ class CommandInformation {
         this.description = description ?? "No description provided.",
             this.usage = usage ?? "No usage provided.",
             this.examples = examples ?? "",
-            this.permissionLevel = permissionLevel ?? CONSTANTS_js_1.default.PERMISSIONS.DEVELOPMENT,
-            this.category = category ?? CONSTANTS_js_1.default.CATEGORIES.DEVELOPMENT,
+            this.permissionLevel = permissionLevel ?? CONSTANTS.PERMISSIONS.DEVELOPMENT,
+            this.category = category ?? CONSTANTS.CATEGORIES.DEVELOPMENT,
             this.aliases = aliases ?? [],
             this.cooldown = cooldown ?? 0,
             this.requiresUser = requiresUser ?? true;
@@ -47,8 +41,7 @@ class CommandInformation {
         };
     }
 }
-exports.CommandInformation = CommandInformation;
-class FarmBotCommand {
+export class FarmBotCommand {
     /**
      * @description Makes a command for the bot.
      * @param name - The name of the command.
@@ -77,22 +70,18 @@ class FarmBotCommand {
      * @param userdata - The caller's DB information.
      */
     run(msg, args, userdata) {
-        if (this.subcommands.size() != 0 && this.subcommands.has(args[0])) {
-            this.subcommands.get(args.shift() ?? "")?.run(msg, args, userdata);
+        if (this.subcommands.size() !== 0 && this.subcommands.has(args[0])) {
+            this.subcommands.get(args.shift())?.run(msg, args, userdata);
         }
         else {
-            if (this.info.requiresUser && userdata.permissions < this.info.permissionLevel) {
-                return;
-            }
-            if (!this.info.requiresUser) {
+            const timeToWait = this.Cooldowns.check(msg.author.id);
+            // FIXME: Better error handling than this big if statement
+            if ((this.info.requiresUser && userdata !== undefined && userdata.permissions >= this.info.permissionLevel) || !this.info.requiresUser) {
                 this.func(msg, args, undefined);
-            }
-            else {
-                const timeToWait = this.Cooldowns.check(msg.author.id);
                 if (timeToWait > 0) {
-                    const m = msg.send(`**${msg.author.username}**, you have to wait **${(timeToWait / 1000).toFixed(2)}** seconds to use \`farm ${this.getFullCommandName()}\`!`);
+                    const sentMessage = msg.send(`**${msg.author.username}**, you have to wait **${(timeToWait / 1000).toFixed(2)}** seconds to use \`farm ${this.getFullCommandName()}\`!`);
                     msg.delete();
-                    setTimeout(async () => { (await m).delete(); }, timeToWait);
+                    setTimeout(async () => { (await sentMessage).delete(); }, timeToWait);
                 }
                 else {
                     this.func(msg, args, userdata);
@@ -105,7 +94,7 @@ class FarmBotCommand {
      * @param name - The name of the subcommand.
      * @param func - The subcommand.
      * @param info - The information for the command.
-     * @returns {FarmBotCommand The new subcommand object.
+     * @returns The new subcommand object.
      */
     subcommand(name, func, info) {
         return this.subcommands.set(name, func, new CommandInformation(info), this);
@@ -153,8 +142,7 @@ class FarmBotCommand {
         return util.inspect(toReturn, true, 1, true).replace(" [Map] ", " ");
     }
 }
-exports.FarmBotCommand = FarmBotCommand;
-class FarmBotCommandHandler {
+export class FarmBotCommandHandler {
     constructor() {
         _internal.set(this, void 0);
         this.size = () => __classPrivateFieldGet(this, _internal).size;
@@ -173,7 +161,7 @@ class FarmBotCommandHandler {
     }
     /**
      * @description Gets a command from the `FarmBotCommandHandler`.
-     * @param {String} cmd - The command name.
+     * @param {string} cmd - The command name.
      * @returns {(FarmBotCommand | undefined)} The found command, or undefined if no command is found.
      */
     get(cmd) {
@@ -181,11 +169,11 @@ class FarmBotCommandHandler {
     }
     /**
      * @description Adds a command to the bot.
-     * @param {String} name - The command name.
-     * @param {CommandFunction} func - The command function.
-     * @param {CommandInformation} info - The information for the command.
-     * @param {FarmBotCommand} [parent] - The parent command, if this is a subcommand.
-     * @returns {FarmBotCommand} The new `FarmBotCommand` object.
+     * @param name - The command name.
+     * @param func - The command function.
+     * @param info - The information for the command.
+     * @param parent - The parent command, if this is a subcommand.
+     * @returns The new `FarmBotCommand` object.
      */
     set(name, func, info, parent) {
         const newCmd = new FarmBotCommand(name, func, info, parent ? parent : undefined);
@@ -216,24 +204,26 @@ class FarmBotCommandHandler {
     }
     /**
      * @description Ye.
-     * @returns {IterableIterator<[string, FarmBotCommand]>} The iterable.
+     * @returns The iterable.
      */
     entries() {
         return __classPrivateFieldGet(this, _internal).entries();
     }
+    delete(key) {
+        return __classPrivateFieldGet(this, _internal).delete(key);
+    }
     toJSON() {
         return Object
             .fromEntries(Array.from(this.entries()).filter(([name, cmd]) => {
-            console.log(cmd.info.permissionLevel === CONSTANTS_js_1.default.PERMISSIONS.EVERYONE);
-            return cmd.info.permissionLevel === CONSTANTS_js_1.default.PERMISSIONS.EVERYONE;
+            console.log(cmd.info.permissionLevel === CONSTANTS.PERMISSIONS.EVERYONE);
+            return cmd.info.permissionLevel === CONSTANTS.PERMISSIONS.EVERYONE;
         }).map(([name, cmd]) => {
             return [name, cmd.toJSON()];
         }));
     }
 }
-exports.FarmBotCommandHandler = FarmBotCommandHandler;
 _internal = new WeakMap();
-class Cooldown extends Map {
+export class Cooldown extends Map {
     constructor(commandName, cooldownTimeMs) {
         super();
         this.commandName = commandName;
@@ -241,8 +231,8 @@ class Cooldown extends Map {
     }
     /**
      * @description Checks if a user is able to use a command. If they are able to use it, reset their cooldown for that command.
-     * @param {String} userID - The `userID` of the user who is attempting to use the command.
-     * @returns {Number} How long the user has to wait to use the command, in milliseconds; `0` if the cooldown is up.
+     * @param {string} userID - The `userID` of the user who is attempting to use the command.
+     * @returns {number} How long the user has to wait to use the command, in milliseconds; `0` if the cooldown is up.
      */
     check(userID) {
         // check for the user in the cooldowns
@@ -310,4 +300,3 @@ class Cooldown extends Map {
         }
     }
 }
-exports.Cooldown = Cooldown;

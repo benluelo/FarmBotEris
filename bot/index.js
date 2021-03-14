@@ -1,12 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const FarmBotClient_1 = require("./lib/FarmBotClient");
-const eris_1 = require("eris");
-eris_1.Message.prototype.send = function (content, file) {
+import { FarmBotClient } from "./lib/FarmBotClient.js";
+import { Message } from "eris";
+Message.prototype.send = function (content, file) {
     // @ts-ignore the fact that this still works proves otherwise
     return this._client.createMessage(this.channel.id, content, file);
 };
-const bot = new FarmBotClient_1.FarmBotClient(require("dotenv").config().parsed, {
+const bot = new FarmBotClient(require("dotenv").config().parsed, {
     disableEveryone: true,
     defaultImageFormat: "png",
     disableEvents: {
@@ -27,9 +25,11 @@ const bot = new FarmBotClient_1.FarmBotClient(require("dotenv").config().parsed,
     "farm",
     "f!"
 ]);
-require("./src/command-loader.js")(bot);
-require("./src/event-loader.js")(bot);
+import commandLoader from "./src/command-loader.js";
+import eventLoader from "./src/event-loader.js";
 // gonna turn that off for now
 // require("../API/index")(bot) // not ideal (bot goes down so does some user pages) but works!
+commandLoader(bot);
+eventLoader(bot);
 bot.initDB();
 bot.connect();

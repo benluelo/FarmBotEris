@@ -1,32 +1,30 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.FarmBotClient = void 0;
-const eris_1 = require("eris");
-const mongodb_1 = require("mongodb");
-const emoji_json_1 = require("./emoji.json");
-const FarmBotCommandHandler_1 = require("./FarmBotCommandHandler");
-class FarmBotClient extends eris_1.Client {
+import { Client } from "eris";
+import { MongoClient } from "mongodb";
+import config from "../config";
+import Log from "../src/logger";
+import { Embed } from "./Embed";
+import { coin } from "./emoji.json";
+import { FarmBotCommandHandler, CommandInformation } from "./FarmBotCommandHandler";
+import User from "./User";
+export class FarmBotClient extends Client {
     /**
      * @description Creates an instance of `FarmBotClient`.
-     * @param {import("dotenv").DotenvParseOutput} dotenv - The environment variables, containing at least the bot token as `TOKEN`.
-     * @param {import("eris").ClientOptions} options - The {@link import("eris").ClientOptions} for the `FarmBotClient`.
-     * @param {String[]} prefixes - An array of the prefixes for the bot.
+     * @param dotenv - The environment variables, containing at least the bot token as `TOKEN`.
+     * @param options - The {@link ClientOptions} for the Eris {@link Client}.
+     * @param prefixes - An array of the prefixes for the bot.
      */
     constructor(dotenv, options, prefixes) {
+        super(dotenv.TOKEN, options);
+        this.oneOrMoreSpaces = /\s+/;
         if (!dotenv.TOKEN) {
             throw Error("No bot token!");
         }
-        super(dotenv.TOKEN, options);
-        /** @description The different permission levels for a command. */
-        this.PERMISSIONS = require("./CONSTANTS.js").PERMISSIONS;
-        /** @description The different categories of commands. */
-        this.CATEGORIES = require("./CONSTANTS.js").CATEGORIES;
         this.ENV = Object.freeze(dotenv);
         this.prefixes = Object.freeze(prefixes);
         this.on("messageCreate", this.onMessageCreate);
         this._db;
         // this.Cooldowns = new Cooldowns()
-        this.Commands = new FarmBotCommandHandler_1.FarmBotCommandHandler();
+        this.commands = new FarmBotCommandHandler();
         /**
          * @description The different colors for the bot.
          */
@@ -37,11 +35,8 @@ class FarmBotClient extends eris_1.Client {
             success: 0x00FF00,
             error: 0xFF0000
         });
-        this.log = require("../src/logger.js");
-        /** @description The Embed class, used for making new embeds. */
-        this.Embed = require("./classes.js").Embed;
         this.ownersIDs = require("../config.js").ownersIDs;
-        this.config = Object.freeze(require("../config.js"));
+        this.config = Object.freeze(config);
     }
     /**
      * @description Ye.
@@ -56,10 +51,11 @@ class FarmBotClient extends eris_1.Client {
         if (!prefixUsed) {
             return;
         }
-        const args = this._removePrefix(content, prefixUsed).split(/\s+/);
+        const [commandToRun, ...args] = this._removePrefix(content, prefixUsed).split(this.oneOrMoreSpaces);
         // check if a prefix was used; if a prefix was used, check if a command was used
-        if (this.Commands.has(args[0])) {
-            if (this.Commands.get(args[0]).info.requiresUser) {
+        const command = this.commands.get(args[0]);
+        if (command !== undefined) {
+            if (command.info.requiresUser) {
                 // if a command was used, check if the caller can use the command
                 this.getUser(msg.author.id, (err, userdata) => {
                     if (err) {
@@ -69,12 +65,12 @@ class FarmBotClient extends eris_1.Client {
                         this.startMessage(msg);
                     }
                     else {
-                        this.Commands.run(args.shift(), msg, args, userdata);
+                        this.commands.run(commandToRun, msg, args, userdata);
                     }
                 });
             }
             else {
-                this.Commands.run(args.shift(), msg, args);
+                this.commands.run(commandToRun, msg, args, undefined);
             }
         }
     }
@@ -87,7 +83,7 @@ class FarmBotClient extends eris_1.Client {
      * @returns The newly added command.
      */
     addCommand(name, commandFunction, help, parent) {
-        const newCmd = this.Commands.set(name, commandFunction, new FarmBotCommandHandler_1.CommandInformation(help), parent);
+        const newCmd = this.commands.set(name, commandFunction, new CommandInformation(help), parent);
         return newCmd;
     }
     /**
@@ -96,7 +92,7 @@ class FarmBotClient extends eris_1.Client {
      * @returns - The message that was sent to the user.
      */
     startMessage(message) {
-        return message.send(new this.Embed().uhoh(`You have to start farming first, **${message.author.username}**! Send \`farm start\` to start farming!`));
+        return message.send(new Embed().uhoh(`You have to start farming first, **${message.author.username}**! Send \`farm start\` to start farming!`));
     }
     /**
      * @description Gets a user from the database.
@@ -104,12 +100,12 @@ class FarmBotClient extends eris_1.Client {
      * @param callback - The callback.
      */
     getUser(userID, callback) {
-        this.database?.Userdata.findOne({ userID: userID }, (err, user) => {
+        this.database?.Userdata.findOne({ userID: userID }, (err, userdata) => {
             if (err) {
                 return callback(err, null);
             }
-            if (user) {
-                return callback(null, user);
+            if (userdata) {
+                return callback(null, User.fromUserData(userdata, userdata.userID));
             }
             else {
                 return callback(null, null);
@@ -127,7 +123,7 @@ class FarmBotClient extends eris_1.Client {
             currency: "USD",
             minimumFractionDigits: 2
         });
-        return formatter.format(value).substr(1) + " " + emoji_json_1.coin;
+        return formatter.format(value).substr(1) + " " + coin;
     }
     /**
      * @description Checks if a message used a bot prefix.
@@ -152,7 +148,7 @@ class FarmBotClient extends eris_1.Client {
      * @description Initializes the database.
      */
     async initDB() {
-        mongodb_1.MongoClient.connect(this.config.db.connectionString, this.config.db.connectionOptions, async (err, db) => {
+        MongoClient.connect(this.config.db.connectionString, this.config.db.connectionOptions, async (err, db) => {
             if (err) {
                 throw err;
             }
@@ -167,9 +163,8 @@ class FarmBotClient extends eris_1.Client {
                     db,
                     Userdata: db.db("farmbot").collection("farm"),
                 };
-                this.log.dbconnect("Successfully connected to database!");
+                Log.dbconnect("Successfully connected to database!");
             }
         });
     }
 }
-exports.FarmBotClient = FarmBotClient;

@@ -1,10 +1,9 @@
 import names from "./names.json"
 const genders = ["male", "female"] as const
 
-export default (region: string) => {
-  const capitalized = capitalize(region)
-  if (names.hasOwnProperty(capitalized)) {
-    let regionCleaned = capitalized as keyof typeof names
+export default function (region: string) {
+  if (names.hasOwnProperty(region)) {
+    let regionCleaned = region as keyof typeof names
     return [...new Array(12)].map(() => {
       const randomGender = genders[randomIndex(genders as unknown as any[])]
       return {

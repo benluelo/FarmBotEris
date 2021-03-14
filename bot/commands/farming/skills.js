@@ -1,46 +1,62 @@
-const cropData = require("../../lib/crop-data.js")
-const { XPProgressBar, Attachment } = require("../../lib/classes.js")
-
-/** @private @param {import("../../lib/FarmBotClient.js")} bot */
-module.exports.run = (bot) => {
-  bot.addCommand("skills", (message, args, userdata) => {
-    const crop = args[0]
-    if (!crop) {
-      const skillsEmbed = new bot.Embed()
-        .setAuthor(message.author.username, null, message.author.avatarURL)
-        .setColor(bot.color.lightgreen)
-
-      for (const seed in userdata.seeds.common) {
-        if (!userdata.seeds.common[seed].discovered) { continue }
-        const XPBar = new XPProgressBar(userdata.seeds.common[seed].level, 5)
-
-        if (bot.ENV.DEBUG === "true") { console.log(XPBar.show()) }
-
-        skillsEmbed.addField(cropData[seed].emoji, `Level: **${XPBar.level()}**` + "\n" + XPBar.show(), true)
-      }
-      return message.send(skillsEmbed)
-    } else {
-      if (cropData[crop] && userdata.seeds.common[crop].discovered) {
-        const attachment = new Attachment(crop)
-        const XPBar = new XPProgressBar(userdata.seeds.common[crop].level)
-        const seedSkillEmbed = new bot.Embed()
-          .setAuthor(message.author.username, null, message.author.avatarURL)
-          .setColor(bot.color.lightgreen)
-          .setTitle(`${crop[0].toUpperCase() + crop.substr(1)}`)
-          .setThumbnail(attachment.link())
-          .addField(`Level: **${XPBar.level()}**`, XPBar.show())
-
-        return message.send(seedSkillEmbed, attachment.send())
-      } else {
-        return message.send(new bot.Embed().uhoh(`**${crop}** isn't one of your crops!`))
-      }
-    }
-  }, {
-    description: "Shows the level of all your seeds",
-    usage: "​farm skills [seed]",
-    examples: "farm skills apple",
-    permissionLevel: bot.PERMISSIONS.EVERYONE,
-    category: bot.CATEGORIES.FARMING,
-    cooldown: 5000
-  })
-}
+import cropData from "../../lib/crop-data";
+import { Attachment } from "../../lib/Attachment";
+import { Embed } from "../../lib/Embed";
+import { XPProgressBar } from "../../lib/XPProgressBar";
+import { isValidCropName } from "../../../helpers/isValidCropName";
+import CONSTANTS from "../../lib/CONSTANTS";
+export default (bot) => {
+    bot.addCommand("skills", (message, [cropArg, ..._args], userdata) => {
+        if (userdata === undefined) {
+            throw new Error("command `farm sell` requires a user data.");
+        }
+        if (bot.database === undefined) {
+            return message.send("Database not yet initialized. Please try again in a moment.");
+        }
+        if (cropArg === undefined) {
+            return message.send(`It seems you don't know what a \`${cropArg}\` is... maybe you mispelled it?`);
+        }
+        if (!isValidCropName(cropArg)) {
+            const skillsEmbed = new Embed()
+                .setAuthor(message.author.username, undefined, message.author.avatarURL)
+                .setColor(bot.color.lightgreen);
+            for (const seed in userdata.seeds.common) {
+                // TODO: log this
+                if (!isValidCropName(seed)) {
+                    continue;
+                }
+                if (!userdata.seeds.common[seed].discovered) {
+                    continue;
+                }
+                const XPBar = new XPProgressBar(userdata.seeds.common[seed].level, 5);
+                if (bot.ENV.DEBUG === "true") {
+                    console.log(XPBar.show());
+                }
+                skillsEmbed.addField(cropData[seed].emoji, `Level: **${XPBar.level()}**` + "\n" + XPBar.show(), true);
+            }
+            return message.send(skillsEmbed);
+        }
+        else {
+            if (cropData[cropArg] && userdata.seeds.common[cropArg].discovered) {
+                const attachment = new Attachment(cropArg);
+                const XPBar = new XPProgressBar(userdata.seeds.common[cropArg].level);
+                const seedSkillEmbed = new Embed()
+                    .setAuthor(message.author.username, undefined, message.author.avatarURL)
+                    .setColor(bot.color.lightgreen)
+                    .setTitle(`${cropArg[0].toUpperCase() + cropArg.substr(1)}`)
+                    .setThumbnail(attachment.link())
+                    .addField(`Level: **${XPBar.level()}**`, XPBar.show());
+                return message.send(seedSkillEmbed, attachment.send());
+            }
+            else {
+                return message.send(new Embed().uhoh(`**${cropArg}** isn't one of your crops!`));
+            }
+        }
+    }, {
+        description: "Shows the level of all your seeds",
+        usage: "​farm skills [seed]",
+        examples: "farm skills apple",
+        permissionLevel: CONSTANTS.PERMISSIONS.EVERYONE,
+        category: CONSTANTS.CATEGORIES.FARMING,
+        cooldown: 5000
+    });
+};

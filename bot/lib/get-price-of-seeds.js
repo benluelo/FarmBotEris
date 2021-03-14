@@ -1,4 +1,3 @@
-"use strict";
 const hour = 3600000;
 // ideas for the prices
 // - random (low) chance for any seed price to be decreased by 50%
@@ -33,4 +32,4 @@ randomPrice();
 setInterval(() => {
     randomPrice();
 }, hour);
-module.exports = seedsPrice;
+export default seedsPrice;

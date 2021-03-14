@@ -3,9 +3,9 @@ const si = require("systeminformation")
 
 /**
  * @description Formats bytes.
- * @param {Number} bytes - Number of bytes.
- * @param {Number} decimals - Decimal precision. Defaults to `2`.
- * @returns {String} The formatted bytes.
+ * @param {number} bytes - number of bytes.
+ * @param {number} decimals - Decimal precision. Defaults to `2`.
+ * @returns {string} The formatted bytes.
  */
 function formatBytes(bytes, decimals = 2) {
   if (!bytes) { return "0 Bytes" }

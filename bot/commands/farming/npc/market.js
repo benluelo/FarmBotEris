@@ -244,12 +244,12 @@ module.exports.run = (bot) => {
   /**
    * @description Prettify the request.
    * @param {Object} req - The request to prettify.
-   * @param {String} req.id - The ID.
+   * @param {string} req.id - The ID.
    * @param {Req[]} req.want - An array of the different wants in the request.
    * @param {Object} req.rewards - The rewards.
-   * @param {Number} req.rewards.money - How much money wil be rewarded.
-   * @param {Number} req.rewards.amount - How much reputation wil be rewarded.
-   * @returns {String} The prettified request.
+   * @param {number} req.rewards.money - How much money wil be rewarded.
+   * @param {number} req.rewards.amount - How much reputation wil be rewarded.
+   * @returns {string} The prettified request.
    */
   function prettifyParsedRequest(req) {
     return [
@@ -267,7 +267,7 @@ module.exports.run = (bot) => {
    * @description Parse the provided request.
    * @param {import("../../../lib/npc.js").Request} request - The request object.
    * @param {import("../../../lib/npc.js").Farmer[]} userFarmers - The user's farmers (their "village").
-   * @param {(Number | String)} id - The ID of the request.
+   * @param {(number | string)} id - The ID of the request.
    * @returns The parsed request.
    */
   function parseRequest(request, userFarmers, id) {
@@ -303,8 +303,8 @@ module.exports.run = (bot) => {
   function parseWants(preferences, request) {
     /**
      * @typedef {Object} ParsedWants
-     * @prop {Number} val - The monetary value of the request.
-     * @prop {Number} rep - The reputation(ary?) value of the request.
+     * @prop {number} val - The monetary value of the request.
+     * @prop {number} rep - The reputation(ary?) value of the request.
      * @prop {Req[]} req
      */
     /** @type {ParsedWants} */
@@ -350,7 +350,7 @@ module.exports.run = (bot) => {
   /**
    * @description Makes the parsed requests readable and good for sending to the user.
    * @param {Req} req - The request.
-   * @returns {String} The reqdable request.
+   * @returns {string} The reqdable request.
    */
   function readableReq(req) {
     return req.map((r, i) => {
@@ -362,6 +362,6 @@ module.exports.run = (bot) => {
    * @typedef {Object} Req
    * @prop {import("../../../lib/crop-data.js").CropName} name - The name.
    * @prop {import("../../../lib/crop-data.js").CropEmoji} emoji - The emoji.
-   * @prop {Number} amount - The amount.
+   * @prop {number} amount - The amount.
    */
 }

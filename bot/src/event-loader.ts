@@ -1,10 +1,9 @@
-import { FarmBotClient } from "../lib/FarmBotClient"
+import { FarmBotClient } from "../lib/FarmBotClient.js"
 
 import fs from "fs"
 import { join } from "path"
-import Log from "./logger"
+import Log from "./logger.js"
 
-/** @private @param {import("../lib/FarmBotClient.js")} bot */
 export default (bot: FarmBotClient) => {
   fs.readdir(join(__dirname, "../events/"), (err, files) => {
     if (err) {

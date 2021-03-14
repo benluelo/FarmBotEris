@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const CONSTANTS = {
     PERMISSIONS: Object.freeze({
         /** Commands that everyone has access to. */
@@ -22,4 +20,4 @@ const CONSTANTS = {
         DEVELOPMENT: Symbol("📜 Development")
     })
 };
-exports.default = CONSTANTS;
+export default CONSTANTS;

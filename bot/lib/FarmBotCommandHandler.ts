@@ -1,13 +1,12 @@
 import { Message } from "eris"
-import { InspectOptionsStylized } from "util"
-import { CommandHelp } from "./FarmBotClient"
-
-import util from "util"
+import util, { InspectOptionsStylized } from "util"
+import { CommandHelp } from "./FarmBotClient.js"
 import CONSTANTS from "./CONSTANTS.js"
-import { Embed } from "./Embed"
-import User from "./User"
+import { Embed } from "./Embed.js"
+import User from "./User.js"
+import { UserData } from "../dtos/UserData.js"
 
-export type CommandFunction = (msg: Message, args: String[], user?: User) => void;
+export type CommandFunction = (msg: Message, args: (string | undefined)[], user?: UserData) => void;
 
 export type CmdInfo = {
   /** The description for the command. */
@@ -120,7 +119,7 @@ export class FarmBotCommand {
    * @param args - The command arguments.
    * @param userdata - The caller's DB information.
    */
-  run(msg: Message, args: string[], userdata?: User) {
+  run(msg: Message, args: string[], userdata?: UserData) {
     if (this.subcommands.size() !== 0 && this.subcommands.has(args[0])) {
       this.subcommands.get(args.shift()!)?.run(msg, args, userdata)
     } else {
@@ -214,13 +213,13 @@ export class FarmBotCommandHandler {
    * @param args - The command arguments.
    * @param userdata - The user's DB information.
    */
-  run(cmdName: string, message: Message, args: string[], userdata?: User) {
+  run(cmdName: string, message: Message, args: string[], userdata?: UserData) {
     this.get(cmdName)?.run(message, args, userdata)
   }
 
   /**
    * @description Gets a command from the `FarmBotCommandHandler`.
-   * @param {String} cmd - The command name.
+   * @param {string} cmd - The command name.
    * @returns {(FarmBotCommand | undefined)} The found command, or undefined if no command is found.
    */
   get(cmd: string): FarmBotCommand | undefined {
@@ -229,11 +228,11 @@ export class FarmBotCommandHandler {
 
   /**
    * @description Adds a command to the bot.
-   * @param {String} name - The command name.
-   * @param {CommandFunction} func - The command function.
-   * @param {CommandInformation} info - The information for the command.
-   * @param {FarmBotCommand} [parent] - The parent command, if this is a subcommand.
-   * @returns {FarmBotCommand} The new `FarmBotCommand` object.
+   * @param name - The command name.
+   * @param func - The command function.
+   * @param info - The information for the command.
+   * @param parent - The parent command, if this is a subcommand.
+   * @returns The new `FarmBotCommand` object.
    */
   set(name: string, func: CommandFunction, info: CommandInformation, parent: FarmBotCommand | undefined) {
     const newCmd = new FarmBotCommand(name, func, info, parent ? parent : undefined)
@@ -267,10 +266,14 @@ export class FarmBotCommandHandler {
 
   /**
    * @description Ye.
-   * @returns {IterableIterator<[string, FarmBotCommand]>} The iterable.
+   * @returns The iterable.
    */
-  entries() {
+  entries(): IterableIterator<[string, FarmBotCommand]> {
     return this.#internal.entries()
+  }
+
+  delete(key: string): boolean {
+    return this.#internal.delete(key)
   }
 
   toJSON() {
@@ -299,8 +302,8 @@ export class Cooldown extends Map<string, number> {
 
   /**
    * @description Checks if a user is able to use a command. If they are able to use it, reset their cooldown for that command.
-   * @param {String} userID - The `userID` of the user who is attempting to use the command.
-   * @returns {Number} How long the user has to wait to use the command, in milliseconds; `0` if the cooldown is up.
+   * @param {string} userID - The `userID` of the user who is attempting to use the command.
+   * @returns {number} How long the user has to wait to use the command, in milliseconds; `0` if the cooldown is up.
    */
   check(userID: string): number {
 

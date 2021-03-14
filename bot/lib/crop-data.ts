@@ -1,4 +1,4 @@
-import type { CropInformationMap } from "../../global"
+import { CropInformationMap } from "../dtos/Crop";
 
 export default {
   apple: {

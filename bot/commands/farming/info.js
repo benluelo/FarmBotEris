@@ -6,10 +6,10 @@ const { parsePlotNumber } = require("../../lib/parse-plot-number.js")
 
 /**
  * @description Clamps a number between two provided values.
- * @param {Number} num - The number to clamp.
- * @param {Number} min - The minimum value for the number.
- * @param {Number} max - The maximum value for the number.
- * @returns {Number} The clamped number.
+ * @param {number} num - The number to clamp.
+ * @param {number} min - The minimum value for the number.
+ * @param {number} max - The maximum value for the number.
+ * @returns {number} The clamped number.
  */
 function clamp(num, min, max) {
   return num <= min ? min : num >= max ? max : num

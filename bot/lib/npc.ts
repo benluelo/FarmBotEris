@@ -1,6 +1,7 @@
 import farmerData from "./farmer-data"
 import getLevel from "../../helpers/level-test"
-import { CropName, MarketRequest } from "../dtos/user"
+import { CropName } from "../dtos/Crop"
+import { MarketRequest } from "../dtos/MarketRequest"
 
 type Color = typeof farmerData.preferences.color[number]
 type Taste = typeof farmerData.preferences.taste[number]

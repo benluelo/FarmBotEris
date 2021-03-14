@@ -1,4 +1,4 @@
-import { FarmBotClient } from "../../lib/FarmBotClient"
+import { FarmBotClient } from "../../lib/FarmBotClient.js"
 
 export default (bot: FarmBotClient) => {
   const main = bot.addCommand("cmdtest", (message, args) => {

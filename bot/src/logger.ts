@@ -1,10 +1,12 @@
 import chalk from "chalk"
-import fs, { mkdirSync } from "fs"
+import fs, { existsSync, mkdirSync } from "fs"
 import { basename, join } from "path"
 import { get } from "stack-trace"
 
 const outFileName = "toFileLogs"
-mkdirSync(join(process.cwd(), "../logs/"))
+if (!existsSync(join(process.cwd(), "../logs/"))) {
+  mkdirSync(join(process.cwd(), "../logs/"))
+}
 const toFileStream = fs.createWriteStream(`${process.cwd()}/bot/logs/${outFileName}.txt`, {
   encoding: "utf-8",
   flags: "a+"

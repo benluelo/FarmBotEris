@@ -4,15 +4,20 @@ import config from "../config";
 import regions from "./names.json";
 import flags from "./flags.json";
 import { NPC } from "./npc";
-import { UserData, Plot, CropName, Seed, MarketRequest, Farmer, uuid } from "../dtos/user";
+import { UserData } from "../dtos/UserData";
+import { CropName } from "../dtos/Crop";
+import { Farmer } from "../dtos/Farmer";
+import { MarketRequest } from "../dtos/MarketRequest";
+import { Seed } from "../dtos/Seed";
+import { Plot } from "../dtos/Plot";
+
+import { v4 as uuid } from "uuid"
 
 export default class User implements UserData {
     userID;
-    userTag;
-    nickname;
     region: {
         name: keyof typeof regions;
-        flag: typeof flags[Lowercase<keyof typeof regions>];
+        flag: typeof flags[keyof typeof regions];
     };
     messagesUserSent: number;
     botCommandsUsed: number;
@@ -35,13 +40,11 @@ export default class User implements UserData {
      * @param region - The region that the user is farming in.
      * @param farmers - The farmers of the user (i.e. their "village").
      */
-    constructor(author: ErisUser, region: string, farmers: Farmer[]) {
-        this.userID = author.id;
-        this.userTag = author.username + "#" + author.discriminator;
-        this.nickname = author.username;
+    constructor(author: ErisUser | string, region: string, farmers: Farmer[]) {
+        this.userID = typeof author === "string" ? author : author.id;
         this.region = {
             name: region as keyof typeof regions,
-            flag: flags[region as Lowercase<keyof typeof regions>]
+            flag: flags[region as keyof typeof regions]
         };
         this.messagesUserSent = 0;
         this.botCommandsUsed = 0;
@@ -122,13 +125,13 @@ export default class User implements UserData {
         };
         this.requests = {};
         this.farmers = farmers;
-        this.permissions = config.ownersIDs.includes(author.id) ? CONSTANTS.PERMISSIONS.DEVELOPMENT : CONSTANTS.PERMISSIONS.EVERYONE;
+        this.permissions = config.ownersIDs.includes(this.userID) ? CONSTANTS.PERMISSIONS.DEVELOPMENT : CONSTANTS.PERMISSIONS.EVERYONE;
         this.requestTimeOut = 0;
         this.requestAmount = 9;
         this.uuid = uuid();
         this.updated = true;
     }
-
+    
     newRequest(returnRequest = false) {
         const randomFarmer = this.farmers[Math.floor(Math.random() * this.farmers.length)];
         const randomReq = new NPC(randomFarmer.name, randomFarmer.gender, randomFarmer.unlockableCrop, randomFarmer.wealth, randomFarmer.preferences)
@@ -144,8 +147,8 @@ export default class User implements UserData {
      * @param author The author of the message.
      * @param userdata The userdata object from the database.
      */
-    static fromUserData(author: ErisUser, userdata: UserData) {
-        const user = new User(author, userdata.region.name, userdata.farmers);
-        return { ...user, ...userdata };
+    static fromUserData(userdata: UserData, author: ErisUser | string): User {
+        const user = new User(author, userdata.region.name, userdata.farmers)
+        return { ...user, ...userdata, newRequest: user.newRequest }
     }
 }

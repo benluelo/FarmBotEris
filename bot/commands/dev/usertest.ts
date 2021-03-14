@@ -1,4 +1,4 @@
-import { FarmBotClient } from "../../lib/FarmBotClient"
+import { FarmBotClient } from "../../lib/FarmBotClient.js"
 
 export default (bot: FarmBotClient) => {
   // eslint-disable-next-line no-unused-vars
@@ -10,7 +10,7 @@ export default (bot: FarmBotClient) => {
       }
 
       if (userdata) {
-        console.log("userdata! " + userdata.nickname)
+        console.log("userdata! " + userdata.userID)
       } else {
         console.log("no userdata :(")
       }
@@ -25,7 +25,7 @@ export default (bot: FarmBotClient) => {
       }
 
       if (userdata) {
-        console.log("userdata! " + userdata.nickname)
+        console.log("userdata! " + userdata.userID)
       } else {
         console.log("no userdata :(")
       }

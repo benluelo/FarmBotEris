@@ -1,7 +1,7 @@
-import { CropName } from "../../global";
 import util from "util";
 import { readFileSync } from "fs";
 import { resolve } from "path";
+import { CropName } from "../dtos/Crop.js";
 
 
 export class Attachment {

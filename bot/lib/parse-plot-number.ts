@@ -5,11 +5,11 @@ const plotRegex = /^[a-e]{1}[1-5]{1}$/
 /**
  * @description Parses the supplied plot number.
  * @param str - The plot number to get the value of, in the format `<letter><number>`.
- * @returns The value of the plot supplied, or `false` if the input was not in valid format.
+ * @returns The numeric value of the plot supplied, or `undefined` if the input was not in valid format.
  */
-module.exports.parsePlotNumber = (str: string): (number | boolean) => {
+export default (str: string): (number | undefined) => {
   // check that the plot is in <letter><number> format
-  if (!plotRegex.test(str)) { return false }
+  if (!plotRegex.test(str)) { return undefined }
 
   // if correct format, create an object that holds the plot coordinates
   // cast is safe since we know the regex matched

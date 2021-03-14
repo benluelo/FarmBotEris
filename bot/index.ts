@@ -1,4 +1,4 @@
-import { FarmBotClient } from "./lib/FarmBotClient"
+import { FarmBotClient } from "./lib/FarmBotClient.js"
 import { Message, MessageContent, MessageFile } from "eris"
 
 Message.prototype.send = function (content: MessageContent, file: MessageFile): Promise<Message> {
@@ -28,10 +28,12 @@ const bot = new FarmBotClient(require("dotenv").config().parsed, {
   "f!"
 ])
 
-require("./src/command-loader.js")(bot)
-require("./src/event-loader.js")(bot)
+import commandLoader from "./src/command-loader.js"
+import eventLoader from "./src/event-loader.js"
 // gonna turn that off for now
 // require("../API/index")(bot) // not ideal (bot goes down so does some user pages) but works!
+commandLoader(bot)
+eventLoader(bot)
 
 bot.initDB()
 

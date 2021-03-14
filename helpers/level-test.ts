@@ -1,7 +1,7 @@
 type LevelInfo = {
-  level: Number
-  numerator: Number
-  denominator: Number
+  level: number
+  numerator: number
+  denominator: number
 }
 
 /**

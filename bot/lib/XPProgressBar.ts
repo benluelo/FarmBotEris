@@ -6,9 +6,9 @@ export class XPProgressBar extends ProgressBar {
   private _level: any;
   /**
    * @description An extension of the {@link ProgressBar} class, for use in showing the levels of the npcs or crops.
-   * @param {Number} exp - The amount of experience points. Must be `>= 0`.
-   * @param {Number} [length=10] - The length of the progress bar, in characters. Default is 10. Must be `>= 2`. Default `10`.
-   * @param {Number} [base=2] - The base for the level calculation. Must be `>= 2`. Default `2`.
+   * @param {number} exp - The amount of experience points. Must be `>= 0`.
+   * @param {number} [length=10] - The length of the progress bar, in characters. Default is 10. Must be `>= 2`. Default `10`.
+   * @param {number} [base=2] - The base for the level calculation. Must be `>= 2`. Default `2`.
    */
   constructor(exp: number, length: number = 10, base: number = 2) {
     const { getLevel } = require("../../helpers/level-test.js");
