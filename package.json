@@ -13,6 +13,8 @@
   },
   "keywords": [
     "farm",
+    "farming",
+    "casual",
     "farmbot",
     "eris",
     "discord"
@@ -25,21 +27,15 @@
   "homepage": "https://github.com/benluelo/FarmBotEris#readme",
   "dependencies": {
     "chalk": "^3.0.0",
-    "convert-svg-to-png": "^0.5.0",
     "dotenv": "^8.2.0",
-    "eris": "^0.11.2",
+    "eris": "^0.14.0",
     "eris-pagination": "^0.5.2",
     "express": "^4.17.1",
-    "jsdoc": "^3.6.3",
     "mongodb": "^3.6.4",
-    "node-fetch": "^2.6.0",
     "parse-ms": "^2.1.0",
-    "readline-sync": "^1.4.10",
     "stack-trace": "0.0.10",
-    "svg-parser": "^2.0.3",
-    "systeminformation": "^4.21.1",
+    "systeminformation": "^5.6.3",
     "transliteration": "^2.1.8",
-    "twemoji": "^12.1.5",
     "uuid": "^7.0.2"
   },
   "devDependencies": {
@@ -48,7 +44,6 @@
     "@types/stack-trace": "0.0.29",
     "@types/transliteration": "^1.6.6",
     "@types/uuid": "^8.3.0",
-    "eslint": "^6.8.0",
-    "eslint-plugin-jsdoc": "^21.0.0"
+    "eslint": "^6.8.0"
   }
 }

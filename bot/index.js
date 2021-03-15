@@ -1,6 +1,7 @@
-import { FarmBotClient } from "./lib/FarmBotClient.js";
+import { FarmBotClient } from "./src/lib/FarmBotClient.js";
 import { Message } from "eris";
 Message.prototype.send = function (content, file) {
+    // console.log(JSON.stringify(content, null, 4), file)
     // @ts-ignore the fact that this still works proves otherwise
     return this._client.createMessage(this.channel.id, content, file);
 };
@@ -30,11 +31,12 @@ const bot = new FarmBotClient(dotenvParsed.parsed, {
     "farm",
     "f!"
 ]);
-import { loadCommands } from "./src/command-loader.js";
-import { loadEvents } from "./src/event-loader.js";
+import { loadCommands } from "./src/loaders/command-loader.js";
+import { loadEvents } from "./src/loaders/event-loader.js";
 // gonna turn that off for now
 // require("../API/index")(bot) // not ideal (bot goes down so does some user pages) but works!
 loadCommands(bot);
 loadEvents(bot);
-bot.initDB();
-bot.connect();
+bot.initDB()
+    .then(_ok => bot.connect())
+    .catch(err => console.error(`unable to connect to the database. Error: ${err}`));
