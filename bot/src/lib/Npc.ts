@@ -1,22 +1,22 @@
-import farmerData from "../data/farmer-data.js"
-import { CropColors, CropFlavours, CropName } from "../dtos/Crop.js"
-import { MarketRequest } from "../dtos/MarketRequest.js"
-import { getLevel } from "../utils/level-test.js"
+import farmerData from '../data/farmer-data.js';
+import { CropColors, CropFlavours, CropName } from '../dtos/Crop.js';
+import { MarketRequest } from '../dtos/MarketRequest.js';
+import { getLevel } from '../utils/level-test.js';
 
 export type Preferences = {
   color: CropColors
   taste: CropFlavours[]
-}
+};
 
 export class Npc {
-  name: string
-  gender: ("male" | "female")
-  unlockableCrop: CropName
-  wealth: number
-  preferences: Preferences
-  level: number
-  unlockLevel: number
-  emoji: string
+  name: string;
+  gender: ('male' | 'female');
+  unlockableCrop: CropName;
+  wealth: number;
+  preferences: Preferences;
+  level: number;
+  unlockLevel: number;
+  emoji: string;
   /**
    * @description Creates a new NPC.
    * @param name - The name of the NPC.
@@ -25,19 +25,19 @@ export class Npc {
    * @param wealth - The wealth of the NPC. Must be `0 <= x <= 1`.
    * @param preferences - The preferences of the NPC.
    */
-  constructor(name: string, gender: ("male" | "female"), unlockableCrop: CropName, wealth: number, preferences?: Preferences) {
-    this.name = name
-    this.gender = gender
-    this.unlockableCrop = unlockableCrop
-    this.wealth = wealth || Math.random()
+  constructor(name: string, gender: ('male' | 'female'), unlockableCrop: CropName, wealth: number, preferences?: Preferences) {
+    this.name = name;
+    this.gender = gender;
+    this.unlockableCrop = unlockableCrop;
+    this.wealth = wealth || Math.random();
     this.preferences = preferences ?? {
       color: farmerData.preferences.color[Math.floor(Math.random() * farmerData.preferences.color.length)] as typeof farmerData.preferences.color[number],
       taste: [farmerData.preferences.taste[Math.floor(Math.random() * farmerData.preferences.taste.length)] as typeof farmerData.preferences.taste[number]]
-    }
-    this.level = 0
-    this.unlockLevel = Math.ceil(this.wealth * 10) // will be between 1 and 10, depending on the wealth of the farmer
+    };
+    this.level = 0;
+    this.unlockLevel = Math.ceil(this.wealth * 10); // will be between 1 and 10, depending on the wealth of the farmer
 
-    this.emoji = farmerData.emoji[this.gender][Math.floor(Math.random() * farmerData.emoji[this.gender].length)]
+    this.emoji = farmerData.emoji[this.gender][Math.floor(Math.random() * farmerData.emoji[this.gender].length)];
   }
 
   /**
@@ -47,32 +47,32 @@ export class Npc {
    */
   newRequest(crops: { [s in CropName]: { discovered: boolean; level: number; amount: number } }): { id: string; req: MarketRequest } {
 
-    const rand = Math.random()
-    const want = []
+    const rand = Math.random();
+    const want = [];
     const discoveredCrops = (Object.entries(crops)).reduce((prev, [crop, { discovered }]) => {
       if (discovered) {
-        return [...prev, crop as CropName]
+        return [...prev, crop as CropName];
       }
-      return prev
-    }, [] as CropName[])
+      return prev;
+    }, [] as CropName[]);
 
     // add one random crop from the list of discovered crops to the requests
     // if there is only one crop discovered, add a random amount of those to want
     // otherwise, check a random number against the wealth (more wealth = more possible requests)
     // after having looped through all of the discovered crops, return the request(s)
 
-    const randIndex = Math.floor(Math.random() * discoveredCrops.length)
+    const randIndex = Math.floor(Math.random() * discoveredCrops.length);
     want.push({
       crop: discoveredCrops[randIndex],
       amount: Math.ceil(Math.random() * this.wealth * 10)
-    })
-    discoveredCrops.splice(randIndex, 1)
+    });
+    discoveredCrops.splice(randIndex, 1);
     for (const crop in discoveredCrops) {
       if (Math.random() < this.wealth) {
         want.push({
           crop: discoveredCrops[crop],
           amount: Math.ceil(Math.random() * this.wealth * 10)
-        })
+        });
       }
     }
 
@@ -81,11 +81,11 @@ export class Npc {
       want: want,
       value: (this.wealth * rand) * 10 * 10 * getLevel(2, this.level).level,
       reputation: (1 - (this.wealth * rand)) * 10 * 10 * getLevel(2, this.level).level
-    }
+    };
     return {
       id: getRandomID(),
       req: marketRequest
-    }
+    };
   }
 }
 
@@ -97,18 +97,18 @@ export class Npc {
 function getRandomID(): string {
   const letterValues: {
     [n: number]: string
-  } = {}
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach((v) => {
-    letterValues[v.charCodeAt(0) - 65] = v
-  })
+  } = {};
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach((v) => {
+    letterValues[v.charCodeAt(0) - 65] = v;
+  });
 
-  let num = Math.floor(Math.random() * Math.pow(Object.keys(letterValues).length, 3))
-  let toReturn = ""
+  let num = Math.floor(Math.random() * Math.pow(Object.keys(letterValues).length, 3));
+  let toReturn = '';
   while (num != 0) {
-    const quotient = Math.floor(num / Object.keys(letterValues).length)
-    const remainder = num % Object.keys(letterValues).length
-    num = quotient
-    toReturn += letterValues[remainder]
+    const quotient = Math.floor(num / Object.keys(letterValues).length);
+    const remainder = num % Object.keys(letterValues).length;
+    num = quotient;
+    toReturn += letterValues[remainder];
   }
-  return toReturn
+  return toReturn;
 }

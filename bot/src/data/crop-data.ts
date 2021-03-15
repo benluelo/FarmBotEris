@@ -1,100 +1,100 @@
-import { CropInformationMap } from "../dtos/Crop.js";
+import { CropInformationMap } from '../dtos/Crop.js';
 
 export default {
   apple: {
-    emoji: "🍎",
+    emoji: '🍎',
     flavour: [
-      "sweet",
-      "sweet"
+      'sweet',
+      'sweet'
     ],
-    color: "red"
+    color: 'red'
   },
   orange: {
-    emoji: "🍊",
+    emoji: '🍊',
     flavour: [
-      "sweet",
-      "tart"
+      'sweet',
+      'tart'
     ],
-    color: "orange"
+    color: 'orange'
   },
   lemon: {
-    emoji: "🍋",
+    emoji: '🍋',
     flavour: [
-      "sweet",
-      "sour"
+      'sweet',
+      'sour'
     ],
-    color: "yellow"
+    color: 'yellow'
   },
   pear: {
-    emoji: "🍐",
+    emoji: '🍐',
     flavour: [
-      "sweet",
-      "sweet"
+      'sweet',
+      'sweet'
     ],
-    color: "green"
+    color: 'green'
   },
   cherry: {
-    emoji: "🍒",
+    emoji: '🍒',
     flavour: [
-      "sweet",
-      "sour"
+      'sweet',
+      'sour'
     ],
-    color: "red"
+    color: 'red'
   },
   peach: {
-    emoji: "🍑",
+    emoji: '🍑',
     flavour: [
-      "sweet",
-      "sweet"
+      'sweet',
+      'sweet'
     ],
-    color: "pink"
+    color: 'pink'
   },
   mango: {
-    emoji: "🥭",
+    emoji: '🥭',
     flavour: [
-      "sour",
-      "sweet"
+      'sour',
+      'sweet'
     ],
-    color: "pink"
+    color: 'pink'
   },
   melon: {
-    emoji: "🍈",
+    emoji: '🍈',
     flavour: [
-      "sweet",
-      "sweet"
+      'sweet',
+      'sweet'
     ],
-    color: "green"
+    color: 'green'
   },
   grapes: {
-    emoji: "🍇",
+    emoji: '🍇',
     flavour: [
-      "sweet",
-      "tart"
+      'sweet',
+      'tart'
     ],
-    color: "purple"
+    color: 'purple'
   },
   strawberry: {
-    emoji: "🍓",
+    emoji: '🍓',
     flavour: [
-      "sweet",
-      "tart"
+      'sweet',
+      'tart'
     ],
-    color: "red"
+    color: 'red'
   },
   banana: {
-    emoji: "🍌",
+    emoji: '🍌',
     flavour: [
-      "sweet",
-      "sweet"
+      'sweet',
+      'sweet'
     ],
-    color: "yellow"
+    color: 'yellow'
   },
   pineapple: {
-    emoji: "🍍",
+    emoji: '🍍',
     flavour: [
-      "sweet",
-      "tart"
+      'sweet',
+      'tart'
     ],
-    color: "yellow"
+    color: 'yellow'
   }
-} as CropInformationMap
+} as CropInformationMap;

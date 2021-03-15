@@ -1,10 +1,10 @@
-import { Message } from "eris"
-import util, { InspectOptionsStylized } from "util"
-import { CommandHelp } from "./FarmBotClient.js"
-import CONSTANTS from "../data/CONSTANTS.js"
-import { Embed } from "./Embed.js"
-import User from "./User.js"
-import { UserData } from "../dtos/UserData.js"
+import { Message } from 'eris';
+import util, { InspectOptionsStylized } from 'util';
+import { CommandHelp } from './FarmBotClient.js';
+import CONSTANTS from '../data/CONSTANTS.js';
+import { Embed } from './Embed.js';
+import User from './User.js';
+import { UserData } from '../dtos/UserData.js';
 
 export type CommandFunction = (msg: Message, args: (string | undefined)[], user?: UserData) => void;
 
@@ -16,34 +16,34 @@ export type CmdInfo = {
   /** Examples of how to use the command. */
   examples: string
   /** | 1 | 2 | 3)} */
-  permissionLevel: typeof CONSTANTS["PERMISSIONS"][keyof typeof CONSTANTS["PERMISSIONS"]]
+  permissionLevel: typeof CONSTANTS['PERMISSIONS'][keyof typeof CONSTANTS['PERMISSIONS']]
   /** The category the command belongs in. */
-  category: typeof CONSTANTS["CATEGORIES"][keyof typeof CONSTANTS["CATEGORIES"]]
+  category: typeof CONSTANTS['CATEGORIES'][keyof typeof CONSTANTS['CATEGORIES']]
   /** An array of aliases for the command. */
   aliases: string[]
   /** The cooldown for the command, in `ms`. */
   cooldown: number
   /** Whether or not the command requires a userdata to run. WARNING: If set to `true`, no permissions checks will be made. */
   requiresUser: boolean
-}
+};
 
 export class CommandInformation {
   /** The description for the command. */
-  description: string
+  description: string;
   /** How to use the command. */
-  usage: string
+  usage: string;
   /** Examples of how to use the command. */
-  examples: string
+  examples: string;
   /** | 1 | 2 | 3)} */
-  permissionLevel: typeof CONSTANTS["PERMISSIONS"][keyof typeof CONSTANTS["PERMISSIONS"]]
+  permissionLevel: typeof CONSTANTS['PERMISSIONS'][keyof typeof CONSTANTS['PERMISSIONS']];
   /** The category the command belongs in. */
-  category: typeof CONSTANTS["CATEGORIES"][keyof typeof CONSTANTS["CATEGORIES"]]
+  category: typeof CONSTANTS['CATEGORIES'][keyof typeof CONSTANTS['CATEGORIES']];
   /** An array of aliases for the command. */
-  aliases: string[]
+  aliases: string[];
   /** The cooldown for the command, in `ms`. */
-  cooldownMs: number
+  cooldownMs: number;
   /** Whether or not the command requires a userdata to run. WARNING: If set to `true`, no permissions checks will be made. */
-  requiresUser: boolean
+  requiresUser: boolean;
   /**
    * @description The general information about a command.
    */
@@ -57,16 +57,16 @@ export class CommandInformation {
       aliases,
       cooldown,
       requiresUser,
-    } = info ?? {}
+    } = info ?? {};
 
-    this.description = description ?? "No description provided.",
-      this.usage = usage ?? "No usage provided.",
-      this.examples = examples ?? "",
-      this.permissionLevel = permissionLevel ?? CONSTANTS.PERMISSIONS.DEVELOPMENT,
-      this.category = category ?? CONSTANTS.CATEGORIES.DEVELOPMENT,
-      this.aliases = aliases ?? [],
-      this.cooldownMs = cooldown ?? 0,
-      this.requiresUser = requiresUser ?? true
+    this.description = description ?? 'No description provided.',
+    this.usage = usage ?? 'No usage provided.',
+    this.examples = examples ?? '',
+    this.permissionLevel = permissionLevel ?? CONSTANTS.PERMISSIONS.DEVELOPMENT,
+    this.category = category ?? CONSTANTS.CATEGORIES.DEVELOPMENT,
+    this.aliases = aliases ?? [],
+    this.cooldownMs = cooldown ?? 0,
+    this.requiresUser = requiresUser ?? true;
   }
 
   toJSON() {
@@ -78,18 +78,18 @@ export class CommandInformation {
       category: this.category.description,
       aliases: this.aliases,
       cooldown: this.cooldownMs
-    }
+    };
   }
 }
 
 export class FarmBotCommand {
-  name: string
-  func: CommandFunction
-  info: CommandInformation
-  parent?: FarmBotCommand
-  subcommands: FarmBotCommandHandler
-  Cooldowns: Cooldown
-  embed?: Embed
+  name: string;
+  func: CommandFunction;
+  info: CommandInformation;
+  parent?: FarmBotCommand;
+  subcommands: FarmBotCommandHandler;
+  Cooldowns: Cooldown;
+  embed?: Embed;
   /**
    * @description Makes a command for the bot.
    * @param name - The name of the command.
@@ -98,37 +98,37 @@ export class FarmBotCommand {
    * @param parent - The parent command, if this is a subcommand.
    */
   constructor(name: string, func: CommandFunction, info: CommandInformation, parent?: FarmBotCommand) {
-    this.name = name
-    this.func = Object.freeze(Object.defineProperty(func, "name", {
+    this.name = name;
+    this.func = Object.freeze(Object.defineProperty(func, 'name', {
       value: name,
       writable: false
-    }))
-    this.info = info
-    this.parent = parent
-    this.subcommands = new FarmBotCommandHandler()
-    this.Cooldowns = new Cooldown(this.getFullCommandName(), this.info.cooldownMs)
+    }));
+    this.info = info;
+    this.parent = parent;
+    this.subcommands = new FarmBotCommandHandler();
+    this.Cooldowns = new Cooldown(this.getFullCommandName(), this.info.cooldownMs);
 
     // build the embed
     const embed = new Embed()
       .setTitle(`Help for \`${this.name}\``)
       .setDescription(this.info.description)
       .setColor(0x00b3b3)
-      .setFooter("<> - required  |  [] - optional")
-      .addField("**__Usage__:**", `\`\`\`${this.info.usage}\`\`\``)
+      .setFooter('<> - required  |  [] - optional')
+      .addField('**__Usage__:**', `\`\`\`${this.info.usage}\`\`\``);
     if (this.info.examples) {
-      embed.addField("**__Examples__:**", `\`\`\`${this.info.examples}\`\`\``)
+      embed.addField('**__Examples__:**', `\`\`\`${this.info.examples}\`\`\``);
     }
     if (this.info.aliases) {
-      embed.addField("**__Aliases__:**", `\`\`\`${this.info.aliases.join(", ")}\`\`\``)
+      embed.addField('**__Aliases__:**', `\`\`\`${this.info.aliases.join(', ')}\`\`\``);
     }
-    embed.addField("**__Cooldown__:**", `\`\`\`${this.info.cooldownMs / 1000} seconds\`\`\``)
+    embed.addField('**__Cooldown__:**', `\`\`\`${this.info.cooldownMs / 1000} seconds\`\`\``);
     if (this.subcommands.size() > 0) {
-      embed.addField("**__Subcommands__:**", `\`\`\`${[...this.subcommands.entries()].map(([subcommandName, _subcommandObject]) => subcommandName).join(", ")}\`\`\``)
+      embed.addField('**__Subcommands__:**', `\`\`\`${[...this.subcommands.entries()].map(([subcommandName, _subcommandObject]) => subcommandName).join(', ')}\`\`\``);
     }
   }
 
   getFullCommandName(): string {
-    return (this.parent ? this.parent.getFullCommandName() + " " : "") + this.name
+    return (this.parent ? this.parent.getFullCommandName() + ' ' : '') + this.name;
   }
 
   /**
@@ -139,17 +139,17 @@ export class FarmBotCommand {
    */
   run(msg: Message, args: string[], userdata?: UserData) {
     if (this.subcommands.size() !== 0 && this.subcommands.has(args[0])) {
-      this.subcommands.get(args.shift()!)?.run(msg, args, userdata)
+      this.subcommands.get(args.shift()!)?.run(msg, args, userdata);
     } else {
-      const timeToWait = this.Cooldowns.check(msg.author.id)
+      const timeToWait = this.Cooldowns.check(msg.author.id);
       // FIXME: Better error handling than this big if statement
       if ((this.info.requiresUser && userdata !== undefined && userdata.permissions >= this.info.permissionLevel) || !this.info.requiresUser) {
         if (timeToWait > 0) {
-          const sentMessage = msg.send(`**${msg.author.username}**, you have to wait **${(timeToWait / 1000).toFixed(2)}** seconds to use \`farm ${this.getFullCommandName()}\`!`)
-          msg.delete()
-          setTimeout(async () => { (await sentMessage).delete() }, timeToWait)
+          const sentMessage = msg.send(`**${msg.author.username}**, you have to wait **${(timeToWait / 1000).toFixed(2)}** seconds to use \`farm ${this.getFullCommandName()}\`!`);
+          msg.delete();
+          setTimeout(async () => { (await sentMessage).delete(); }, timeToWait);
         } else {
-          this.func(msg, args, userdata)
+          this.func(msg, args, userdata);
         }
       }
     }
@@ -163,7 +163,7 @@ export class FarmBotCommand {
    * @returns The new subcommand object.
    */
   subcommand(name: string, func: CommandFunction, info?: CommandHelp): FarmBotCommand {
-    return this.subcommands.set(name, func, new CommandInformation(info), this)
+    return this.subcommands.set(name, func, new CommandInformation(info), this);
   }
 
   /**
@@ -171,7 +171,7 @@ export class FarmBotCommand {
    * @param embed - The help embed for this command.
    */
   setEmbed(embed: Embed) {
-    this.embed = embed
+    this.embed = embed;
   }
 
   /**
@@ -182,13 +182,13 @@ export class FarmBotCommand {
    */
   getEmbed([subcmd, ...args]: (string | undefined)[], userdata: User): Embed | undefined {
     if (subcmd !== undefined && this.subcommands.size() !== 0 && this.subcommands.has(subcmd)) {
-      return this.subcommands.get(args.shift() ?? "")?.getEmbed(args, userdata)
+      return this.subcommands.get(args.shift() ?? '')?.getEmbed(args, userdata);
     } else {
       if (userdata.permissions < this.info.permissionLevel) {
-        return undefined
+        return undefined;
       }
       else {
-        return this.embed
+        return this.embed;
       }
     }
   }
@@ -197,7 +197,7 @@ export class FarmBotCommand {
     return {
       ...this.info.toJSON(),
       subcommands: this.subcommands.size() > 0 ? this.subcommands.toJSON() : undefined,
-    }
+    };
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -207,21 +207,21 @@ export class FarmBotCommand {
       info: this.info,
       parent: this.parent ? this.parent.name : null,
       subcommands: this.subcommands.size() > 0 ? this.subcommands : null
-    }
+    };
 
-    return util.inspect(toReturn, true, 1, true).replace(" [Map] ", " ")
+    return util.inspect(toReturn, true, 1, true).replace(' [Map] ', ' ');
   }
 }
 
 export class FarmBotCommandHandler {
-  aliases: Map<string, string>
-  #internal: Map<string, FarmBotCommand>
+  aliases: Map<string, string>;
+  #internal: Map<string, FarmBotCommand>;
   constructor() {
-    this.aliases = new Map()
-    this.#internal = new Map()
+    this.aliases = new Map();
+    this.#internal = new Map();
   }
 
-  size = () => this.#internal.size
+  size = () => this.#internal.size;
 
   /**
    * @description Runs thespecified command.
@@ -231,7 +231,7 @@ export class FarmBotCommandHandler {
    * @param userdata - The user's DB information.
    */
   run(cmdName: string, message: Message, args: string[], userdata?: UserData) {
-    this.get(cmdName)?.run(message, args, userdata)
+    this.get(cmdName)?.run(message, args, userdata);
   }
 
   /**
@@ -240,7 +240,7 @@ export class FarmBotCommandHandler {
    * @returns {(FarmBotCommand | undefined)} The found command, or undefined if no command is found.
    */
   get(cmd: string): FarmBotCommand | undefined {
-    return this.#internal.get(cmd) || this.#internal.get(this.aliases.get(cmd) ?? "")
+    return this.#internal.get(cmd) || this.#internal.get(this.aliases.get(cmd) ?? '');
   }
 
   /**
@@ -252,15 +252,15 @@ export class FarmBotCommandHandler {
    * @returns The new `FarmBotCommand` object.
    */
   set(name: string, func: CommandFunction, info: CommandInformation, parent: FarmBotCommand | undefined) {
-    console.log(name)
-    const newCmd = new FarmBotCommand(name, func, info, parent ? parent : undefined)
+    console.log(name);
+    const newCmd = new FarmBotCommand(name, func, info, parent ? parent : undefined);
     if (info && info.aliases) {
       info.aliases.forEach((alias: any) => {
-        this.aliases.set(alias, name)
-      })
+        this.aliases.set(alias, name);
+      });
     }
-    this.#internal.set(name, newCmd)
-    return newCmd
+    this.#internal.set(name, newCmd);
+    return newCmd;
   }
 
   /**
@@ -269,7 +269,7 @@ export class FarmBotCommandHandler {
    * @returns Whether or not the command is in the `FarmBotCommandHandler`.
    */
   has(cmd: string): boolean {
-    return this.#internal.has(cmd) || this.aliases.has(cmd)
+    return this.#internal.has(cmd) || this.aliases.has(cmd);
   }
 
   /**
@@ -279,8 +279,8 @@ export class FarmBotCommandHandler {
    * @returns The help embed for this command, or `undefined` if either their permmissions aren't high enough or there is no command with that name.
    */
   getEmbed([cmd, ...args]: (string | undefined)[], userdata: User): Embed | undefined {
-    if (cmd === undefined) { return undefined }
-    return this.has(cmd) ? this.get(cmd)?.getEmbed(args, userdata) : undefined
+    if (cmd === undefined) { return undefined; }
+    return this.has(cmd) ? this.get(cmd)?.getEmbed(args, userdata) : undefined;
   }
 
   /**
@@ -288,12 +288,12 @@ export class FarmBotCommandHandler {
    * @returns The iterable.
    */
   entries(): IterableIterator<[string, FarmBotCommand]> {
-    console.log(this.#internal.entries())
-    return this.#internal.entries()
+    console.log(this.#internal.entries());
+    return this.#internal.entries();
   }
 
   delete(key: string): boolean {
-    return this.#internal.delete(key)
+    return this.#internal.delete(key);
   }
 
   toJSON() {
@@ -302,22 +302,22 @@ export class FarmBotCommandHandler {
         Array.from(
           this.entries()
         ).filter(([name, cmd]) => {
-          console.log(cmd.info.permissionLevel === CONSTANTS.PERMISSIONS.EVERYONE)
-          return cmd.info.permissionLevel === CONSTANTS.PERMISSIONS.EVERYONE
+          console.log(cmd.info.permissionLevel === CONSTANTS.PERMISSIONS.EVERYONE);
+          return cmd.info.permissionLevel === CONSTANTS.PERMISSIONS.EVERYONE;
         }).map(([name, cmd]) => {
-          return [name, cmd.toJSON()]
+          return [name, cmd.toJSON()];
         })
-      )
+      );
   }
 }
 
 export class Cooldown extends Map<string, number> {
-  commandName: any
-  cooldownTimeMs: any
+  commandName: any;
+  cooldownTimeMs: any;
   constructor(commandName: string, cooldownTimeMs: number) {
-    super()
-    this.commandName = commandName
-    this.cooldownTimeMs = cooldownTimeMs
+    super();
+    this.commandName = commandName;
+    this.cooldownTimeMs = cooldownTimeMs;
   }
 
   /**
@@ -330,20 +330,20 @@ export class Cooldown extends Map<string, number> {
     // check for the user in the cooldowns
     if (this.has(userID)) {
       /** @description The **T**ime the user has **T**o **W**ait to use the command. */
-      let TTW = 0
+      let TTW = 0;
       // if the user is in the cooldowns, check if they can use the command
       if ((TTW = this.get(userID)) == 0) {
         // if they can use the command, reset their cooldown for that command
-        this.set(userID)
-        return 0
+        this.set(userID);
+        return 0;
       } else {
         // else, return how long they have to wait
-        return TTW
+        return TTW;
       }
       // if the user isn't in the cooldowns, add them to it
     } else {
-      this.set(userID)
-      return 0
+      this.set(userID);
+      return 0;
     }
   }
 
@@ -353,8 +353,8 @@ export class Cooldown extends Map<string, number> {
    * @returns How long the user has to wait to use the command; `0` if the cooldown is up.
    */
   get(userID: string): number {
-    const userCooldown = super.get(userID)
-    return this._clamp((userCooldown + this.cooldownTimeMs - Date.now()), 0, this.cooldownTimeMs)
+    const userCooldown = super.get(userID);
+    return this._clamp((userCooldown + this.cooldownTimeMs - Date.now()), 0, this.cooldownTimeMs);
   }
 
   /**
@@ -363,7 +363,7 @@ export class Cooldown extends Map<string, number> {
    * @returns The `Cooldowns` object.
    */
   set(userID: string): this {
-    return super.set(userID, Date.now())
+    return super.set(userID, Date.now());
   }
 
   /**
@@ -372,7 +372,7 @@ export class Cooldown extends Map<string, number> {
    * @returns Whether or not the user is in the `Cooldowns`.
    */
   has(userID: string): boolean {
-    return super.has(userID)
+    return super.has(userID);
   }
 
   /**
@@ -383,14 +383,14 @@ export class Cooldown extends Map<string, number> {
    * @returns The clamped number.
    */
   _clamp(num: number, min: number, max: number): number {
-    return num <= min ? min : num >= max ? max : num
+    return num <= min ? min : num >= max ? max : num;
   }
 
   [util.inspect.custom](depth: number, options: InspectOptionsStylized) {
     if (depth == 0) {
-      return options.stylize(`[${this.constructor.name}]`, "special")
+      return options.stylize(`[${this.constructor.name}]`, 'special');
     } else {
-      return this
+      return this;
     }
   }
 }

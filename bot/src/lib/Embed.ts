@@ -1,6 +1,6 @@
-import { URL } from "url";
-import util from "util";
-import { Attachment } from "./Attachment.js";
+import { URL } from 'url';
+import util from 'util';
+import { Attachment } from './Attachment.js';
 
 /**
  * @description Gets the image url out of the provided object.
@@ -9,15 +9,15 @@ import { Attachment } from "./Attachment.js";
  */
 export function getURL(obj: UrlLike): string {
   if (obj instanceof URL) {
-    return obj.href
+    return obj.href;
   } else if (obj instanceof Attachment) {
-    return obj.link()
+    return obj.link();
   } else {
-    return obj
+    return obj;
   }
 }
 
-export type UrlLike = string | URL | Attachment
+export type UrlLike = string | URL | Attachment;
 
 type EmbedFields = {
   name: string;
@@ -58,11 +58,11 @@ type EmbedStructure = {
 };
 
 export class Embed {
-  embed: EmbedStructure = { fields: [] }
+  embed: EmbedStructure = { fields: [] };
 
   constructor(embed?: EmbedStructure) {
     if (embed !== undefined) {
-      this.embed = embed
+      this.embed = embed;
     }
   }
 
@@ -129,7 +129,7 @@ export class Embed {
   setFooter(text: string, icon_url?: UrlLike): Embed {
     this.embed.footer = {
       text,
-      icon_url: getURL(icon_url ?? "")
+      icon_url: getURL(icon_url ?? '')
     };
     return this;
   }
@@ -140,7 +140,7 @@ export class Embed {
    * @returns The embed this was called on.
    */
   setThumbnail(url?: UrlLike): Embed {
-    this.embed.thumbnail = { url: getURL(url ?? "") }
+    this.embed.thumbnail = { url: getURL(url ?? '') };
     return this;
   }
 
@@ -154,8 +154,8 @@ export class Embed {
   setAuthor(name: string, url?: UrlLike, icon_url?: UrlLike): Embed {
     this.embed.author = {
       name,
-      url: getURL(url ?? ""),
-      icon_url: getURL(icon_url ?? "")
+      url: getURL(url ?? ''),
+      icon_url: getURL(icon_url ?? '')
     };
     return this;
   }
@@ -167,12 +167,12 @@ export class Embed {
    * @param inline - Whether or not the field should be inline.
    * @returns The embed this was called on.
    */
-  addField(name: string, value: string, inline: boolean = false): Embed {
+  addField(name: string, value: string, inline = false): Embed {
     this.embed.fields = [...this.embed.fields ?? [], {
       name: name,
       value: value,
       inline: inline
-    }]
+    }];
     return this;
   }
 
@@ -181,12 +181,12 @@ export class Embed {
    * @param {Boolean} inline - Whether or not the field should be inline.
    * @returns {Embed} The embed this was called on.
    */
-  addBlankField(inline: boolean = false): Embed {
+  addBlankField(inline = false): Embed {
     this.embed.fields = [...this.embed.fields ?? [], {
-      name: "\u200B",
-      value: "\u200B",
+      name: '\u200B',
+      value: '\u200B',
       inline: inline
-    }]
+    }];
     return this;
   }
 
@@ -195,8 +195,8 @@ export class Embed {
    * @param {string} message - The uh-oh message to send to the user.
    * @returns {Embed} The embed this was called on.
    */
-  uhoh(message: string = ""): Embed {
-    this.embed.title = "Uh-oh!";
+  uhoh(message = ''): Embed {
+    this.embed.title = 'Uh-oh!';
     this.embed.description = message;
     this.embed.color = 0xFF0000;
     return this;
@@ -207,7 +207,7 @@ export class Embed {
    * @param {string} message - The message to show user.
    * @returns {Embed} The embed this was called on.
    */
-  success(message: string = ""): Embed {
+  success(message = ''): Embed {
     this.embed.description = message;
     this.embed.color = 0x00FF00;
     return this;
@@ -217,9 +217,9 @@ export class Embed {
     return this.embed;
   }
 
-  [util.inspect.custom](depth: number, options: import("util").InspectOptionsStylized) {
+  [util.inspect.custom](depth: number, options: import('util').InspectOptionsStylized) {
     if (depth == 0) {
-      return options.stylize(`[${this.constructor.name}]`, "special");
+      return options.stylize(`[${this.constructor.name}]`, 'special');
     } else {
       return this;
     }

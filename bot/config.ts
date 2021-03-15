@@ -1,6 +1,6 @@
 export const config = {
   db: {
-    connectionString: "mongodb://localhost:27017/",
+    connectionString: 'mongodb://localhost:27017/',
     connectionOptions: {
       useUnifiedTopology: true
     }
@@ -22,7 +22,7 @@ export const config = {
     }
   },
   ownersIDs: [
-    "527729016849956874",
-    "295255543596187650"
+    '527729016849956874',
+    '295255543596187650'
   ]
-} as const
+} as const;

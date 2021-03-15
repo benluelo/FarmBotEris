@@ -11,12 +11,12 @@ export default {
   } as const),
   CATEGORIES: Object.freeze({
     /** Commands related to farming. */
-    FARMING: Symbol("🌱 Farming"),
+    FARMING: Symbol('🌱 Farming'),
     /** Useful commands for information about the bot. */
-    UTILITY: Symbol("⚙️ Utility"),
+    UTILITY: Symbol('⚙️ Utility'),
     /** Commands that are only to be used by the owners (i.e. only Ben & Tyler). */
-    OWNER: Symbol("🥑 Owner"),
+    OWNER: Symbol('🥑 Owner'),
     /** Commands used for bot development. */
-    DEVELOPMENT: Symbol("📜 Development")
+    DEVELOPMENT: Symbol('📜 Development')
   } as const)
-} as const
+} as const;

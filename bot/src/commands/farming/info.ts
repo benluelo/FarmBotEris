@@ -1,12 +1,12 @@
-import { FarmBotClient } from "../../lib/FarmBotClient.js"
+import { FarmBotClient } from '../../lib/FarmBotClient.js';
 
-import ms from "parse-ms"
-import { Attachment } from "../../lib/Attachment.js"
-import { Embed } from "../../lib/Embed.js"
-import { ProgressBar } from "../../lib/ProgressBar.js"
-import CONSTANTS from "../../data/CONSTANTS.js"
-import { CropName } from "../../dtos/Crop.js"
-import { parsePlotNumber } from "../../utils/parsePlotNumber.js"
+import ms from 'parse-ms';
+import { Attachment } from '../../lib/Attachment.js';
+import { Embed } from '../../lib/Embed.js';
+import { ProgressBar } from '../../lib/ProgressBar.js';
+import CONSTANTS from '../../data/CONSTANTS.js';
+import { CropName } from '../../dtos/Crop.js';
+import { parsePlotNumber } from '../../utils/parsePlotNumber.js';
 
 /**
  * @description Clamps a number between two provided values.
@@ -16,40 +16,40 @@ import { parsePlotNumber } from "../../utils/parsePlotNumber.js"
  * @return The clamped number.
  */
 function clamp(num: number, min: number, max: number): number {
-  return num <= min ? min : num >= max ? max : num
+  return num <= min ? min : num >= max ? max : num;
 }
 
 export function run(bot: FarmBotClient) {
-  bot.addCommand("info", async (message, args, userdata) => {
+  bot.addCommand('info', async (message, args, userdata) => {
     if (args[0]) {
-      const plotNumber = parsePlotNumber(args[0]) // plotNumber returns false and NaN depending on the input // doesn't act how you think it will
+      const plotNumber = parsePlotNumber(args[0]); // plotNumber returns false and NaN depending on the input // doesn't act how you think it will
       if (plotNumber !== undefined) { // this is broken asf
 
         if (userdata) {
-          if (bot.ENV.DEBUG === "true") { console.log(plotNumber) }
+          if (bot.ENV.DEBUG === 'true') { console.log(plotNumber); }
 
-          if (plotNumber >= userdata.farm.length) { return message.send(new Embed().uhoh("You don't own that plot!")) }
+          if (plotNumber >= userdata.farm.length) { return message.send(new Embed().uhoh('You don\'t own that plot!')); }
           else {
-            const userCrop = userdata.farm[plotNumber].crop
+            const userCrop = userdata.farm[plotNumber].crop;
 
-            if (userCrop.planted == "dirt") {
-              const attachment = new Attachment(userCrop.planted)
+            if (userCrop.planted == 'dirt') {
+              const attachment = new Attachment(userCrop.planted);
               const infoEmbed = new Embed()
                 .setColor(bot.color.lightgreen)
                 .setTitle(`Info for plot #\`${args[0].toUpperCase()}\``)
                 .setDescription(`There's nothing planted here! Send \`farm plant ${args[0]} <crop>\` to plant a crop on this plot!`)
-                .setThumbnail(attachment.link())
-              return message.send(infoEmbed, attachment)
+                .setThumbnail(attachment.link());
+              return message.send(infoEmbed, attachment);
             }
 
-            if (bot.ENV.DEBUG === "true") {
-              console.log(JSON.stringify(userCrop))
+            if (bot.ENV.DEBUG === 'true') {
+              console.log(JSON.stringify(userCrop));
 
               console.log((
                 Date.now() -
                 userCrop.datePlantedAt
               ) /
-                bot.config.farminfo.growTimes[userCrop.planted])
+                bot.config.farminfo.growTimes[userCrop.planted]);
             }
 
             const growthPercentage = clamp(
@@ -62,51 +62,51 @@ export function run(bot: FarmBotClient) {
               ),
               0,
               1
-            )
+            );
 
-            if (bot.ENV.DEBUG === "true") {
-              console.log("Time difference:", (Date.now() - userCrop.datePlantedAt))
-              console.log("growthPercentage:", growthPercentage)
+            if (bot.ENV.DEBUG === 'true') {
+              console.log('Time difference:', (Date.now() - userCrop.datePlantedAt));
+              console.log('growthPercentage:', growthPercentage);
             }
 
             // calculate the time until growth
-            let timeUntilPlantFinished
+            let timeUntilPlantFinished;
             if (0 < bot.config.farminfo.growTimes[userCrop.planted] - (Date.now() - userCrop.datePlantedAt)) {
-              const timeSincePlanted = ms((userCrop.datePlantedAt + bot.config.farminfo.growTimes[userCrop.planted]) - Date.now())
-              timeUntilPlantFinished = `${timeSincePlanted.hours}h ${timeSincePlanted.minutes}m ${timeSincePlanted.seconds}s\n`
+              const timeSincePlanted = ms((userCrop.datePlantedAt + bot.config.farminfo.growTimes[userCrop.planted]) - Date.now());
+              timeUntilPlantFinished = `${timeSincePlanted.hours}h ${timeSincePlanted.minutes}m ${timeSincePlanted.seconds}s\n`;
             } else {
-              timeUntilPlantFinished = "Fully grown!\n"
+              timeUntilPlantFinished = 'Fully grown!\n';
             }
 
-            const p = new ProgressBar(growthPercentage, 1, 10)
-            const growthBar = timeUntilPlantFinished + p.show() + ` ${Math.floor(growthPercentage * 100)}%`
-            const attachment = new Attachment(userCrop.planted)
+            const p = new ProgressBar(growthPercentage, 1, 10);
+            const growthBar = timeUntilPlantFinished + p.show() + ` ${Math.floor(growthPercentage * 100)}%`;
+            const attachment = new Attachment(userCrop.planted);
 
             const infoEmbed = new Embed()
               .setColor(bot.color.lightgreen)
               .setTitle(`Info for plot #\`${args[0].toUpperCase()}\``)
-              .setThumbnail(attachment.link())
+              .setThumbnail(attachment.link());
 
-            if ("dirt" !== (userCrop.planted as CropName | "dirt")) {
-              infoEmbed.addField("**Time until grown:**", growthBar)
+            if ('dirt' !== (userCrop.planted as CropName | 'dirt')) {
+              infoEmbed.addField('**Time until grown:**', growthBar);
             }
-            message.send(infoEmbed, attachment.send())
+            message.send(infoEmbed, attachment.send());
           }
         } else {
-          bot.startMessage(message)
+          bot.startMessage(message);
         }
       } else {
-        message.send(new Embed().uhoh("Please enter a valid plot format! `<letter><number>`"))
+        message.send(new Embed().uhoh('Please enter a valid plot format! `<letter><number>`'));
       }
     } else {
-      message.send(new Embed().uhoh("Please specify the plot you want info on!"))
+      message.send(new Embed().uhoh('Please specify the plot you want info on!'));
     }
   }, {
-    description: "To show utility on a plot in your farm",
-    usage: "​farm info <plot>",
-    examples: "​farm info a1",
+    description: 'To show utility on a plot in your farm',
+    usage: '​farm info <plot>',
+    examples: '​farm info a1',
     permissionLevel: CONSTANTS.PERMISSIONS.EVERYONE,
     category: CONSTANTS.CATEGORIES.UTILITY,
     cooldown: 3000
-  })
+  });
 }

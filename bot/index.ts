@@ -1,21 +1,24 @@
-import { FarmBotClient } from "./src/lib/FarmBotClient.js"
-import { Message, MessageContent, MessageFile } from "eris"
+import { FarmBotClient } from './src/lib/FarmBotClient.js';
+import { Message, MessageContent, MessageFile } from 'eris';
+import dotenv from 'dotenv';
 
 Message.prototype.send = function (content: MessageContent, file: MessageFile): Promise<Message> {
   // console.log(JSON.stringify(content, null, 4), file)
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore the fact that this still works proves otherwise
-  return this._client.createMessage(this.channel.id, content, file)
+  return this._client.createMessage(this.channel.id, content, file);
+};
+
+const dotenvConfigOuput = dotenv.config();
+if (dotenvConfigOuput.parsed === undefined || dotenvConfigOuput.error !== undefined) {
+  throw dotenvConfigOuput.error;
 }
 
-import dotenv from "dotenv"
-const dotenvParsed = dotenv.config()
-if (dotenvParsed.parsed === undefined && dotenvParsed.error !== undefined) {
-  throw dotenvParsed.error
-}
-
-const bot = new FarmBotClient(dotenvParsed.parsed!, {
-  disableEveryone: true,
-  defaultImageFormat: "png",
+const bot = new FarmBotClient(dotenvConfigOuput.parsed, {
+  allowedMentions: {
+    everyone: false
+  },
+  defaultImageFormat: 'png',
   disableEvents: {
     CHANNEL_DELETE: true,
     CHANNEL_UPDATE: true,
@@ -31,17 +34,17 @@ const bot = new FarmBotClient(dotenvParsed.parsed!, {
     VOICE_STATE_UPDATE: true
   }
 }, [
-  "farm",
-  "f!"
-])
+  'farm',
+  'f!'
+]);
 
-import { loadCommands } from "./src/loaders/command-loader.js"
-import { loadEvents } from "./src/loaders/event-loader.js"
+import { loadCommands } from './src/loaders/command-loader.js';
+import { loadEvents } from './src/loaders/event-loader.js';
 // gonna turn that off for now
 // require("../API/index")(bot) // not ideal (bot goes down so does some user pages) but works!
-loadCommands(bot)
-loadEvents(bot)
+loadCommands(bot);
+loadEvents(bot);
 
 bot.initDB()
   .then(_ok => bot.connect())
-  .catch(err => console.error(`unable to connect to the database. Error: ${err}`))
+  .catch(err => console.error(`unable to connect to the database. Error: ${err}`));

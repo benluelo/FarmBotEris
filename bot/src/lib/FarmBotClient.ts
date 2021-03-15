@@ -1,16 +1,16 @@
-import type { DotenvParseOutput } from "dotenv/types"
-import { Client, ClientOptions, Message } from "eris"
-import mongodb from "mongodb"
-import type { Collection, MongoError, MongoClient } from "mongodb"
+import type { DotenvParseOutput } from 'dotenv/types';
+import { Client, ClientOptions, Message } from 'eris';
+import mongodb from 'mongodb';
+import type { Collection, MongoError, MongoClient } from 'mongodb';
 // const { MongoClient } = mongodb
-import { config } from "../../config.js"
-import Log from "../logger.js"
-import { Embed } from "./Embed.js"
-import CONSTANTS from "../data/CONSTANTS.js"
-import emoji from "../json/emoji.json"
-import { FarmBotCommandHandler, CommandInformation, CommandFunction, FarmBotCommand } from "./FarmBotCommandHandler.js"
-import User from "./User.js"
-import { UserData } from "../dtos/UserData.js"
+import { config } from '../../config.js';
+import Log from '../logger.js';
+import { Embed } from './Embed.js';
+import CONSTANTS from '../data/CONSTANTS.js';
+import emoji from '../json/emoji.json';
+import { FarmBotCommandHandler, CommandInformation, CommandFunction, FarmBotCommand } from './FarmBotCommandHandler.js';
+import User from './User.js';
+import { UserData } from '../dtos/UserData.js';
 
 export type CommandHelp = {
   description?: string
@@ -21,27 +21,27 @@ export type CommandHelp = {
   aliases?: string[]
   cooldown?: number
   requiresUser?: boolean
-}
+};
 
 export class FarmBotClient extends Client {
-  ENV: Readonly<DotenvParseOutput>
-  prefixes: readonly string[]
+  ENV: Readonly<DotenvParseOutput>;
+  prefixes: readonly string[];
   database?: {
     db: MongoClient,
     Userdata: Collection<UserData>,
-  }
+  };
   color: Readonly<{
     market: number;
     darkgreen: number;
     lightgreen: number;
     success: number;
     error: number
-  }>
-  readonly ownersIDs: readonly [string, string]
-  config: typeof config
-  commands: FarmBotCommandHandler
-  private _db: any
-  private readonly oneOrMoreSpaces = /\s+/
+  }>;
+  readonly ownersIDs: readonly [string, string];
+  config: typeof config;
+  commands: FarmBotCommandHandler;
+  private _db: any;
+  private readonly oneOrMoreSpaces = /\s+/;
 
   /**
    * @description Creates an instance of `FarmBotClient`.
@@ -50,18 +50,18 @@ export class FarmBotClient extends Client {
    * @param prefixes - An array of the prefixes for the bot.
    */
   constructor(dotenv: DotenvParseOutput, options: ClientOptions, prefixes: string[]) {
-    super(dotenv.TOKEN, options)
-    if (!dotenv.TOKEN) { throw Error("No bot token!") }
+    super(dotenv.TOKEN, options);
+    if (!dotenv.TOKEN) { throw Error('No bot token!'); }
 
-    this.ENV = Object.freeze(dotenv)
+    this.ENV = Object.freeze(dotenv);
 
-    this.prefixes = Object.freeze(prefixes)
+    this.prefixes = Object.freeze(prefixes);
 
-    this.on("messageCreate", this.onMessageCreate)
+    this.on('messageCreate', this.onMessageCreate);
 
-    this._db
+    this._db;
     // this.Cooldowns = new Cooldowns()
-    this.commands = new FarmBotCommandHandler()
+    this.commands = new FarmBotCommandHandler();
 
     /**
      * @description The different colors for the bot.
@@ -72,11 +72,11 @@ export class FarmBotClient extends Client {
       lightgreen: 0x00FF00,
       success: 0x00FF00,
       error: 0xFF0000
-    })
+    });
 
-    this.ownersIDs = config.ownersIDs
+    this.ownersIDs = config.ownersIDs;
 
-    this.config = Object.freeze(config)
+    this.config = Object.freeze(config);
   }
 
   /**
@@ -84,31 +84,31 @@ export class FarmBotClient extends Client {
    * @param msg - The message from the messageCreate event.
    */
   async onMessageCreate(msg: Message) {
-    if (msg.author.bot) { return }
+    if (msg.author.bot) { return; }
 
-    const content = msg.content.toLowerCase()
+    const content = msg.content.toLowerCase();
 
-    const prefixUsed = this._checkForPrefix(content)
+    const prefixUsed = this._checkForPrefix(content);
 
-    if (!prefixUsed) { return }
+    if (!prefixUsed) { return; }
 
-    const [commandToRun, ...args] = this._removePrefix(content, prefixUsed).split(this.oneOrMoreSpaces)
+    const [commandToRun, ...args] = this._removePrefix(content, prefixUsed).split(this.oneOrMoreSpaces);
 
     // check if a prefix was used; if a prefix was used, check if a command was used
-    const command = this.commands.get(commandToRun)
+    const command = this.commands.get(commandToRun);
     if (command !== undefined) {
       if (command.info.requiresUser) {
         // if a command was used, check if the caller can use the command
         this.getUser(msg.author.id, (err, userdata) => {
-          if (err) { throw err }
+          if (err) { throw err; }
           if (!userdata) {
-            this.startMessage(msg)
+            this.startMessage(msg);
           } else {
-            this.commands.run(commandToRun, msg, args, userdata as UserData)
+            this.commands.run(commandToRun, msg, args, userdata as UserData);
           }
-        })
+        });
       } else {
-        this.commands.run(commandToRun, msg, args, undefined)
+        this.commands.run(commandToRun, msg, args, undefined);
       }
     }
   }
@@ -122,8 +122,8 @@ export class FarmBotClient extends Client {
    * @returns The newly added command.
    */
   addCommand(name: string, commandFunction: CommandFunction, help: CommandHelp, parent?: FarmBotCommand): FarmBotCommand {
-    const newCmd = this.commands.set(name, commandFunction, new CommandInformation(help), parent)
-    return newCmd
+    const newCmd = this.commands.set(name, commandFunction, new CommandInformation(help), parent);
+    return newCmd;
   }
 
   /**
@@ -132,7 +132,7 @@ export class FarmBotClient extends Client {
    * @returns - The message that was sent to the user.
    */
   startMessage(message: Message): Promise<Message> {
-    return message.send(new Embed().uhoh(`You have to start farming first, **${message.author.username}**! Send \`farm start\` to start farming!`))
+    return message.send(new Embed().uhoh(`You have to start farming first, **${message.author.username}**! Send \`farm start\` to start farming!`));
   }
 
   /**
@@ -143,15 +143,15 @@ export class FarmBotClient extends Client {
   getUser(userID: string, callback: (err: MongoError | null, user: User | null) => void) {
     this.database?.Userdata.findOne({ userID: userID }, (err, userdata) => {
       if (err) {
-        return callback(err, null)
+        return callback(err, null);
       }
 
       if (userdata) {
-        return callback(null, User.fromUserData(userdata, userdata.userID))
+        return callback(null, User.fromUserData(userdata, userdata.userID));
       } else {
-        return callback(null, null)
+        return callback(null, null);
       }
-    })
+    });
   }
 
   /**
@@ -162,18 +162,18 @@ export class FarmBotClient extends Client {
   _checkForPrefix(str: string): string | false {
     for (const prefix in this.prefixes) {
       if (str.startsWith(this.prefixes[prefix])) {
-        return this.prefixes[prefix]
+        return this.prefixes[prefix];
       }
     }
-    return false
+    return false;
   }
 
   _removePrefix(str: string, prefix: string) {
-    return str.substr(prefix.length).trim()
+    return str.substr(prefix.length).trim();
   }
 
   _checkForFarps(str: string) {
-    return str.includes("farping")
+    return str.includes('farping');
   }
 
   /**
@@ -181,19 +181,19 @@ export class FarmBotClient extends Client {
    */
   async initDB() {
     mongodb.MongoClient.connect(this.config.db.connectionString, this.config.db.connectionOptions, async (err, db) => {
-      if (err) { throw err }
+      if (err) { throw err; }
 
       if (this._db) {
-        if (process.env.DEBUG === "true") { console.warn("trying to init DB again!") }
+        if (process.env.DEBUG === 'true') { console.warn('trying to init DB again!'); }
       }
-      this._db = db
+      this._db = db;
       if (db) {
         this.database = {
           db,
-          Userdata: db.db("farmbot").collection("farm"),
-        }
-        Log.dbconnect("Successfully connected to database!")
+          Userdata: db.db('farmbot').collection('farm'),
+        };
+        Log.dbconnect('Successfully connected to database!');
       }
-    })
+    });
   }
 }

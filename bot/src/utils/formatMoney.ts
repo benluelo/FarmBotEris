@@ -1,10 +1,10 @@
-import emoji from "../json/emoji.json";
+import emoji from '../json/emoji.json';
 
-export const formatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
+export const formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
   minimumFractionDigits: 2
-})
+});
 
 /**
  * @description Formats money for sending to the user. Appends the coin emoji to the end.
@@ -13,5 +13,5 @@ export const formatter = new Intl.NumberFormat("en-US", {
  */
 
 export function formatMoney(value: number): string {
-  return formatter.format(value).substr(1) + " " + emoji.coin;
+  return formatter.format(value).substr(1) + ' ' + emoji.coin;
 }
