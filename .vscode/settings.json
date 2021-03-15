@@ -29,9 +29,9 @@
         "**/.git": true,
         "**/.hg": true,
         "**/.svn": true,
-        "**/*.js": {
+        "**/CVS": true,
+        "bot/**/*.j": {
             "when": "$(basename).ts"
-        },
-        "**/CVS": true
+        }
     }
 }

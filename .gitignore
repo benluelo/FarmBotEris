@@ -1,6 +1,6 @@
 node_modules
 .env
-bot/logs/**
+bot/logs/*.txt
 out
 helpers/crop-maker.js
 .vs/
@@ -8,3 +8,5 @@ helpers/crop-maker.js
 .vscode
 
 index.d.ts
+
+bot/**/*.js
