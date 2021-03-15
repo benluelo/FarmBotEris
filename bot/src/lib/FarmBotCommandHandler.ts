@@ -59,25 +59,33 @@ export class CommandInformation {
       requiresUser,
     } = info ?? {};
 
-    this.description = description ?? 'No description provided.',
-    this.usage = usage ?? 'No usage provided.',
-    this.examples = examples ?? '',
-    this.permissionLevel = permissionLevel ?? CONSTANTS.PERMISSIONS.DEVELOPMENT,
-    this.category = category ?? CONSTANTS.CATEGORIES.DEVELOPMENT,
-    this.aliases = aliases ?? [],
-    this.cooldownMs = cooldown ?? 0,
+    this.description = description ?? 'No description provided.';
+    this.usage = usage ?? 'No usage provided.';
+    this.examples = examples ?? '';
+    this.permissionLevel = permissionLevel ?? CONSTANTS.PERMISSIONS.DEVELOPMENT;
+    this.category = category ?? CONSTANTS.CATEGORIES.DEVELOPMENT;
+    this.aliases = aliases ?? [];
+    this.cooldownMs = cooldown ?? 0;
     this.requiresUser = requiresUser ?? true;
   }
 
-  toJSON() {
+  toJSON(): {
+    description: string,
+    usage: string,
+    examples: string,
+    permissionLevel: typeof CONSTANTS['PERMISSIONS'][keyof typeof CONSTANTS['PERMISSIONS']],
+    category: string,
+    aliases: string[],
+    cooldownMs: number,
+  } {
     return {
       description: this.description,
       usage: this.usage,
       examples: this.examples,
       permissionLevel: this.permissionLevel,
-      category: this.category.description,
+      category: this.category.description || 'error: no description on category symbol',
       aliases: this.aliases,
-      cooldown: this.cooldownMs
+      cooldownMs: this.cooldownMs
     };
   }
 }
@@ -137,8 +145,10 @@ export class FarmBotCommand {
    * @param args - The command arguments.
    * @param userdata - The caller's DB information.
    */
-  run(msg: Message, args: string[], userdata?: UserData) {
+  run(msg: Message, args: string[], userdata?: UserData): void {
     if (this.subcommands.size() !== 0 && this.subcommands.has(args[0])) {
+      // safe due to checking args[0] in the condition above
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.subcommands.get(args.shift()!)?.run(msg, args, userdata);
     } else {
       const timeToWait = this.Cooldowns.check(msg.author.id);
@@ -170,7 +180,7 @@ export class FarmBotCommand {
    * @description Sets the help embed for the command.
    * @param embed - The help embed for this command.
    */
-  setEmbed(embed: Embed) {
+  setEmbed(embed: Embed): void {
     this.embed = embed;
   }
 
@@ -201,7 +211,7 @@ export class FarmBotCommand {
   }
 
   // eslint-disable-next-line no-unused-vars
-  [util.inspect.custom](_depth: number, _options: InspectOptionsStylized) {
+  [util.inspect.custom](_depth: number, _options: InspectOptionsStylized): string | this {
     const toReturn = {
       name: this.name,
       info: this.info,
@@ -221,7 +231,7 @@ export class FarmBotCommandHandler {
     this.#internal = new Map();
   }
 
-  size = () => this.#internal.size;
+  size = (): number => this.#internal.size;
 
   /**
    * @description Runs thespecified command.
@@ -230,7 +240,7 @@ export class FarmBotCommandHandler {
    * @param args - The command arguments.
    * @param userdata - The user's DB information.
    */
-  run(cmdName: string, message: Message, args: string[], userdata?: UserData) {
+  run(cmdName: string, message: Message, args: string[], userdata?: UserData): void {
     this.get(cmdName)?.run(message, args, userdata);
   }
 
@@ -251,11 +261,11 @@ export class FarmBotCommandHandler {
    * @param parent - The parent command, if this is a subcommand.
    * @returns The new `FarmBotCommand` object.
    */
-  set(name: string, func: CommandFunction, info: CommandInformation, parent: FarmBotCommand | undefined) {
+  set(name: string, func: CommandFunction, info: CommandInformation, parent: FarmBotCommand | undefined): FarmBotCommand {
     console.log(name);
     const newCmd = new FarmBotCommand(name, func, info, parent ? parent : undefined);
     if (info && info.aliases) {
-      info.aliases.forEach((alias: any) => {
+      info.aliases.forEach((alias) => {
         this.aliases.set(alias, name);
       });
     }
@@ -296,12 +306,15 @@ export class FarmBotCommandHandler {
     return this.#internal.delete(key);
   }
 
-  toJSON() {
+  // TODO: Better return type for this method
+  toJSON(): {
+    [k: string]: Record<string, unknown>;
+  } {
     return Object
       .fromEntries(
         Array.from(
           this.entries()
-        ).filter(([name, cmd]) => {
+        ).filter(([_name, cmd]) => {
           console.log(cmd.info.permissionLevel === CONSTANTS.PERMISSIONS.EVERYONE);
           return cmd.info.permissionLevel === CONSTANTS.PERMISSIONS.EVERYONE;
         }).map(([name, cmd]) => {
@@ -312,8 +325,8 @@ export class FarmBotCommandHandler {
 }
 
 export class Cooldown extends Map<string, number> {
-  commandName: any;
-  cooldownTimeMs: any;
+  commandName: string;
+  cooldownTimeMs: number;
   constructor(commandName: string, cooldownTimeMs: number) {
     super();
     this.commandName = commandName;
@@ -353,7 +366,7 @@ export class Cooldown extends Map<string, number> {
    * @returns How long the user has to wait to use the command; `0` if the cooldown is up.
    */
   get(userID: string): number {
-    const userCooldown = super.get(userID);
+    const userCooldown = super.get(userID) ?? 0;
     return this._clamp((userCooldown + this.cooldownTimeMs - Date.now()), 0, this.cooldownTimeMs);
   }
 
@@ -386,7 +399,7 @@ export class Cooldown extends Map<string, number> {
     return num <= min ? min : num >= max ? max : num;
   }
 
-  [util.inspect.custom](depth: number, options: InspectOptionsStylized) {
+  [util.inspect.custom](depth: number, options: InspectOptionsStylized): string | this {
     if (depth == 0) {
       return options.stylize(`[${this.constructor.name}]`, 'special');
     } else {

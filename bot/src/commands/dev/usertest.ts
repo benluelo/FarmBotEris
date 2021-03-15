@@ -1,6 +1,6 @@
 import { FarmBotClient } from '../../lib/FarmBotClient.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   const cmd = bot.addCommand('usertest', (message, _args) => {
     if (!bot.ownersIDs.includes(message.author.id)) { return; }
     bot.getUser(message.author.id, (err, userdata) => {

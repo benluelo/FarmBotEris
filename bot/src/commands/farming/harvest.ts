@@ -7,7 +7,7 @@ import CONSTANTS from '../../data/CONSTANTS.js';
 import { CropName } from '../../dtos/Crop.js';
 import { parsePlotNumber } from '../../utils/parsePlotNumber.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('harvest', async (message, args, userdata) => {
     if (userdata === undefined) {
       throw new Error('command `farm sell` requires a user data.');

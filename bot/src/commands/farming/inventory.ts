@@ -1,7 +1,7 @@
 import smallNumbers from '../../json/small-numbers.json';
 import cropData from '../../data/crop-data.js';
 import { FarmBotClient } from '../../lib/FarmBotClient.js';
-import { CropEmoji, CropName } from '../../dtos/Crop.js';
+import type { CropName } from '../../dtos/Crop.js';
 import { Embed } from '../../lib/Embed.js';
 import CONSTANTS from '../../data/CONSTANTS.js';
 
@@ -14,7 +14,7 @@ const getSmallNumbers = (number: number) => {
   return numberString;
 };
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('inventory', (message, _args, userdata) => {
     if (userdata === undefined) {
       throw new Error('command `farm inventory` requires a user data.');
@@ -26,7 +26,6 @@ export function run(bot: FarmBotClient) {
     // gather inv
     const invItemList: Record<string, number> = {};
     let invItemString = '';
-    const inter = 0;
     const gap = '  ';
     for (const plant in userdata.seeds.common) {
       if (0 !== userdata.seeds.common[plant as CropName].amount) {

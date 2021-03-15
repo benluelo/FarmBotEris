@@ -4,7 +4,7 @@ import { FarmBotClient } from '../../lib/FarmBotClient.js';
 import emoji from '../../json/emoji.json';
 import { formatMoney } from '../../utils/formatMoney.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('money', (message, _args, userdata) => {
     if (userdata === undefined) {
       throw new Error('command `farm money` requires a user data.');

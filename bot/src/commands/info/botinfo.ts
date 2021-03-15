@@ -5,7 +5,7 @@ import ms from 'parse-ms';
 import { Embed } from '../../lib/Embed.js';
 import CONSTANTS from '../../data/CONSTANTS.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('botinfo', (message) => {
     const botCreation = new Date(bot.user.createdAt).toUTCString();
     const botUptime = `${ms(bot.uptime).days}d ${ms(bot.uptime).hours}h ${ms(bot.uptime).minutes}m ${ms(bot.uptime).seconds}s`;

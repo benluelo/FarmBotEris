@@ -32,7 +32,7 @@ setInterval(async () => {
   systemInfo.os = `${os.platform} ${os.distro} ${os.codename}#${os.release} ${os.arch}`;
 }, 10000);
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('status', async (message, _args, _userdata) => {
 
     // get debug/ development info

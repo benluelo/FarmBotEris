@@ -6,7 +6,7 @@ import { formatMoney } from '../../utils/formatMoney.js';
 const MAX_PLOTS = 25;
 // a Math.round(Math.pow(1.90546071796, i))
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('buy', (message, _args, userdata) => {
     if (userdata === undefined) {
       throw new Error('command `farm sell` requires a user data.');

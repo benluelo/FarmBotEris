@@ -2,7 +2,7 @@ import { Embed } from '../../lib/Embed.js';
 import CONSTANTS from '../../data/CONSTANTS.js';
 import { FarmBotClient } from '../../lib/FarmBotClient.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('deleteuser', (message) => {
     if (!message.mentions[0]) {
       // delete your own account

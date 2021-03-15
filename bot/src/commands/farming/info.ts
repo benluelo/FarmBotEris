@@ -19,7 +19,7 @@ function clamp(num: number, min: number, max: number): number {
   return num <= min ? min : num >= max ? max : num;
 }
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('info', async (message, args, userdata) => {
     if (args[0]) {
       const plotNumber = parsePlotNumber(args[0]); // plotNumber returns false and NaN depending on the input // doesn't act how you think it will

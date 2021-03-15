@@ -204,8 +204,8 @@ export class Embed {
 
   /**
    * @description Send a preset success message.
-   * @param {string} message - The message to show user.
-   * @returns {Embed} The embed this was called on.
+   * @param message - The message to show user.
+   * @returns The embed this was called on.
    */
   success(message = ''): Embed {
     this.embed.description = message;
@@ -213,11 +213,11 @@ export class Embed {
     return this;
   }
 
-  showContent() {
+  showContent(): EmbedStructure {
     return this.embed;
   }
 
-  [util.inspect.custom](depth: number, options: import('util').InspectOptionsStylized) {
+  [util.inspect.custom](depth: number, options: import('util').InspectOptionsStylized): string | this {
     if (depth == 0) {
       return options.stylize(`[${this.constructor.name}]`, 'special');
     } else {

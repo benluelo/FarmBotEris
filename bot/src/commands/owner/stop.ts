@@ -2,7 +2,7 @@ import CONSTANTS from '../../data/CONSTANTS.js';
 import { Embed } from '../../lib/Embed.js';
 import { FarmBotClient } from '../../lib/FarmBotClient.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   // eslint-disable-next-line no-unused-vars
   bot.addCommand('stop', (message, _args, _userdata) => {
     const stopEmbed = new Embed()

@@ -4,7 +4,7 @@ import { inspect } from 'util';
 import CONSTANTS from '../../data/CONSTANTS.js';
 import { Embed } from '../../lib/Embed.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('eval', (message, args) => {
     const toEval = args.join(' ');
     try {

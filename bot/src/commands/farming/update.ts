@@ -8,7 +8,7 @@ import User from '../../lib/User.js';
 import { getFarmers } from '../../utils/getFarmers.js';
 import type { UserData } from '../../dtos/UserData.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('update', async (message, args, userdata) => {
     if (userdata === undefined) {
       throw new Error('command `farm start` requires a user data.');

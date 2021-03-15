@@ -8,7 +8,7 @@ import { isValidCropName } from '../../utils/isValidCropName.js';
 import { getLevel } from '../../utils/level-test.js';
 import { seedsPrice } from '../../utils/seedsPrice.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('sell', async (message, [amount, crop, ..._args]: (string | undefined)[], userdata) => {
     if (userdata === undefined) {
       throw new Error('command `farm sell` requires a user data.');

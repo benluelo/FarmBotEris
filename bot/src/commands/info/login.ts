@@ -1,7 +1,7 @@
 import CONSTANTS from '../../data/CONSTANTS.js';
 import { FarmBotClient } from '../../lib/FarmBotClient.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('login', async (message, args, userdata) => {
     if (userdata === undefined) {
       throw new Error('command `farm login` requires a user data.');

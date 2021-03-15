@@ -7,7 +7,7 @@ import { CropName } from '../dtos/Crop.js';
 export class Attachment {
   private crop: CropName | 'dirt';
   private size: number;
-  file: any;
+  file: Buffer;
   name: string;
 
   constructor(crop: CropName | 'dirt', size = 150) {
@@ -17,18 +17,21 @@ export class Attachment {
     this.name = `${crop}.png`;
   }
 
-  send() {
+  send(): {
+    file: Buffer;
+    name: string;
+  } {
     return {
       file: this.file,
       name: this.name
     };
   }
 
-  link() {
+  link(): string {
     return `attachment://${this.name}`;
   }
 
-  [util.inspect.custom](depth: number, options: import('util').InspectOptionsStylized) {
+  [util.inspect.custom](depth: number, options: import('util').InspectOptionsStylized): string | this {
     if (depth == 0) {
       return options.stylize(`[${this.constructor.name}]`, 'special');
     } else {

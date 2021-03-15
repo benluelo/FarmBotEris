@@ -6,7 +6,7 @@ import Log from '../logger.js';
 
 let helpLocation = '';
 
-export async function loadCommands(bot: FarmBotClient) {
+export async function loadCommands(bot: FarmBotClient): Promise<void> {
   loadCommandsInner(bot, path.join(process.cwd(), 'bot/commands'));
   const help = await import(helpLocation);
   setTimeout(() => {

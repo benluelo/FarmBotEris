@@ -3,7 +3,7 @@ import { getLevel } from '../utils/level-test.js';
 import { ProgressBar } from './ProgressBar.js';
 
 export class XPProgressBar extends ProgressBar {
-  private _level: any;
+  private _level: number;
   /**
    * @description An extension of the {@link ProgressBar} class, for use in showing the levels of the npcs or crops.
    * @param exp - The amount of experience points. Must be `>= 0`.
@@ -18,15 +18,15 @@ export class XPProgressBar extends ProgressBar {
     this._level = data.level;
   }
 
-  show() {
+  show(): string {
     return `**${this.numerator}/${this.denominator}**xp\n` + super.show();
   }
 
-  level() {
+  level(): number {
     return this._level;
   }
 
-  [util.inspect.custom](depth: number, options: import('util').InspectOptionsStylized) {
+  [util.inspect.custom](depth: number, options: import('util').InspectOptionsStylized): string | this {
     if (depth == 0) {
       return options.stylize(`[${this.constructor.name}]`, 'special');
     } else {

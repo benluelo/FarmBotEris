@@ -9,7 +9,7 @@ import Log from '../../logger.js';
 import { getFarmers } from '../../utils/getFarmers.js';
 import { UserData } from '../../dtos/UserData.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('start', (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
       if (userdata === null) {

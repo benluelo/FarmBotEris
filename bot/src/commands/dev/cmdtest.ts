@@ -1,6 +1,6 @@
 import { FarmBotClient } from '../../lib/FarmBotClient.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   const main = bot.addCommand('cmdtest', (message, args) => {
     console.log('message: ', typeof message);
     console.log('args: ', args);

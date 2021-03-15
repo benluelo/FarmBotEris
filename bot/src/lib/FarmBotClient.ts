@@ -6,8 +6,6 @@ import type { Collection, MongoError, MongoClient } from 'mongodb';
 import { config } from '../../config.js';
 import Log from '../logger.js';
 import { Embed } from './Embed.js';
-import CONSTANTS from '../data/CONSTANTS.js';
-import emoji from '../json/emoji.json';
 import { FarmBotCommandHandler, CommandInformation, CommandFunction, FarmBotCommand } from './FarmBotCommandHandler.js';
 import User from './User.js';
 import { UserData } from '../dtos/UserData.js';
@@ -40,8 +38,9 @@ export class FarmBotClient extends Client {
   readonly ownersIDs: readonly [string, string];
   config: typeof config;
   commands: FarmBotCommandHandler;
-  private _db: any;
   private readonly oneOrMoreSpaces = /\s+/;
+  // DB is initialized before client ever connects
+  private _db!: mongodb.MongoClient;
 
   /**
    * @description Creates an instance of `FarmBotClient`.
@@ -59,7 +58,6 @@ export class FarmBotClient extends Client {
 
     this.on('messageCreate', this.onMessageCreate);
 
-    this._db;
     // this.Cooldowns = new Cooldowns()
     this.commands = new FarmBotCommandHandler();
 
@@ -83,7 +81,7 @@ export class FarmBotClient extends Client {
    * @description Ye.
    * @param msg - The message from the messageCreate event.
    */
-  async onMessageCreate(msg: Message) {
+  async onMessageCreate(msg: Message): Promise<void> {
     if (msg.author.bot) { return; }
 
     const content = msg.content.toLowerCase();
@@ -140,7 +138,7 @@ export class FarmBotClient extends Client {
    * @param userID - The user's id.
    * @param callback - The callback.
    */
-  getUser(userID: string, callback: (err: MongoError | null, user: User | null) => void) {
+  getUser(userID: string, callback: (err: MongoError | null, user: User | null) => void): void {
     this.database?.Userdata.findOne({ userID: userID }, (err, userdata) => {
       if (err) {
         return callback(err, null);
@@ -168,29 +166,29 @@ export class FarmBotClient extends Client {
     return false;
   }
 
-  _removePrefix(str: string, prefix: string) {
+  _removePrefix(str: string, prefix: string): string {
     return str.substr(prefix.length).trim();
   }
 
-  _checkForFarps(str: string) {
+  _checkForFarps(str: string): boolean {
     return str.includes('farping');
   }
 
   /**
    * @description Initializes the database.
    */
-  async initDB() {
-    mongodb.MongoClient.connect(this.config.db.connectionString, this.config.db.connectionOptions, async (err, db) => {
+  async initDB(): Promise<void> {
+    mongodb.MongoClient.connect(this.config.db.connectionString, this.config.db.connectionOptions, async (err, client) => {
       if (err) { throw err; }
 
       if (this._db) {
         if (process.env.DEBUG === 'true') { console.warn('trying to init DB again!'); }
       }
-      this._db = db;
-      if (db) {
+      this._db = client;
+      if (client) {
         this.database = {
-          db,
-          Userdata: db.db('farmbot').collection('farm'),
+          db: client,
+          Userdata: client.db('farmbot').collection('farm'),
         };
         Log.dbconnect('Successfully connected to database!');
       }

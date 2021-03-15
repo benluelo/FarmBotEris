@@ -7,7 +7,7 @@ import { XPProgressBar } from '../../lib/XPProgressBar.js';
 import CONSTANTS from '../../data/CONSTANTS.js';
 import { isValidCropName } from '../../utils/isValidCropName.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('skills', (message, [cropArg, ..._args], userdata) => {
     if (userdata === undefined) {
       throw new Error('command `farm sell` requires a user data.');

@@ -3,7 +3,7 @@ import { Embed } from '../../../lib/Embed.js';
 import { FarmBotClient } from '../../../lib/FarmBotClient.js';
 import { XPProgressBar } from '../../../lib/XPProgressBar.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('village', (message, _args, userdata) => {
     if (userdata === undefined) {
       throw new Error('command `farm sell` requires a user data.');

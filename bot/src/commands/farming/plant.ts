@@ -6,8 +6,8 @@ import { FarmBotClient } from '../../lib/FarmBotClient.js';
 import { isValidCropName } from '../../utils/isValidCropName.js';
 import { parsePlotNumber } from '../../utils/parsePlotNumber.js';
 
-export function run(bot: FarmBotClient) {
-  const cmd = bot.addCommand('plant', async (message, [plot, crop, ...args], userdata) => {
+export function run(bot: FarmBotClient): void {
+  const cmd = bot.addCommand('plant', async (message, [plot, crop, ..._args], userdata) => {
     if (userdata === undefined) {
       throw new Error('command `farm sell` requires a user data.');
     }
@@ -101,7 +101,7 @@ export function run(bot: FarmBotClient) {
     cooldown: 5000
   });
 
-  cmd.subcommand('row', async (message, [row, crop, ...args], userdata) => {
+  cmd.subcommand('row', async (message, [row, crop, ..._args], userdata) => {
     if (userdata === undefined) {
       throw new Error('command `farm plant row` requires a user data.');
     }

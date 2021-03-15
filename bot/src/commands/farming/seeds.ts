@@ -7,7 +7,7 @@ import { formatMoney } from '../../utils/formatMoney.js';
 import { getLevel } from '../../utils/level-test.js';
 import { seedsPrice } from '../../utils/seedsPrice.js';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('seeds', (message, _args, userdata) => {
     console.log('seeds');
     if (userdata === undefined) {

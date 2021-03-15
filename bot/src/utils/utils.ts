@@ -9,10 +9,10 @@ export type _01234 = ('0' | '1' | '2' | '3' | '4');
 
 export const genders = ['male', 'female'] as const;
 
-export function randomIndex(array: any[]): number {
+export function randomIndex(array: unknown[]): number {
   return Math.floor(Math.random() * array.length);
 }
 
-export function capitalize(str: string) {
+export function capitalize(str: string): string {
   return str[0].toUpperCase() + str.slice(1).toLowerCase();
 }

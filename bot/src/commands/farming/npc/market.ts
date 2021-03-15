@@ -14,7 +14,7 @@ import { seedsPrice } from '../../../utils/seedsPrice.js';
 
 const commandName = 'market';
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   const command = bot.addCommand(commandName, async (message, _args, userdata) => {
     if (userdata === undefined) {
       throw new Error('command `farm market` requires a user data.');
@@ -323,11 +323,14 @@ function prettifyParsedRequest(req: {
  * @returns The parsed request.
  */
 function parseRequest(request: MarketRequest, userFarmers: Farmer[], id: string) {
+  // i know its not undefined here. ideally, this function would be rewritten in such a way that
+  // the assertion is unnecessary
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const farmer = userFarmers.find((f) => {
     return f.name == request.name;
-  });
+  })!;
 
-  const parsed = parseWants(farmer!.preferences, request);
+  const parsed = parseWants(farmer.preferences, request);
 
   return {
     id: id,
@@ -337,9 +340,9 @@ function parseRequest(request: MarketRequest, userFarmers: Farmer[], id: string)
       reputation: parsed.reputation
     },
     farmer: {
-      name: farmer!.name,
-      emoji: farmer!.emoji,
-      level: farmer!.level
+      name: farmer.name,
+      emoji: farmer.emoji,
+      level: farmer.level
     }
   };
 }

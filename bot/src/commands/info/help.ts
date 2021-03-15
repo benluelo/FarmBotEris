@@ -1,9 +1,7 @@
 import CONSTANTS from '../../data/CONSTANTS.js';
 import { Embed } from '../../lib/Embed.js';
 import { FarmBotClient } from '../../lib/FarmBotClient.js';
-import { FarmBotCommand } from '../../lib/FarmBotCommandHandler.js';
 import User from '../../lib/User.js';
-import Log from '../../logger.js';
 
 type PermissionsValues = typeof CONSTANTS.PERMISSIONS[keyof typeof CONSTANTS.PERMISSIONS];
 
@@ -18,7 +16,7 @@ const genericHelpEmbeds: HelpEmbedsType = Object.values(CONSTANTS.PERMISSIONS)
   .map(val => ({ [val]: new Embed() }))
   .reduce((prev, curr) => ({ ...prev, ...curr }), {}) as { [n in PermissionsValues]: Embed };
 
-export function run(bot: FarmBotClient) {
+export function run(bot: FarmBotClient): void {
   bot.addCommand('help', (message, args, userdata) => {
     if (userdata === undefined) {
       throw new Error('command `farm help` requires a user data.');
@@ -49,7 +47,7 @@ export function run(bot: FarmBotClient) {
  * This is to be called ***after*** the commands have all been loaded.
  * @param bot the client.
  */
-export function loadHelpEmbeds(bot: FarmBotClient) {
+export function loadHelpEmbeds(bot: FarmBotClient): void {
   // // remove development commands if in production
   // console.log(bot.ENV)
   // if ((bot.ENV.DEVELOPMENT !== "true")) {
@@ -79,6 +77,8 @@ export function loadHelpEmbeds(bot: FarmBotClient) {
   });
   console.debug('commandNameCategoryAndPermissions: ', commandNameCategoryAndPermissions);
   for (const [commandName, permissionLevel, categorySymbol] of commandNameCategoryAndPermissions) {
+    // find a better way to do this so that the assertion is unnecessary
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const category = [...Object.entries(CONSTANTS.CATEGORIES) as [keyof typeof CONSTANTS.CATEGORIES, symbol][]].find(([_name, symbol]) => symbol === categorySymbol)!;
     console.log('permissionLevel: ', permissionLevel, 'commandName: ', commandName, 'category: ', category);
     // FIXME: don't use a constant `3` here
