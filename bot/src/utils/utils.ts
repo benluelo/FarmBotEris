@@ -1,7 +1,7 @@
 
 export const plotRegex = /^[a-e]{1}[1-5]{1}$/;
 
-export type ABCDE = ('a' | 'b' | 'c' | 'd' | 'e');
+export type abcde = ('a' | 'b' | 'c' | 'd' | 'e');
 
 export type _12345 = ('1' | '2' | '3' | '4' | '5');
 

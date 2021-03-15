@@ -1,4 +1,4 @@
-import { plotRegex, ABCDE, _12345 } from './utils';
+import { plotRegex, abcde, _12345 } from './utils';
 import { formatForPlotNumber } from './formatForPlotNumber';
 
 // this was an interesting way to do it for sure. using base 5 and parsing a number out of it was... creative
@@ -15,7 +15,7 @@ export function parsePlotNumber(str: string): (number | undefined) {
   // if correct format, create an object that holds the plot coordinates
   // cast is safe since we know the regex matched
   const letterAndNumber = {
-    letter: formatForPlotNumber(str[1] as ABCDE),
+    letter: formatForPlotNumber(str[1] as abcde),
     number: formatForPlotNumber(str[0] as _12345)
   };
 

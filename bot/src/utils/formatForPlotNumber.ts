@@ -1,4 +1,4 @@
-import { ABCDE, _12345, _01234 } from './utils';
+import { abcde, _12345, _01234 } from './utils';
 
 /**
  * @description Formats the individual `letter` and `number` portions of the plot number.
@@ -6,7 +6,7 @@ import { ABCDE, _12345, _01234 } from './utils';
  * @returns The index of the plot.
  */
 
-export function formatForPlotNumber(str: (ABCDE | _12345)): _01234 {
+export function formatForPlotNumber(str: (abcde | _12345)): _01234 {
   switch (str) {
     case ('1'):
     case ('a'): return '0';
