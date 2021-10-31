@@ -1,0 +1,15 @@
+a "meta" card variant type:
+
+frontend stays the same, every collection option is still language + condition + variant type, except that now variant type is the "meta" card variant type
+
+sort of what we were talking about about making the card variants many to many with themselves, but instead of being self referential you have something like this:
+
+variants table:
+cosmos holo: 1
+jumbo: 2
+yellow a alternate: 3
+
+meta table, many to 1 with variants:
+1: 1
+1: 2
+1: 3

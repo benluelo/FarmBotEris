@@ -1,5 +1,5 @@
-import { plotRegex, abcde, _12345 } from './utils';
-import { formatForPlotNumber } from './formatForPlotNumber';
+import { plotRegex, abcde, _12345 } from './utils.js';
+import { formatForPlotNumber } from './formatForPlotNumber.js';
 
 // this was an interesting way to do it for sure. using base 5 and parsing a number out of it was... creative
 /**

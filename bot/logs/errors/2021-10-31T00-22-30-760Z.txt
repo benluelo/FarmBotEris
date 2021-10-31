@@ -1,0 +1,2 @@
+event-loader.ts
+Error: ENOENT: no such file or directory, scandir '/home/ben/codeprojects/FarmBotEris/bot/events/'

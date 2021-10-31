@@ -7,7 +7,7 @@ import Log from '../logger.js';
 let helpLocation = '';
 
 export async function loadCommands(bot: FarmBotClient): Promise<void> {
-  loadCommandsInner(bot, path.join(process.cwd(), 'bot/commands'));
+  loadCommandsInner(bot, path.join(process.cwd(), 'bot/src/commands'));
   const help = await import(helpLocation);
   setTimeout(() => {
     console.log(help);
@@ -25,7 +25,7 @@ function loadCommandsInner(bot: FarmBotClient, dirpath: string, depth = 0) {
   fs.readdirSync(p).forEach((file, key, arr) => {
     if (!fs.lstatSync(`${p}/${file}`).isDirectory()) {
       const [name, ext] = file.split('.');
-      if (ext === 'js') {
+      if (ext === 'ts') {
         if (name === 'help') {
           if (helpLocation !== '') {
             throw new Error(`Two commands/ subcommands share the name "help":\n  ${helpLocation}\n  ${`${p}/${file}`}`);

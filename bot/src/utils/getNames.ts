@@ -1,5 +1,5 @@
 import names from '../json/names.json';
-import { genders, randomIndex } from './utils';
+import { genders, randomIndex } from './utils.js';
 
 type GetNamesResult = {
   name: string;

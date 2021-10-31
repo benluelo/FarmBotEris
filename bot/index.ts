@@ -2,7 +2,13 @@ import { FarmBotClient } from './src/lib/FarmBotClient.js';
 import { Message, MessageContent, MessageFile } from 'eris';
 import dotenv from 'dotenv';
 
-Message.prototype.send = function (content: MessageContent, file: MessageFile): Promise<Message> {
+declare module 'eris' {
+  export interface Message {
+    send(content: MessageContent, file?: MessageFile): Promise<Message>;
+  }
+}
+
+Message.prototype.send = function (content: MessageContent, file?: MessageFile): Promise<Message> {
   // console.log(JSON.stringify(content, null, 4), file)
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore the fact that this still works proves otherwise
@@ -48,3 +54,5 @@ loadEvents(bot);
 bot.initDB()
   .then(_ok => bot.connect())
   .catch(err => console.error(`unable to connect to the database. Error: ${err}`));
+
+export { };
