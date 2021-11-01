@@ -90,7 +90,7 @@ export class FarmBotClient extends Client {
 
     if (!prefixUsed) { return; }
 
-    const [commandToRun, ...args] = this._removePrefix(content, prefixUsed).split(this.oneOrMoreSpaces);
+    const [commandToRun, ...args] = this._removePrefix(msg.content, prefixUsed).split(this.oneOrMoreSpaces);
 
     // check if a prefix was used; if a prefix was used, check if a command was used
     const command = this.commands.get(commandToRun);

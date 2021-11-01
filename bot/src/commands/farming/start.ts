@@ -44,7 +44,7 @@ export function run(bot: FarmBotClient): void {
 
           return await EmbedPaginator.createPaginationEmbed(message, myEmbeds);
         } else {
-          const region = args.join(' ').toLowerCase();
+          const region = args.join(' ');
           if (isValidCountry(region)) {
             const farmers = getFarmers(region);
             if (farmers === undefined) {
