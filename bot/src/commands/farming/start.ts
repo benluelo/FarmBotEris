@@ -12,9 +12,6 @@ import { UserData } from '../../dtos/UserData.js';
 export function run(bot: FarmBotClient): void {
   bot.addCommand('start', (message, args) => {
     bot.getUser(message.author.id, async (err, userdata) => {
-      if (userdata === null) {
-        throw new Error('command `farm start` requires a user data.');
-      }
       if (bot.database === undefined) {
         return message.send('Database not yet initialized. Please try again in a moment.');
       }
